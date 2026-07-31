@@ -6,7 +6,9 @@
       "Read(*)",
       "Bash(git status)",
       "Bash(git diff*)",
-      "Bash(git log*)"
+      "Bash(git log*)",
+      "WebSearch",
+      "WebFetch"
     ],
     "deny": [
       "Bash(rm -rf *)",

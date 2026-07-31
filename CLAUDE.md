@@ -9,7 +9,7 @@ This repository is for building autonomous systems on top of Claude: custom harn
 ## Repository state
 
 - `README.md` — placeholder title only.
-- `.claude/settings.json` — project permissions (safe defaults: read + read-only git allowed; destructive commands and secret files denied) and auto-memory/auto-compaction enabled.
+- `.claude/settings.json` — project permissions (safe defaults: read + read-only git + WebSearch/WebFetch allowed, the latter needed by the `claude-code-tracker` subagent; destructive commands and secret files denied) and auto-memory/auto-compaction enabled.
 - `notes/` — versioned, git-tracked knowledge base (Claude Code/Agent SDK changes, harness decisions, tested patterns). This is distinct from Claude's auto-memory, which is local to each machine under `~/.claude/projects/.../memory/` and never committed.
 - `.claude/skills/` — pre-installed Claude Code skills (banner-design, brand, design, design-system, slides, ui-styling, ui-ux-pro-max) for visual/brand design workflows, plus `diagnosing-bugs` (mattpocock/skills) for hard bugs/perf regressions — dormant until a real bug shows up. Not project source code; ignore unless a request specifically calls for one of them.
 

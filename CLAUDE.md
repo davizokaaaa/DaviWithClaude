@@ -35,7 +35,7 @@ This repository is for building autonomous systems on top of Claude: custom harn
   - `agents.py` — named `AgentDefinition`s (subagents) for this project, e.g. `claude-code-tracker` for researching Claude Code/Agent SDK changes.
   - `tests/` — pytest tests; real-API tests are marked `@pytest.mark.integration` and excluded by default.
 - `memory/` — experiments with memory strategies beyond CLAUDE.md/auto-memory (custom retrieval, summarization, persistence). `retrieval.py` has a first experiment: keyword-overlap retrieval over `notes/*.md`, wired into `harness/basic_loop.py`'s `run_with_memory()`.
-- `loops/` — loop-prompting patterns: scripts driving repeated/iterative agent cycles (plan → act → review → repeat).
+- `loops/` — loop-prompting patterns: scripts driving repeated/iterative agent cycles (plan → act → review → repeat). `plan_act_review.py` is the first experiment: cycles plan/act/review via `harness.basic_loop.run()`, stopping when the review step says "DONE" or after `max_iterations`.
 - `experiments/` — one-off scripts, graduate into the folders above once proven.
 - `notes/` — versioned knowledge base (see `notes/README.md`); `notes/agent-sdk.md` has SDK-specific gotchas learned so far (e.g. auth, trust dialog behavior when running headless).
 

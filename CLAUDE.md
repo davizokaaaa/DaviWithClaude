@@ -9,9 +9,9 @@ This repository is for building autonomous systems on top of Claude: custom harn
 ## Repository state
 
 - `README.md` — placeholder title only.
-- `.claude/settings.json` — project permissions (safe defaults: read + read-only git allowed; destructive commands and secret files denied) and auto-memory/auto-compaction enabled.
+- `.claude/settings.json` — project permissions (safe defaults: read + read-only git + WebSearch/WebFetch allowed, the latter needed by the `claude-code-tracker` subagent; destructive commands and secret files denied) and auto-memory/auto-compaction enabled.
 - `notes/` — versioned, git-tracked knowledge base (Claude Code/Agent SDK changes, harness decisions, tested patterns). This is distinct from Claude's auto-memory, which is local to each machine under `~/.claude/projects/.../memory/` and never committed.
-- `.claude/skills/` — pre-installed Claude Code skills (banner-design, brand, design, design-system, slides, ui-styling, ui-ux-pro-max) for visual/brand design workflows. Not project source code; ignore unless a request specifically calls for one of them.
+- `.claude/skills/` — pre-installed Claude Code skills (banner-design, brand, design, design-system, slides, ui-styling, ui-ux-pro-max) for visual/brand design workflows, plus `diagnosing-bugs` (mattpocock/skills) for hard bugs/perf regressions — dormant until a real bug shows up. Not project source code; ignore unless a request specifically calls for one of them.
 
 ## Stack
 
@@ -34,8 +34,8 @@ This repository is for building autonomous systems on top of Claude: custom harn
   - `basic_loop.py` — minimal single-prompt `query()` loop; starting point for more complex harnesses.
   - `agents.py` — named `AgentDefinition`s (subagents) for this project, e.g. `claude-code-tracker` for researching Claude Code/Agent SDK changes.
   - `tests/` — pytest tests; real-API tests are marked `@pytest.mark.integration` and excluded by default.
-- `memory/` — experiments with memory strategies beyond CLAUDE.md/auto-memory (custom retrieval, summarization, persistence).
-- `loops/` — loop-prompting patterns: scripts driving repeated/iterative agent cycles (plan → act → review → repeat).
+- `memory/` — experiments with memory strategies beyond CLAUDE.md/auto-memory (custom retrieval, summarization, persistence). `retrieval.py` has a first experiment: keyword-overlap retrieval over `notes/*.md`, wired into `harness/basic_loop.py`'s `run_with_memory()`.
+- `loops/` — loop-prompting patterns: scripts driving repeated/iterative agent cycles (plan → act → review → repeat). `plan_act_review.py` is the first experiment: cycles plan/act/review via `harness.basic_loop.run()`, stopping when the review step says "DONE" or after `max_iterations`.
 - `experiments/` — one-off scripts, graduate into the folders above once proven.
 - `notes/` — versioned knowledge base (see `notes/README.md`); `notes/agent-sdk.md` has SDK-specific gotchas learned so far (e.g. auth, trust dialog behavior when running headless).
 

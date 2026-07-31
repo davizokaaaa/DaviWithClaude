@@ -8,6 +8,16 @@ import asyncio
 
 from claude_agent_sdk import AssistantMessage, ClaudeAgentOptions, ResultMessage, TextBlock, query
 
+from memory.retrieval import relevant_notes
+
+
+async def run_with_memory(prompt: str) -> str:
+    """Same as run(), but prepends relevant notes/ content as context."""
+    context = relevant_notes(prompt)
+    if context:
+        prompt = "Contexto relevante de notes/:\n\n" + "\n---\n".join(context) + f"\n\n{prompt}"
+    return await run(prompt)
+
 
 async def run(prompt: str) -> str:
     options = ClaudeAgentOptions(allowed_tools=[])

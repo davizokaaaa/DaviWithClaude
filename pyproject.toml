@@ -12,3 +12,9 @@ dependencies = [
 dev = [
     "pytest>=9.1.1",
 ]
+
+[tool.pytest.ini_options]
+addopts = "-m 'not integration'"
+markers = [
+    "integration: makes real Claude API calls, excluded by default (run with -m integration)",
+]

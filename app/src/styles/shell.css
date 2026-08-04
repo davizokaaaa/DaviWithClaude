@@ -6,6 +6,20 @@
   overflow: hidden;
 }
 
+/* ── Materials ───────────────────────────────────────────────────────
+   Paper grain: a procedural SVG noise tile at whisper opacity, laid over the
+   whole shell. It is what makes the surfaces read as material instead of
+   pixels. Fixed + tiled = one 160px texture, no assets, no GPU cost. */
+.shell::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: var(--grain-opacity);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0.5 0 0 0 0 0.5 0 0 0 0 0.5 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
 /* ── Sidebar ─────────────────────────────────────────────────────────── */
 
 .sidebar {
@@ -115,7 +129,12 @@
   min-width: 0;
   display: flex;
   flex-direction: column;
-  background: var(--canvas);
+  /* The room's ambient light: each module tints the top of its canvas with a
+     whisper-alpha wash (see the Living Gallery block in tokens.css). It must
+     never compete with content — if you can point at it, it's too strong. */
+  background:
+    radial-gradient(1100px 480px at 50% -120px, var(--module-tint), transparent 72%),
+    var(--canvas);
 }
 
 .topbar {

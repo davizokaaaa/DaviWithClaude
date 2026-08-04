@@ -68,7 +68,7 @@ export function App() {
 
   return (
     <LayoutGroup>
-      <div className="shell">
+      <div className="shell" data-module={route.view}>
         <a href="#main-content" className="sr-only skip-link">Skip to content</a>
         <Sidebar />
         <div className="main">

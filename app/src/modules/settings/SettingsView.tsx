@@ -8,11 +8,11 @@ import { riseIn, stagger, staggerItem, spring } from '@/lib/motion';
 import type { AccentPref, ModuleFlags } from '@/core/types';
 
 const ACCENTS: { id: AccentPref; label: string }[] = [
-  { id: 'indigo', label: 'Indigo' },
-  { id: 'evergreen', label: 'Evergreen' },
-  { id: 'amber', label: 'Amber' },
-  { id: 'rose', label: 'Rose' },
-  { id: 'graphite', label: 'Graphite' },
+  { id: 'indigo', label: 'Ink Navy' },
+  { id: 'evergreen', label: 'Forest' },
+  { id: 'amber', label: 'Brass' },
+  { id: 'rose', label: 'Terracotta' },
+  { id: 'graphite', label: 'Stone' },
 ];
 
 const MODULES: { key: keyof ModuleFlags; label: string; hint: string }[] = [

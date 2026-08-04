@@ -18,6 +18,9 @@ export default defineConfig({
     target: 'es2022',
     outDir: 'dist-artifact',
     cssCodeSplit: false,
+    /* Fonts (and any small asset) must ride inside the CSS as data URIs —
+       the artifact CSP forbids fetching separate files. */
+    assetsInlineLimit: 65536,
     reportCompressedSize: false,
     rollupOptions: {
       output: { inlineDynamicImports: true },

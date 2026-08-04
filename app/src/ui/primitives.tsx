@@ -3,10 +3,10 @@
  * Styling lives in ui.css; behaviour and motion live here.
  */
 
-import { forwardRef, type InputHTMLAttributes, type ReactNode, type SelectHTMLAttributes } from 'react';
+import { forwardRef, useEffect, useRef, useState, type InputHTMLAttributes, type ReactNode, type SelectHTMLAttributes } from 'react';
 import { motion, type HTMLMotionProps } from 'motion/react';
 import clsx from 'clsx';
-import { spring } from '@/lib/motion';
+import { ease, spring } from '@/lib/motion';
 
 /* ── Button ──────────────────────────────────────────────────────────── */
 
@@ -139,6 +139,15 @@ interface CheckboxProps {
 }
 
 export function Checkbox({ checked, onChange, label, size = 'md' }: CheckboxProps) {
+  /* The completion burst: a soft ring that blooms outward the moment a box is
+     ticked by the user — never on mount, never on untick. */
+  const wasChecked = useRef(checked);
+  const [burstKey, setBurstKey] = useState(0);
+  useEffect(() => {
+    if (checked && !wasChecked.current) setBurstKey((k) => k + 1);
+    wasChecked.current = checked;
+  }, [checked]);
+
   return (
     <motion.button
       role="checkbox"
@@ -165,6 +174,16 @@ export function Checkbox({ checked, onChange, label, size = 'md' }: CheckboxProp
           transition={{ duration: 0.18, ease: [0.22, 1, 0.36, 1] }}
         />
       </motion.svg>
+      {burstKey > 0 && (
+        <motion.span
+          key={burstKey}
+          className="checkbox-burst"
+          aria-hidden
+          initial={{ opacity: 0.5, scale: 0.5 }}
+          animate={{ opacity: 0, scale: 2 }}
+          transition={{ duration: 0.5, ease: ease.out }}
+        />
+      )}
     </motion.button>
   );
 }

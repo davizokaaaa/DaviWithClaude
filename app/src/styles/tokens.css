@@ -477,6 +477,36 @@
   --module-tint: rgb(194 85 69 / 0.045);
 }
 
+/* ── DYNAMIC ENVIRONMENT ────────────────────────────────────────────── */
+/*
+ * The gallery's light follows the day. `data-daypart` on <html> is set by the
+ * shell (and refreshed every few minutes): a warmer wash in the morning,
+ * neutral focus in the afternoon, a cool dusk in the evening, near-silence at
+ * night. Evening and night also slow the interface's CSS transitions a step —
+ * the building quiets down.
+ */
+:root {
+  --daypart-tint: transparent;
+}
+:root[data-daypart='morning'] {
+  --daypart-tint: rgb(193 163 93 / 0.05);
+}
+:root[data-daypart='afternoon'] {
+  --daypart-tint: rgb(117 114 106 / 0.02);
+}
+:root[data-daypart='evening'] {
+  --daypart-tint: rgb(77 109 153 / 0.05);
+  --dur-fast: 170ms;
+  --dur-base: 240ms;
+  --dur-slow: 380ms;
+}
+:root[data-daypart='night'] {
+  --daypart-tint: rgb(60 84 118 / 0.04);
+  --dur-fast: 170ms;
+  --dur-base: 240ms;
+  --dur-slow: 380ms;
+}
+
 /* Density — Settings toggles this on <html>. Comfortable is the default. */
 :root,
 :root[data-density='comfortable'] {

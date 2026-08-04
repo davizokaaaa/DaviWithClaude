@@ -10,7 +10,7 @@ import { useData } from '@/core/store/data';
 import { useUi } from '@/core/store/ui';
 import { Dot, ProgressRing } from '@/ui/primitives';
 import { AnimatedNumber, Bars, Sparkline } from '@/ui/charts';
-import { riseIn, stagger, staggerItem } from '@/lib/motion';
+import { reveal, riseIn, stagger, staggerItem } from '@/lib/motion';
 import { completionTrend, focusMinutesTrend, goalProgress, habitConsistency } from '@/core/selectors';
 import { fmtMinutes, todayKey, trailingKeys } from '@/lib/dates';
 
@@ -89,14 +89,14 @@ export default function DashboardView() {
       </motion.div>
 
       <div className="grid-2" style={{ marginBottom: 'var(--stack-gap)', alignItems: 'start' }}>
-        <motion.section className="panel panel-pad" variants={riseIn} initial="hidden" animate="show">
+        <motion.section className="panel panel-pad" {...reveal}>
           <div className="panel-head">
             <h3 className="panel-title">Completions</h3>
             <span className="t-caption ink-faint">14 days</span>
           </div>
           <Bars data={completion.map((p) => p.value)} labels={['2w ago', 'today']} height={80} />
         </motion.section>
-        <motion.section className="panel panel-pad" variants={riseIn} initial="hidden" animate="show">
+        <motion.section className="panel panel-pad" {...reveal}>
           <div className="panel-head">
             <h3 className="panel-title">Mood</h3>
             <span className="t-caption ink-faint">14 days · logged at shutdown</span>
@@ -106,7 +106,7 @@ export default function DashboardView() {
       </div>
 
       <div className="grid-2" style={{ alignItems: 'start' }}>
-        <motion.section className="panel panel-pad" variants={riseIn} initial="hidden" animate="show">
+        <motion.section className="panel panel-pad" {...reveal}>
           <div className="panel-head">
             <h3 className="panel-title">Goal movement</h3>
             <button className="t-caption ink-faint" onClick={() => navigate({ view: 'goals' })}>All →</button>
@@ -133,7 +133,7 @@ export default function DashboardView() {
           </div>
         </motion.section>
 
-        <motion.section className="panel panel-pad" variants={riseIn} initial="hidden" animate="show">
+        <motion.section className="panel panel-pad" {...reveal}>
           <div className="panel-head"><h3 className="panel-title">Right now</h3></div>
           <div className="col g-4 t-body-sm ink-muted">
             <p>

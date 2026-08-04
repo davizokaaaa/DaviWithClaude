@@ -129,12 +129,29 @@
   min-width: 0;
   display: flex;
   flex-direction: column;
-  /* The room's ambient light: each module tints the top of its canvas with a
-     whisper-alpha wash (see the Living Gallery block in tokens.css). It must
-     never compete with content — if you can point at it, it's too strong. */
+  background: var(--canvas);
+  position: relative;
+  isolation: isolate;
+}
+
+/* The room's ambient light: the module's wash from above, the time of day's
+   from the side (see Living Gallery + Dynamic Environment in tokens.css).
+   It drifts on a very slow breath — transform only, so the gradients never
+   repaint. If you can point at it, it's too strong. */
+.main::before {
+  content: '';
+  position: absolute;
+  inset: -12%;
+  z-index: -1;
+  pointer-events: none;
   background:
-    radial-gradient(1100px 480px at 50% -120px, var(--module-tint), transparent 72%),
-    var(--canvas);
+    radial-gradient(46% 34% at 50% 4%, var(--module-tint), transparent 72%),
+    radial-gradient(40% 46% at 92% 88%, var(--daypart-tint), transparent 74%);
+  animation: atmosphere-drift 90s var(--ease-in-out) infinite alternate;
+}
+@keyframes atmosphere-drift {
+  from { transform: translate3d(-1.5%, -1%, 0) scale(1); }
+  to { transform: translate3d(1.5%, 1%, 0) scale(1.06); }
 }
 
 .topbar {

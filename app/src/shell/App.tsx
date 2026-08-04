@@ -34,6 +34,19 @@ export function App() {
   const accent = useSettings((s) => s.accent);
   const density = useSettings((s) => s.density);
 
+  /* The gallery's light follows the clock — data-daypart drives the ambient
+     wash and, in the evening, a slower transition tempo (tokens.css). */
+  useEffect(() => {
+    const apply = () => {
+      const h = new Date().getHours();
+      document.documentElement.dataset.daypart =
+        h >= 5 && h < 11 ? 'morning' : h < 17 ? 'afternoon' : h < 22 ? 'evening' : 'night';
+    };
+    apply();
+    const id = window.setInterval(apply, 5 * 60 * 1000);
+    return () => window.clearInterval(id);
+  }, []);
+
   useEffect(() => {
     applyAppearance({ theme, accent, density });
     if (theme !== 'system') return;

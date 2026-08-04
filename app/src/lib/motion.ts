@@ -134,6 +134,21 @@ export const toastIn: Variants = {
   exit: { opacity: 0, x: 24, scale: 0.97, transition: fade.fast },
 };
 
+/* ── Scroll ───────────────────────────────────────────────────────────── */
+
+/**
+ * Section-level scroll reveal: spread onto a motion element. Content below
+ * the fold rises gently as it enters; content already visible is untouched
+ * (margin keeps the trigger just inside the viewport). Fires once — scrolling
+ * back up must never replay entrances.
+ */
+export const reveal = {
+  initial: { opacity: 0, y: 14 },
+  whileInView: { opacity: 1, y: 0 },
+  viewport: { once: true, margin: '0px 0px -48px 0px' },
+  transition: spring.smooth,
+} as const;
+
 /* ── Interaction presets ──────────────────────────────────────────────── */
 
 /** Applied to every pressable surface. Tiny numbers on purpose. */

@@ -29,3 +29,12 @@ Museum pigments, muted: ink navy `#4d6d99` (default accent), forest `#47775a`, a
 - `--t-*-ls` tracking vars are overridable per module because the type helpers read vars, not literals — that's why serif rooms can relax tracking without new classes.
 - Gradient washes don't transition; the tint change on navigation is imperceptible at these alphas. Animate with a motion layer in Sprint 2 if wanted.
 - `index.html` theme-color metas + favicon must track palette changes by hand.
+
+## Sprint 2 (done) — motion & atmosphere
+
+- **Dynamic environment**: `data-daypart` on `<html>` (morning/afternoon/evening/night, refreshed every 5 min by the shell). Drives `--daypart-tint` (a second ambient wash, bottom corner) and — evening/night only — one-step-slower `--dur-*` CSS transitions. The building quiets down at dusk.
+- **Atmosphere drift**: both washes live on `.main::before` (z -1, `isolation: isolate`) and breathe on a 90s alternate transform animation — translate/scale only, zero repaint; global reduced-motion collapse kills it.
+- **Checkbox completion burst**: accent ring blooms outward on user tick (keyed re-mount, guarded so it never fires on mount or untick).
+- **Scroll reveal**: `reveal` spread in `lib/motion.ts` (`whileInView`, fires once, -48px margin). Applied to Dashboard's below-fold sections; roll out per-view in Sprint 3.
+- **Button depth**: `.btn-primary` gets inset top light + breath of under-shadow — a key, not a rectangle.
+- Already in place pre-sprint (don't redo): checkbox path draw, ProgressRing/Bars/Sparkline draw-in, AnimatedNumber springs, segmented sliding thumb, palette overshoot.

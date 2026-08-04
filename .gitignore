@@ -10,3 +10,4 @@ CLAUDE.local.md
 # Node (app/)
 node_modules/
 dist/
+dist-artifact/

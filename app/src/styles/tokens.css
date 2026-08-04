@@ -1,0 +1,390 @@
+/*
+ * Meridian design tokens
+ * ──────────────────────
+ * Three layers, in this order:
+ *   1. primitives  — raw values, never referenced by components
+ *   2. semantic    — what a component asks for ("surface", "ink-subtle")
+ *   3. component   — only where a component needs its own knob
+ *
+ * Rule that keeps the whole thing coherent: depth comes from the SURFACE LADDER
+ * and 1px hairlines, not from shadows. Shadows exist only for layers that truly
+ * float above the page (dialog, popover, palette, dragged item).
+ */
+
+:root {
+  /* ── 1. PRIMITIVES ────────────────────────────────────────────────── */
+
+  /* Neutral ramp — very slightly warm so it never reads as clinical grey */
+  --n-0: #ffffff;
+  --n-25: #fcfcfb;
+  --n-50: #f7f7f6;
+  --n-100: #f0f0ee;
+  --n-150: #e7e7e4;
+  --n-200: #dcdcd8;
+  --n-300: #c4c4bf;
+  --n-400: #9d9d98;
+  --n-500: #777772;
+  --n-600: #575753;
+  --n-700: #3d3d3a;
+  --n-800: #2a2a28;
+  --n-850: #202020;
+  --n-900: #18181a;
+  --n-925: #131315;
+  --n-950: #0f0f11;
+  --n-975: #0b0b0d;
+  --n-1000: #060607;
+
+  /* Accent families. `data-accent` on <html> swaps which one is active. */
+  --indigo-300: #a5a8f0;
+  --indigo-400: #8a8de8;
+  --indigo-500: #6b6ee0;
+  --indigo-600: #5a5dcf;
+  --indigo-700: #4a4cb0;
+
+  --evergreen-300: #7fd2ac;
+  --evergreen-400: #4fc08d;
+  --evergreen-500: #2fa873;
+  --evergreen-600: #248a5e;
+  --evergreen-700: #1d6e4b;
+
+  --amber-300: #f2c879;
+  --amber-400: #e9ad42;
+  --amber-500: #d4922a;
+  --amber-600: #b5781f;
+  --amber-700: #92601a;
+
+  --rose-300: #f0a0b0;
+  --rose-400: #e77b91;
+  --rose-500: #d95b76;
+  --rose-600: #bd4761;
+  --rose-700: #9b3a50;
+
+  --graphite-300: #b8bcc4;
+  --graphite-400: #969ba6;
+  --graphite-500: #767c89;
+  --graphite-600: #5e646f;
+  --graphite-700: #4a4f59;
+
+  /* Semantic hues — status only, never decoration */
+  --green-400: #4fc08d;
+  --green-500: #2fa873;
+  --green-600: #248a5e;
+  --yellow-400: #e9ad42;
+  --yellow-500: #d4922a;
+  --red-400: #e8697f;
+  --red-500: #d94d67;
+  --red-600: #b93b53;
+  --blue-400: #5fa8f0;
+  --blue-500: #3d8ede;
+  --purple-400: #a982e8;
+  --purple-500: #8e63d4;
+  --teal-400: #4dc4c4;
+  --teal-500: #2ba5a5;
+
+  /* ── 2. SCALES (theme-independent) ────────────────────────────────── */
+
+  /* Spacing — 4px base. Named by step so intent survives refactors. */
+  --sp-0: 0;
+  --sp-1: 2px;
+  --sp-2: 4px;
+  --sp-3: 6px;
+  --sp-4: 8px;
+  --sp-5: 12px;
+  --sp-6: 16px;
+  --sp-7: 20px;
+  --sp-8: 24px;
+  --sp-9: 32px;
+  --sp-10: 40px;
+  --sp-11: 48px;
+  --sp-12: 64px;
+  --sp-13: 80px;
+  --sp-14: 96px;
+
+  /* Radii */
+  --r-xs: 4px;
+  --r-sm: 6px;
+  --r-md: 8px;
+  --r-lg: 10px;
+  --r-xl: 14px;
+  --r-2xl: 18px;
+  --r-3xl: 24px;
+  --r-full: 999px;
+
+  /* Typography ------------------------------------------------------- */
+  --font-sans: 'InterVariable', 'Inter', -apple-system, BlinkMacSystemFont,
+    'SF Pro Text', 'Segoe UI', system-ui, sans-serif;
+  --font-display: var(--font-sans);
+  --font-mono: 'SF Mono', 'JetBrains Mono', 'Fira Code', ui-monospace,
+    'Cascadia Mono', Menlo, monospace;
+
+  /* Size / line-height / tracking travel together — that pairing is the
+     difference between a "designed" scale and default browser type. */
+  --t-display-lg: 40px;
+  --t-display-lg-lh: 1.08;
+  --t-display-lg-ls: -1.4px;
+
+  --t-display: 32px;
+  --t-display-lh: 1.12;
+  --t-display-ls: -1px;
+
+  --t-title-lg: 24px;
+  --t-title-lg-lh: 1.2;
+  --t-title-lg-ls: -0.6px;
+
+  --t-title: 19px;
+  --t-title-lh: 1.3;
+  --t-title-ls: -0.4px;
+
+  --t-subtitle: 16px;
+  --t-subtitle-lh: 1.4;
+  --t-subtitle-ls: -0.24px;
+
+  --t-body: 14px;
+  --t-body-lh: 1.5;
+  --t-body-ls: -0.08px;
+
+  --t-body-sm: 13px;
+  --t-body-sm-lh: 1.5;
+  --t-body-sm-ls: -0.05px;
+
+  --t-caption: 12px;
+  --t-caption-lh: 1.4;
+  --t-caption-ls: 0;
+
+  --t-micro: 11px;
+  --t-micro-lh: 1.35;
+  --t-micro-ls: 0.2px;
+
+  --t-eyebrow: 11px;
+  --t-eyebrow-lh: 1.3;
+  --t-eyebrow-ls: 0.7px;
+
+  --fw-regular: 400;
+  --fw-medium: 500;
+  --fw-semibold: 590;
+  --fw-bold: 680;
+
+  /* Motion ----------------------------------------------------------- */
+  /* Duration-based easing is for opacity and colour only. Anything that
+     behaves like an object (drag, layout, scale) uses the springs in
+     src/lib/motion.ts instead. */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-snap: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-entrance: cubic-bezier(0.05, 0.7, 0.1, 1);
+
+  --dur-instant: 90ms;
+  --dur-fast: 140ms;
+  --dur-base: 200ms;
+  --dur-slow: 320ms;
+  --dur-slower: 480ms;
+
+  /* Layout ----------------------------------------------------------- */
+  --sidebar-w: 248px;
+  --sidebar-w-collapsed: 60px;
+  --topbar-h: 52px;
+  --content-max: 1180px;
+  --reading-max: 720px;
+
+  --z-base: 0;
+  --z-sticky: 10;
+  --z-dock: 40;
+  --z-drawer: 50;
+  --z-overlay: 60;
+  --z-dialog: 70;
+  --z-popover: 80;
+  --z-palette: 90;
+  --z-toast: 100;
+}
+
+/* ── 3. THEMES ──────────────────────────────────────────────────────── */
+
+/*
+ * Dark is the primary theme. The canvas is near-black and *is* the whitespace;
+ * panels separate by lifting onto a surface, not by adding gaps and shadows.
+ */
+:root,
+:root[data-theme='dark'] {
+  color-scheme: dark;
+
+  --canvas: var(--n-975);
+  --surface-0: var(--n-950);
+  --surface-1: var(--n-925);
+  --surface-2: var(--n-900);
+  --surface-3: #1c1c1f;
+  --surface-inset: #08080a;
+  --surface-overlay: #17171a;
+
+  --hairline: #232326;
+  --hairline-strong: #2e2e33;
+  --hairline-soft: #1a1a1d;
+
+  --ink: #f4f4f3;
+  --ink-muted: #c8c8c6;
+  --ink-subtle: #8f8f8d;
+  --ink-faint: #6a6a69;
+  --ink-ghost: #4d4d4d;
+  --ink-inverse: var(--n-950);
+
+  --fill-subtle: rgb(255 255 255 / 0.032);
+  --fill-hover: rgb(255 255 255 / 0.055);
+  --fill-active: rgb(255 255 255 / 0.085);
+  --fill-selected: rgb(255 255 255 / 0.07);
+
+  --scrim: rgb(4 4 6 / 0.62);
+
+  --success: var(--green-400);
+  --success-fill: rgb(79 192 141 / 0.14);
+  --warning: var(--yellow-400);
+  --warning-fill: rgb(233 173 66 / 0.14);
+  --danger: var(--red-400);
+  --danger-fill: rgb(232 105 127 / 0.14);
+  --info: var(--blue-400);
+  --info-fill: rgb(95 168 240 / 0.14);
+
+  /* Shadows: floating layers only. Two-part — a tight contact shadow plus a
+     wide ambient one. Dark themes need a hairline instead of a soft edge. */
+  --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.4);
+  --shadow-md: 0 2px 4px rgb(0 0 0 / 0.3), 0 8px 20px -6px rgb(0 0 0 / 0.5);
+  --shadow-lg: 0 4px 8px rgb(0 0 0 / 0.34), 0 20px 44px -12px rgb(0 0 0 / 0.62);
+  --shadow-xl: 0 8px 16px rgb(0 0 0 / 0.36), 0 36px 72px -18px rgb(0 0 0 / 0.72);
+  --shadow-drag: 0 12px 28px -6px rgb(0 0 0 / 0.6);
+
+  --chart-grid: #202023;
+  --chart-track: #232326;
+}
+
+:root[data-theme='light'] {
+  color-scheme: light;
+
+  --canvas: #fbfbfa;
+  --surface-0: #ffffff;
+  --surface-1: #ffffff;
+  --surface-2: var(--n-50);
+  --surface-3: var(--n-100);
+  --surface-inset: var(--n-50);
+  --surface-overlay: #ffffff;
+
+  --hairline: #e8e8e4;
+  --hairline-strong: #dcdcd6;
+  --hairline-soft: #f0f0ec;
+
+  --ink: #1a1a19;
+  --ink-muted: #43433f;
+  --ink-subtle: #6e6e69;
+  --ink-faint: #91918c;
+  --ink-ghost: #b4b4ae;
+  --ink-inverse: #ffffff;
+
+  --fill-subtle: rgb(20 20 18 / 0.028);
+  --fill-hover: rgb(20 20 18 / 0.048);
+  --fill-active: rgb(20 20 18 / 0.075);
+  --fill-selected: rgb(20 20 18 / 0.055);
+
+  --scrim: rgb(28 28 26 / 0.28);
+
+  --success: var(--green-600);
+  --success-fill: rgb(47 168 115 / 0.12);
+  --warning: #a8761c;
+  --warning-fill: rgb(212 146 42 / 0.14);
+  --danger: var(--red-600);
+  --danger-fill: rgb(217 77 103 / 0.1);
+  --info: #2f7ac4;
+  --info-fill: rgb(61 142 222 / 0.1);
+
+  --shadow-sm: 0 1px 2px rgb(30 30 26 / 0.06);
+  --shadow-md: 0 1px 2px rgb(30 30 26 / 0.05), 0 6px 16px -4px rgb(30 30 26 / 0.09);
+  --shadow-lg: 0 2px 4px rgb(30 30 26 / 0.05), 0 16px 36px -10px rgb(30 30 26 / 0.14);
+  --shadow-xl: 0 4px 10px rgb(30 30 26 / 0.06), 0 32px 64px -16px rgb(30 30 26 / 0.18);
+  --shadow-drag: 0 10px 24px -6px rgb(30 30 26 / 0.2);
+
+  --chart-grid: #eeeeea;
+  --chart-track: #eaeae5;
+}
+
+/* ── ACCENTS ────────────────────────────────────────────────────────── */
+/* One chromatic accent, used scarcely: brand mark, focus ring, the single
+   primary action on a screen, and the "now" marker on the calendar. */
+
+:root,
+:root[data-accent='indigo'] {
+  --accent: var(--indigo-500);
+  --accent-hover: var(--indigo-400);
+  --accent-press: var(--indigo-600);
+  --accent-ink: #ffffff;
+  --accent-soft: rgb(107 110 224 / 0.16);
+  --accent-softer: rgb(107 110 224 / 0.09);
+  --accent-line: rgb(107 110 224 / 0.42);
+  --accent-glow: rgb(107 110 224 / 0.3);
+}
+:root[data-accent='evergreen'] {
+  --accent: var(--evergreen-500);
+  --accent-hover: var(--evergreen-400);
+  --accent-press: var(--evergreen-600);
+  --accent-ink: #ffffff;
+  --accent-soft: rgb(47 168 115 / 0.16);
+  --accent-softer: rgb(47 168 115 / 0.09);
+  --accent-line: rgb(47 168 115 / 0.42);
+  --accent-glow: rgb(47 168 115 / 0.3);
+}
+:root[data-accent='amber'] {
+  --accent: var(--amber-500);
+  --accent-hover: var(--amber-400);
+  --accent-press: var(--amber-600);
+  --accent-ink: #1a1206;
+  --accent-soft: rgb(212 146 42 / 0.18);
+  --accent-softer: rgb(212 146 42 / 0.1);
+  --accent-line: rgb(212 146 42 / 0.45);
+  --accent-glow: rgb(212 146 42 / 0.32);
+}
+:root[data-accent='rose'] {
+  --accent: var(--rose-500);
+  --accent-hover: var(--rose-400);
+  --accent-press: var(--rose-600);
+  --accent-ink: #ffffff;
+  --accent-soft: rgb(217 91 118 / 0.16);
+  --accent-softer: rgb(217 91 118 / 0.09);
+  --accent-line: rgb(217 91 118 / 0.42);
+  --accent-glow: rgb(217 91 118 / 0.3);
+}
+:root[data-accent='graphite'] {
+  --accent: var(--graphite-500);
+  --accent-hover: var(--graphite-400);
+  --accent-press: var(--graphite-600);
+  --accent-ink: #ffffff;
+  --accent-soft: rgb(118 124 137 / 0.18);
+  --accent-softer: rgb(118 124 137 / 0.1);
+  --accent-line: rgb(118 124 137 / 0.45);
+  --accent-glow: rgb(118 124 137 / 0.3);
+}
+
+/* Priority + life-area colours resolve through these so a single swap
+   restyles every surface that references them. */
+:root {
+  --pri-urgent: var(--red-400);
+  --pri-high: var(--yellow-400);
+  --pri-medium: var(--blue-400);
+  --pri-low: var(--ink-faint);
+
+  --hue-indigo: var(--indigo-400);
+  --hue-green: var(--green-400);
+  --hue-amber: var(--yellow-400);
+  --hue-rose: var(--red-400);
+  --hue-blue: var(--blue-400);
+  --hue-purple: var(--purple-400);
+  --hue-teal: var(--teal-400);
+  --hue-graphite: var(--graphite-400);
+}
+
+/* Density — Settings toggles this on <html>. Comfortable is the default. */
+:root,
+:root[data-density='comfortable'] {
+  --row-h: 38px;
+  --row-pad-y: var(--sp-4);
+  --stack-gap: var(--sp-6);
+}
+:root[data-density='compact'] {
+  --row-h: 32px;
+  --row-pad-y: var(--sp-3);
+  --stack-gap: var(--sp-5);
+}

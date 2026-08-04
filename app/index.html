@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Meridian — Personal Operating System</title>
+    <meta
+      name="description"
+      content="Meridian is a personal operating system: plan your day, run your projects, build habits, protect your focus and keep everything you know in one calm, fast place."
+    />
+    <meta name="color-scheme" content="dark light" />
+    <meta name="theme-color" content="#0b0b0d" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#fbfbfa" media="(prefers-color-scheme: light)" />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%236b6ee0'/%3E%3Cpath d='M16 6a10 10 0 100 20 10 10 0 000-20zm0 3.2v13.6a6.8 6.8 0 010-13.6z' fill='%23fff'/%3E%3C/svg%3E" />
+
+    <!--
+      The theme is resolved before first paint so the app never flashes the wrong
+      surface colour. Kept inline and tiny on purpose.
+    -->
+    <script>
+      (function () {
+        try {
+          var raw = localStorage.getItem('meridian.settings');
+          var pref = raw ? (JSON.parse(raw).state || {}).theme : null;
+          var dark =
+            pref === 'dark' ||
+            ((!pref || pref === 'system') &&
+              window.matchMedia('(prefers-color-scheme: dark)').matches);
+          document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+          var accent = raw ? (JSON.parse(raw).state || {}).accent : null;
+          if (accent) document.documentElement.dataset.accent = accent;
+        } catch (e) {
+          document.documentElement.dataset.theme = 'dark';
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

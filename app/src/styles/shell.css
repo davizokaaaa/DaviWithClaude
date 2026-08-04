@@ -1,0 +1,385 @@
+/* App shell: sidebar, topbar, content region, command palette, views. */
+
+.shell {
+  display: flex;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* ── Materials ───────────────────────────────────────────────────────
+   Paper grain: a procedural SVG noise tile at whisper opacity, laid over the
+   whole shell. It is what makes the surfaces read as material instead of
+   pixels. Fixed + tiled = one 160px texture, no assets, no GPU cost. */
+.shell::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: var(--grain-opacity);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0.5 0 0 0 0 0.5 0 0 0 0 0.5 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ── Sidebar ─────────────────────────────────────────────────────────── */
+
+.sidebar {
+  flex: none;
+  width: var(--sidebar-w);
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid var(--hairline);
+  background: var(--canvas);
+  overflow: hidden;
+}
+.sidebar.is-collapsed { width: var(--sidebar-w-collapsed); }
+
+.sidebar-head {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+  height: var(--topbar-h);
+  padding: 0 var(--sp-6);
+  flex: none;
+}
+.sidebar-logo {
+  width: 24px;
+  height: 24px;
+  border-radius: var(--r-md);
+  background: var(--accent);
+  display: grid;
+  place-items: center;
+  color: var(--accent-ink);
+  flex: none;
+  font-weight: var(--fw-bold);
+  font-size: 13px;
+}
+.sidebar-wordmark {
+  font-weight: var(--fw-semibold);
+  letter-spacing: -0.3px;
+  white-space: nowrap;
+}
+
+.sidebar-nav {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--sp-4) var(--sp-4) var(--sp-6);
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.sidebar-section {
+  margin: var(--sp-6) var(--sp-4) var(--sp-2);
+  white-space: nowrap;
+}
+
+.navitem {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+  height: 30px;
+  padding: 0 var(--sp-4);
+  border-radius: var(--r-md);
+  color: var(--ink-subtle);
+  font-size: var(--t-body-sm);
+  font-weight: var(--fw-medium);
+  white-space: nowrap;
+  transition: color var(--dur-fast) var(--ease-out), background-color var(--dur-fast) var(--ease-out);
+}
+.navitem:hover { color: var(--ink); background: var(--fill-hover); }
+.navitem.is-active { color: var(--ink); }
+.navitem-bg {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--r-md);
+  background: var(--fill-selected);
+  border: 1px solid var(--hairline);
+}
+.navitem-icon {
+  position: relative;
+  z-index: 1;
+  width: 16px;
+  display: inline-flex;
+  justify-content: center;
+  flex: none;
+  font-size: 12px;
+  opacity: 0.9;
+}
+.navitem-label { position: relative; z-index: 1; }
+.navitem-count {
+  position: relative;
+  z-index: 1;
+  margin-left: auto;
+  font-size: var(--t-micro);
+  color: var(--ink-faint);
+  font-variant-numeric: tabular-nums;
+}
+
+.sidebar-foot {
+  flex: none;
+  padding: var(--sp-4);
+  border-top: 1px solid var(--hairline);
+}
+
+/* ── Main region ─────────────────────────────────────────────────────── */
+
+.main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--canvas);
+  position: relative;
+  isolation: isolate;
+}
+
+/* The room's ambient light: the module's wash from above, the time of day's
+   from the side (see Living Gallery + Dynamic Environment in tokens.css).
+   It drifts on a very slow breath — transform only, so the gradients never
+   repaint. If you can point at it, it's too strong. */
+.main::before {
+  content: '';
+  position: absolute;
+  inset: -12%;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(46% 34% at 50% 4%, var(--module-tint), transparent 72%),
+    radial-gradient(40% 46% at 92% 88%, var(--daypart-tint), transparent 74%);
+  animation: atmosphere-drift 90s var(--ease-in-out) infinite alternate;
+}
+/* The generative layer (Atmosphere.tsx) sits with the washes, behind content. */
+.atmosphere {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  width: 100%;
+  height: 100%;
+}
+
+@keyframes atmosphere-drift {
+  from { transform: translate3d(-1.5%, -1%, 0) scale(1); }
+  to { transform: translate3d(1.5%, 1%, 0) scale(1.06); }
+}
+
+.topbar {
+  flex: none;
+  height: var(--topbar-h);
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+  padding: 0 var(--sp-8);
+  border-bottom: 1px solid var(--hairline);
+}
+.topbar-title {
+  font-size: var(--t-subtitle);
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--t-subtitle-ls);
+}
+
+.searchbtn {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+  height: 30px;
+  padding: 0 var(--sp-5);
+  border-radius: var(--r-md);
+  border: 1px solid var(--hairline);
+  background: var(--surface-inset);
+  color: var(--ink-faint);
+  font-size: var(--t-body-sm);
+  min-width: 180px;
+  transition: border-color var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out);
+}
+.searchbtn:hover { border-color: var(--hairline-strong); color: var(--ink-subtle); }
+.searchbtn .kbd { margin-left: auto; }
+
+.content {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scroll-padding-top: var(--sp-8);
+}
+.view {
+  max-width: var(--content-max);
+  margin: 0 auto;
+  padding: var(--sp-9) var(--sp-9) var(--sp-14);
+}
+.view-narrow { max-width: var(--reading-max); }
+
+.view-head { margin-bottom: var(--sp-8); }
+.view-title {
+  /* Speaks in the room's voice — serif in Notes and Reviews. */
+  font-family: var(--font-display);
+  font-size: var(--t-display);
+  line-height: var(--t-display-lh);
+  letter-spacing: var(--t-display-ls);
+  font-weight: var(--fw-display);
+}
+.view-sub { margin-top: var(--sp-3); color: var(--ink-subtle); font-size: var(--t-body); }
+
+/* ── Command palette / capture ───────────────────────────────────────── */
+
+.palette {
+  position: relative;
+  width: min(620px, calc(100vw - var(--sp-9)));
+  margin-top: clamp(48px, 16vh, 160px);
+  background: var(--surface-overlay);
+  border: 1px solid var(--hairline-strong);
+  border-radius: var(--r-2xl);
+  box-shadow: var(--shadow-xl);
+  overflow: hidden;
+}
+.palette-input-row {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-5);
+  padding: var(--sp-6) var(--sp-7);
+  border-bottom: 1px solid var(--hairline);
+}
+.capture .palette-input-row { border-bottom: none; }
+.palette-input {
+  flex: 1;
+  min-width: 0;
+  font-size: 15px;
+  letter-spacing: -0.15px;
+  color: var(--ink);
+  background: none;
+}
+.palette-input::placeholder { color: var(--ink-faint); }
+
+.palette-list {
+  max-height: min(46vh, 420px);
+  overflow-y: auto;
+  padding: var(--sp-4);
+}
+.palette-group {
+  padding: var(--sp-4) var(--sp-5) var(--sp-2);
+  font-size: var(--t-micro);
+  font-weight: var(--fw-semibold);
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+.palette-item {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-5);
+  width: 100%;
+  min-height: 36px;
+  padding: 0 var(--sp-5);
+  border-radius: var(--r-md);
+  font-size: var(--t-body);
+  color: var(--ink-muted);
+  text-align: left;
+  transition: none;
+}
+.palette-item.is-active { background: var(--fill-selected); color: var(--ink); }
+.palette-hint { margin-left: auto; font-size: var(--t-caption); color: var(--ink-faint); flex: none; max-width: 40%; }
+.palette-item .kbd { flex: none; }
+.palette-empty { padding: var(--sp-9); text-align: center; color: var(--ink-faint); font-size: var(--t-body-sm); }
+
+.capture-chips { overflow: hidden; border-top: 1px solid var(--hairline-soft); }
+.capture-foot {
+  padding: var(--sp-4) var(--sp-7);
+  border-top: 1px solid var(--hairline);
+  background: var(--fill-subtle);
+}
+
+/* ── Charts ──────────────────────────────────────────────────────────── */
+
+.bars { display: flex; align-items: flex-end; gap: 3px; }
+.bars-slot { flex: 1; height: 100%; display: flex; align-items: flex-end; }
+.bars-bar { width: 100%; border-radius: 3px 3px 1px 1px; min-height: 3px; }
+
+.heatmap { display: flex; gap: 3px; overflow-x: auto; padding-bottom: var(--sp-2); }
+.heatmap-col { display: flex; flex-direction: column; gap: 3px; }
+.heatmap-cell {
+  width: 11px;
+  height: 11px;
+  border-radius: 3px;
+  background: var(--chart-track);
+  flex: none;
+}
+
+.distbar {
+  display: flex;
+  height: 8px;
+  border-radius: var(--r-full);
+  overflow: hidden;
+  gap: 2px;
+}
+.distbar-seg { min-width: 2px; border-radius: 2px; }
+
+/* ── Stat tiles ──────────────────────────────────────────────────────── */
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+.stat-value {
+  font-size: var(--t-title-lg);
+  line-height: var(--t-title-lg-lh);
+  letter-spacing: var(--t-title-lg-ls);
+  font-weight: var(--fw-semibold);
+  font-variant-numeric: tabular-nums;
+}
+.stat-label { font-size: var(--t-caption); color: var(--ink-faint); }
+.stat-delta { font-size: var(--t-caption); font-variant-numeric: tabular-nums; }
+.stat-delta.is-up { color: var(--success); }
+.stat-delta.is-down { color: var(--danger); }
+
+/* ── Grid helpers for views ──────────────────────────────────────────── */
+
+.grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--stack-gap); }
+.grid-3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--stack-gap); }
+.grid-4 { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--stack-gap); }
+
+@media (max-width: 1080px) {
+  .grid-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .grid-3 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 760px) {
+  .grid-2, .grid-3, .grid-4 { grid-template-columns: minmax(0, 1fr); }
+  .view { padding: var(--sp-7) var(--sp-6) var(--sp-12); }
+  .topbar { padding: 0 var(--sp-6); }
+  .searchbtn { min-width: 0; }
+  .searchbtn-label { display: none; }
+}
+
+/* ── Mobile: sidebar becomes a dock ──────────────────────────────────── */
+
+@media (max-width: 760px) {
+  .sidebar { display: none; }
+  .shell { flex-direction: column; }
+  .mobiledock {
+    display: flex !important;
+    flex: none;
+    border-top: 1px solid var(--hairline);
+    background: color-mix(in oklab, var(--canvas) 88%, transparent);
+    backdrop-filter: blur(16px);
+    padding: var(--sp-3) var(--sp-4) calc(var(--sp-3) + env(safe-area-inset-bottom));
+    justify-content: space-around;
+    z-index: var(--z-dock);
+  }
+  .mobiledock-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    padding: var(--sp-2) var(--sp-5);
+    border-radius: var(--r-lg);
+    color: var(--ink-faint);
+    font-size: var(--t-micro);
+  }
+  .mobiledock-item.is-active { color: var(--accent); }
+  .mobiledock-icon { font-size: 15px; }
+}
+.mobiledock { display: none; }
+
+/* ── Focus ring page-level polish ────────────────────────────────────── */
+
+.content:focus-visible { outline: none; }

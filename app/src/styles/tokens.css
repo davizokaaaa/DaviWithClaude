@@ -1,0 +1,521 @@
+/*
+ * Meridian design tokens
+ * ──────────────────────
+ * Three layers, in this order:
+ *   1. primitives  — raw values, never referenced by components
+ *   2. semantic    — what a component asks for ("surface", "ink-subtle")
+ *   3. component   — only where a component needs its own knob
+ *
+ * Art direction: "The Living Gallery". The palette is a museum's, not a SaaS
+ * product's — warm paper, charcoal, ink navy, forest green, aged brass,
+ * terracotta, stone. Every hue is muted; chroma is spent, never sprayed.
+ *
+ * Rule that keeps the whole thing coherent: depth comes from the SURFACE LADDER
+ * and 1px hairlines, not from shadows. Shadows exist only for layers that truly
+ * float above the page (dialog, popover, palette, dragged item).
+ */
+
+:root {
+  /* ── 1. PRIMITIVES ────────────────────────────────────────────────── */
+
+  /* Neutral ramp — warm like gallery walls and unbleached paper, so the
+     interface never reads as clinical grey. */
+  --n-0: #ffffff;
+  --n-25: #fdfcfa;
+  --n-50: #f8f6f2;
+  --n-100: #f1eee8;
+  --n-150: #e9e5dd;
+  --n-200: #ded9cf;
+  --n-300: #c6c1b6;
+  --n-400: #9e9a90;
+  --n-500: #78756c;
+  --n-600: #58554e;
+  --n-700: #3e3c37;
+  --n-800: #2b2925;
+  --n-850: #211f1c;
+  --n-900: #191816;
+  --n-925: #141311;
+  --n-950: #100f0d;
+  --n-975: #0c0b0a;
+  --n-1000: #070605;
+
+  /* Accent families — museum pigments. `data-accent` on <html> swaps which
+     one is active. Keys keep their historical names (stored in settings). */
+
+  /* "indigo" → ink navy. Prussian blue thinned with grey. */
+  --indigo-300: #96aecd;
+  --indigo-400: #6f8db4;
+  --indigo-500: #4d6d99;
+  --indigo-600: #3e597f;
+  --indigo-700: #324767;
+
+  /* "evergreen" → forest. Viridian earthed down. */
+  --evergreen-300: #8db199;
+  --evergreen-400: #679478;
+  --evergreen-500: #47775a;
+  --evergreen-600: #386148;
+  --evergreen-700: #2d4e3a;
+
+  /* "amber" → aged brass. Metal, not honey. */
+  --amber-300: #d5bd85;
+  --amber-400: #c1a35d;
+  --amber-500: #a8873c;
+  --amber-600: #8b6e2f;
+  --amber-700: #6f5726;
+
+  /* "rose" → terracotta. Burnt orange fired into clay. */
+  --rose-300: #dda285;
+  --rose-400: #ca7f5c;
+  --rose-500: #b25f3d;
+  --rose-600: #964b2d;
+  --rose-700: #7a3d25;
+
+  /* "graphite" → stone. */
+  --graphite-300: #b6b3a9;
+  --graphite-400: #949187;
+  --graphite-500: #75726a;
+  --graphite-600: #5d5b54;
+  --graphite-700: #4a4842;
+
+  /* Semantic hues — status only, never decoration. Slightly desaturated to
+     sit inside the museum palette without shouting. */
+  --green-400: #5aab81;
+  --green-500: #3d8f66;
+  --green-600: #2f7453;
+  --yellow-400: #d5a44a;
+  --yellow-500: #b98a33;
+  --red-400: #d9705f;
+  --red-500: #c25545;
+  --red-600: #a24437;
+  --blue-400: #6d97c8;
+  --blue-500: #4d7cb2;
+  --purple-400: #a186c4;
+  --purple-500: #8368aa;
+  --teal-400: #5aacaa;
+  --teal-500: #3d908e;
+
+  /* ── 2. SCALES (theme-independent) ────────────────────────────────── */
+
+  /* Spacing — 4px base. Named by step so intent survives refactors. */
+  --sp-0: 0;
+  --sp-1: 2px;
+  --sp-2: 4px;
+  --sp-3: 6px;
+  --sp-4: 8px;
+  --sp-5: 12px;
+  --sp-6: 16px;
+  --sp-7: 20px;
+  --sp-8: 24px;
+  --sp-9: 32px;
+  --sp-10: 40px;
+  --sp-11: 48px;
+  --sp-12: 64px;
+  --sp-13: 80px;
+  --sp-14: 96px;
+
+  /* Radii */
+  --r-xs: 4px;
+  --r-sm: 6px;
+  --r-md: 8px;
+  --r-lg: 10px;
+  --r-xl: 14px;
+  --r-2xl: 18px;
+  --r-3xl: 24px;
+  --r-full: 999px;
+
+  /* Typography ------------------------------------------------------- */
+  --font-sans: 'InterVariable', 'Inter', -apple-system, BlinkMacSystemFont,
+    'SF Pro Text', 'Segoe UI', system-ui, sans-serif;
+  --font-serif: 'Instrument Serif', 'Iowan Old Style', Georgia,
+    'Times New Roman', serif;
+  /* What display headings resolve to. Modules whose art direction calls for
+     an editorial voice (Notes, Reviews) swap this to the serif. */
+  --font-display: var(--font-sans);
+  --fw-display: var(--fw-semibold);
+  --font-mono: 'SF Mono', 'JetBrains Mono', 'Fira Code', ui-monospace,
+    'Cascadia Mono', Menlo, monospace;
+
+  /* Size / line-height / tracking travel together — that pairing is the
+     difference between a "designed" scale and default browser type. */
+  --t-display-lg: 40px;
+  --t-display-lg-lh: 1.08;
+  --t-display-lg-ls: -1.4px;
+
+  --t-display: 32px;
+  --t-display-lh: 1.12;
+  --t-display-ls: -1px;
+
+  --t-title-lg: 24px;
+  --t-title-lg-lh: 1.2;
+  --t-title-lg-ls: -0.6px;
+
+  --t-title: 19px;
+  --t-title-lh: 1.3;
+  --t-title-ls: -0.4px;
+
+  --t-subtitle: 16px;
+  --t-subtitle-lh: 1.4;
+  --t-subtitle-ls: -0.24px;
+
+  --t-body: 14px;
+  --t-body-lh: 1.5;
+  --t-body-ls: -0.08px;
+
+  --t-body-sm: 13px;
+  --t-body-sm-lh: 1.5;
+  --t-body-sm-ls: -0.05px;
+
+  --t-caption: 12px;
+  --t-caption-lh: 1.4;
+  --t-caption-ls: 0;
+
+  --t-micro: 11px;
+  --t-micro-lh: 1.35;
+  --t-micro-ls: 0.2px;
+
+  --t-eyebrow: 11px;
+  --t-eyebrow-lh: 1.3;
+  --t-eyebrow-ls: 0.7px;
+
+  --fw-regular: 400;
+  --fw-medium: 500;
+  --fw-semibold: 590;
+  --fw-bold: 680;
+
+  /* Motion ----------------------------------------------------------- */
+  /* Duration-based easing is for opacity and colour only. Anything that
+     behaves like an object (drag, layout, scale) uses the springs in
+     src/lib/motion.ts instead. */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-snap: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-entrance: cubic-bezier(0.05, 0.7, 0.1, 1);
+
+  --dur-instant: 90ms;
+  --dur-fast: 140ms;
+  --dur-base: 200ms;
+  --dur-slow: 320ms;
+  --dur-slower: 480ms;
+
+  /* Layout ----------------------------------------------------------- */
+  --sidebar-w: 248px;
+  --sidebar-w-collapsed: 60px;
+  --topbar-h: 52px;
+  --content-max: 1180px;
+  --reading-max: 720px;
+
+  --z-base: 0;
+  --z-sticky: 10;
+  --z-dock: 40;
+  --z-drawer: 50;
+  --z-overlay: 60;
+  --z-dialog: 70;
+  --z-popover: 80;
+  --z-palette: 90;
+  --z-toast: 100;
+}
+
+/* ── 3. THEMES ──────────────────────────────────────────────────────── */
+
+/*
+ * Dark is the primary theme: warm charcoal — a gallery at night — rather than
+ * blue-black. The canvas is near-black and *is* the whitespace; panels
+ * separate by lifting onto a surface, not by adding gaps and shadows.
+ */
+:root,
+:root[data-theme='dark'] {
+  color-scheme: dark;
+
+  --canvas: #0d0c0b;
+  --surface-0: #121110;
+  --surface-1: #161513;
+  --surface-2: #1a1917;
+  --surface-3: #201e1b;
+  --surface-inset: #0a0908;
+  --surface-overlay: #191815;
+
+  --hairline: #262420;
+  --hairline-strong: #322f29;
+  --hairline-soft: #1c1a17;
+
+  --ink: #f2f0eb;
+  --ink-muted: #c9c6bf;
+  --ink-subtle: #918d84;
+  --ink-faint: #6c6961;
+  --ink-ghost: #4f4c46;
+  --ink-inverse: var(--n-950);
+
+  --fill-subtle: rgb(255 250 240 / 0.032);
+  --fill-hover: rgb(255 250 240 / 0.055);
+  --fill-active: rgb(255 250 240 / 0.085);
+  --fill-selected: rgb(255 250 240 / 0.07);
+
+  --scrim: rgb(6 5 4 / 0.62);
+
+  --success: var(--green-400);
+  --success-fill: rgb(90 171 129 / 0.14);
+  --warning: var(--yellow-400);
+  --warning-fill: rgb(213 164 74 / 0.14);
+  --danger: var(--red-400);
+  --danger-fill: rgb(217 112 95 / 0.14);
+  --info: var(--blue-400);
+  --info-fill: rgb(109 151 200 / 0.14);
+
+  /* Shadows: floating layers only. Two-part — a tight contact shadow plus a
+     wide ambient one. Dark themes need a hairline instead of a soft edge. */
+  --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.4);
+  --shadow-md: 0 2px 4px rgb(0 0 0 / 0.3), 0 8px 20px -6px rgb(0 0 0 / 0.5);
+  --shadow-lg: 0 4px 8px rgb(0 0 0 / 0.34), 0 20px 44px -12px rgb(0 0 0 / 0.62);
+  --shadow-xl: 0 8px 16px rgb(0 0 0 / 0.36), 0 36px 72px -18px rgb(0 0 0 / 0.72);
+  --shadow-drag: 0 12px 28px -6px rgb(0 0 0 / 0.6);
+
+  --chart-grid: #211f1c;
+  --chart-track: #262420;
+
+  /* Paper grain — the material layer. Dark rooms show less texture. */
+  --grain-opacity: 0.02;
+}
+
+/*
+ * Light is warm paper — ivory panels on a gallery-wall canvas. White is
+ * reserved for surfaces; the canvas itself is unbleached.
+ */
+:root[data-theme='light'] {
+  color-scheme: light;
+
+  --canvas: #f4f1ea;
+  --surface-0: #fbfaf6;
+  --surface-1: #fdfcfa;
+  --surface-2: #f1eee6;
+  --surface-3: #eae6dc;
+  --surface-inset: #efece4;
+  --surface-overlay: #fdfcfa;
+
+  --hairline: #e4dfd4;
+  --hairline-strong: #d5cfc1;
+  --hairline-soft: #ece8de;
+
+  --ink: #232220;
+  --ink-muted: #4a4843;
+  --ink-subtle: #767065;
+  --ink-faint: #999286;
+  --ink-ghost: #b9b3a6;
+  --ink-inverse: #fdfcfa;
+
+  --fill-subtle: rgb(58 52 40 / 0.032);
+  --fill-hover: rgb(58 52 40 / 0.055);
+  --fill-active: rgb(58 52 40 / 0.085);
+  --fill-selected: rgb(58 52 40 / 0.06);
+
+  --scrim: rgb(40 36 28 / 0.3);
+
+  --success: var(--green-600);
+  --success-fill: rgb(61 143 102 / 0.12);
+  --warning: #96701f;
+  --warning-fill: rgb(185 138 51 / 0.14);
+  --danger: var(--red-600);
+  --danger-fill: rgb(194 85 69 / 0.1);
+  --info: #3d6da5;
+  --info-fill: rgb(77 124 178 / 0.1);
+
+  --shadow-sm: 0 1px 2px rgb(46 40 30 / 0.06);
+  --shadow-md: 0 1px 2px rgb(46 40 30 / 0.05), 0 6px 16px -4px rgb(46 40 30 / 0.09);
+  --shadow-lg: 0 2px 4px rgb(46 40 30 / 0.05), 0 16px 36px -10px rgb(46 40 30 / 0.14);
+  --shadow-xl: 0 4px 10px rgb(46 40 30 / 0.06), 0 32px 64px -16px rgb(46 40 30 / 0.18);
+  --shadow-drag: 0 10px 24px -6px rgb(46 40 30 / 0.2);
+
+  --chart-grid: #e8e3d8;
+  --chart-track: #e4dfd3;
+
+  /* Paper shows its grain in daylight. */
+  --grain-opacity: 0.045;
+}
+
+/* ── ACCENTS ────────────────────────────────────────────────────────── */
+/* One chromatic accent, used scarcely: brand mark, focus ring, the single
+   primary action on a screen, and the "now" marker on the calendar. */
+
+:root,
+:root[data-accent='indigo'] {
+  --accent: var(--indigo-500);
+  --accent-hover: var(--indigo-400);
+  --accent-press: var(--indigo-600);
+  --accent-ink: #f6f4ef;
+  --accent-soft: rgb(77 109 153 / 0.17);
+  --accent-softer: rgb(77 109 153 / 0.1);
+  --accent-line: rgb(77 109 153 / 0.45);
+  --accent-glow: rgb(77 109 153 / 0.3);
+}
+:root[data-accent='evergreen'] {
+  --accent: var(--evergreen-500);
+  --accent-hover: var(--evergreen-400);
+  --accent-press: var(--evergreen-600);
+  --accent-ink: #f4f6f2;
+  --accent-soft: rgb(71 119 90 / 0.17);
+  --accent-softer: rgb(71 119 90 / 0.1);
+  --accent-line: rgb(71 119 90 / 0.45);
+  --accent-glow: rgb(71 119 90 / 0.3);
+}
+:root[data-accent='amber'] {
+  --accent: var(--amber-500);
+  --accent-hover: var(--amber-400);
+  --accent-press: var(--amber-600);
+  --accent-ink: #1c1508;
+  --accent-soft: rgb(168 135 60 / 0.18);
+  --accent-softer: rgb(168 135 60 / 0.1);
+  --accent-line: rgb(168 135 60 / 0.45);
+  --accent-glow: rgb(168 135 60 / 0.32);
+}
+:root[data-accent='rose'] {
+  --accent: var(--rose-500);
+  --accent-hover: var(--rose-400);
+  --accent-press: var(--rose-600);
+  --accent-ink: #f8f3ef;
+  --accent-soft: rgb(178 95 61 / 0.17);
+  --accent-softer: rgb(178 95 61 / 0.1);
+  --accent-line: rgb(178 95 61 / 0.45);
+  --accent-glow: rgb(178 95 61 / 0.3);
+}
+:root[data-accent='graphite'] {
+  --accent: var(--graphite-500);
+  --accent-hover: var(--graphite-400);
+  --accent-press: var(--graphite-600);
+  --accent-ink: #f5f4f0;
+  --accent-soft: rgb(117 114 106 / 0.18);
+  --accent-softer: rgb(117 114 106 / 0.1);
+  --accent-line: rgb(117 114 106 / 0.45);
+  --accent-glow: rgb(117 114 106 / 0.3);
+}
+
+/* Priority + life-area colours resolve through these so a single swap
+   restyles every surface that references them. */
+:root {
+  --pri-urgent: var(--red-400);
+  --pri-high: var(--yellow-400);
+  --pri-medium: var(--blue-400);
+  --pri-low: var(--ink-faint);
+
+  --hue-indigo: var(--indigo-400);
+  --hue-green: var(--green-400);
+  --hue-amber: var(--yellow-400);
+  --hue-rose: var(--red-400);
+  --hue-blue: var(--blue-400);
+  --hue-purple: var(--purple-400);
+  --hue-teal: var(--teal-400);
+  --hue-graphite: var(--graphite-400);
+}
+
+/* ── THE LIVING GALLERY ─────────────────────────────────────────────── */
+/*
+ * Each module is a room in the same building: one architecture, its own
+ * light. `data-module` on the shell selects the room. Two knobs only —
+ * an ambient wash colour (kept at whisper alpha so it never competes with
+ * content) and, where the art direction is editorial, the display voice.
+ * Rooms without an entry inherit the neutral defaults.
+ */
+:root {
+  --module-tint: transparent;
+}
+
+/* Dashboard — Bauhaus. Neutral geometry; the canvas itself is the statement. */
+.shell[data-module='dashboard'] {
+  --module-tint: rgb(77 109 153 / 0.04);
+}
+
+/* Today — morning brass, the day's first light. */
+.shell[data-module='today'] {
+  --module-tint: rgb(193 163 93 / 0.045);
+}
+
+/* Calendar — Mondrian. Primary blue held far back. */
+.shell[data-module='calendar'] {
+  --module-tint: rgb(77 109 153 / 0.055);
+}
+
+/* Goals — Kandinsky. A violet drift for circles and connections. */
+.shell[data-module='goals'] {
+  --module-tint: rgb(131 104 170 / 0.05);
+}
+
+/* Focus — Japanese minimalism. Almost nothing: stone, silence. */
+.shell[data-module='focus'] {
+  --module-tint: rgb(117 114 106 / 0.035);
+}
+
+/* Notes / Journal — Monet. Soft green-blue atmosphere, serif voice. */
+.shell[data-module='notes'] {
+  --module-tint: rgb(103 148 120 / 0.055);
+  --font-display: var(--font-serif);
+  --fw-display: var(--fw-regular);
+  --t-display-lg-ls: -0.4px;
+  --t-display-ls: -0.2px;
+  --t-title-lg-ls: -0.1px;
+}
+
+/* Reviews — Art Deco. Brass light, serif voice. */
+.shell[data-module='reviews'] {
+  --module-tint: rgb(168 135 60 / 0.06);
+  --font-display: var(--font-serif);
+  --fw-display: var(--fw-regular);
+  --t-display-lg-ls: -0.4px;
+  --t-display-ls: -0.2px;
+  --t-title-lg-ls: -0.1px;
+}
+
+/* Habits — terracotta warmth: streaks are clay, built by hand. */
+.shell[data-module='habits'] {
+  --module-tint: rgb(178 95 61 / 0.045);
+}
+
+/* Finance — forest green, the colour of stewardship. */
+.shell[data-module='finance'] {
+  --module-tint: rgb(71 119 90 / 0.05);
+}
+
+/* Timeline / Analytics — Constructivism. A firmer red, still whispered. */
+.shell[data-module='timeline'] {
+  --module-tint: rgb(194 85 69 / 0.045);
+}
+
+/* ── DYNAMIC ENVIRONMENT ────────────────────────────────────────────── */
+/*
+ * The gallery's light follows the day. `data-daypart` on <html> is set by the
+ * shell (and refreshed every few minutes): a warmer wash in the morning,
+ * neutral focus in the afternoon, a cool dusk in the evening, near-silence at
+ * night. Evening and night also slow the interface's CSS transitions a step —
+ * the building quiets down.
+ */
+:root {
+  --daypart-tint: transparent;
+}
+:root[data-daypart='morning'] {
+  --daypart-tint: rgb(193 163 93 / 0.05);
+}
+:root[data-daypart='afternoon'] {
+  --daypart-tint: rgb(117 114 106 / 0.02);
+}
+:root[data-daypart='evening'] {
+  --daypart-tint: rgb(77 109 153 / 0.05);
+  --dur-fast: 170ms;
+  --dur-base: 240ms;
+  --dur-slow: 380ms;
+}
+:root[data-daypart='night'] {
+  --daypart-tint: rgb(60 84 118 / 0.04);
+  --dur-fast: 170ms;
+  --dur-base: 240ms;
+  --dur-slow: 380ms;
+}
+
+/* Density — Settings toggles this on <html>. Comfortable is the default. */
+:root,
+:root[data-density='comfortable'] {
+  --row-h: 38px;
+  --row-pad-y: var(--sp-4);
+  --stack-gap: var(--sp-6);
+}
+:root[data-density='compact'] {
+  --row-h: 32px;
+  --row-pad-y: var(--sp-3);
+  --stack-gap: var(--sp-5);
+}

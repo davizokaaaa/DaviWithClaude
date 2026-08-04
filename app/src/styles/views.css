@@ -1,0 +1,303 @@
+/* View-specific styles: board, calendar, habits, matrix, timeline, focus. */
+
+/* ── Kanban board ────────────────────────────────────────────────────── */
+
+.board {
+  display: flex;
+  gap: var(--sp-5);
+  align-items: flex-start;
+  overflow-x: auto;
+  padding-bottom: var(--sp-8);
+  min-height: 420px;
+}
+.board-col {
+  flex: none;
+  width: 286px;
+  display: flex;
+  flex-direction: column;
+  background: var(--surface-0);
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-xl);
+  padding: var(--sp-4);
+  max-height: calc(100vh - 240px);
+  transition: border-color var(--dur-fast) var(--ease-out), background-color var(--dur-fast) var(--ease-out);
+}
+.board-col.is-over {
+  border-color: var(--accent-line);
+  background: var(--accent-softer);
+}
+.board-col-head { padding: var(--sp-2) var(--sp-3) var(--sp-4); flex: none; }
+.board-cards {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  overflow-y: auto;
+  min-height: 60px;
+  padding: 1px;
+}
+.board-card {
+  background: var(--surface-2);
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-lg);
+  padding: var(--sp-4) var(--sp-5);
+  cursor: grab;
+  position: relative;
+  transition: border-color var(--dur-fast) var(--ease-out), background-color var(--dur-fast) var(--ease-out);
+}
+.board-card:hover { border-color: var(--hairline-strong); background: var(--surface-3); }
+.board-card.is-done { opacity: 0.55; }
+
+/* ── Calendar ────────────────────────────────────────────────────────── */
+
+.cal { overflow: hidden; display: flex; flex-direction: column; height: calc(100vh - 230px); min-height: 420px; }
+.cal-head {
+  display: flex;
+  border-bottom: 1px solid var(--hairline);
+  flex: none;
+  padding-right: 10px; /* scrollbar gutter */
+}
+.cal-gutter { flex: none; width: 52px; position: relative; }
+.cal-day-head {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: var(--sp-4) 0;
+  border-left: 1px solid var(--hairline-soft);
+}
+.cal-day-num {
+  font-size: var(--t-body);
+  font-weight: var(--fw-semibold);
+  width: 26px;
+  height: 26px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--r-full);
+}
+.cal-day-num.is-today { background: var(--accent); color: var(--accent-ink); }
+
+.cal-scroll { flex: 1; overflow-y: auto; }
+.cal-grid { display: flex; position: relative; }
+.cal-hour { position: absolute; right: var(--sp-4); translate: 0 -50%; }
+.cal-col {
+  flex: 1;
+  min-width: 0;
+  position: relative;
+  border-left: 1px solid var(--hairline-soft);
+  cursor: copy;
+}
+.cal-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  border-top: 1px solid var(--hairline-soft);
+  pointer-events: none;
+}
+.cal-now {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--accent);
+  z-index: 5;
+  pointer-events: none;
+}
+.cal-now::before {
+  content: '';
+  position: absolute;
+  left: -3px;
+  top: -3px;
+  width: 8px;
+  height: 8px;
+  border-radius: var(--r-full);
+  background: var(--accent);
+}
+
+.cal-block {
+  position: absolute;
+  left: 3px;
+  right: 3px;
+  border-radius: var(--r-md);
+  padding: var(--sp-2) var(--sp-4);
+  background: color-mix(in oklab, var(--block-hue) 16%, var(--surface-2));
+  border: 1px solid color-mix(in oklab, var(--block-hue) 42%, transparent);
+  border-left: 3px solid var(--block-hue);
+  overflow: hidden;
+  cursor: grab;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  user-select: none;
+}
+.cal-block-title { font-size: var(--t-caption); font-weight: var(--fw-medium); color: var(--ink); }
+.cal-block-time { font-size: var(--t-micro); color: var(--ink-subtle); font-variant-numeric: tabular-nums; }
+.cal-kind-break { opacity: 0.75; border-left-style: dashed; }
+.cal-kind-ritual { border-left-style: double; }
+
+@media (max-width: 900px) {
+  .cal-gutter { width: 40px; }
+}
+
+/* ── Habits ──────────────────────────────────────────────────────────── */
+
+.habit-row {
+  display: grid;
+  grid-template-columns: minmax(160px, 1fr) auto;
+  gap: var(--sp-5);
+  align-items: center;
+  padding: var(--sp-5) var(--sp-6);
+  border-bottom: 1px solid var(--hairline-soft);
+}
+.habit-row:last-child { border-bottom: none; }
+.habit-week { display: flex; gap: var(--sp-2); }
+.habit-cell {
+  width: 30px;
+  height: 30px;
+  border-radius: var(--r-md);
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--hairline);
+  background: var(--fill-subtle);
+  color: transparent;
+  font-size: 11px;
+  transition: background-color var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out);
+}
+.habit-cell:hover { border-color: var(--ink-ghost); }
+.habit-cell.is-done { color: #fff; border-color: transparent; }
+.habit-cell.is-frozen { color: var(--info); background: var(--info-fill); border-color: transparent; }
+.habit-cell.is-future { opacity: 0.35; pointer-events: none; }
+
+/* ── Matrix ──────────────────────────────────────────────────────────── */
+
+.matrix {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--stack-gap);
+}
+@media (max-width: 900px) { .matrix { grid-template-columns: minmax(0, 1fr); } }
+.matrix-quad { min-height: 220px; }
+.matrix-label { display: flex; align-items: baseline; gap: var(--sp-3); margin-bottom: var(--sp-4); }
+
+/* ── Timeline / Gantt ────────────────────────────────────────────────── */
+
+.gantt { overflow-x: auto; }
+.gantt-inner { min-width: 640px; }
+.gantt-row { display: flex; align-items: center; gap: var(--sp-5); min-height: 44px; }
+.gantt-name { flex: none; width: 200px; }
+.gantt-track { flex: 1; position: relative; height: 22px; background: var(--fill-subtle); border-radius: var(--r-full); }
+.gantt-bar {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  border-radius: var(--r-full);
+  min-width: 8px;
+}
+.gantt-today { position: absolute; top: -6px; bottom: -6px; width: 2px; background: var(--accent); border-radius: 2px; }
+
+/* ── Focus ───────────────────────────────────────────────────────────── */
+
+.focus-stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-8);
+  padding: var(--sp-12) var(--sp-6);
+  text-align: center;
+}
+.focus-time {
+  font-size: clamp(56px, 12vw, 96px);
+  font-weight: var(--fw-semibold);
+  letter-spacing: -3px;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Notes ───────────────────────────────────────────────────────────── */
+
+.notes-layout {
+  display: grid;
+  grid-template-columns: minmax(220px, 320px) minmax(0, 1fr);
+  gap: var(--stack-gap);
+  align-items: start;
+}
+@media (max-width: 900px) { .notes-layout { grid-template-columns: minmax(0, 1fr); } }
+.note-item {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  width: 100%;
+  text-align: left;
+  padding: var(--sp-4) var(--sp-5);
+  border-radius: var(--r-lg);
+  transition: background-color var(--dur-fast) var(--ease-out);
+}
+.note-item:hover { background: var(--fill-hover); }
+.note-item.is-active { background: var(--fill-selected); }
+.note-editor-title {
+  width: 100%;
+  font-size: var(--t-title-lg);
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--t-title-lg-ls);
+  background: none;
+  color: var(--ink);
+}
+.note-editor-body {
+  width: 100%;
+  min-height: 46vh;
+  background: none;
+  color: var(--ink-muted);
+  font-size: 15px;
+  line-height: 1.7;
+  resize: none;
+  border: none;
+}
+.note-editor-body:focus-visible, .note-editor-title:focus-visible { outline: none; }
+
+/* ── Rooms ───────────────────────────────────────────────────────────────
+   Per-module character (see the Living Gallery in tokens.css). Same building,
+   its own light: each room gets a few surgical overrides, never a redesign. */
+
+/* Focus — Japanese minimalism. More silence: wider margins, a lighter and
+   larger clock, slower breath. The interface steps back from the work. */
+.shell[data-module='focus'] .focus-stage {
+  padding-top: var(--sp-14);
+  gap: var(--sp-9);
+}
+.shell[data-module='focus'] .focus-time {
+  font-weight: 310;
+  letter-spacing: -2px;
+}
+
+/* Calendar — Mondrian. The grid asserts itself: firmer lines, sharper
+   rectangles. Blocks are planes of colour inside black rules. */
+.shell[data-module='calendar'] .cal-col { border-left-color: var(--hairline); }
+.shell[data-module='calendar'] .cal-line { border-top-color: var(--hairline); }
+.shell[data-module='calendar'] .cal-block { border-radius: var(--r-xs); }
+
+/* Notes — Monet. The editor becomes a page: serif title, long leading,
+   nothing between the writer and the light. */
+.shell[data-module='notes'] .note-editor-title {
+  font-family: var(--font-serif);
+  font-weight: var(--fw-regular);
+  letter-spacing: 0;
+  font-size: 28px;
+}
+.shell[data-module='notes'] .note-editor-body {
+  line-height: 1.75;
+  color: var(--ink);
+}
+
+/* Reviews — Art Deco. Brass rules along the tops of panels, serif panel
+   titles, generously tracked eyebrows: a printed annual report from 1928. */
+.shell[data-module='reviews'] .panel {
+  border-top-color: color-mix(in oklab, var(--amber-500) 30%, var(--hairline));
+}
+.shell[data-module='reviews'] .panel-title {
+  font-family: var(--font-serif);
+  font-weight: var(--fw-regular);
+  letter-spacing: 0;
+  font-size: 17px;
+}
+.shell[data-module='reviews'] .t-eyebrow { letter-spacing: 1.6px; }

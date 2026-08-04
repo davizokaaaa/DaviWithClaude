@@ -1,0 +1,19 @@
+/* Instrument Serif — the editorial voice of Meridian. Latin subset only,
+   self-hosted so the single-file artifact build can inline it (CSP allows no
+   external hosts). Used sparingly: display headings in the modules whose art
+   direction calls for it (Notes/Journal, Reviews), and pull-quote moments. */
+
+@font-face {
+  font-family: 'Instrument Serif';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('../assets/fonts/instrument-serif-latin.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Instrument Serif';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url('../assets/fonts/instrument-serif-latin-italic.woff2') format('woff2');
+}

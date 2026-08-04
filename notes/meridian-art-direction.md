@@ -38,3 +38,15 @@ Museum pigments, muted: ink navy `#4d6d99` (default accent), forest `#47775a`, a
 - **Scroll reveal**: `reveal` spread in `lib/motion.ts` (`whileInView`, fires once, -48px margin). Applied to Dashboard's below-fold sections; roll out per-view in Sprint 3.
 - **Button depth**: `.btn-primary` gets inset top light + breath of under-shadow — a key, not a rectangle.
 - Already in place pre-sprint (don't redo): checkbox path draw, ProgressRing/Bars/Sparkline draw-in, AnimatedNumber springs, segmented sliding thumb, palette overshoot.
+
+## Sprint 3 (done) — rooms
+
+Per-module character as a `/* Rooms */` block at the end of `views.css` — surgical CSS overrides under `.shell[data-module=…]`, never redesigns:
+
+- **Focus**: wider top margin, 310-weight clock, more gap — silence.
+- **Calendar**: hairlines step up from soft → regular, blocks sharpen to `--r-xs` — Mondrian planes inside rules.
+- **Notes**: serif 28px editor title, 1.75 body leading, full-ink body — a page, not a form.
+- **Reviews**: brass top rule on panels (`color-mix` with `--amber-500`), serif panel titles, 1.6px eyebrow tracking — 1928 annual report.
+- `.view-title` now reads `--font-display`/`--fw-display`, so page titles speak each room's voice automatically.
+
+Identity milestone complete. Future work: apply `reveal` to more below-fold sections as views grow; consider a Kandinsky treatment for Goals' progress rings (connected circles) if it can stay quiet.

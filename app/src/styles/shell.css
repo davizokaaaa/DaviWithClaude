@@ -201,10 +201,12 @@
 
 .view-head { margin-bottom: var(--sp-8); }
 .view-title {
+  /* Speaks in the room's voice — serif in Notes and Reviews. */
+  font-family: var(--font-display);
   font-size: var(--t-display);
   line-height: var(--t-display-lh);
   letter-spacing: var(--t-display-ls);
-  font-weight: var(--fw-semibold);
+  font-weight: var(--fw-display);
 }
 .view-sub { margin-top: var(--sp-3); color: var(--ink-subtle); font-size: var(--t-body); }
 

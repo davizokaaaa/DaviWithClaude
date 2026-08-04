@@ -254,3 +254,50 @@
   border: none;
 }
 .note-editor-body:focus-visible, .note-editor-title:focus-visible { outline: none; }
+
+/* ── Rooms ───────────────────────────────────────────────────────────────
+   Per-module character (see the Living Gallery in tokens.css). Same building,
+   its own light: each room gets a few surgical overrides, never a redesign. */
+
+/* Focus — Japanese minimalism. More silence: wider margins, a lighter and
+   larger clock, slower breath. The interface steps back from the work. */
+.shell[data-module='focus'] .focus-stage {
+  padding-top: var(--sp-14);
+  gap: var(--sp-9);
+}
+.shell[data-module='focus'] .focus-time {
+  font-weight: 310;
+  letter-spacing: -2px;
+}
+
+/* Calendar — Mondrian. The grid asserts itself: firmer lines, sharper
+   rectangles. Blocks are planes of colour inside black rules. */
+.shell[data-module='calendar'] .cal-col { border-left-color: var(--hairline); }
+.shell[data-module='calendar'] .cal-line { border-top-color: var(--hairline); }
+.shell[data-module='calendar'] .cal-block { border-radius: var(--r-xs); }
+
+/* Notes — Monet. The editor becomes a page: serif title, long leading,
+   nothing between the writer and the light. */
+.shell[data-module='notes'] .note-editor-title {
+  font-family: var(--font-serif);
+  font-weight: var(--fw-regular);
+  letter-spacing: 0;
+  font-size: 28px;
+}
+.shell[data-module='notes'] .note-editor-body {
+  line-height: 1.75;
+  color: var(--ink);
+}
+
+/* Reviews — Art Deco. Brass rules along the tops of panels, serif panel
+   titles, generously tracked eyebrows: a printed annual report from 1928. */
+.shell[data-module='reviews'] .panel {
+  border-top-color: color-mix(in oklab, var(--amber-500) 30%, var(--hairline));
+}
+.shell[data-module='reviews'] .panel-title {
+  font-family: var(--font-serif);
+  font-weight: var(--fw-regular);
+  letter-spacing: 0;
+  font-size: 17px;
+}
+.shell[data-module='reviews'] .t-eyebrow { letter-spacing: 1.6px; }

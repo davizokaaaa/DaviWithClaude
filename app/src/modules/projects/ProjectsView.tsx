@@ -27,7 +27,7 @@ export default function ProjectsView() {
   );
 
   const statusLabel: Record<ProjectStatus, string> = {
-    active: 'Active', planned: 'Planned', paused: 'Paused', done: 'Done',
+    active: 'Ativo', planned: 'Planejado', paused: 'Pausado', done: 'Concluído',
   };
 
   return (
@@ -35,16 +35,16 @@ export default function ProjectsView() {
       <motion.header className="view-head row between g-4 wrap" variants={riseIn} initial="hidden" animate="show">
         <div>
           <h2 className="view-title">Projects</h2>
-          <p className="view-sub">Every commitment with a finish line.</p>
+          <p className="view-sub">Cada compromisso com uma linha de chegada.</p>
         </div>
         <div className="row g-4">
           <Segmented
             layoutNs="projects-filter"
-            label="Filter projects"
+            label="Filtrar projetos"
             value={filter}
             options={[
-              { value: 'active', label: 'Active' },
-              { value: 'all', label: 'All' },
+              { value: 'active', label: 'Ativos' },
+              { value: 'all', label: 'Todos' },
             ]}
             onChange={setFilter}
           />
@@ -53,17 +53,17 @@ export default function ProjectsView() {
             onClick={() => {
               const area = areas[0];
               if (!area) return;
-              const p = addProject({ name: 'New project', areaId: area.id });
+              const p = addProject({ name: 'Novo projeto', areaId: area.id });
               navigate({ view: 'project', param: p.id });
             }}
           >
-            + New project
+            + Novo projeto
           </Button>
         </div>
       </motion.header>
 
       {visible.length === 0 ? (
-        <EmptyState title="No projects here" hint="Create a project to give bigger work a home and a board." />
+        <EmptyState title="Nenhum projeto aqui" hint="Crie um projeto para dar casa e quadro aos trabalhos maiores. (Antes, crie uma Área da Vida.)" />
       ) : (
         <motion.div className="grid-3" variants={stagger(0.02, 0.04)} initial="hidden" animate="show">
           {visible.map((p) => {
@@ -89,7 +89,7 @@ export default function ProjectsView() {
                 {p.description && <p className="t-body-sm ink-subtle clamp-2">{p.description}</p>}
                 <ProgressBar value={progress} hue={p.hue} />
                 <div className="row between t-caption ink-faint">
-                  <span>{done}/{projTasks.length} tasks</span>
+                  <span>{done}/{projTasks.length} tarefas</span>
                   <span className="row g-3">
                     {subprojects.length > 0 && <span>{subprojects.length} sub</span>}
                     {area && <span>{area.name}</span>}

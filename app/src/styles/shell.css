@@ -149,6 +149,16 @@
     radial-gradient(40% 46% at 92% 88%, var(--daypart-tint), transparent 74%);
   animation: atmosphere-drift 90s var(--ease-in-out) infinite alternate;
 }
+/* The generative layer (Atmosphere.tsx) sits with the washes, behind content. */
+.atmosphere {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  width: 100%;
+  height: 100%;
+}
+
 @keyframes atmosphere-drift {
   from { transform: translate3d(-1.5%, -1%, 0) scale(1); }
   to { transform: translate3d(1.5%, 1%, 0) scale(1.06); }

@@ -10,6 +10,7 @@ import { ToastHost } from '@/ui/overlays';
 import { TaskDetailHost } from '@/modules/tasks/TaskDetail';
 import { ShortcutsDialog } from '@/shell/ShortcutsDialog';
 import { PlanningRitual, ShutdownRitual } from '@/modules/rituals/Rituals';
+import { Atmosphere } from '@/shell/Atmosphere';
 import { applyAppearance, useSettings, useUi } from '@/core/store/ui';
 import { useHotkeys, modLabel } from '@/lib/hooks/useHotkeys';
 import { viewIn } from '@/lib/motion';
@@ -17,7 +18,7 @@ import type { ViewId } from '@/core/types';
 
 function ViewSkeleton() {
   return (
-    <div className="view" aria-busy="true" aria-label="Loading view">
+    <div className="view" aria-busy="true" aria-label="Carregando">
       <div className="skeleton" style={{ width: 220, height: 34, marginBottom: 24 }} />
       <div className="skeleton" style={{ width: '100%', height: 96, marginBottom: 12 }} />
       <div className="skeleton" style={{ width: '100%', height: 96, marginBottom: 12 }} />
@@ -82,23 +83,24 @@ export function App() {
   return (
     <LayoutGroup>
       <div className="shell" data-module={route.view}>
-        <a href="#main-content" className="sr-only skip-link">Skip to content</a>
+        <a href="#main-content" className="sr-only skip-link">Pular para o conteúdo</a>
         <Sidebar />
         <div className="main">
+          <Atmosphere module={route.view} />
           <header className="topbar">
             <h1 className="topbar-title">{def.title}</h1>
             <span className="spacer" />
             <button className="searchbtn" onClick={() => openOverlay({ kind: 'palette' })}>
               <SearchGlyph />
-              <span className="searchbtn-label">Search or jump to…</span>
+              <span className="searchbtn-label">Buscar ou ir para…</span>
               <kbd className="kbd">{modLabel} K</kbd>
             </button>
             <button
               className="btn btn-primary btn-sm"
               onClick={() => openOverlay({ kind: 'capture' })}
-              title={`Quick capture (${modLabel}⇧N)`}
+              title={`Captura rápida (${modLabel}⇧N)`}
             >
-              + New
+              + Novo
             </button>
           </header>
           <main className="content" id="main-content" tabIndex={-1}>

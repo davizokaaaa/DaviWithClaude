@@ -17,7 +17,7 @@ export function TaskDetailHost() {
   const task = useData((s) => (taskId ? s.tasks.find((t) => t.id === taskId) : undefined));
 
   return (
-    <Drawer open={!!task} onClose={close} title="Task" width={440}>
+    <Drawer open={!!task} onClose={close} title="Tarefa" width={440}>
       {task && <TaskDetailBody taskId={task.id} />}
     </Drawer>
   );
@@ -42,7 +42,7 @@ function TaskDetailBody({ taskId }: { taskId: string }) {
   return (
     <div className="col g-6">
       <Input
-        aria-label="Task title"
+        aria-label="Título da tarefa"
         value={task.title}
         onChange={(e) => updateTask(task.id, { title: e.target.value })}
         style={{ fontSize: 16, fontWeight: 590, height: 40 }}
@@ -50,13 +50,13 @@ function TaskDetailBody({ taskId }: { taskId: string }) {
 
       <div className="row g-3 wrap">
         <Chip active={!!task.plannedFor && task.plannedFor === todayKey()} onClick={() => updateTask(task.id, { plannedFor: todayKey(), status: task.status === 'inbox' ? 'todo' : task.status })}>
-          Today
+          Hoje
         </Chip>
         <Chip
           active={!!task.plannedFor && task.plannedFor === addDaysKey(todayKey(), 1)}
           onClick={() => updateTask(task.id, { plannedFor: addDaysKey(todayKey(), 1), status: task.status === 'inbox' ? 'todo' : task.status })}
         >
-          Tomorrow
+          Amanhã
         </Chip>
         {task.plannedFor && (
           <Chip onClick={() => updateTask(task.id, { plannedFor: undefined })}>
@@ -67,28 +67,28 @@ function TaskDetailBody({ taskId }: { taskId: string }) {
 
       <div className="grid-2" style={{ gap: 'var(--sp-5)' }}>
         <Select
-          label="Priority"
+          label="Prioridade"
           value={task.priority}
           onChange={(e) => updateTask(task.id, { priority: e.target.value as Priority })}
         >
-          <option value="urgent">Urgent</option>
-          <option value="high">High</option>
-          <option value="medium">Medium</option>
-          <option value="low">Low</option>
-          <option value="none">None</option>
+          <option value="urgent">Urgente</option>
+          <option value="high">Alta</option>
+          <option value="medium">Média</option>
+          <option value="low">Baixa</option>
+          <option value="none">Nenhuma</option>
         </Select>
         <Select
-          label="Energy"
+          label="Energia"
           value={task.energy ?? ''}
           onChange={(e) => updateTask(task.id, { energy: (e.target.value || undefined) as EnergyLevel | undefined })}
         >
           <option value="">—</option>
-          <option value="deep">Deep work</option>
-          <option value="focused">Focused</option>
-          <option value="light">Light</option>
+          <option value="deep">Trabalho profundo</option>
+          <option value="focused">Concentrado</option>
+          <option value="light">Leve</option>
         </Select>
         <Select
-          label="Project"
+          label="Projeto"
           value={task.projectId ?? ''}
           onChange={(e) => {
             const proj = projects.find((p) => p.id === e.target.value);
@@ -99,23 +99,23 @@ function TaskDetailBody({ taskId }: { taskId: string }) {
             });
           }}
         >
-          <option value="">None</option>
+          <option value="">Nenhum</option>
           {projects.map((p) => (
             <option key={p.id} value={p.id}>{p.name}</option>
           ))}
         </Select>
         <Select
-          label="Area"
+          label="Área"
           value={task.areaId ?? ''}
           onChange={(e) => updateTask(task.id, { areaId: e.target.value || undefined })}
         >
-          <option value="">None</option>
+          <option value="">Nenhum</option>
           {areas.map((a) => (
             <option key={a.id} value={a.id}>{a.name}</option>
           ))}
         </Select>
         <Input
-          label="Estimate (min)"
+          label="Estimativa (min)"
           type="number"
           min={0}
           step={5}
@@ -123,7 +123,7 @@ function TaskDetailBody({ taskId }: { taskId: string }) {
           onChange={(e) => updateTask(task.id, { estimate: e.target.value ? Number(e.target.value) : undefined })}
         />
         <Input
-          label="Due date"
+          label="Prazo"
           type="date"
           value={task.dueDate ?? ''}
           onChange={(e) => updateTask(task.id, { dueDate: e.target.value || undefined })}
@@ -131,16 +131,16 @@ function TaskDetailBody({ taskId }: { taskId: string }) {
       </div>
 
       <Textarea
-        label="Notes"
+        label="Notas"
         rows={3}
         value={task.notes ?? ''}
-        placeholder="Context, links, acceptance criteria…"
+        placeholder="Contexto, links, critérios de aceite…"
         onChange={(e) => updateTask(task.id, { notes: e.target.value })}
       />
 
       {blockers.length > 0 && (
         <div className="panel panel-pad" style={{ borderColor: 'var(--warning)', background: 'var(--warning-fill)' }}>
-          <p className="t-caption" style={{ color: 'var(--warning)', fontWeight: 590 }}>Blocked by</p>
+          <p className="t-caption" style={{ color: 'var(--warning)', fontWeight: 590 }}>Bloqueada por</p>
           {blockers.map((b) => (
             <p key={b!.id} className="t-body-sm ink-muted" style={{ marginTop: 4 }}>· {b!.title}</p>
           ))}
@@ -175,13 +175,13 @@ function TaskDetailBody({ taskId }: { taskId: string }) {
           }}
         >
           <Input
-            aria-label="New checklist item"
-            placeholder="Add a step…"
+            aria-label="Novo item do checklist"
+            placeholder="Adicionar um passo…"
             value={newSub}
             onChange={(e) => setNewSub(e.target.value)}
             style={{ height: 30 }}
           />
-          <Button type="submit" size="sm" variant="ghost">Add</Button>
+          <Button type="submit" size="sm" variant="ghost">Adicionar</Button>
         </form>
       </section>
     </div>

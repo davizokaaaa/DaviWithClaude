@@ -50,7 +50,7 @@ export default function FocusView({ param }: { param?: string }) {
     if (running && !focus.paused && remainingMs <= 0 && focus.sessionId) {
       endSession(focus.sessionId, true);
       setFocus({ sessionId: null, endsAt: null, paused: false, pausedRemaining: null });
-      toast({ message: 'Focus session complete. Take a real break.', kind: 'success' });
+      toast({ message: 'Sessão de foco concluída. Faça uma pausa de verdade.', kind: 'success' });
     }
   });
 
@@ -88,7 +88,7 @@ export default function FocusView({ param }: { param?: string }) {
     <div className="view view-narrow">
       <motion.header className="view-head" variants={riseIn} initial="hidden" animate="show">
         <h2 className="view-title">Focus</h2>
-        <p className="view-sub">One task, one block of undivided attention.</p>
+        <p className="view-sub">Uma tarefa, um bloco de atenção indivisível.</p>
       </motion.header>
 
       <section className="panel focus-stage">
@@ -104,24 +104,24 @@ export default function FocusView({ param }: { param?: string }) {
             >
               <Segmented
                 layoutNs="focus-mode"
-                label="Focus mode"
+                label="Modo de foco"
                 value={mode}
                 options={[
                   { value: 'pomodoro', label: `Pomodoro · ${pomodoro.work}m` },
-                  { value: 'deep', label: 'Deep work · 50m' },
+                  { value: 'deep', label: 'Trabalho profundo · 50m' },
                 ]}
                 onChange={setMode}
               />
               <div style={{ width: 320, maxWidth: '100%' }}>
-                <Select aria-label="Focus on task" value={taskId} onChange={(e) => setTaskId(e.target.value)}>
-                  <option value="">No specific task</option>
+                <Select aria-label="Focar em uma tarefa" value={taskId} onChange={(e) => setTaskId(e.target.value)}>
+                  <option value="">Sem tarefa específica</option>
                   {openToday.map((t) => (
                     <option key={t.id} value={t.id}>{t.title}</option>
                   ))}
                 </Select>
               </div>
               <Button variant="primary" size="lg" onClick={start}>
-                Start focusing
+                Começar a focar
               </Button>
             </motion.div>
           ) : (
@@ -138,7 +138,7 @@ export default function FocusView({ param }: { param?: string }) {
                   <span className="focus-time">
                     {mm}:{String(ss).padStart(2, '0')}
                   </span>
-                  {focus.paused && <span className="t-caption ink-faint">paused</span>}
+                  {focus.paused && <span className="t-caption ink-faint">pausado</span>}
                 </div>
               </ProgressRing>
               {linkedTask && (
@@ -147,8 +147,8 @@ export default function FocusView({ param }: { param?: string }) {
                 </p>
               )}
               <div className="row g-4">
-                <Button onClick={pause}>{focus.paused ? 'Resume' : 'Pause'}</Button>
-                <Button variant="ghost" onClick={() => stop(false)}>End early</Button>
+                <Button onClick={pause}>{focus.paused ? 'Retomar' : 'Pausar'}</Button>
+                <Button variant="ghost" onClick={() => stop(false)}>Encerrar antes</Button>
               </div>
             </motion.div>
           )}
@@ -157,12 +157,12 @@ export default function FocusView({ param }: { param?: string }) {
 
       <section className="panel panel-pad" style={{ marginTop: 'var(--stack-gap)' }}>
         <div className="panel-head">
-          <h3 className="panel-title">Focus this fortnight</h3>
+          <h3 className="panel-title">Foco na quinzena</h3>
           <span className="t-caption ink-faint">
-            today · <AnimatedNumber value={todayMinutes} format={(n) => fmtMinutes(Math.round(n))} />
+            hoje · <AnimatedNumber value={todayMinutes} format={(n) => fmtMinutes(Math.round(n))} />
           </span>
         </div>
-        <Bars data={trend.map((p) => p.value)} labels={['2 weeks ago', 'today']} hue="purple" height={64} />
+        <Bars data={trend.map((p) => p.value)} labels={['há 2 semanas', 'hoje']} hue="purple" height={64} />
       </section>
     </div>
   );

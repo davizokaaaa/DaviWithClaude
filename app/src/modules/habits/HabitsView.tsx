@@ -46,9 +46,9 @@ export default function HabitsView() {
       <motion.header className="view-head row between g-4" variants={riseIn} initial="hidden" animate="show">
         <div>
           <h2 className="view-title">Habits</h2>
-          <p className="view-sub">Small things, kept. Freezes protect a streak on a bad day.</p>
+          <p className="view-sub">Pequenas coisas, mantidas. Congelamentos protegem a sequência num dia ruim.</p>
         </div>
-        <Button variant="primary" onClick={() => setAdding(true)}>+ New habit</Button>
+        <Button variant="primary" onClick={() => setAdding(true)}>+ Novo hábito</Button>
       </motion.header>
 
       <motion.section className="panel" variants={stagger()} initial="hidden" animate="show">
@@ -64,11 +64,11 @@ export default function HabitsView() {
                 <div className="col" style={{ minWidth: 0 }}>
                   <span className="t-body truncate" style={{ fontWeight: 500 }}>{h.name}</span>
                   <span className="t-micro ink-faint">
-                    {streak > 0 ? `${streak}-day streak` : 'no streak yet'} · {Math.round(consistency * 100)}% this month
+                    {streak > 0 ? `sequência de ${streak} dias` : 'sem sequência ainda'} · {Math.round(consistency * 100)}% no mês
                   </span>
                 </div>
               </button>
-              <div className="habit-week" role="group" aria-label={`${h.name} this week`}>
+              <div className="habit-week" role="group" aria-label={`${h.name} nesta semana`}>
                 {week.map((day) => {
                   const done = habitDoneOn(habitLogs, h.id, day);
                   const frozen = h.freezes.includes(day);
@@ -78,15 +78,15 @@ export default function HabitsView() {
                       key={day}
                       className={clsx('habit-cell', done && 'is-done', frozen && !done && 'is-frozen', future && 'is-future')}
                       style={done ? { background: `var(--hue-${h.hue})` } : undefined}
-                      aria-label={`${h.name} on ${format(fromKey(day), 'EEE d')}${done ? ' — done' : frozen ? ' — frozen' : ''}`}
+                      aria-label={`${h.name} em ${format(fromKey(day), 'EEE d')}${done ? ' — feito' : frozen ? ' — congelado' : ''}`}
                       aria-pressed={done}
-                      title={`${format(fromKey(day), 'EEE d')}${frozen ? ' · frozen' : ''}`}
+                      title={`${format(fromKey(day), 'EEE d')}${frozen ? ' · congelado' : ''}`}
                       onClick={() => !future && toggleHabit(h.id, day)}
                       onContextMenu={(e) => {
                         e.preventDefault();
                         if (!future && !done) {
                           freezeHabit(h.id, day);
-                          toast({ message: 'Day frozen — streak protected', kind: 'success' });
+                          toast({ message: 'Dia congelado — sequência protegida', kind: 'success' });
                         }
                       }}
                       whileTap={{ scale: 0.8 }}
@@ -111,8 +111,8 @@ export default function HabitsView() {
           animate="show"
         >
           <div className="panel-head">
-            <h3 className="panel-title">{selectedHabit.name} — last 16 weeks</h3>
-            <span className="t-caption ink-faint">right-click a day to freeze it</span>
+            <h3 className="panel-title">{selectedHabit.name} — últimas 16 semanas</h3>
+            <span className="t-caption ink-faint">clique com o botão direito para congelar um dia</span>
           </div>
           <Heatmap
             days={heatDays}
@@ -122,18 +122,18 @@ export default function HabitsView() {
         </motion.section>
       )}
 
-      <Dialog open={adding} onClose={() => setAdding(false)} title="New habit" width={380}>
+      <Dialog open={adding} onClose={() => setAdding(false)} title="Novo hábito" width={380}>
         <div className="col g-5">
           <Input
             autoFocus
-            label="Habit"
-            placeholder="Read 20 pages"
+            label="Hábito"
+            placeholder="Ler 20 páginas"
             value={name}
             onChange={(e) => setName(e.target.value)}
           />
-          <Select label="Color" value={hue} onChange={(e) => setHue(e.target.value as Hue)}>
+          <Select label="Cor" value={hue} onChange={(e) => setHue(e.target.value as Hue)}>
             {(['green', 'indigo', 'amber', 'rose', 'blue', 'purple', 'teal'] as Hue[]).map((h) => (
-              <option key={h} value={h}>{h}</option>
+              <option key={h} value={h}>{({ green: 'verde', indigo: 'azul-tinta', amber: 'latão', rose: 'terracota', blue: 'azul', purple: 'violeta', teal: 'petróleo', graphite: 'pedra' } as Record<Hue, string>)[h]}</option>
             ))}
           </Select>
           <div className="row" style={{ justifyContent: 'flex-end' }}>
@@ -146,7 +146,7 @@ export default function HabitsView() {
                 setAdding(false);
               }}
             >
-              Create habit
+              Criar hábito
             </Button>
           </div>
         </div>

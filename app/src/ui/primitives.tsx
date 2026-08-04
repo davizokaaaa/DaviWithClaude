@@ -152,7 +152,7 @@ export function Checkbox({ checked, onChange, label, size = 'md' }: CheckboxProp
     <motion.button
       role="checkbox"
       aria-checked={checked}
-      aria-label={label ?? (checked ? 'Mark incomplete' : 'Mark complete')}
+      aria-label={label ?? (checked ? 'Marcar como pendente' : 'Marcar como concluída')}
       className={clsx('checkbox', `checkbox-${size}`, checked && 'is-checked')}
       onClick={(e) => {
         e.stopPropagation();
@@ -228,21 +228,21 @@ export function Dot({ hue, className }: { hue: string; className?: string }) {
 }
 
 const PRIORITY_META: Record<string, { label: string; cls: string }> = {
-  urgent: { label: 'Urgent', cls: 'pri-urgent' },
-  high: { label: 'High', cls: 'pri-high' },
-  medium: { label: 'Medium', cls: 'pri-medium' },
-  low: { label: 'Low', cls: 'pri-low' },
+  urgent: { label: 'Urgente', cls: 'pri-urgent' },
+  high: { label: 'Alta', cls: 'pri-high' },
+  medium: { label: 'Média', cls: 'pri-medium' },
+  low: { label: 'Baixa', cls: 'pri-low' },
 };
 
 export function PriorityFlag({ priority }: { priority: string }) {
   const meta = PRIORITY_META[priority];
   if (!meta) return null;
   return (
-    <span className={clsx('priflag', meta.cls)} title={`${meta.label} priority`}>
+    <span className={clsx('priflag', meta.cls)} title={`Prioridade ${meta.label.toLowerCase()}`}>
       <svg width="11" height="11" viewBox="0 0 12 12" aria-hidden>
         <path d="M2.5 1.5v9M2.5 1.8c2-.9 4-.9 6 .2l1 .5-.6 4c-2-1.1-4-1.1-6.4-.2" fill="currentColor" fillOpacity="0.25" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
       </svg>
-      <span className="sr-only">{meta.label} priority</span>
+      <span className="sr-only">Prioridade {meta.label.toLowerCase()}</span>
     </span>
   );
 }

@@ -22,21 +22,21 @@ export default function UpcomingView() {
     <div className="view view-narrow">
       <motion.header className="view-head" variants={riseIn} initial="hidden" animate="show">
         <h2 className="view-title">Upcoming</h2>
-        <p className="view-sub">The next two weeks, exactly as committed.</p>
+        <p className="view-sub">As próximas duas semanas, exatamente como assumidas.</p>
       </motion.header>
 
       {empty && (
         <EmptyState
           icon={<span aria-hidden>⤳</span>}
-          title="A clear horizon"
-          hint="Nothing scheduled ahead. Plan from Today or set due dates on tasks."
+          title="Horizonte limpo"
+          hint="Nada agendado à frente. Planeje a partir de Hoje ou defina prazos nas tarefas."
         />
       )}
 
       {overdue.length > 0 && (
         <motion.section variants={stagger()} initial="hidden" animate="show" style={{ marginBottom: 'var(--stack-gap)' }}>
           <motion.p variants={staggerItem} className="t-eyebrow" style={{ color: 'var(--danger)', marginBottom: 'var(--sp-3)' }}>
-            Needs a decision · {overdue.length}
+            Precisa de decisão · {overdue.length}
           </motion.p>
           <ul className="col panel" style={{ padding: 'var(--sp-3)', borderColor: 'var(--danger-fill)' }}>
             <AnimatePresence initial={false}>

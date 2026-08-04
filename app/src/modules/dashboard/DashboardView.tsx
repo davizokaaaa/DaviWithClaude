@@ -60,46 +60,46 @@ export default function DashboardView() {
   return (
     <div className="view">
       <motion.header className="view-head" variants={riseIn} initial="hidden" animate="show">
-        <h2 className="view-title">Dashboard</h2>
-        <p className="view-sub">Follow-through, not busyness.</p>
+        <h2 className="view-title">Painel</h2>
+        <p className="view-sub">Entrega, não ocupação.</p>
       </motion.header>
 
       <motion.div className="grid-4" style={{ marginBottom: 'var(--stack-gap)' }} variants={stagger(0.02, 0.05)} initial="hidden" animate="show">
         <motion.div variants={staggerItem} className="panel panel-pad stat">
           <span className="stat-value"><AnimatedNumber value={week.last7} /></span>
-          <span className="stat-label">tasks done · 7 days</span>
+          <span className="stat-label">tarefas feitas · 7 dias</span>
           <span className={`stat-delta ${week.delta >= 0 ? 'is-up' : 'is-down'}`}>
-            {week.delta >= 0 ? '▲' : '▼'} {Math.abs(week.delta)} vs prior week
+            {week.delta >= 0 ? '▲' : '▼'} {Math.abs(week.delta)} vs semana anterior
           </span>
         </motion.div>
         <motion.div variants={staggerItem} className="panel panel-pad stat">
           <span className="stat-value">
             <AnimatedNumber value={focusWeekMin} format={(n) => fmtMinutes(Math.round(n))} />
           </span>
-          <span className="stat-label">focused time · 7 days</span>
+          <span className="stat-label">tempo focado · 7 dias</span>
         </motion.div>
         <motion.div variants={staggerItem} className="panel panel-pad stat">
           <span className="stat-value"><AnimatedNumber value={ritualRate} format={(n) => `${Math.round(n)}%`} /></span>
-          <span className="stat-label">planning + shutdown kept</span>
+          <span className="stat-label">planejamento + encerramento mantidos</span>
         </motion.div>
         <motion.div variants={staggerItem} className="panel panel-pad stat">
           <span className="stat-value"><AnimatedNumber value={Math.round(habitAvg * 100)} format={(n) => `${Math.round(n)}%`} /></span>
-          <span className="stat-label">habit consistency · 30 days</span>
+          <span className="stat-label">consistência de hábitos · 30 dias</span>
         </motion.div>
       </motion.div>
 
       <div className="grid-2" style={{ marginBottom: 'var(--stack-gap)', alignItems: 'start' }}>
         <motion.section className="panel panel-pad" {...reveal}>
           <div className="panel-head">
-            <h3 className="panel-title">Completions</h3>
-            <span className="t-caption ink-faint">14 days</span>
+            <h3 className="panel-title">Conclusões</h3>
+            <span className="t-caption ink-faint">14 dias</span>
           </div>
-          <Bars data={completion.map((p) => p.value)} labels={['2w ago', 'today']} height={80} />
+          <Bars data={completion.map((p) => p.value)} labels={['há 2 sem', 'hoje']} height={80} />
         </motion.section>
         <motion.section className="panel panel-pad" {...reveal}>
           <div className="panel-head">
-            <h3 className="panel-title">Mood</h3>
-            <span className="t-caption ink-faint">14 days · logged at shutdown</span>
+            <h3 className="panel-title">Humor</h3>
+            <span className="t-caption ink-faint">14 dias · registrado no encerramento</span>
           </div>
           <Sparkline points={moodTrend} hue="teal" height={80} />
         </motion.section>
@@ -108,8 +108,8 @@ export default function DashboardView() {
       <div className="grid-2" style={{ alignItems: 'start' }}>
         <motion.section className="panel panel-pad" {...reveal}>
           <div className="panel-head">
-            <h3 className="panel-title">Goal movement</h3>
-            <button className="t-caption ink-faint" onClick={() => navigate({ view: 'goals' })}>All →</button>
+            <h3 className="panel-title">Movimento das metas</h3>
+            <button className="t-caption ink-faint" onClick={() => navigate({ view: 'goals' })}>Todas →</button>
           </div>
           <div className="col g-5">
             {goals.slice(0, 4).map((g) => {
@@ -124,7 +124,7 @@ export default function DashboardView() {
                     <span className="t-body-sm truncate" style={{ fontWeight: 500 }}>{g.name}</span>
                     <span className="t-micro ink-faint row g-2">
                       {area && <Dot hue={area.hue} />}
-                      {g.status.replace('-', ' ')}
+                      {({ 'on-track': 'no rumo', 'at-risk': 'em risco', behind: 'atrasada', achieved: 'alcançada', paused: 'pausada' } as const)[g.status]}
                     </span>
                   </div>
                 </div>
@@ -134,20 +134,20 @@ export default function DashboardView() {
         </motion.section>
 
         <motion.section className="panel panel-pad" {...reveal}>
-          <div className="panel-head"><h3 className="panel-title">Right now</h3></div>
+          <div className="panel-head"><h3 className="panel-title">Agora mesmo</h3></div>
           <div className="col g-4 t-body-sm ink-muted">
             <p>
-              <strong style={{ color: 'var(--ink)' }}>{openToday}</strong> task{openToday !== 1 ? 's' : ''} left on today’s plan.
+              <strong style={{ color: 'var(--ink)' }}>{openToday}</strong> tarefa{openToday !== 1 ? 's' : ''} no plano de hoje.
             </p>
             <p>
               {plannedDays.includes(todayKey())
-                ? 'Today was planned deliberately — the system is working.'
-                : 'Today has no committed plan yet. Two minutes of planning beats a day of reacting.'}
+                ? 'Hoje foi planejado deliberadamente — o sistema está funcionando.'
+                : 'Hoje ainda não tem plano assumido. Dois minutos de planejamento valem mais que um dia reagindo.'}
             </p>
             <p>
               {shutdowns.some((s) => s.date === todayKey())
-                ? 'Shutdown complete. The evening is yours.'
-                : 'End with a shutdown so tomorrow starts clean.'}
+                ? 'Encerramento feito. A noite é sua.'
+                : 'Termine com um encerramento para amanhã começar limpo.'}
             </p>
           </div>
         </motion.section>

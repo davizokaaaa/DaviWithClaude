@@ -45,7 +45,7 @@ export default function TimelineView() {
     <div className="view">
       <motion.header className="view-head" variants={riseIn} initial="hidden" animate="show">
         <h2 className="view-title">Timeline</h2>
-        <p className="view-sub">Projects against their finish lines, next {horizon} days.</p>
+        <p className="view-sub">Projetos contra suas linhas de chegada, próximos {horizon} dias.</p>
       </motion.header>
 
       <motion.section className="panel panel-pad gantt" variants={stagger(0.03, 0.05)} initial="hidden" animate="show">
@@ -55,7 +55,7 @@ export default function TimelineView() {
             <div className="gantt-track" style={{ background: 'none' }}>
               <span className="gantt-today" style={{ left: pct(today) }} />
               <span className="t-micro ink-faint" style={{ position: 'absolute', left: pct(today), translate: '6px -2px' }}>
-                today
+                hoje
               </span>
             </div>
           </div>
@@ -97,7 +97,7 @@ export default function TimelineView() {
                   </motion.span>
                 </span>
                 <span className="t-caption ink-faint" style={{ flex: 'none', width: 84, textAlign: 'right', color: overdue ? 'var(--danger)' : undefined }}>
-                  {p.targetDate ? humanDay(to) : 'no date'}
+                  {p.targetDate ? humanDay(to) : 'sem data'}
                 </span>
               </motion.button>
             );

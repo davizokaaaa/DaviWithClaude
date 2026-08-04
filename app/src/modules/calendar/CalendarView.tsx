@@ -66,7 +66,7 @@ export default function CalendarView() {
     if (!draft || !draftTitle.trim()) return;
     addBlock({ date: draft.date, start: draft.start, duration: draftDuration, title: draftTitle.trim(), kind: 'task', hue: 'indigo' });
     setDraft(null);
-    toast({ message: `Blocked ${fmtClock(draft.start)}–${fmtClock(draft.start + draftDuration)}`, kind: 'success' });
+    toast({ message: `Bloco ${fmtClock(draft.start)}–${fmtClock(draft.start + draftDuration)} reservado`, kind: 'success' });
   };
 
   return (
@@ -74,12 +74,12 @@ export default function CalendarView() {
       <motion.header className="view-head row between g-4 wrap" variants={riseIn} initial="hidden" animate="show">
         <div>
           <h2 className="view-title">{format(fromKey(days[0]), 'MMMM yyyy')}</h2>
-          <p className="view-sub">Click any slot to block time. Drag blocks to move them.</p>
+          <p className="view-sub">Clique em um horário para reservar tempo. Arraste blocos para movê-los.</p>
         </div>
         <div className="row g-3">
-          <Button size="sm" onClick={() => setAnchor((d) => new Date(d.getTime() - 7 * 86400000))} aria-label="Previous week">←</Button>
-          <Button size="sm" onClick={() => setAnchor(new Date())}>Today</Button>
-          <Button size="sm" onClick={() => setAnchor((d) => new Date(d.getTime() + 7 * 86400000))} aria-label="Next week">→</Button>
+          <Button size="sm" onClick={() => setAnchor((d) => new Date(d.getTime() - 7 * 86400000))} aria-label="Semana anterior">←</Button>
+          <Button size="sm" onClick={() => setAnchor(new Date())}>Hoje</Button>
+          <Button size="sm" onClick={() => setAnchor((d) => new Date(d.getTime() + 7 * 86400000))} aria-label="Próxima semana">→</Button>
         </div>
       </motion.header>
 
@@ -111,7 +111,7 @@ export default function CalendarView() {
                 onClick={(e) => onGridClick(day, e)}
                 role="button"
                 tabIndex={-1}
-                aria-label={`Schedule for ${day}`}
+                aria-label={`Agenda de ${day}`}
               >
                 {hours.map((m) => (
                   <span key={m} className="cal-line" style={{ top: (m - DAY_START) * PX_PER_MIN }} aria-hidden />
@@ -145,7 +145,7 @@ export default function CalendarView() {
         </div>
       </div>
 
-      <Dialog open={!!draft} onClose={() => setDraft(null)} title="Block time" width={380}>
+      <Dialog open={!!draft} onClose={() => setDraft(null)} title="Reservar tempo" width={380}>
         {draft && (
           <div className="col g-5">
             <p className="t-body-sm ink-subtle" style={{ marginTop: -8 }}>
@@ -153,22 +153,22 @@ export default function CalendarView() {
             </p>
             <Input
               autoFocus
-              label="What is this time for?"
+              label="Para que é esse tempo?"
               value={draftTitle}
               onChange={(e) => setDraftTitle(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && saveDraft()}
-              placeholder="Deep work, workout, review…"
+              placeholder="Trabalho profundo, treino, revisão…"
             />
-            <Select label="Duration" value={String(draftDuration)} onChange={(e) => setDraftDuration(Number(e.target.value))}>
+            <Select label="Duração" value={String(draftDuration)} onChange={(e) => setDraftDuration(Number(e.target.value))}>
               <option value="15">15 min</option>
               <option value="30">30 min</option>
               <option value="45">45 min</option>
-              <option value="60">1 hour</option>
-              <option value="90">1.5 hours</option>
-              <option value="120">2 hours</option>
+              <option value="60">1 hora</option>
+              <option value="90">1,5 hora</option>
+              <option value="120">2 horas</option>
             </Select>
             <div className="row" style={{ justifyContent: 'flex-end' }}>
-              <Button variant="primary" onClick={saveDraft}>Add block</Button>
+              <Button variant="primary" onClick={saveDraft}>Adicionar bloco</Button>
             </div>
           </div>
         )}
@@ -216,7 +216,7 @@ function CalBlock({
         e.stopPropagation();
         onDelete();
       }}
-      title={`${block.title} · ${fmtClock(block.start)}–${fmtClock(block.start + block.duration)} (double-click to remove)`}
+      title={`${block.title} · ${fmtClock(block.start)}–${fmtClock(block.start + block.duration)} (clique duplo para remover)`}
       tabIndex={0}
       role="button"
       aria-label={`${block.title}, ${fmtClock(block.start)}`}

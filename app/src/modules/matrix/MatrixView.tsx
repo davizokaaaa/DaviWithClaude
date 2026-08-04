@@ -10,10 +10,10 @@ import { todayKey } from '@/lib/dates';
 import type { Task } from '@/core/types';
 
 const QUADS = [
-  { title: 'Do first', hint: 'urgent & important', color: 'var(--danger)' },
-  { title: 'Schedule', hint: 'important, not urgent', color: 'var(--accent)' },
-  { title: 'Shrink', hint: 'urgent, not important', color: 'var(--warning)' },
-  { title: 'Let go', hint: 'neither — candidates to drop', color: 'var(--ink-faint)' },
+  { title: 'Fazer já', hint: 'urgente e importante', color: 'var(--danger)' },
+  { title: 'Agendar', hint: 'importante, não urgente', color: 'var(--accent)' },
+  { title: 'Encolher', hint: 'urgente, não importante', color: 'var(--warning)' },
+  { title: 'Soltar', hint: 'nem um nem outro — candidatas a sair', color: 'var(--ink-faint)' },
 ];
 
 export default function MatrixView() {
@@ -34,7 +34,7 @@ export default function MatrixView() {
       <motion.header className="view-head" variants={riseIn} initial="hidden" animate="show">
         <h2 className="view-title">Eisenhower Matrix</h2>
         <p className="view-sub">
-          Urgency from dates, importance from priority and project — computed live, so this view is always honest.
+          Urgência vem das datas, importância da prioridade e do projeto — calculado ao vivo, então esta visão é sempre honesta.
         </p>
       </motion.header>
 
@@ -46,7 +46,7 @@ export default function MatrixView() {
               <span className="t-caption ink-faint">{q.hint} · {quads[i].length}</span>
             </div>
             {quads[i].length === 0 ? (
-              <p className="t-body-sm ink-faint">Nothing here.</p>
+              <p className="t-body-sm ink-faint">Nada por aqui.</p>
             ) : (
               <motion.ul className="col" variants={stagger()} initial="hidden" animate="show">
                 <AnimatePresence initial={false}>
@@ -57,7 +57,7 @@ export default function MatrixView() {
               </motion.ul>
             )}
             {quads[i].length > 8 && (
-              <p className="t-caption ink-faint" style={{ marginTop: 'var(--sp-3)' }}>+ {quads[i].length - 8} more</p>
+              <p className="t-caption ink-faint" style={{ marginTop: 'var(--sp-3)' }}>+ {quads[i].length - 8} outras</p>
             )}
           </motion.section>
         ))}

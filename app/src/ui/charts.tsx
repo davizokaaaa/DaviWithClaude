@@ -153,7 +153,7 @@ export function Heatmap({
     cols.push(days.slice(wI * 7, wI * 7 + 7));
   }
   return (
-    <div className="heatmap" role="img" aria-label="Completion history">
+    <div className="heatmap" role="img" aria-label="Histórico de conclusões">
       {cols.map((week, wi) => (
         <div key={wi} className="heatmap-col">
           {week.map((day, di) => {

@@ -51,7 +51,14 @@ export interface DataState {
   addProject: (partial: Partial<Project> & { name: string; areaId: ID }) => Project;
   updateProject: (id: ID, patch: Partial<Project>) => void;
 
+  /* areas */
+  addArea: (partial: Partial<Area> & { name: string }) => Area;
+  updateArea: (id: ID, patch: Partial<Area>) => void;
+
   /* goals */
+  addGoal: (partial: Partial<Goal> & { name: string; areaId: ID }) => Goal;
+  deleteGoal: (id: ID) => void;
+  addKeyResult: (goalId: ID, kr: { name: string; target: number; start?: number; unit?: string }) => void;
   updateKeyResult: (goalId: ID, krId: ID, current: number) => void;
   updateGoal: (id: ID, patch: Partial<Goal>) => void;
 
@@ -83,6 +90,8 @@ export interface DataState {
   addFlow: (f: Omit<MoneyFlow, 'id'>) => void;
   deleteFlow: (id: ID) => void;
   updateSavings: (id: ID, patch: Partial<SavingsGoal>) => void;
+  addSavings: (s: Omit<SavingsGoal, 'id'>) => void;
+  deleteSavings: (id: ID) => void;
 
   /* rituals */
   markDayPlanned: (date: DateKey) => void;
@@ -223,9 +232,9 @@ export const useData = create<DataState>()(
           targetDate: partial.targetDate,
           createdAt: now(),
           columns: partial.columns ?? [
-            { id: uid('c'), name: 'To do' },
-            { id: uid('c'), name: 'In progress', wipLimit: 3 },
-            { id: uid('c'), name: 'Done' },
+            { id: uid('c'), name: 'A fazer' },
+            { id: uid('c'), name: 'Em andamento', wipLimit: 3 },
+            { id: uid('c'), name: 'Concluído' },
           ],
         };
         set((s) => ({ projects: [...s.projects, project] }));
@@ -235,7 +244,57 @@ export const useData = create<DataState>()(
       updateProject: (id, patch) =>
         set((s) => ({ projects: s.projects.map((p) => (p.id === id ? { ...p, ...patch } : p)) })),
 
+      /* ── areas ─────────────────────────────────────────────────── */
+      addArea: (partial) => {
+        const area: Area = {
+          id: uid('a'),
+          name: partial.name,
+          icon: partial.icon ?? '◆',
+          hue: partial.hue ?? 'indigo',
+          order: partial.order ?? now(),
+          intendedHours: partial.intendedHours,
+        };
+        set((s) => ({ areas: [...s.areas, area] }));
+        return area;
+      },
+
+      updateArea: (id, patch) =>
+        set((s) => ({ areas: s.areas.map((a) => (a.id === id ? { ...a, ...patch } : a)) })),
+
       /* ── goals ─────────────────────────────────────────────────── */
+      addGoal: (partial) => {
+        const goal: Goal = {
+          id: uid('g'),
+          areaId: partial.areaId,
+          name: partial.name,
+          why: partial.why,
+          horizon: partial.horizon ?? 'quarter',
+          status: partial.status ?? 'on-track',
+          keyResults: partial.keyResults ?? [],
+          targetDate: partial.targetDate,
+          createdAt: now(),
+        };
+        set((s) => ({ goals: [...s.goals, goal] }));
+        return goal;
+      },
+
+      deleteGoal: (id) => set((s) => ({ goals: s.goals.filter((g) => g.id !== id) })),
+
+      addKeyResult: (goalId, kr) =>
+        set((s) => ({
+          goals: s.goals.map((g) =>
+            g.id === goalId
+              ? {
+                  ...g,
+                  keyResults: [
+                    ...g.keyResults,
+                    { id: uid('kr'), name: kr.name, start: kr.start ?? 0, current: kr.start ?? 0, target: kr.target, unit: kr.unit },
+                  ],
+                }
+              : g,
+          ),
+        })),
+
       updateKeyResult: (goalId, krId, current) =>
         set((s) => ({
           goals: s.goals.map((g) =>
@@ -345,6 +404,9 @@ export const useData = create<DataState>()(
       updateSavings: (id, patch) =>
         set((s) => ({ savings: s.savings.map((x) => (x.id === id ? { ...x, ...patch } : x)) })),
 
+      addSavings: (sv) => set((s) => ({ savings: [...s.savings, { ...sv, id: uid('sv') }] })),
+      deleteSavings: (id) => set((s) => ({ savings: s.savings.filter((x) => x.id !== id) })),
+
       /* ── rituals ───────────────────────────────────────────────── */
       markDayPlanned: (date) =>
         set((s) => (s.plannedDays.includes(date) ? s : { plannedDays: [...s.plannedDays, date] })),
@@ -378,7 +440,10 @@ export const useData = create<DataState>()(
     }),
     {
       name: 'meridian.data',
-      version: 1,
+      /* v2 emptied the demo seed. Migrating from v1 discards the seeded
+         workspace so real data starts from a clean slate. */
+      version: 2,
+      migrate: () => ({ ...seedState() }) as DataState,
     },
   ),
 );

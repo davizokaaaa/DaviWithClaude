@@ -17,29 +17,29 @@ interface NavDef {
 }
 
 const NAV: NavDef[] = [
-  { view: 'today', label: 'Today', icon: '☀', section: 'plan' },
-  { view: 'inbox', label: 'Inbox', icon: '⊙', section: 'plan' },
-  { view: 'upcoming', label: 'Upcoming', icon: '⤳', section: 'plan' },
-  { view: 'calendar', label: 'Calendar', icon: '▦', section: 'plan' },
-  { view: 'focus', label: 'Focus', icon: '◎', section: 'plan', moduleKey: 'focus' },
+  { view: 'today', label: 'Hoje', icon: '☀', section: 'plan' },
+  { view: 'inbox', label: 'Entrada', icon: '⊙', section: 'plan' },
+  { view: 'upcoming', label: 'Próximos', icon: '⤳', section: 'plan' },
+  { view: 'calendar', label: 'Calendário', icon: '▦', section: 'plan' },
+  { view: 'focus', label: 'Foco', icon: '◎', section: 'plan', moduleKey: 'focus' },
 
-  { view: 'projects', label: 'Projects', icon: '▣', section: 'organize' },
-  { view: 'timeline', label: 'Timeline', icon: '≡', section: 'organize' },
-  { view: 'matrix', label: 'Matrix', icon: '⊞', section: 'organize' },
-  { view: 'notes', label: 'Notes', icon: '✎', section: 'organize', moduleKey: 'knowledge' },
+  { view: 'projects', label: 'Projetos', icon: '▣', section: 'organize' },
+  { view: 'timeline', label: 'Linha do Tempo', icon: '≡', section: 'organize' },
+  { view: 'matrix', label: 'Matriz', icon: '⊞', section: 'organize' },
+  { view: 'notes', label: 'Notas', icon: '✎', section: 'organize', moduleKey: 'knowledge' },
 
-  { view: 'dashboard', label: 'Dashboard', icon: '◧', section: 'grow' },
-  { view: 'goals', label: 'Goals', icon: '◈', section: 'grow', moduleKey: 'goals' },
-  { view: 'habits', label: 'Habits', icon: '↻', section: 'grow', moduleKey: 'habits' },
-  { view: 'areas', label: 'Life Areas', icon: '❖', section: 'grow' },
-  { view: 'finance', label: 'Finance', icon: '▲', section: 'grow', moduleKey: 'finance' },
-  { view: 'reviews', label: 'Reviews', icon: '✓', section: 'grow', moduleKey: 'reviews' },
+  { view: 'dashboard', label: 'Painel', icon: '◧', section: 'grow' },
+  { view: 'goals', label: 'Metas', icon: '◈', section: 'grow', moduleKey: 'goals' },
+  { view: 'habits', label: 'Hábitos', icon: '↻', section: 'grow', moduleKey: 'habits' },
+  { view: 'areas', label: 'Áreas da Vida', icon: '❖', section: 'grow' },
+  { view: 'finance', label: 'Finanças', icon: '▲', section: 'grow', moduleKey: 'finance' },
+  { view: 'reviews', label: 'Revisões', icon: '✓', section: 'grow', moduleKey: 'reviews' },
 ];
 
 const SECTIONS: { id: NavDef['section']; label: string }[] = [
-  { id: 'plan', label: 'Plan' },
-  { id: 'organize', label: 'Organize' },
-  { id: 'grow', label: 'Grow' },
+  { id: 'plan', label: 'Planejar' },
+  { id: 'organize', label: 'Organizar' },
+  { id: 'grow', label: 'Evoluir' },
 ];
 
 export function Sidebar() {
@@ -52,7 +52,7 @@ export function Sidebar() {
   const visible = NAV.filter((n) => !n.moduleKey || modules[n.moduleKey]);
 
   return (
-    <nav className={clsx('sidebar', collapsed && 'is-collapsed')} aria-label="Main navigation">
+    <nav className={clsx('sidebar', collapsed && 'is-collapsed')} aria-label="Navegação principal">
       <div className="sidebar-head">
         <span className="sidebar-logo" aria-hidden>M</span>
         {!collapsed && <span className="sidebar-wordmark">Meridian</span>}
@@ -94,13 +94,13 @@ export function Sidebar() {
         <button
           className={clsx('navitem', route.view === 'settings' && 'is-active')}
           onClick={() => navigate({ view: 'settings' })}
-          title={collapsed ? 'Settings' : undefined}
+          title={collapsed ? 'Ajustes' : undefined}
         >
           {route.view === 'settings' && (
             <motion.span className="navitem-bg" layoutId="nav-active" transition={spring.smooth} />
           )}
           <span className="navitem-icon" aria-hidden>⚙</span>
-          {!collapsed && <span className="navitem-label">Settings</span>}
+          {!collapsed && <span className="navitem-label">Ajustes</span>}
         </button>
       </div>
     </nav>
@@ -112,14 +112,14 @@ export function MobileDock() {
   const route = useUi((s) => s.route);
   const navigate = useUi((s) => s.navigate);
   const items: { view: ViewId; label: string; icon: string }[] = [
-    { view: 'today', label: 'Today', icon: '☀' },
-    { view: 'inbox', label: 'Inbox', icon: '⊙' },
-    { view: 'calendar', label: 'Calendar', icon: '▦' },
-    { view: 'projects', label: 'Projects', icon: '▣' },
-    { view: 'dashboard', label: 'More', icon: '◧' },
+    { view: 'today', label: 'Hoje', icon: '☀' },
+    { view: 'inbox', label: 'Entrada', icon: '⊙' },
+    { view: 'calendar', label: 'Calendário', icon: '▦' },
+    { view: 'projects', label: 'Projetos', icon: '▣' },
+    { view: 'dashboard', label: 'Mais', icon: '◧' },
   ];
   return (
-    <div className="mobiledock" role="navigation" aria-label="Quick navigation">
+    <div className="mobiledock" role="navigation" aria-label="Navegação rápida">
       {items.map((i) => (
         <button
           key={i.view}

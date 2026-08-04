@@ -52,9 +52,9 @@ export function QuickCapture() {
 
     const today = todayKey();
     const dateTokens: [RegExp, () => string][] = [
-      [/\btoday\b/i, () => today],
-      [/\btomorrow\b/i, () => addDaysKey(today, 1)],
-      [/\bnext week\b/i, () => addDaysKey(today, 7)],
+      [/\b(today|hoje)\b/i, () => today],
+      [/\b(tomorrow|amanh[ãa])\b/i, () => addDaysKey(today, 1)],
+      [/\b(next week|pr[óo]xima semana)\b/i, () => addDaysKey(today, 7)],
     ];
     for (const [re, get] of dateTokens) {
       if (re.test(title)) {
@@ -107,7 +107,7 @@ export function QuickCapture() {
       columnId: proj?.columns[0]?.id,
     });
     toast({
-      message: parsed.plannedFor ? `Added to ${humanDay(parsed.plannedFor)}` : 'Captured to Inbox',
+      message: parsed.plannedFor ? `Adicionada em ${humanDay(parsed.plannedFor)}` : 'Capturada na Entrada',
       kind: 'success',
     });
     setText('');
@@ -123,7 +123,7 @@ export function QuickCapture() {
             className="palette capture"
             role="dialog"
             aria-modal="true"
-            aria-label="Quick capture"
+            aria-label="Captura rápida"
             variants={paletteIn}
             initial="hidden"
             animate="show"
@@ -135,14 +135,14 @@ export function QuickCapture() {
               <input
                 ref={inputRef}
                 className="palette-input"
-                placeholder="Capture a task…  try “Draft spec !high tomorrow 45m #launch @atlas”"
+                placeholder="Capture uma tarefa…  ex.: “Rascunhar spec !high amanhã 45m #lançamento @atlas”"
                 value={text}
                 onChange={(e) => setText(e.target.value)}
                 onKeyDown={(e) => {
                   if (e.key === 'Enter') save();
                   if (e.key === 'Escape') close();
                 }}
-                aria-label="Task title"
+                aria-label="Título da tarefa"
               />
             </div>
             <AnimatePresence>
@@ -155,7 +155,7 @@ export function QuickCapture() {
                 >
                   <div className="row g-3 wrap" style={{ padding: 'var(--sp-4) var(--sp-6) var(--sp-5)' }}>
                     {parsed.plannedFor && <Chip active>{humanDay(parsed.plannedFor)}</Chip>}
-                    {parsed.priority && <Chip active>{parsed.priority}</Chip>}
+                    {parsed.priority && <Chip active>{({ urgent: 'urgente', high: 'alta', medium: 'média', low: 'baixa', none: '—' } as const)[parsed.priority]}</Chip>}
                     {parsed.estimate && <Chip active>{parsed.estimate}m</Chip>}
                     {parsed.projectName && (
                       <Chip active>
@@ -172,7 +172,7 @@ export function QuickCapture() {
             </AnimatePresence>
             <div className="capture-foot">
               <span className="t-micro ink-faint">
-                <kbd className="kbd">↵</kbd> save · <kbd className="kbd">esc</kbd> dismiss · goes to {parsed.plannedFor ? 'your day plan' : 'Inbox'}
+                <kbd className="kbd">↵</kbd> salvar · <kbd className="kbd">esc</kbd> fechar · vai para {parsed.plannedFor ? 'o plano do dia' : 'a Entrada'}
               </span>
             </div>
           </motion.div>

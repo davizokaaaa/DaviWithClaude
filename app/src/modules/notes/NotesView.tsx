@@ -13,12 +13,12 @@ import { format } from '@/lib/dates';
 import type { NoteKind } from '@/core/types';
 
 const KIND_META: Record<NoteKind | 'all', string> = {
-  all: 'All',
-  note: 'Notes',
-  journal: 'Journal',
-  meeting: 'Meetings',
-  bookmark: 'Bookmarks',
-  reading: 'Reading',
+  all: 'Todas',
+  note: 'Notas',
+  journal: 'Diário',
+  meeting: 'Reuniões',
+  bookmark: 'Favoritos',
+  reading: 'Leituras',
 };
 
 export default function NotesView({ param }: { param?: string }) {
@@ -46,16 +46,16 @@ export default function NotesView({ param }: { param?: string }) {
       <motion.header className="view-head row between g-4 wrap" variants={riseIn} initial="hidden" animate="show">
         <div>
           <h2 className="view-title">Notes</h2>
-          <p className="view-sub">Everything you know, one search away.</p>
+          <p className="view-sub">Tudo o que você sabe, a uma busca de distância.</p>
         </div>
         <Button
           variant="primary"
           onClick={() => {
-            const n = addNote({ title: 'Untitled', kind: kind === 'all' ? 'note' : kind });
+            const n = addNote({ title: 'Sem título', kind: kind === 'all' ? 'note' : kind });
             setActiveId(n.id);
           }}
         >
-          + New note
+          + Nova nota
         </Button>
       </motion.header>
 
@@ -63,8 +63,8 @@ export default function NotesView({ param }: { param?: string }) {
         <aside className="col g-4">
           <input
             className="input"
-            placeholder="Filter notes…"
-            aria-label="Filter notes"
+            placeholder="Filtrar notas…"
+            aria-label="Filtrar notas"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
           />
@@ -86,17 +86,17 @@ export default function NotesView({ param }: { param?: string }) {
                   onClick={() => setActiveId(n.id)}
                 >
                   <span className="row g-3">
-                    {n.pinned && <span aria-label="Pinned" style={{ fontSize: 10 }}>★</span>}
+                    {n.pinned && <span aria-label="Fixada" style={{ fontSize: 10 }}>★</span>}
                     <span className="t-body-sm truncate" style={{ fontWeight: 500 }}>{n.title}</span>
                   </span>
                   <span className="t-micro ink-faint truncate">
                     {KIND_META[n.kind]} · {format(new Date(n.updatedAt), 'MMM d')}
-                    {n.readingStatus && ` · ${n.readingStatus}`}
+                    {n.readingStatus && ` · ${({ 'to-read': 'a ler', reading: 'lendo', read: 'lida' } as const)[n.readingStatus]}`}
                   </span>
                 </motion.button>
               ))}
             </AnimatePresence>
-            {visible.length === 0 && <p className="t-body-sm ink-faint" style={{ padding: 'var(--sp-5)' }}>No matches.</p>}
+            {visible.length === 0 && <p className="t-body-sm ink-faint" style={{ padding: 'var(--sp-5)' }}>Nada encontrado.</p>}
           </motion.div>
         </aside>
 
@@ -112,7 +112,7 @@ export default function NotesView({ param }: { param?: string }) {
             >
               <div className="row g-3 wrap">
                 <Select
-                  aria-label="Note type"
+                  aria-label="Tipo de nota"
                   value={active.kind}
                   onChange={(e) => updateNote(active.id, { kind: e.target.value as NoteKind })}
                   style={{ width: 130 }}
@@ -133,44 +133,44 @@ export default function NotesView({ param }: { param?: string }) {
                 )}
                 {active.kind === 'reading' && (
                   <Select
-                    aria-label="Reading status"
+                    aria-label="Status de leitura"
                     value={active.readingStatus ?? 'to-read'}
                     onChange={(e) => updateNote(active.id, { readingStatus: e.target.value as 'to-read' | 'reading' | 'read' })}
                     style={{ width: 110 }}
                   >
-                    <option value="to-read">To read</option>
-                    <option value="reading">Reading</option>
-                    <option value="read">Read</option>
+                    <option value="to-read">A ler</option>
+                    <option value="reading">Lendo</option>
+                    <option value="read">Lida</option>
                   </Select>
                 )}
                 <span className="spacer" />
                 <Button size="sm" variant="ghost" onClick={() => updateNote(active.id, { pinned: !active.pinned })}>
-                  {active.pinned ? '★ Pinned' : '☆ Pin'}
+                  {active.pinned ? '★ Fixada' : '☆ Fixar'}
                 </Button>
                 <Button size="sm" variant="danger" onClick={() => { deleteNote(active.id); setActiveId(null); }}>
-                  Delete
+                  Excluir
                 </Button>
               </div>
               <input
                 className="note-editor-title"
-                aria-label="Note title"
+                aria-label="Título da nota"
                 value={active.title}
                 onChange={(e) => updateNote(active.id, { title: e.target.value })}
-                placeholder="Untitled"
+                placeholder="Sem título"
               />
               <textarea
                 className="note-editor-body"
-                aria-label="Note body"
+                aria-label="Corpo da nota"
                 value={active.body}
                 onChange={(e) => updateNote(active.id, { body: e.target.value })}
-                placeholder="Write. Everything autosaves."
+                placeholder="Escreva. Tudo é salvo automaticamente."
               />
               <p className="t-micro ink-faint">
-                Last edited {format(new Date(active.updatedAt), 'MMM d, HH:mm')} · autosaved
+                Editada {format(new Date(active.updatedAt), "d 'de' MMM, HH:mm")} · salva automaticamente
               </p>
             </motion.section>
           ) : (
-            <EmptyState title="No note selected" hint="Pick a note on the left or create a new one." />
+            <EmptyState title="Nenhuma nota selecionada" hint="Escolha uma nota à esquerda ou crie uma nova." />
           )}
         </AnimatePresence>
       </div>

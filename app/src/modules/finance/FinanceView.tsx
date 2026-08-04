@@ -10,7 +10,7 @@ import { riseIn, stagger, staggerItem } from '@/lib/motion';
 import type { MoneyFlow } from '@/core/types';
 
 const fmt = (n: number) =>
-  n.toLocaleString('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
+  n.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 });
 
 export default function FinanceView() {
   const flows = useData((s) => s.flows);
@@ -19,6 +19,7 @@ export default function FinanceView() {
   const addFlow = useData((s) => s.addFlow);
   const deleteFlow = useData((s) => s.deleteFlow);
   const updateSavings = useData((s) => s.updateSavings);
+  const addSavings = useData((s) => s.addSavings);
 
   const [adding, setAdding] = useState(false);
   const [draft, setDraft] = useState({ name: '', amount: '', kind: 'variable' as MoneyFlow['kind'] });
@@ -30,10 +31,10 @@ export default function FinanceView() {
   const savingsRate = income > 0 ? saved / income : 0;
 
   const groups: { kind: MoneyFlow['kind']; label: string }[] = [
-    { kind: 'income', label: 'Income' },
-    { kind: 'fixed', label: 'Fixed costs' },
-    { kind: 'variable', label: 'Variable spending' },
-    { kind: 'saving', label: 'Savings & investing' },
+    { kind: 'income', label: 'Renda' },
+    { kind: 'fixed', label: 'Custos fixos' },
+    { kind: 'variable', label: 'Gastos variáveis' },
+    { kind: 'saving', label: 'Poupança e investimentos' },
   ];
 
   return (
@@ -41,40 +42,40 @@ export default function FinanceView() {
       <motion.header className="view-head row between g-4" variants={riseIn} initial="hidden" animate="show">
         <div>
           <h2 className="view-title">Finance</h2>
-          <p className="view-sub">The monthly shape of your money — direction, not bookkeeping.</p>
+          <p className="view-sub">A forma mensal do seu dinheiro — direção, não contabilidade.</p>
         </div>
-        <Button variant="primary" onClick={() => setAdding(true)}>+ Add flow</Button>
+        <Button variant="primary" onClick={() => setAdding(true)}>+ Novo fluxo</Button>
       </motion.header>
 
       <motion.section className="panel panel-pad" variants={riseIn} initial="hidden" animate="show" style={{ marginBottom: 'var(--stack-gap)' }}>
         <div className="grid-4" style={{ marginBottom: 'var(--sp-6)' }}>
           <div className="stat">
             <span className="stat-value"><AnimatedNumber value={income} format={fmt} /></span>
-            <span className="stat-label">monthly income</span>
+            <span className="stat-label">renda mensal</span>
           </div>
           <div className="stat">
             <span className="stat-value"><AnimatedNumber value={spending} format={fmt} /></span>
-            <span className="stat-label">spending</span>
+            <span className="stat-label">gastos</span>
           </div>
           <div className="stat">
             <span className="stat-value" style={{ color: 'var(--success)' }}>
               <AnimatedNumber value={Math.round(savingsRate * 100)} format={(n) => `${Math.round(n)}%`} />
             </span>
-            <span className="stat-label">savings rate</span>
+            <span className="stat-label">taxa de poupança</span>
           </div>
           <div className="stat">
             <span className="stat-value" style={free < 0 ? { color: 'var(--danger)' } : undefined}>
               <AnimatedNumber value={free} format={fmt} />
             </span>
-            <span className="stat-label">unallocated</span>
+            <span className="stat-label">sem destino</span>
           </div>
         </div>
         <DistributionBar
           segments={[
-            { label: 'Fixed', value: flows.filter((f) => f.kind === 'fixed').reduce((s, f) => s - f.amount, 0), hue: 'indigo' },
-            { label: 'Variable', value: flows.filter((f) => f.kind === 'variable').reduce((s, f) => s - f.amount, 0), hue: 'amber' },
-            { label: 'Savings', value: saved, hue: 'green' },
-            { label: 'Free', value: Math.max(0, free), hue: 'graphite' },
+            { label: 'Fixos', value: flows.filter((f) => f.kind === 'fixed').reduce((s, f) => s - f.amount, 0), hue: 'indigo' },
+            { label: 'Variáveis', value: flows.filter((f) => f.kind === 'variable').reduce((s, f) => s - f.amount, 0), hue: 'amber' },
+            { label: 'Poupança', value: saved, hue: 'green' },
+            { label: 'Livre', value: Math.max(0, free), hue: 'graphite' },
           ]}
         />
       </motion.section>
@@ -96,14 +97,14 @@ export default function FinanceView() {
                         className="input"
                         style={{ width: 92, height: 26, textAlign: 'right', fontSize: 12 }}
                         type="number"
-                        aria-label={`${f.name} amount`}
+                        aria-label={`Valor de ${f.name}`}
                         value={Math.abs(f.amount)}
                         onChange={(e) => {
                           const v = Math.abs(Number(e.target.value));
                           updateFlow(f.id, { amount: f.amount >= 0 ? v : -v });
                         }}
                       />
-                      <button className="iconbtn iconbtn-sm" aria-label={`Remove ${f.name}`} onClick={() => deleteFlow(f.id)}>
+                      <button className="iconbtn iconbtn-sm" aria-label={`Remover ${f.name}`} onClick={() => deleteFlow(f.id)}>
                         ✕
                       </button>
                     </motion.div>
@@ -115,7 +116,10 @@ export default function FinanceView() {
         </motion.section>
 
         <motion.section className="panel panel-pad col g-5" variants={stagger(0.05, 0.06)} initial="hidden" animate="show">
-          <h3 className="panel-title">Savings goals</h3>
+          <h3 className="panel-title">Objetivos de poupança</h3>
+          {savings.length === 0 && (
+            <p className="t-body-sm ink-faint">Nenhum objetivo ainda — crie o primeiro abaixo.</p>
+          )}
           {savings.map((sv) => (
             <motion.div key={sv.id} variants={staggerItem} className="col g-2">
               <div className="row between g-4">
@@ -129,24 +133,25 @@ export default function FinanceView() {
                 className="input"
                 style={{ width: 110, height: 26, fontSize: 12 }}
                 type="number"
-                aria-label={`${sv.name} current amount`}
+                aria-label={`Valor atual de ${sv.name}`}
                 value={sv.current}
                 onChange={(e) => updateSavings(sv.id, { current: Number(e.target.value) })}
               />
             </motion.div>
           ))}
+          <NewSavings onAdd={(name, target) => addSavings({ name, target, current: 0, hue: 'teal' })} />
         </motion.section>
       </div>
 
-      <Dialog open={adding} onClose={() => setAdding(false)} title="Add money flow" width={380}>
+      <Dialog open={adding} onClose={() => setAdding(false)} title="Novo fluxo mensal" width={380}>
         <div className="col g-5">
-          <Input autoFocus label="Name" value={draft.name} onChange={(e) => setDraft({ ...draft, name: e.target.value })} />
-          <Input label="Monthly amount" type="number" value={draft.amount} onChange={(e) => setDraft({ ...draft, amount: e.target.value })} />
-          <Select label="Type" value={draft.kind} onChange={(e) => setDraft({ ...draft, kind: e.target.value as MoneyFlow['kind'] })}>
-            <option value="income">Income</option>
-            <option value="fixed">Fixed cost</option>
-            <option value="variable">Variable spending</option>
-            <option value="saving">Saving / investing</option>
+          <Input autoFocus label="Nome" value={draft.name} onChange={(e) => setDraft({ ...draft, name: e.target.value })} />
+          <Input label="Valor mensal" type="number" value={draft.amount} onChange={(e) => setDraft({ ...draft, amount: e.target.value })} />
+          <Select label="Tipo" value={draft.kind} onChange={(e) => setDraft({ ...draft, kind: e.target.value as MoneyFlow['kind'] })}>
+            <option value="income">Renda</option>
+            <option value="fixed">Custo fixo</option>
+            <option value="variable">Gasto variável</option>
+            <option value="saving">Poupança / investimento</option>
           </Select>
           <div className="row" style={{ justifyContent: 'flex-end' }}>
             <Button
@@ -164,11 +169,34 @@ export default function FinanceView() {
                 setAdding(false);
               }}
             >
-              Add
+              Adicionar
             </Button>
           </div>
         </div>
       </Dialog>
     </div>
+  );
+}
+
+/** Composer inline: um objetivo de poupança com nome e alvo. */
+function NewSavings({ onAdd }: { onAdd: (name: string, target: number) => void }) {
+  const [name, setName] = useState('');
+  const [target, setTarget] = useState('');
+  return (
+    <form
+      className="row g-3 wrap"
+      onSubmit={(e) => {
+        e.preventDefault();
+        const t = Number(target);
+        if (!name.trim() || !t) return;
+        onAdd(name.trim(), t);
+        setName('');
+        setTarget('');
+      }}
+    >
+      <Input aria-label="Objetivo" placeholder="Ex.: reserva de emergência" value={name} onChange={(e) => setName(e.target.value)} style={{ flex: 2, minWidth: 150, height: 30 }} />
+      <Input aria-label="Alvo" type="number" placeholder="Alvo" value={target} onChange={(e) => setTarget(e.target.value)} style={{ width: 100, height: 30 }} />
+      <Button type="submit" size="sm" variant="ghost">Adicionar</Button>
+    </form>
   );
 }

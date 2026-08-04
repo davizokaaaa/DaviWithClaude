@@ -17,25 +17,25 @@ import { startOfWeek } from 'date-fns';
 const QUESTIONS: Record<ReviewCadence, string[]> = {
   daily: [],
   weekly: [
-    'What actually moved forward this week?',
-    'What did you avoid, and why?',
-    'What deserves less of your time next week?',
-    'One thing to do differently next week:',
+    'O que de fato andou nesta semana?',
+    'O que você evitou, e por quê?',
+    'O que merece menos do seu tempo na próxima semana?',
+    'Uma coisa para fazer diferente na próxima semana:',
   ],
   monthly: [
-    'Which goal moved the most this month — and what caused it?',
-    'Where did the month leak time or energy?',
-    'What will you say no to next month?',
+    'Qual meta mais andou neste mês — e o que causou isso?',
+    'Onde o mês vazou tempo ou energia?',
+    'A que você vai dizer não no próximo mês?',
   ],
   quarterly: [
-    'Which goals are still worth pursuing as written?',
-    'What systems (not efforts) need to change?',
-    'What is the single bet for next quarter?',
+    'Quais metas ainda valem como estão escritas?',
+    'Que sistemas (não esforços) precisam mudar?',
+    'Qual é a aposta única do próximo trimestre?',
   ],
   annual: [
-    'What defined this year?',
-    'What are you demonstrably better at than a year ago?',
-    'What would make next year unambiguously successful?',
+    'O que definiu este ano?',
+    'Em que você está comprovadamente melhor do que há um ano?',
+    'O que tornaria o próximo ano inequivocamente bem-sucedido?',
   ],
 };
 
@@ -56,10 +56,10 @@ function periodKeyFor(cadence: ReviewCadence): string {
 }
 
 const CADENCE_LABEL: Record<Exclude<ReviewCadence, 'daily'>, string> = {
-  weekly: 'Weekly',
-  monthly: 'Monthly',
-  quarterly: 'Quarterly',
-  annual: 'Annual',
+  weekly: 'Semanal',
+  monthly: 'Mensal',
+  quarterly: 'Trimestral',
+  annual: 'Anual',
 };
 
 export default function ReviewsView() {
@@ -95,11 +95,11 @@ export default function ReviewsView() {
       <motion.header className="view-head row between g-4 wrap" variants={riseIn} initial="hidden" animate="show">
         <div>
           <h2 className="view-title">Reviews</h2>
-          <p className="view-sub">The system only stays honest if you look back on schedule.</p>
+          <p className="view-sub">O sistema só continua honesto se você olhar para trás com cadência.</p>
         </div>
         <Segmented
           layoutNs="review-cadence"
-          label="Review cadence"
+          label="Cadência de revisão"
           value={cadence}
           options={(Object.keys(CADENCE_LABEL) as (keyof typeof CADENCE_LABEL)[]).map((c) => ({
             value: c,
@@ -116,15 +116,15 @@ export default function ReviewsView() {
         <motion.section className="panel panel-pad row g-8 wrap" style={{ marginBottom: 'var(--stack-gap)' }} variants={riseIn} initial="hidden" animate="show">
           <div className="stat">
             <span className="stat-value"><AnimatedNumber value={weekStats.done} /></span>
-            <span className="stat-label">tasks completed, 7 days</span>
+            <span className="stat-label">tarefas concluídas, 7 dias</span>
           </div>
           <div className="stat">
             <span className="stat-value"><AnimatedNumber value={weekStats.focus} format={(n) => `${Math.round(n)}h`} /></span>
-            <span className="stat-label">deliberate focus</span>
+            <span className="stat-label">foco deliberado</span>
           </div>
           <div className="stat">
             <span className="stat-value">{reviews.filter((r) => r.cadence === 'weekly').length}</span>
-            <span className="stat-label">weekly reviews kept</span>
+            <span className="stat-label">revisões semanais mantidas</span>
           </div>
         </motion.section>
       )}
@@ -138,8 +138,8 @@ export default function ReviewsView() {
           exit={{ opacity: 0, y: -6 }}
         >
           <div className="row between g-4">
-            <h3 className="panel-title">{CADENCE_LABEL[cadence]} review · {periodKey.slice(2)}</h3>
-            {done && <span className="t-caption" style={{ color: 'var(--success)' }}>✓ completed</span>}
+            <h3 className="panel-title">Revisão {CADENCE_LABEL[cadence].toLowerCase()} · {periodKey.slice(2)}</h3>
+            {done && <span className="t-caption" style={{ color: 'var(--success)' }}>✓ concluída</span>}
           </div>
           {questions.map((q) => (
             <Textarea
@@ -157,10 +157,10 @@ export default function ReviewsView() {
                 variant="primary"
                 onClick={() => {
                   saveReview(cadence, periodKey, answers);
-                  toast({ message: `${CADENCE_LABEL[cadence]} review saved`, kind: 'success' });
+                  toast({ message: `Revisão ${CADENCE_LABEL[cadence].toLowerCase()} salva`, kind: 'success' });
                 }}
               >
-                Complete review
+                Concluir revisão
               </Button>
             </div>
           )}
@@ -169,7 +169,7 @@ export default function ReviewsView() {
 
       {reviews.filter((r) => r.cadence === cadence).length > 0 && (
         <section style={{ marginTop: 'var(--stack-gap)' }}>
-          <p className="t-eyebrow" style={{ marginBottom: 'var(--sp-4)' }}>Past {CADENCE_LABEL[cadence].toLowerCase()} reviews</p>
+          <p className="t-eyebrow" style={{ marginBottom: 'var(--sp-4)' }}>Revisões {CADENCE_LABEL[cadence].toLowerCase().replace('semanal', 'semanais').replace('mensal', 'mensais').replace('trimestral', 'trimestrais').replace('anual', 'anuais')} anteriores</p>
           <div className="col g-3">
             {reviews
               .filter((r) => r.cadence === cadence)

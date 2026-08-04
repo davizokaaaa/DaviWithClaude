@@ -205,9 +205,9 @@ export function suggestNow(state: Pick<DataState, 'tasks'>, date: DateKey): { ta
   const open = tasksForDay(state.tasks, date).filter((t) => isOpen(t) && !isBlocked(t, state.tasks));
   if (!open.length) return null;
   const urgent = open.find((t) => t.priority === 'urgent');
-  if (urgent) return { task: urgent, reason: 'Highest priority on today’s plan' };
+  if (urgent) return { task: urgent, reason: 'Maior prioridade no plano de hoje' };
   const short = open.find((t) => (t.estimate ?? 30) <= 15);
   const hour = new Date().getHours();
-  if (hour >= 16 && short) return { task: short, reason: 'Small enough to finish before the day ends' };
-  return { task: open[0], reason: 'Next by priority on today’s plan' };
+  if (hour >= 16 && short) return { task: short, reason: 'Pequena o bastante para terminar antes do fim do dia' };
+  return { task: open[0], reason: 'Próxima por prioridade no plano de hoje' };
 }

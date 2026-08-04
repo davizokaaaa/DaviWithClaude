@@ -78,29 +78,29 @@ export function CommandPalette() {
 
   const commands = useMemo<Command[]>(() => {
     const nav: Command[] = [
-      { id: 'nav-today', group: 'Go to', title: 'Today', kbd: 'G T', run: () => go({ view: 'today' }) },
-      { id: 'nav-inbox', group: 'Go to', title: 'Inbox', kbd: 'G I', run: () => go({ view: 'inbox' }) },
-      { id: 'nav-upcoming', group: 'Go to', title: 'Upcoming', kbd: 'G U', run: () => go({ view: 'upcoming' }) },
-      { id: 'nav-cal', group: 'Go to', title: 'Calendar', kbd: 'G C', run: () => go({ view: 'calendar' }) },
-      { id: 'nav-projects', group: 'Go to', title: 'Projects', kbd: 'G P', run: () => go({ view: 'projects' }) },
-      { id: 'nav-matrix', group: 'Go to', title: 'Eisenhower Matrix', run: () => go({ view: 'matrix' }) },
-      { id: 'nav-timeline', group: 'Go to', title: 'Timeline', run: () => go({ view: 'timeline' }) },
-      ...(modules.focus ? [{ id: 'nav-focus', group: 'Go to', title: 'Focus', kbd: 'G F', run: () => go({ view: 'focus' }) }] : []),
-      ...(modules.habits ? [{ id: 'nav-habits', group: 'Go to', title: 'Habits', kbd: 'G H', run: () => go({ view: 'habits' }) }] : []),
-      ...(modules.goals ? [{ id: 'nav-goals', group: 'Go to', title: 'Goals', kbd: 'G G', run: () => go({ view: 'goals' }) }] : []),
-      ...(modules.knowledge ? [{ id: 'nav-notes', group: 'Go to', title: 'Notes', kbd: 'G N', run: () => go({ view: 'notes' }) }] : []),
-      ...(modules.finance ? [{ id: 'nav-fin', group: 'Go to', title: 'Finance', run: () => go({ view: 'finance' }) }] : []),
-      ...(modules.reviews ? [{ id: 'nav-rev', group: 'Go to', title: 'Reviews', run: () => go({ view: 'reviews' }) }] : []),
-      { id: 'nav-dash', group: 'Go to', title: 'Dashboard', kbd: 'G D', run: () => go({ view: 'dashboard' }) },
-      { id: 'nav-settings', group: 'Go to', title: 'Settings', run: () => go({ view: 'settings' }) },
+      { id: 'nav-today', group: 'Ir para', title: 'Hoje', kbd: 'G T', run: () => go({ view: 'today' }) },
+      { id: 'nav-inbox', group: 'Ir para', title: 'Entrada', kbd: 'G I', run: () => go({ view: 'inbox' }) },
+      { id: 'nav-upcoming', group: 'Ir para', title: 'Próximos', kbd: 'G U', run: () => go({ view: 'upcoming' }) },
+      { id: 'nav-cal', group: 'Ir para', title: 'Calendário', kbd: 'G C', run: () => go({ view: 'calendar' }) },
+      { id: 'nav-projects', group: 'Ir para', title: 'Projetos', kbd: 'G P', run: () => go({ view: 'projects' }) },
+      { id: 'nav-matrix', group: 'Ir para', title: 'Matriz de Eisenhower', run: () => go({ view: 'matrix' }) },
+      { id: 'nav-timeline', group: 'Ir para', title: 'Linha do Tempo', run: () => go({ view: 'timeline' }) },
+      ...(modules.focus ? [{ id: 'nav-focus', group: 'Ir para', title: 'Foco', kbd: 'G F', run: () => go({ view: 'focus' }) }] : []),
+      ...(modules.habits ? [{ id: 'nav-habits', group: 'Ir para', title: 'Hábitos', kbd: 'G H', run: () => go({ view: 'habits' }) }] : []),
+      ...(modules.goals ? [{ id: 'nav-goals', group: 'Ir para', title: 'Metas', kbd: 'G G', run: () => go({ view: 'goals' }) }] : []),
+      ...(modules.knowledge ? [{ id: 'nav-notes', group: 'Ir para', title: 'Notas', kbd: 'G N', run: () => go({ view: 'notes' }) }] : []),
+      ...(modules.finance ? [{ id: 'nav-fin', group: 'Ir para', title: 'Finanças', run: () => go({ view: 'finance' }) }] : []),
+      ...(modules.reviews ? [{ id: 'nav-rev', group: 'Ir para', title: 'Revisões', run: () => go({ view: 'reviews' }) }] : []),
+      { id: 'nav-dash', group: 'Ir para', title: 'Painel', kbd: 'G D', run: () => go({ view: 'dashboard' }) },
+      { id: 'nav-settings', group: 'Ir para', title: 'Ajustes', run: () => go({ view: 'settings' }) },
     ];
     const actions: Command[] = [
-      { id: 'act-capture', group: 'Actions', title: 'Quick capture', hint: 'Add a task from anywhere', kbd: `${modLabel}⇧N`, run: () => openOverlay({ kind: 'capture' }) },
-      { id: 'act-plan', group: 'Actions', title: 'Plan today', hint: 'Guided daily planning', run: () => openOverlay({ kind: 'planning' }) },
-      { id: 'act-shutdown', group: 'Actions', title: 'Daily shutdown', hint: 'Close the day deliberately', run: () => openOverlay({ kind: 'shutdown' }) },
-      { id: 'act-shortcuts', group: 'Actions', title: 'Keyboard shortcuts', kbd: '?', run: () => openOverlay({ kind: 'shortcuts' }) },
-      { id: 'act-dark', group: 'Actions', title: 'Switch to dark theme', run: () => { setTheme('dark'); close(); } },
-      { id: 'act-light', group: 'Actions', title: 'Switch to light theme', run: () => { setTheme('light'); close(); } },
+      { id: 'act-capture', group: 'Ações', title: 'Captura rápida', hint: 'Adicione uma tarefa de qualquer lugar', kbd: `${modLabel}⇧N`, run: () => openOverlay({ kind: 'capture' }) },
+      { id: 'act-plan', group: 'Ações', title: 'Planejar o dia', hint: 'Planejamento diário guiado', run: () => openOverlay({ kind: 'planning' }) },
+      { id: 'act-shutdown', group: 'Ações', title: 'Encerramento do dia', hint: 'Feche o dia deliberadamente', run: () => openOverlay({ kind: 'shutdown' }) },
+      { id: 'act-shortcuts', group: 'Ações', title: 'Atalhos de teclado', kbd: '?', run: () => openOverlay({ kind: 'shortcuts' }) },
+      { id: 'act-dark', group: 'Ações', title: 'Mudar para o tema escuro', run: () => { setTheme('dark'); close(); } },
+      { id: 'act-light', group: 'Ações', title: 'Mudar para o tema claro', run: () => { setTheme('light'); close(); } },
     ];
     // Content search only when there's a query — keeps the default list calm.
     const content: Command[] = query
@@ -109,9 +109,9 @@ export function CommandPalette() {
             .filter((t) => t.status !== 'done' && t.status !== 'dropped')
             .map((t) => ({
               id: `task-${t.id}`,
-              group: 'Tasks',
+              group: 'Tarefas',
               title: t.title,
-              hint: 'Open task',
+              hint: 'Abrir tarefa',
               run: () => {
                 openOverlay({ kind: 'task', taskId: t.id });
               },
@@ -121,24 +121,24 @@ export function CommandPalette() {
             .slice(0, 50)
             .map((t) => ({
               id: `done-${t.id}`,
-              group: 'Tasks',
-              title: `Complete: ${t.title}`,
+              group: 'Tarefas',
+              title: `Concluir: ${t.title}`,
               run: () => {
                 completeTask(t.id);
-                toast({ message: 'Completed', kind: 'success' });
+                toast({ message: 'Concluída', kind: 'success' });
                 close();
               },
             })),
           ...projects.map((p) => ({
             id: `proj-${p.id}`,
-            group: 'Projects',
+            group: 'Projetos',
             title: p.name,
-            hint: 'Open project',
+            hint: 'Abrir projeto',
             run: () => go({ view: 'project', param: p.id }),
           })),
           ...notes.map((n) => ({
             id: `note-${n.id}`,
-            group: 'Notes',
+            group: 'Notas',
             title: n.title,
             hint: n.kind,
             run: () => go({ view: 'notes', param: n.id }),
@@ -200,7 +200,7 @@ export function CommandPalette() {
             className="palette"
             role="dialog"
             aria-modal="true"
-            aria-label="Command palette"
+            aria-label="Paleta de comandos"
             variants={paletteIn}
             initial="hidden"
             animate="show"
@@ -211,11 +211,11 @@ export function CommandPalette() {
               <input
                 ref={inputRef}
                 className="palette-input"
-                placeholder="Search or run a command…"
+                placeholder="Busque ou execute um comando…"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 onKeyDown={onKeyDown}
-                aria-label="Search commands"
+                aria-label="Buscar comandos"
                 role="combobox"
                 aria-expanded="true"
                 aria-controls="palette-list"
@@ -224,7 +224,7 @@ export function CommandPalette() {
             </div>
             <div className="palette-list" id="palette-list" role="listbox" ref={listRef}>
               {grouped.length === 0 && (
-                <p className="palette-empty">Nothing matches “{query}”.</p>
+                <p className="palette-empty">Nada corresponde a “{query}”.</p>
               )}
               {grouped.map(([group, items]) => (
                 <div key={group}>

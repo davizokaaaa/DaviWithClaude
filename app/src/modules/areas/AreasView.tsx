@@ -1,13 +1,21 @@
-/** Life Areas — where attention actually went vs. where it was meant to go. */
+/** Áreas da Vida — onde a atenção realmente foi vs. onde deveria ter ido. */
 
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { motion } from 'motion/react';
 import { useData } from '@/core/store/data';
-import { Dot } from '@/ui/primitives';
+import { Button, Dot, EmptyState, Input, Select } from '@/ui/primitives';
+import { Dialog } from '@/ui/overlays';
 import { DistributionBar } from '@/ui/charts';
 import { riseIn, stagger, staggerItem } from '@/lib/motion';
 import { areaLoad } from '@/core/selectors';
 import { fmtMinutes } from '@/lib/dates';
+import type { Hue } from '@/core/types';
+
+const HUE_LABEL: Record<Hue, string> = {
+  indigo: 'azul-tinta', green: 'verde', amber: 'latão', rose: 'terracota',
+  blue: 'azul', purple: 'violeta', teal: 'petróleo', graphite: 'pedra',
+};
+const ICONS = ['◆', '♥', '◉', '✦', '▲', '❖', '☾', '✎'];
 
 export default function AreasView() {
   const areas = useData((s) => s.areas);
@@ -15,20 +23,39 @@ export default function AreasView() {
   const goals = useData((s) => s.goals);
   const projects = useData((s) => s.projects);
   const tasks = useData((s) => s.tasks);
+  const addArea = useData((s) => s.addArea);
+
+  const [adding, setAdding] = useState(false);
+  const [name, setName] = useState('');
+  const [hue, setHue] = useState<Hue>('indigo');
+  const [icon, setIcon] = useState('◆');
+  const [hours, setHours] = useState('');
 
   const load = useMemo(() => areaLoad({ blocks, areas }, 7), [blocks, areas]);
   const totalPlanned = [...load.values()].reduce((s, v) => s + v, 0);
 
   return (
     <div className="view view-narrow">
-      <motion.header className="view-head" variants={riseIn} initial="hidden" animate="show">
-        <h2 className="view-title">Life Areas</h2>
-        <p className="view-sub">The week’s attention, area by area — intention vs. reality.</p>
+      <motion.header className="view-head row between g-4" variants={riseIn} initial="hidden" animate="show">
+        <div>
+          <h2 className="view-title">Áreas da Vida</h2>
+          <p className="view-sub">A atenção da semana, área por área — intenção vs. realidade.</p>
+        </div>
+        <Button variant="primary" onClick={() => setAdding(true)}>+ Nova área</Button>
       </motion.header>
+
+      {areas.length === 0 && (
+        <EmptyState
+          icon={<span aria-hidden>❖</span>}
+          title="Nenhuma área ainda"
+          hint="Áreas são os grandes territórios da sua vida — Trabalho, Saúde, Aprendizado. Metas e projetos vivem dentro delas."
+          action={<Button variant="primary" onClick={() => setAdding(true)}>Criar a primeira área</Button>}
+        />
+      )}
 
       {totalPlanned > 0 && (
         <motion.section className="panel panel-pad" style={{ marginBottom: 'var(--stack-gap)' }} variants={riseIn} initial="hidden" animate="show">
-          <div className="panel-head"><h3 className="panel-title">This week’s balance</h3></div>
+          <div className="panel-head"><h3 className="panel-title">Equilíbrio da semana</h3></div>
           <DistributionBar
             segments={areas
               .filter((a) => (load.get(a.id) ?? 0) > 0)
@@ -72,24 +99,61 @@ export default function AreasView() {
                 <div className="col">
                   <span className="t-subtitle">{a.name}</span>
                   <span className="t-micro ink-faint">
-                    {fmtMinutes(weekMinutes)} this week{intended > 0 && ` · intent ${fmtMinutes(intended)}`}
+                    {fmtMinutes(weekMinutes)} nesta semana{intended > 0 && ` · intenção ${fmtMinutes(intended)}`}
                   </span>
                 </div>
               </div>
               <div className="row g-5 t-caption ink-subtle wrap">
-                <span>{areaProjects.length} active project{areaProjects.length !== 1 ? 's' : ''}</span>
-                <span>{areaGoals.length} goal{areaGoals.length !== 1 ? 's' : ''}</span>
-                <span>{openTasks} open task{openTasks !== 1 ? 's' : ''}</span>
+                <span>{areaProjects.length} projeto{areaProjects.length !== 1 ? 's' : ''} ativo{areaProjects.length !== 1 ? 's' : ''}</span>
+                <span>{areaGoals.length} meta{areaGoals.length !== 1 ? 's' : ''}</span>
+                <span>{openTasks} tarefa{openTasks !== 1 ? 's' : ''} aberta{openTasks !== 1 ? 's' : ''}</span>
               </div>
               {intended > 0 && weekMinutes < intended * 0.5 && (
                 <p className="t-caption" style={{ color: 'var(--warning)' }}>
-                  Running well under intention this week.
+                  Bem abaixo da intenção nesta semana.
                 </p>
               )}
             </motion.section>
           );
         })}
       </motion.div>
+
+      <Dialog open={adding} onClose={() => setAdding(false)} title="Nova área" width={400}>
+        <div className="col g-5">
+          <Input autoFocus label="Nome" placeholder="Trabalho, Saúde, Aprendizado…" value={name} onChange={(e) => setName(e.target.value)} />
+          <div className="grid-2" style={{ gap: 'var(--sp-5)' }}>
+            <Select label="Ícone" value={icon} onChange={(e) => setIcon(e.target.value)}>
+              {ICONS.map((i) => <option key={i} value={i}>{i}</option>)}
+            </Select>
+            <Select label="Cor" value={hue} onChange={(e) => setHue(e.target.value as Hue)}>
+              {(Object.keys(HUE_LABEL) as Hue[]).map((h) => (
+                <option key={h} value={h}>{HUE_LABEL[h]}</option>
+              ))}
+            </Select>
+          </div>
+          <Input
+            label="Horas semanais pretendidas (opcional)"
+            type="number"
+            min={0}
+            value={hours}
+            onChange={(e) => setHours(e.target.value)}
+          />
+          <div className="row" style={{ justifyContent: 'flex-end' }}>
+            <Button
+              variant="primary"
+              onClick={() => {
+                if (!name.trim()) return;
+                addArea({ name: name.trim(), icon, hue, intendedHours: hours ? Number(hours) : undefined });
+                setName('');
+                setHours('');
+                setAdding(false);
+              }}
+            >
+              Criar área
+            </Button>
+          </div>
+        </div>
+      </Dialog>
     </div>
   );
 }

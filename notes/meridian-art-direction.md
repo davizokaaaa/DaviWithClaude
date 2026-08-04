@@ -50,3 +50,9 @@ Per-module character as a `/* Rooms */` block at the end of `views.css` — surg
 - `.view-title` now reads `--font-display`/`--fw-display`, so page titles speak each room's voice automatically.
 
 Identity milestone complete. Future work: apply `reveal` to more below-fold sections as views grow; consider a Kandinsky treatment for Goals' progress rings (connected circles) if it can stay quiet.
+
+## Living Gallery v2 — generative atmospheres, empty seed, pt-BR
+
+- **`shell/Atmosphere.tsx`**: one canvas per room behind content, painting the module's artistic influence as pure atmosphere (composition/rhythm/geometry extracted, never artwork). Stateless scenes = pure fns of time → resize-proof, no per-frame state. 30fps cap, DPR ≤1.5, halts on hidden tab, reduced-motion renders one still frame. Alphas ≤0.06. Scenes: Bauhaus (dashboard), Mondrian (calendar), Kandinsky orbits+connections (goals), Zen ripples (focus), Monet pools (notes), Deco brass fan (reviews), Constructivist diagonals (timeline), clay-dot kiln (habits), forest ledger-waves (finance), rising light (today).
+- **Seed emptied** (`seed.ts` → all-empty; persist `version: 2` + `migrate` discards the old demo workspace on load). Because areas/goals/savings had no in-app creation, added store actions `addArea/updateArea/addGoal/deleteGoal/addKeyResult/addSavings/deleteSavings` + composer UIs in AreasView, GoalsView (dialog + inline KR composer), FinanceView (savings composer). "Reset to seed" now means "start from zero".
+- **pt-BR everywhere**: all 17 views, shell, palette, capture (parser now accepts hoje/amanhã/próxima semana alongside English tokens), rituals, shortcuts, aria-labels, toasts, suggestion reasons. `lib/dates.ts` wraps date-fns `format` with `ptBR` locale (keys stay `yyyy-MM-dd` via formatBase). Finance switched to BRL. No i18n framework — single-locale in-place strings, revisit only if a second locale is ever needed.

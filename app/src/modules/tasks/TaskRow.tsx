@@ -44,9 +44,9 @@ export function TaskRow({
     if (checked) {
       completeTask(task.id);
       toast({
-        message: 'Completed',
+        message: 'Concluída',
         kind: 'success',
-        action: { label: 'Undo', onAction: () => reopenTask(task.id) },
+        action: { label: 'Desfazer', onAction: () => reopenTask(task.id) },
       });
     } else {
       reopenTask(task.id);
@@ -70,15 +70,15 @@ export function TaskRow({
       <span className="trow-title truncate spacer">{task.title}</span>
 
       <span className="trow-meta">
-        {blocked && <span title="Blocked by another task">⛓</span>}
+        {blocked && <span title="Bloqueada por outra tarefa">⛓</span>}
         {task.subtasks.length > 0 && (
-          <span title="Subtasks">{subDone}/{task.subtasks.length}</span>
+          <span title="Subtarefas">{subDone}/{task.subtasks.length}</span>
         )}
         {task.estimate != null && <span>{fmtMinutes(task.estimate)}</span>}
         {showDay && task.plannedFor && <span>{humanDay(task.plannedFor)}</span>}
         {task.dueDate && !task.plannedFor && (
           <span className={task.dueDate < todayKey() ? 'ink-accent' : undefined}>
-            due {humanDay(task.dueDate)}
+            prazo {humanDay(task.dueDate)}
           </span>
         )}
         <PriorityFlag priority={task.priority} />
@@ -91,30 +91,30 @@ export function TaskRow({
 
       <span className="trow-hover-actions" onClick={(e) => e.stopPropagation()}>
         <Menu
-          label="Task actions"
+          label="Ações da tarefa"
           align="end"
           items={[
-            { label: 'Do today', onSelect: () => planTask(task.id, todayKey()) },
-            { label: 'Do tomorrow', onSelect: () => planTask(task.id, addDaysKey(todayKey(), 1)) },
-            { label: 'Remove from plan', onSelect: () => planTask(task.id, undefined) },
+            { label: 'Fazer hoje', onSelect: () => planTask(task.id, todayKey()) },
+            { label: 'Fazer amanhã', onSelect: () => planTask(task.id, addDaysKey(todayKey(), 1)) },
+            { label: 'Tirar do plano', onSelect: () => planTask(task.id, undefined) },
             'divider',
-            { label: 'Priority: urgent', onSelect: () => setPriority(task.id, 'urgent') },
-            { label: 'Priority: high', onSelect: () => setPriority(task.id, 'high') },
-            { label: 'Priority: medium', onSelect: () => setPriority(task.id, 'medium') },
-            { label: 'Priority: none', onSelect: () => setPriority(task.id, 'none') },
+            { label: 'Prioridade: urgente', onSelect: () => setPriority(task.id, 'urgent') },
+            { label: 'Prioridade: alta', onSelect: () => setPriority(task.id, 'high') },
+            { label: 'Prioridade: média', onSelect: () => setPriority(task.id, 'medium') },
+            { label: 'Prioridade: nenhuma', onSelect: () => setPriority(task.id, 'none') },
             'divider',
-            { label: 'Drop task', onSelect: () => dropTask(task.id) },
+            { label: 'Soltar tarefa', onSelect: () => dropTask(task.id) },
             {
-              label: 'Delete',
+              label: 'Excluir',
               danger: true,
               onSelect: () => {
                 deleteTask(task.id);
-                toast({ message: 'Task deleted', kind: 'danger' });
+                toast({ message: 'Tarefa excluída', kind: 'danger' });
               },
             },
           ]}
           trigger={(props) => (
-            <button className="iconbtn iconbtn-sm" aria-label="Task actions" {...props}>
+            <button className="iconbtn iconbtn-sm" aria-label="Ações da tarefa" {...props}>
               <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden>
                 <circle cx="2" cy="6" r="1.1" fill="currentColor" />
                 <circle cx="6" cy="6" r="1.1" fill="currentColor" />

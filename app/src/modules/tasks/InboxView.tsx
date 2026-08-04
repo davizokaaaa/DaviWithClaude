@@ -21,20 +21,20 @@ export default function InboxView() {
           <h2 className="view-title">Inbox</h2>
           <p className="view-sub">
             {items.length === 0
-              ? 'Everything is processed.'
-              : `${items.length} to triage — give each a home or let it go.`}
+              ? 'Tudo processado.'
+              : `${items.length} para triar — dê um destino a cada uma, ou solte.`}
           </p>
         </div>
         <Button variant="primary" onClick={() => openOverlay({ kind: 'capture' })} kbd={`${modLabel}⇧N`}>
-          Capture
+          Capturar
         </Button>
       </motion.header>
 
       {items.length === 0 ? (
         <EmptyState
           icon={<span aria-hidden>⊙</span>}
-          title="Inbox zero"
-          hint={`Anything on your mind? Press ${modLabel}⇧N from anywhere to capture it before it escapes.`}
+          title="Entrada zerada"
+          hint={`Algo na cabeça? Pressione ${modLabel}⇧N de qualquer lugar para capturar antes que escape.`}
         />
       ) : (
         <motion.ul className="col panel" style={{ padding: 'var(--sp-3)' }} variants={stagger()} initial="hidden" animate="show">

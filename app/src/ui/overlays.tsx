@@ -157,7 +157,7 @@ export function Drawer({
           >
             <header className="drawer-head">
               <h2 id={titleId} className="t-subtitle">{title}</h2>
-              <button className="iconbtn iconbtn-sm" onClick={onClose} aria-label="Close" data-dismiss>
+              <button className="iconbtn iconbtn-sm" onClick={onClose} aria-label="Fechar" data-dismiss>
                 <CloseGlyph />
               </button>
             </header>
@@ -333,7 +333,7 @@ export function ToastHost() {
   const toasts = useUi((s) => s.toasts);
   const dismiss = useUi((s) => s.dismissToast);
   return createPortal(
-    <div className="toast-host" role="region" aria-live="polite" aria-label="Notifications">
+    <div className="toast-host" role="region" aria-live="polite" aria-label="Notificações">
       <AnimatePresence mode="popLayout">
         {toasts.map((t) => (
           <ToastCard key={t.id} toast={t} onDismiss={() => dismiss(t.id)} />
@@ -367,7 +367,7 @@ function ToastCard({ toast, onDismiss }: { toast: Toast; onDismiss: () => void }
           {toast.action.label}
         </button>
       )}
-      <button className="toast-close" onClick={onDismiss} aria-label="Dismiss">
+      <button className="toast-close" onClick={onDismiss} aria-label="Dispensar">
         <CloseGlyph />
       </button>
     </motion.div>

@@ -39,7 +39,7 @@ export default function TodayView() {
   );
 
   const hour = new Date().getHours();
-  const greeting = hour < 5 ? 'Late night' : hour < 12 ? 'Good morning' : hour < 18 ? 'Good afternoon' : 'Good evening';
+  const greeting = hour < 5 ? 'Madrugada adentro' : hour < 12 ? 'Bom dia' : hour < 18 ? 'Boa tarde' : 'Boa noite';
   const planned = plannedDays.includes(today);
   const shutdownDone = shutdowns.some((s) => s.date === today);
   const now = minutesNow();
@@ -55,12 +55,12 @@ export default function TodayView() {
         <div className="row g-4">
           {!planned && (
             <Button variant="primary" onClick={() => openOverlay({ kind: 'planning' })}>
-              Plan today
+              Planejar o dia
             </Button>
           )}
           {planned && !shutdownDone && hour >= 15 && (
             <Button variant="secondary" onClick={() => openOverlay({ kind: 'shutdown' })}>
-              ☾ Shutdown
+              ☾ Encerrar
             </Button>
           )}
           <div className="row g-4 panel" style={{ padding: 'var(--sp-4) var(--sp-6)' }}>
@@ -71,9 +71,9 @@ export default function TodayView() {
             </ProgressRing>
             <div className="col">
               <span className="t-body-sm" style={{ fontWeight: 590 }}>
-                <AnimatedNumber value={stats.done} />/{stats.total} done
+                <AnimatedNumber value={stats.done} />/{stats.total} feitas
               </span>
-              <span className="t-micro ink-faint">~{fmtMinutes(Math.max(0, stats.plannedMinutes - stats.doneMinutes))} remaining</span>
+              <span className="t-micro ink-faint">~{fmtMinutes(Math.max(0, stats.plannedMinutes - stats.doneMinutes))} restantes</span>
             </div>
           </div>
         </div>
@@ -88,20 +88,20 @@ export default function TodayView() {
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0, transition: spring.smooth }}
             exit={{ opacity: 0, y: -6 }}
-            aria-label="Suggested next task"
+            aria-label="Próxima tarefa sugerida"
           >
             <div className="col g-1 spacer" style={{ minWidth: 200 }}>
-              <span className="t-eyebrow" style={{ color: 'var(--accent)' }}>Up next</span>
+              <span className="t-eyebrow" style={{ color: 'var(--accent)' }}>A seguir</span>
               <span className="t-subtitle truncate">{suggestion.task.title}</span>
               <span className="t-caption ink-subtle">{suggestion.reason}</span>
             </div>
             {modules.focus && (
               <Button variant="primary" onClick={() => navigate({ view: 'focus', param: suggestion.task.id })}>
-                Start focus
+                Iniciar foco
               </Button>
             )}
             <Button variant="ghost" onClick={() => openOverlay({ kind: 'task', taskId: suggestion.task.id })}>
-              Open
+              Abrir
             </Button>
           </motion.section>
         )}
@@ -111,16 +111,16 @@ export default function TodayView() {
         {/* The plan */}
         <section className="panel" style={{ gridColumn: '1' }}>
           <div className="panel-head" style={{ padding: 'var(--sp-6) var(--sp-7) 0' }}>
-            <h3 className="panel-title">Today’s plan</h3>
+            <h3 className="panel-title">Plano de hoje</h3>
             <Button size="sm" variant="ghost" onClick={() => openOverlay({ kind: 'planning' })}>
-              Edit plan
+              Editar plano
             </Button>
           </div>
           {dayTasks.length === 0 ? (
             <EmptyState
-              title="No plan yet"
-              hint="Run daily planning to commit a realistic set of tasks for today."
-              action={<Button variant="primary" onClick={() => openOverlay({ kind: 'planning' })}>Plan today</Button>}
+              title="Ainda sem plano"
+              hint="Faça o planejamento diário para assumir um conjunto realista de tarefas."
+              action={<Button variant="primary" onClick={() => openOverlay({ kind: 'planning' })}>Planejar o dia</Button>}
             />
           ) : (
             <motion.ul
@@ -143,13 +143,13 @@ export default function TodayView() {
           {/* Schedule */}
           <section className="panel panel-pad">
             <div className="panel-head">
-              <h3 className="panel-title">Schedule</h3>
+              <h3 className="panel-title">Agenda</h3>
               <Button size="sm" variant="ghost" onClick={() => navigate({ view: 'calendar' })}>
-                Calendar →
+                Calendário →
               </Button>
             </div>
             {todayBlocks.length === 0 ? (
-              <p className="t-body-sm ink-faint">No blocks today. Time-block from the calendar.</p>
+              <p className="t-body-sm ink-faint">Sem blocos hoje. Reserve tempo pelo calendário.</p>
             ) : (
               <motion.ul className="col g-2" variants={stagger()} initial="hidden" animate="show">
                 {todayBlocks.map((b) => {
@@ -177,7 +177,7 @@ export default function TodayView() {
                           animate={{ opacity: [0.5, 1, 0.5] }}
                           transition={{ repeat: Infinity, duration: 2.4 }}
                         >
-                          now
+                          agora
                         </motion.span>
                       )}
                       <span className="t-micro ink-faint">{fmtMinutes(b.duration)}</span>
@@ -192,9 +192,9 @@ export default function TodayView() {
           {modules.habits && activeHabits.length > 0 && (
             <section className="panel panel-pad">
               <div className="panel-head">
-                <h3 className="panel-title">Habits</h3>
+                <h3 className="panel-title">Hábitos</h3>
                 <Button size="sm" variant="ghost" onClick={() => navigate({ view: 'habits' })}>
-                  All →
+                  Todos →
                 </Button>
               </div>
               <motion.ul className="col g-3" variants={stagger()} initial="hidden" animate="show">
@@ -206,7 +206,7 @@ export default function TodayView() {
                       <motion.button
                         className="iconbtn iconbtn-md"
                         aria-pressed={done}
-                        aria-label={`${h.name}${done ? ' — done' : ''}`}
+                        aria-label={`${h.name}${done ? ' — feito' : ''}`}
                         onClick={() => toggleHabit(h.id, today)}
                         whileTap={{ scale: 0.8 }}
                         transition={spring.bouncy}
@@ -222,7 +222,7 @@ export default function TodayView() {
                         {h.name}
                       </span>
                       {streak > 1 && (
-                        <span className="t-micro ink-faint" title={`${streak}-day streak`}>
+                        <span className="t-micro ink-faint" title={`sequência de ${streak} dias`}>
                           {streak}⚡
                         </span>
                       )}

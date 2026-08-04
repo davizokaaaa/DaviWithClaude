@@ -60,18 +60,18 @@ export function PlanningRitual() {
 
   const finish = () => {
     markDayPlanned(today);
-    toast({ message: `Day planned — ${committedIds.length} tasks, ~${fmtMinutes(committedMinutes)}`, kind: 'success' });
+    toast({ message: `Dia planejado — ${committedIds.length} tarefas, ~${fmtMinutes(committedMinutes)}`, kind: 'success' });
     close();
   };
 
   return (
-    <Dialog open={open} onClose={close} title="Plan today" width={540}>
+    <Dialog open={open} onClose={close} title="Planejar o dia" width={540}>
       <p className="t-body-sm ink-subtle" style={{ marginTop: -10, marginBottom: 18 }}>
-        Choose what today actually has room for. Everything else stays safely where it is.
+        Escolha o que realmente cabe no dia de hoje. Todo o resto fica guardado onde está.
       </p>
 
       {candidates.length === 0 ? (
-        <EmptyState title="Nothing waiting" hint="Capture something first, or enjoy the quiet." />
+        <EmptyState title="Nada esperando" hint="Capture algo primeiro, ou aproveite o silêncio." />
       ) : (
         <motion.ul className="col g-1" variants={stagger()} initial="hidden" animate="show">
           {candidates.map((t) => {
@@ -85,11 +85,11 @@ export function PlanningRitual() {
                 style={{ cursor: 'pointer' }}
                 onClick={() => planTask(t.id, committed ? undefined : today)}
               >
-                <Checkbox checked={committed} onChange={() => planTask(t.id, committed ? undefined : today)} label={`Commit ${t.title}`} />
+                <Checkbox checked={committed} onChange={() => planTask(t.id, committed ? undefined : today)} label={`Assumir ${t.title}`} />
                 <span className="trow-title truncate spacer">{t.title}</span>
                 <span className="trow-meta">
-                  {t.status === 'inbox' && <span>inbox</span>}
-                  {t.dueDate && t.dueDate < today && <span style={{ color: 'var(--danger)' }}>overdue</span>}
+                  {t.status === 'inbox' && <span>entrada</span>}
+                  {t.dueDate && t.dueDate < today && <span style={{ color: 'var(--danger)' }}>atrasada</span>}
                   {t.estimate != null && <span>{fmtMinutes(t.estimate)}</span>}
                 </span>
               </motion.li>
@@ -100,9 +100,9 @@ export function PlanningRitual() {
 
       <div className="row between" style={{ marginTop: 20 }}>
         <div className="col g-1">
-          <span className="t-caption ink-faint">Committed</span>
+          <span className="t-caption ink-faint">Assumidas</span>
           <span className="t-subtitle" style={{ fontVariantNumeric: 'tabular-nums' }}>
-            <AnimatedNumber value={committedIds.length} /> tasks · ~{fmtMinutes(committedMinutes)}
+            <AnimatedNumber value={committedIds.length} /> tarefas · ~{fmtMinutes(committedMinutes)}
           </span>
           <AnimatePresence>
             {overloaded && (
@@ -114,12 +114,12 @@ export function PlanningRitual() {
                 exit={{ opacity: 0 }}
                 transition={fade.base}
               >
-                That's a full day before meetings — consider trimming.
+                Isso já é um dia cheio antes das reuniões — considere enxugar.
               </motion.span>
             )}
           </AnimatePresence>
         </div>
-        <Button variant="primary" onClick={finish}>Commit plan</Button>
+        <Button variant="primary" onClick={finish}>Assumir o plano</Button>
       </div>
     </Dialog>
   );
@@ -171,12 +171,12 @@ export function ShutdownRitual() {
     }
     if (mood || energy) logPulse({ date: today, mood: mood || undefined, energy: energy || undefined });
     recordShutdown({ date: today, completedAt: Date.now(), carried, rescheduled, dropped });
-    toast({ message: 'Day closed. Nothing is left hanging.', kind: 'success' });
+    toast({ message: 'Dia encerrado. Nada ficou no ar.', kind: 'success' });
     close();
   };
 
   return (
-    <Dialog open={open} onClose={close} title="Daily shutdown" width={540}>
+    <Dialog open={open} onClose={close} title="Encerramento do dia" width={540}>
       <motion.div
         className="row g-6"
         style={{ marginBottom: 20 }}
@@ -186,18 +186,18 @@ export function ShutdownRitual() {
       >
         <div className="stat">
           <span className="stat-value"><AnimatedNumber value={doneToday} /></span>
-          <span className="stat-label">completed today</span>
+          <span className="stat-label">concluídas hoje</span>
         </div>
         <div className="stat">
           <span className="stat-value"><AnimatedNumber value={unfinished.length} /></span>
-          <span className="stat-label">to decide</span>
+          <span className="stat-label">a decidir</span>
         </div>
       </motion.div>
 
       {unfinished.length > 0 && (
         <section style={{ marginBottom: 20 }}>
           <p className="t-caption ink-subtle" style={{ marginBottom: 10 }}>
-            Decide each one — carry to tomorrow, push a few days, or let it go.
+            Decida uma a uma — levar para amanhã, adiar alguns dias, ou soltar.
           </p>
           <motion.ul className="col g-2" variants={stagger()} initial="hidden" animate="show">
             {unfinished.map((t) => {
@@ -205,7 +205,7 @@ export function ShutdownRitual() {
               return (
                 <motion.li key={t.id} variants={staggerItem} className="row g-4" style={{ minHeight: 34 }}>
                   <span className="t-body truncate spacer">{t.title}</span>
-                  <div className="segmented" role="tablist" aria-label={`Decision for ${t.title}`}>
+                  <div className="segmented" role="tablist" aria-label={`Decisão para ${t.title}`}>
                     {(['carry', 'reschedule', 'drop'] as Decision[]).map((opt) => (
                       <button
                         key={opt}
@@ -218,7 +218,7 @@ export function ShutdownRitual() {
                           <motion.span className="segmented-thumb" layoutId={`shut:${t.id}`} transition={spring.snappy} />
                         )}
                         <span className="segmented-label">
-                          {opt === 'carry' ? 'Tomorrow' : opt === 'reschedule' ? 'Later' : 'Drop'}
+                          {opt === 'carry' ? 'Amanhã' : opt === 'reschedule' ? 'Depois' : 'Soltar'}
                         </span>
                       </button>
                     ))}
@@ -231,12 +231,12 @@ export function ShutdownRitual() {
       )}
 
       <section className="grid-2" style={{ gap: 'var(--sp-6)', marginBottom: 20 }}>
-        <PulsePicker label="How was your mood?" value={mood} onChange={setMood} glyphs={['☹', '◔', '−', '◑', '☺']} />
-        <PulsePicker label="Energy level?" value={energy} onChange={setEnergy} glyphs={['▁', '▂', '▄', '▆', '█']} />
+        <PulsePicker label="Como foi o seu humor?" value={mood} onChange={setMood} glyphs={['☹', '◔', '−', '◑', '☺']} />
+        <PulsePicker label="Nível de energia?" value={energy} onChange={setEnergy} glyphs={['▁', '▂', '▄', '▆', '█']} />
       </section>
 
       <div className="row" style={{ justifyContent: 'flex-end' }}>
-        <Button variant="primary" onClick={finish}>Close the day</Button>
+        <Button variant="primary" onClick={finish}>Encerrar o dia</Button>
       </div>
     </Dialog>
   );
@@ -265,7 +265,7 @@ function PulsePicker({
               key={v}
               role="radio"
               aria-checked={active}
-              aria-label={`${v} of 5`}
+              aria-label={`${v} de 5`}
               className="iconbtn iconbtn-lg"
               style={active ? { background: 'var(--accent-soft)', color: 'var(--accent)' } : undefined}
               onClick={() => onChange(active ? 0 : v)}

@@ -8,20 +8,20 @@ import { riseIn, stagger, staggerItem, spring } from '@/lib/motion';
 import type { AccentPref, ModuleFlags } from '@/core/types';
 
 const ACCENTS: { id: AccentPref; label: string }[] = [
-  { id: 'indigo', label: 'Ink Navy' },
-  { id: 'evergreen', label: 'Forest' },
-  { id: 'amber', label: 'Brass' },
-  { id: 'rose', label: 'Terracotta' },
-  { id: 'graphite', label: 'Stone' },
+  { id: 'indigo', label: 'Azul-tinta' },
+  { id: 'evergreen', label: 'Floresta' },
+  { id: 'amber', label: 'Latão' },
+  { id: 'rose', label: 'Terracota' },
+  { id: 'graphite', label: 'Pedra' },
 ];
 
 const MODULES: { key: keyof ModuleFlags; label: string; hint: string }[] = [
-  { key: 'focus', label: 'Focus', hint: 'Pomodoro and deep-work sessions' },
-  { key: 'habits', label: 'Habits', hint: 'Habit tracker with streak freezes' },
-  { key: 'goals', label: 'Goals', hint: 'OKRs and key results' },
-  { key: 'knowledge', label: 'Notes', hint: 'Knowledge base, journal, reading list' },
-  { key: 'finance', label: 'Finance', hint: 'Monthly money overview' },
-  { key: 'reviews', label: 'Reviews', hint: 'Weekly to annual reviews' },
+  { key: 'focus', label: 'Foco', hint: 'Pomodoro e sessões de trabalho profundo' },
+  { key: 'habits', label: 'Hábitos', hint: 'Rastreador de hábitos com congelamento de sequências' },
+  { key: 'goals', label: 'Metas', hint: 'OKRs e resultados-chave' },
+  { key: 'knowledge', label: 'Notas', hint: 'Base de conhecimento, diário, lista de leituras' },
+  { key: 'finance', label: 'Finanças', hint: 'Visão mensal do dinheiro' },
+  { key: 'reviews', label: 'Revisões', hint: 'Revisões da semanal à anual' },
 ];
 
 export default function SettingsView() {
@@ -33,29 +33,29 @@ export default function SettingsView() {
     <div className="view view-narrow">
       <motion.header className="view-head" variants={riseIn} initial="hidden" animate="show">
         <h2 className="view-title">Settings</h2>
-        <p className="view-sub">Meridian should fit you — not the other way around.</p>
+        <p className="view-sub">O Meridian deve se ajustar a você — não o contrário.</p>
       </motion.header>
 
       <motion.div className="col g-6" variants={stagger(0.02, 0.05)} initial="hidden" animate="show">
         <motion.section variants={staggerItem} className="panel panel-pad col g-6">
-          <h3 className="panel-title">Appearance</h3>
+          <h3 className="panel-title">Aparência</h3>
           <div className="row between g-4 wrap">
-            <span className="t-body-sm">Theme</span>
+            <span className="t-body-sm">Tema</span>
             <Segmented
               layoutNs="theme"
-              label="Theme"
+              label="Tema"
               value={settings.theme}
               options={[
-                { value: 'system', label: 'System' },
-                { value: 'light', label: 'Light' },
-                { value: 'dark', label: 'Dark' },
+                { value: 'system', label: 'Sistema' },
+                { value: 'light', label: 'Claro' },
+                { value: 'dark', label: 'Escuro' },
               ]}
               onChange={settings.setTheme}
             />
           </div>
           <div className="row between g-4 wrap">
-            <span className="t-body-sm">Accent</span>
-            <div className="row g-3" role="radiogroup" aria-label="Accent color">
+            <span className="t-body-sm">Cor de destaque</span>
+            <div className="row g-3" role="radiogroup" aria-label="Cor de destaque">
               {ACCENTS.map((a) => (
                 <motion.button
                   key={a.id}
@@ -79,14 +79,14 @@ export default function SettingsView() {
             </div>
           </div>
           <div className="row between g-4 wrap">
-            <span className="t-body-sm">Density</span>
+            <span className="t-body-sm">Densidade</span>
             <Segmented
               layoutNs="density"
-              label="Density"
+              label="Densidade"
               value={settings.density}
               options={[
-                { value: 'comfortable', label: 'Comfortable' },
-                { value: 'compact', label: 'Compact' },
+                { value: 'comfortable', label: 'Confortável' },
+                { value: 'compact', label: 'Compacta' },
               ]}
               onChange={settings.setDensity}
             />
@@ -95,9 +95,9 @@ export default function SettingsView() {
 
         <motion.section variants={staggerItem} className="panel panel-pad col g-5">
           <div>
-            <h3 className="panel-title">Modules</h3>
+            <h3 className="panel-title">Módulos</h3>
             <p className="t-caption ink-faint" style={{ marginTop: 4 }}>
-              Turn off what you don't use. Less surface, more focus.
+              Desligue o que você não usa. Menos superfície, mais foco.
             </p>
           </div>
           {MODULES.map((m) => (
@@ -109,31 +109,31 @@ export default function SettingsView() {
               <Switch
                 checked={settings.modules[m.key]}
                 onChange={(v) => settings.setModule(m.key, v)}
-                label={`${m.label} module`}
+                label={`Módulo ${m.label}`}
               />
             </div>
           ))}
         </motion.section>
 
         <motion.section variants={staggerItem} className="panel panel-pad col g-5">
-          <h3 className="panel-title">Focus timer</h3>
+          <h3 className="panel-title">Timer de foco</h3>
           <div className="grid-3" style={{ gap: 'var(--sp-5)' }}>
             <Input
-              label="Work (min)"
+              label="Trabalho (min)"
               type="number"
               min={5}
               value={settings.pomodoro.work}
               onChange={(e) => settings.setPomodoro({ work: Number(e.target.value) || 25 })}
             />
             <Input
-              label="Break (min)"
+              label="Pausa (min)"
               type="number"
               min={1}
               value={settings.pomodoro.break}
               onChange={(e) => settings.setPomodoro({ break: Number(e.target.value) || 5 })}
             />
             <Input
-              label="Long break (min)"
+              label="Pausa longa (min)"
               type="number"
               min={5}
               value={settings.pomodoro.longBreak}
@@ -143,9 +143,9 @@ export default function SettingsView() {
         </motion.section>
 
         <motion.section variants={staggerItem} className="panel panel-pad col g-4">
-          <h3 className="panel-title">Data</h3>
+          <h3 className="panel-title">Dados</h3>
           <p className="t-body-sm ink-subtle">
-            Everything lives in your browser's local storage. No account, no server, no telemetry.
+            Tudo vive no armazenamento local do seu navegador. Sem conta, sem servidor, sem telemetria.
           </p>
           <div className="row g-4">
             <Button
@@ -159,21 +159,21 @@ export default function SettingsView() {
                 a.download = `meridian-export-${Date.now()}.json`;
                 a.click();
                 URL.revokeObjectURL(url);
-                toast({ message: 'Workspace exported', kind: 'success' });
+                toast({ message: 'Espaço exportado', kind: 'success' });
               }}
             >
-              Export workspace
+              Exportar dados
             </Button>
             <Button
               variant="danger"
               onClick={() => {
-                if (window.confirm('Reset the workspace to the demo seed? Your data will be replaced.')) {
+                if (window.confirm('Apagar tudo e começar do zero? Seus dados serão removidos.')) {
                   resetToSeed();
-                  toast({ message: 'Workspace reset to seed', kind: 'danger' });
+                  toast({ message: 'Espaço zerado', kind: 'danger' });
                 }
               }}
             >
-              Reset to demo data
+              Começar do zero
             </Button>
           </div>
         </motion.section>

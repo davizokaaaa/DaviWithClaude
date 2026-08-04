@@ -47,8 +47,8 @@ export default function ProjectBoard({ param }: { param?: string }) {
     return (
       <div className="view">
         <EmptyState
-          title="Project not found"
-          action={<Button onClick={() => navigate({ view: 'projects' })}>Back to projects</Button>}
+          title="Projeto não encontrado"
+          action={<Button onClick={() => navigate({ view: 'projects' })}>Voltar aos projetos</Button>}
         />
       </div>
     );
@@ -94,7 +94,7 @@ export default function ProjectBoard({ param }: { param?: string }) {
     <div className="view" style={{ maxWidth: 'none' }}>
       <motion.header className="view-head row between g-4 wrap" variants={riseIn} initial="hidden" animate="show">
         <div className="row g-4">
-          <button className="iconbtn iconbtn-md" onClick={() => navigate({ view: 'projects' })} aria-label="Back to projects">
+          <button className="iconbtn iconbtn-md" onClick={() => navigate({ view: 'projects' })} aria-label="Voltar aos projetos">
             ←
           </button>
           <div>
@@ -117,18 +117,18 @@ export default function ProjectBoard({ param }: { param?: string }) {
               key={col.id}
               data-column-id={col.id}
               className={clsx('board-col', overColumn === col.id && 'is-over')}
-              aria-label={`${col.name} column`}
+              aria-label={`Coluna ${col.name}`}
             >
               <header className="row g-3 board-col-head">
                 <span className="t-body-sm" style={{ fontWeight: 590 }}>{col.name}</span>
                 <span className={clsx('t-micro', overWip ? '' : 'ink-faint')} style={overWip ? { color: 'var(--warning)' } : undefined}>
                   {openCount}{col.wipLimit != null && `/${col.wipLimit}`}
                 </span>
-                {overWip && <span className="t-micro" style={{ color: 'var(--warning)' }}>over limit</span>}
+                {overWip && <span className="t-micro" style={{ color: 'var(--warning)' }}>acima do limite</span>}
                 <span className="spacer" />
                 <button
                   className="iconbtn iconbtn-sm"
-                  aria-label={`Add task to ${col.name}`}
+                  aria-label={`Adicionar tarefa em ${col.name}`}
                   onClick={() => setComposerCol(composerCol === col.id ? null : col.id)}
                 >
                   +
@@ -149,8 +149,8 @@ export default function ProjectBoard({ param }: { param?: string }) {
                   >
                     <Input
                       autoFocus
-                      aria-label="New task title"
-                      placeholder="Task title, ↵ to add"
+                      aria-label="Título da nova tarefa"
+                      placeholder="Título da tarefa, ↵ para adicionar"
                       value={composerText}
                       onChange={(e) => setComposerText(e.target.value)}
                       onKeyDown={(e) => e.key === 'Escape' && setComposerCol(null)}

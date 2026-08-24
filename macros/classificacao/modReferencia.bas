@@ -71,8 +71,8 @@ Function CarregarTabelaReferencia(ByRef dicSegLpPorGeobox As Object, _
     For i = 2 To lastRowRef
         geo = UCase(Trim(CStr(wsRef.Cells(i, 1).Value)))     ' GEOBOX
         geo = NormalizarFormatacaoBasica(geo)                 ' mesma normalização usada na busca
-        gama = UCase(Trim(CStr(wsRef.Cells(i, 2).Value)))    ' GAMA (não usada na busca de segmento/LP)
-        marcaRef = UCase(Trim(CStr(wsRef.Cells(i, 3).Value))) ' MARCA
+        marcaRef = UCase(Trim(CStr(wsRef.Cells(i, 2).Value))) ' MARCA
+        gama = UCase(Trim(CStr(wsRef.Cells(i, 3).Value)))    ' GAMA (não usada na busca de segmento/LP)
         lp = UCase(Trim(CStr(wsRef.Cells(i, 4).Value)))       ' LP
         seg = UCase(Trim(CStr(wsRef.Cells(i, 5).Value)))      ' SEGMENTO
 

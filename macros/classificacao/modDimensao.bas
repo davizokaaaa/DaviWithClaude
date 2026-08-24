@@ -190,11 +190,13 @@ Function NormalizarTextoDimensao(texto As String) As String
     ' Medida escrita por extenso, como no laudo/etiqueta INMETRO:
     ' "BANDA: 175, SÉRIE: 75R, ARO: 13" -> "175/75R13". Cada parte (banda,
     ' série, aro) pode vir separada por qualquer texto no meio (vírgula,
-    ' "POLEGADAS", etc.), por isso o "[^0-9]{1,40}" entre elas em vez de
-    ' exigir vizinhança exata. O "R" da série é opcional no texto de origem
-    ' (às vezes vem "SÉRIE: 75" sem R) e é sempre recolocado no resultado,
-    ' já que medida radial sempre usa R entre perfil e aro.
-    regex.Pattern = "BANDA:?\s*(\d{2,3})[^0-9]{1,40}(?:S[EÉ]RIE|SERIE):?\s*(\d{1,3})R?[^0-9]{1,40}ARO:?\s*(\d{1,2}(?:\.\d)?)"
+    ' "E", "MM", " - ", etc.), por isso o "[^0-9]{1,40}" entre elas em vez
+    ' de exigir vizinhança exata. Cobre também rótulos alternativos vistos
+    ' em outros laudos: "LARGURA(BANDA)" no lugar de "BANDA", e "PERFIL" no
+    ' lugar de "SÉRIE"/"SERIE". O "R" da série é opcional no texto de origem
+    ' e sempre recolocado no resultado, já que medida radial sempre usa R
+    ' entre perfil e aro.
+    regex.Pattern = "(?:LARGURA\(BANDA\)|BANDA)[^0-9]{0,10}(\d{2,3})[^0-9]{1,40}(?:S[EÉ]RIE|SERIE|PERFIL)[^0-9]{0,10}(\d{1,3})R?[^0-9]{1,40}ARO[^0-9]{0,10}(\d{1,2}(?:\.\d)?)"
     resultado = regex.Replace(resultado, "$1/$2R$3")
 
     ' Padrão "NN-NN.NNRNN" (hífen no lugar de "X", ex: "33-12.50R17") ->

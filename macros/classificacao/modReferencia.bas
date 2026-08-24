@@ -10,14 +10,18 @@ Option Explicit
 
 ' ==========================================================================
 ' Carrega a Tabela de Referência (arquivo externo) e monta:
-'   dicSegLpPorGeobox    : chave GEOBOX -> Array(SEGMENTO, LP) — combinação
-'                          mais frequente (maioria) quando o mesmo GEOBOX
-'                          aparece em mais de uma linha da aba "Referencia"
+'   dicSegPorGeobox      : chave GEOBOX -> SEGMENTO mais frequente entre os
+'                          valores NÃO VAZIOS daquele GEOBOX na aba
+'                          "Referencia" (linhas com Segmento vazio não
+'                          entram na votação)
+'   dicLpPorGeobox       : chave GEOBOX -> LP mais frequente entre os
+'                          valores NÃO VAZIOS daquele GEOBOX — votação
+'                          totalmente independente da de Segmento
 '   arrMarcas()          : array de marcas únicas, ordenado da mais longa p/ mais curta
 '   dicGeoboxPorMarca    : chave MARCA -> Collection de GEOBOX únicos daquela marca
 '   dicGeoboxGlobalUnicos: chave GEOBOX -> True (todos os geobox únicos, p/ busca ampla)
 ' ==========================================================================
-Function CarregarTabelaReferencia(ByRef dicSegLpPorGeobox As Object, _
+Function CarregarTabelaReferencia(ByRef dicSegPorGeobox As Object, ByRef dicLpPorGeobox As Object, _
                                    ByRef arrMarcas() As String, ByRef dicGeoboxPorMarca As Object, _
                                    ByRef dicGeoboxGlobalUnicos As Object, ByRef dicExcecoesMarca As Object, _
                                    ByRef diagnostico As String) As Boolean
@@ -55,10 +59,12 @@ Function CarregarTabelaReferencia(ByRef dicSegLpPorGeobox As Object, _
     Set dicGeoboxPorMarca = CreateObject("Scripting.Dictionary")
     Set dicGeoboxGlobalUnicos = CreateObject("Scripting.Dictionary")
 
-    ' dicVotosPorGeo: chave GEOBOX -> Dictionary("SEGMENTO|LP" -> contagem).
-    ' Usado para achar a combinação (SEGMENTO, LP) mais frequente por GEOBOX.
-    Dim dicVotosPorGeo As Object
-    Set dicVotosPorGeo = CreateObject("Scripting.Dictionary")
+    ' dicVotosSegPorGeo / dicVotosLpPorGeo: chave GEOBOX -> Dictionary(valor -> contagem).
+    ' Votações independentes: uma conta SEGMENTO, a outra conta LP, cada
+    ' uma ignorando linhas onde o próprio valor está vazio.
+    Dim dicVotosSegPorGeo As Object, dicVotosLpPorGeo As Object
+    Set dicVotosSegPorGeo = CreateObject("Scripting.Dictionary")
+    Set dicVotosLpPorGeo = CreateObject("Scripting.Dictionary")
 
     Dim dicMarcasUnicas As Object
     Set dicMarcasUnicas = CreateObject("Scripting.Dictionary")
@@ -85,22 +91,32 @@ Function CarregarTabelaReferencia(ByRef dicSegLpPorGeobox As Object, _
         lp = UCase(Trim(CStr(wsRef.Cells(i, 4).Value)))       ' LP
         seg = UCase(Trim(CStr(wsRef.Cells(i, 5).Value)))      ' SEGMENTO
 
-        ' --- Vota (SEGMENTO, LP) para esse GEOBOX, se houver algo pra votar ---
-        If Len(geo) > 0 And (Len(seg) > 0 Or Len(lp) > 0) Then
-            Dim chaveVoto As String
-            chaveVoto = seg & "|" & lp
+        ' --- Vota SEGMENTO e LP separadamente para esse GEOBOX, cada um só ---
+        ' --- quando o próprio valor não está vazio (linha em branco numa  ---
+        ' --- delas não conta como voto nem "suja" a outra votação).       ---
+        Dim subVotos As Object
 
-            If Not dicVotosPorGeo.Exists(geo) Then
-                dicVotosPorGeo.Add geo, CreateObject("Scripting.Dictionary")
+        If Len(geo) > 0 And Len(seg) > 0 Then
+            If Not dicVotosSegPorGeo.Exists(geo) Then
+                dicVotosSegPorGeo.Add geo, CreateObject("Scripting.Dictionary")
             End If
-
-            Dim subVotos As Object
-            Set subVotos = dicVotosPorGeo(geo)
-
-            If subVotos.Exists(chaveVoto) Then
-                subVotos(chaveVoto) = subVotos(chaveVoto) + 1
+            Set subVotos = dicVotosSegPorGeo(geo)
+            If subVotos.Exists(seg) Then
+                subVotos(seg) = subVotos(seg) + 1
             Else
-                subVotos.Add chaveVoto, 1
+                subVotos.Add seg, 1
+            End If
+        End If
+
+        If Len(geo) > 0 And Len(lp) > 0 Then
+            If Not dicVotosLpPorGeo.Exists(geo) Then
+                dicVotosLpPorGeo.Add geo, CreateObject("Scripting.Dictionary")
+            End If
+            Set subVotos = dicVotosLpPorGeo(geo)
+            If subVotos.Exists(lp) Then
+                subVotos(lp) = subVotos(lp) + 1
+            Else
+                subVotos.Add lp, 1
             End If
         End If
 
@@ -123,30 +139,16 @@ Function CarregarTabelaReferencia(ByRef dicSegLpPorGeobox As Object, _
         End If
     Next i
 
-    ' --- Monta dicSegLpPorGeobox: para cada GEOBOX, fica com a combinação  ---
-    ' --- (SEGMENTO, LP) que teve mais votos (maioria). Em empate, fica     ---
-    ' --- com a primeira encontrada (ordem de leitura da aba "Referencia"). ---
-    Set dicSegLpPorGeobox = CreateObject("Scripting.Dictionary")
-    Dim geoKey As Variant, chaveVotoIter As Variant
-    Dim melhorChaveVoto As String, melhorContagem As Long
-    For Each geoKey In dicVotosPorGeo.Keys
-        Set subVotos = dicVotosPorGeo(geoKey)
-        melhorChaveVoto = ""
-        melhorContagem = 0
-        For Each chaveVotoIter In subVotos.Keys
-            If subVotos(chaveVotoIter) > melhorContagem Then
-                melhorContagem = subVotos(chaveVotoIter)
-                melhorChaveVoto = CStr(chaveVotoIter)
-            End If
-        Next chaveVotoIter
-
-        Dim partesVoto() As String
-        partesVoto = Split(melhorChaveVoto, "|")
-        dicSegLpPorGeobox.Add CStr(geoKey), Array(partesVoto(0), partesVoto(1))
-    Next geoKey
+    ' --- Monta dicSegPorGeobox e dicLpPorGeobox: para cada GEOBOX, fica com ---
+    ' --- o valor NÃO VAZIO mais votado (maioria) em cada votação, cada uma ---
+    ' --- totalmente independente da outra. Em empate, fica com o primeiro  ---
+    ' --- encontrado (ordem de leitura da aba "Referencia").                ---
+    Set dicSegPorGeobox = MontarDicMaioriaPorGeobox(dicVotosSegPorGeo)
+    Set dicLpPorGeobox = MontarDicMaioriaPorGeobox(dicVotosLpPorGeo)
 
     diagnostico = diagnostico & "Última linha lida na aba ""Referencia"": " & lastRowRef & vbCrLf
-    diagnostico = diagnostico & "Total de GEOBOX únicos mapeados (SEGMENTO/LP direto por dimensão): " & dicSegLpPorGeobox.Count & vbCrLf
+    diagnostico = diagnostico & "Total de GEOBOX únicos com SEGMENTO mapeado: " & dicSegPorGeobox.Count & vbCrLf
+    diagnostico = diagnostico & "Total de GEOBOX únicos com LP mapeado: " & dicLpPorGeobox.Count & vbCrLf
     If wasOpen Then
         diagnostico = diagnostico & vbCrLf & "ATENÇÃO: o arquivo já estava aberto e foi reaproveitado. " & _
                       "Se os números acima parecerem baixos demais, FECHE o arquivo Tabela_Referencia.xlsx " & _
@@ -242,23 +244,65 @@ ErroAbrir:
 End Function
 
 ' ==========================================================================
-' Retorna, para uma DIMENSÃO (GEOBOX) já extraída, o SEGMENTO e a LP
-' cadastrados na Tabela de Referência (dicSegLpPorGeobox, montado por
-' CarregarTabelaReferencia com a combinação mais frequente quando a mesma
-' DIMENSÃO aparece em mais de uma linha da aba "Referencia"). Não depende
-' de MARCA nem de achar a GAMA no texto — é busca direta por DIMENSÃO.
-' Se a DIMENSÃO não estiver cadastrada, retorna "" para os dois.
+' Recebe um dicionário de votos (chave GEOBOX -> Dictionary(valor -> contagem),
+' montado ignorando valores vazios) e devolve um dicionário simples
+' chave GEOBOX -> valor mais votado (maioria). Em empate, fica com o
+' primeiro valor encontrado (ordem de leitura da aba "Referencia").
 ' ==========================================================================
-Sub ObterSegmentoELpPorDimensao(dimensao As String, dicSegLpPorGeobox As Object, _
+Function MontarDicMaioriaPorGeobox(dicVotosPorGeo As Object) As Object
+    Dim dicResultado As Object
+    Set dicResultado = CreateObject("Scripting.Dictionary")
+
+    Dim geoKey As Variant, valorIter As Variant
+    Dim subVotos As Object
+    Dim melhorValor As String, melhorContagem As Long
+
+    For Each geoKey In dicVotosPorGeo.Keys
+        Set subVotos = dicVotosPorGeo(geoKey)
+        melhorValor = ""
+        melhorContagem = 0
+        For Each valorIter In subVotos.Keys
+            If subVotos(valorIter) > melhorContagem Then
+                melhorContagem = subVotos(valorIter)
+                melhorValor = CStr(valorIter)
+            End If
+        Next valorIter
+        dicResultado.Add CStr(geoKey), melhorValor
+    Next geoKey
+
+    Set MontarDicMaioriaPorGeobox = dicResultado
+End Function
+
+' ==========================================================================
+' Retorna, para uma DIMENSÃO (GEOBOX) já extraída, o SEGMENTO e a LP.
+' Não depende de MARCA nem de achar a GAMA no texto — é busca direta por
+' DIMENSÃO. Regra de prioridade do LP:
+'   1) Se achou SEGMENTO pra essa dimensão, LP = DeduzirLp(segmento)
+'      (TC para PC/REC/COM, PL para TLD/PPL/BUS, BR para DM).
+'   2) Se DeduzirLp não souber mapear esse segmento (retornou ""), ou se
+'      não achou SEGMENTO nenhum, usa a votação independente de LP
+'      (dicLpPorGeobox) — maioria dos valores de LP não vazios daquele
+'      GEOBOX na Tabela de Referência.
+' Se a DIMENSÃO não estiver cadastrada em nenhum dos dois dicionários,
+' retorna "" para os dois. DeduzirLp vem de modClassificacaoRegras.bas.
+' ==========================================================================
+Sub ObterSegmentoELpPorDimensao(dimensao As String, dicSegPorGeobox As Object, dicLpPorGeobox As Object, _
                                  ByRef segmentoOut As String, ByRef lpOut As String)
     segmentoOut = ""
     lpOut = ""
 
     If Len(dimensao) = 0 Then Exit Sub
-    If Not dicSegLpPorGeobox.Exists(dimensao) Then Exit Sub
 
-    Dim par As Variant
-    par = dicSegLpPorGeobox(dimensao)
-    segmentoOut = CStr(par(0))
-    lpOut = CStr(par(1))
+    If dicSegPorGeobox.Exists(dimensao) Then segmentoOut = CStr(dicSegPorGeobox(dimensao))
+
+    Dim lpVotado As String
+    lpVotado = ""
+    If dicLpPorGeobox.Exists(dimensao) Then lpVotado = CStr(dicLpPorGeobox(dimensao))
+
+    If Len(segmentoOut) > 0 Then
+        lpOut = DeduzirLp(segmentoOut)
+        If Len(lpOut) = 0 Then lpOut = lpVotado
+    Else
+        lpOut = lpVotado
+    End If
 End Sub

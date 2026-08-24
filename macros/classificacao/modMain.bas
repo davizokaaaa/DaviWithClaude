@@ -88,12 +88,12 @@ Sub ClassificarTudo()
     Dim dicPadroesLegado As Object
     Set dicPadroesLegado = CarregarPadroesGeoboxLegado()
 
-    Dim dicSegLpPorGeobox As Object
+    Dim dicSegPorGeobox As Object, dicLpPorGeobox As Object
     Dim arrMarcas() As String
     Dim dicGeoboxPorMarca As Object, dicGeoboxGlobalUnicos As Object
     Dim diagnosticoRef As String
 
-    If Not CarregarTabelaReferencia(dicSegLpPorGeobox, arrMarcas, _
+    If Not CarregarTabelaReferencia(dicSegPorGeobox, dicLpPorGeobox, arrMarcas, _
                                      dicGeoboxPorMarca, dicGeoboxGlobalUnicos, dicExcecoesMarca, diagnosticoRef) Then
         MsgBox "Não foi possível abrir a Tabela de Referência em:" & vbCrLf & REF_FILE_PATH, vbCritical
         Exit Sub
@@ -163,13 +163,13 @@ Sub ClassificarTudo()
         ws.Cells(i, colAnip).Value = anip
 
         ' --- TIPO PRODUTO e LP: busca direto pela DIMENSÃO na Tabela de     ---
-        ' --- Referência (aba "Referencia"). Se a mesma DIMENSÃO aparecer   ---
-        ' --- em mais de uma linha lá com combinações diferentes de        ---
-        ' --- SEGMENTO/LP, usa a combinação mais frequente (maioria).      ---
-        ' --- Usa a DIMENSÃO BRUTA (antes do hífen->R) porque é essa forma ---
-        ' --- que bate exatamente com o GEOBOX gravado na Tabela.          ---
+        ' --- Referência (aba "Referencia"). SEGMENTO e LP são votações     ---
+        ' --- independentes (maioria dos valores não vazios daquele         ---
+        ' --- GEOBOX); se achou SEGMENTO, o LP é deduzido dele (TC/PL/BR).  ---
+        ' --- Usa a DIMENSÃO BRUTA (antes do hífen->R) porque é essa forma  ---
+        ' --- que bate exatamente com o GEOBOX gravado na Tabela.           ---
         Dim lp As String
-        ObterSegmentoELpPorDimensao dimensaoBruta, dicSegLpPorGeobox, segmento, lp
+        ObterSegmentoELpPorDimensao dimensaoBruta, dicSegPorGeobox, dicLpPorGeobox, segmento, lp
         ws.Cells(i, colTipoProduto).Value = segmento
 
         ' --- Diagnóstico: conta preenchidos/vazios e guarda uma amostra ---
@@ -181,14 +181,11 @@ Sub ClassificarTudo()
         Else
             qtdSegmentoVazio = qtdSegmentoVazio + 1
             Dim existeNaTabela As Boolean
-            existeNaTabela = dicSegLpPorGeobox.Exists(dimensaoBruta)
+            existeNaTabela = dicSegPorGeobox.Exists(dimensaoBruta)
             amostraVazios = amostraVazios & "Linha " & i & ": DIMENSÃO=""" & dimensaoBruta & _
-                            """ (existe? " & IIf(existeNaTabela, "SIM", "NÃO")
-            If existeNaTabela Then
-                Dim parDebug As Variant
-                parDebug = dicSegLpPorGeobox(dimensaoBruta)
-                amostraVazios = amostraVazios & " | guardado: SEGMENTO=""" & CStr(parDebug(0)) & _
-                                """, LP=""" & CStr(parDebug(1)) & """"
+                            """ (existe no mapa de SEGMENTO? " & IIf(existeNaTabela, "SIM", "NÃO")
+            If dicLpPorGeobox.Exists(dimensaoBruta) Then
+                amostraVazios = amostraVazios & " | LP votado: """ & CStr(dicLpPorGeobox(dimensaoBruta)) & """"
             End If
             amostraVazios = amostraVazios & ")" & vbCrLf
         End If
@@ -231,7 +228,8 @@ Sub ClassificarTudo()
     MsgBox "Classificação concluída com sucesso!" & vbCrLf & _
            "Linhas processadas: " & (lastRow - 1) & vbCrLf & vbCrLf & _
            "--- DIAGNÓSTICO TIPO PRODUTO ---" & vbCrLf & _
-           "GEOBOX únicos na tabela (dicSegLpPorGeobox): " & dicSegLpPorGeobox.Count & vbCrLf & _
+           "GEOBOX únicos com SEGMENTO mapeado: " & dicSegPorGeobox.Count & vbCrLf & _
+           "GEOBOX únicos com LP mapeado: " & dicLpPorGeobox.Count & vbCrLf & _
            "Linhas com DIMENSÃO vazia (não deu pra nem tentar buscar): " & qtdDimensaoVazia & vbCrLf & _
            "Linhas com TIPO PRODUTO preenchido: " & qtdSegmentoPreenchido & vbCrLf & _
            "Linhas com TIPO PRODUTO vazio: " & qtdSegmentoVazio & vbCrLf & vbCrLf & _

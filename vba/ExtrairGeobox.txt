@@ -6,75 +6,39 @@ Option Explicit
 ' ============================================================
 Const CAMINHO_REFERENCIA As String = "C:\Users\E125949\OneDrive - MFP Michelin\Área de Trabalho\Teste importados\Tabela_Referencia.xlsx"
 Const ABA_REFERENCIA As String = "Referencia"
+Const COL_REF_GEOBOX As Long = 1   ' coluna A da aba Referencia
 
-' Colunas da aba Referencia (ajuste se a ordem for diferente)
-Const COL_REF_GEOBOX As Long = 1   ' A
-Const COL_REF_MARCA As Long = 2    ' B
-Const COL_REF_GAMA As Long = 3     ' C
-Const COL_REF_LP As Long = 4       ' D
-Const COL_REF_SEGMENTO As Long = 5 ' E
-
-' ============================================================
-' UDF: extrai a medida do pneu (geobox) de um texto livre
-' Uso: =ExtrairGeobox(A1)
-' ============================================================
-Function ExtrairGeobox(ByVal texto As String) As String
-    Dim re As Object, m As Object
-
-    Set re = CreateObject("VBScript.RegExp")
-    re.Global = False
-    re.IgnoreCase = True
-    re.Pattern = "\d{3}\s?/\s?\d{2,3}\s?Z?R\s?\d{2}(?:\.\d)?(?:\s+\d{1,3}PR)?(?:\s+\d{2,3}(?:/\d{2,3})?[A-Z]{1,3})?"
-
-    If re.Test(texto) Then
-        Set m = re.Execute(texto)
-        ExtrairGeobox = Trim(m(0).Value)
-    Else
-        ExtrairGeobox = ""
-    End If
-
-    Set m = Nothing: Set re = Nothing
-End Function
-
-' ============================================================
-' Normaliza uma geobox para comparacao (maiusculas, sem espacos,
-' sem pontuacao supérflua) para tolerar pequenas diferenças de
-' escrita entre a base e a referencia (ex "175/65R14 82T" vs
-' "175/65 R14 82T").
-' ============================================================
-Function NormalizarGeobox(ByVal texto As String) As String
-    Dim s As String
-    s = UCase(Trim(texto))
-    s = Replace(s, " ", "")
-    s = Replace(s, "-", "")
-    NormalizarGeobox = s
-End Function
+' Coluna de origem, na planilha de dados, com o texto bruto
+Const COL_DADOS_DESCRICAO As String = "H"   ' Descrição da mercadoria
+Const NOME_COLUNA_NOVA As String = "Geobox"
 
 ' ============================================================
 ' MACRO PRINCIPAL
-' Le a coluna de origem (texto bruto) na planilha ativa, extrai a
-' geobox, procura o match na Tabela_Referencia (aba Referencia) e
-' preenche Marca / Gama / LP / Segmento nas colunas de destino.
-'
-' Parametros:
-'   colOrigem   -> coluna com o texto bruto (ex: "A")
-'   colGeobox   -> coluna onde a geobox extraida sera escrita (ex: "B")
-'   colDestino  -> primeira coluna de destino para Marca/Gama/LP/Segmento
-'                  (ex: "C" preenche C=Marca, D=Gama, E=LP, F=Segmento)
-'   linhaInicial-> primeira linha com dados (pule cabecalho, ex: 2)
+' Le a coluna H (Descrição da mercadoria) da planilha ativa.
+' Para cada linha, verifica se algum valor da coluna A da
+' Tabela_Referencia (aba Referencia) aparece EXATAMENTE (como
+' substring, sem alterar o texto de nenhum dos dois lados) dentro
+' do texto da coluna H. Se encontrar, escreve esse valor numa
+' coluna nova chamada "Geobox", criada logo apos a ultima coluna
+' com dados. Se nao encontrar nenhum, deixa a celula em branco.
 ' ============================================================
-Sub PreencherGeoboxEMatch(colOrigem As String, colGeobox As String, colDestino As String, linhaInicial As Long)
-    Dim wsOrigem As Worksheet
+Sub PreencherColunaGeobox()
+    Dim wsDados As Worksheet
     Dim wbRef As Workbook
     Dim wsRef As Worksheet
-    Dim dicRef As Object
-    Dim ultimaLinhaOrigem As Long, ultimaLinhaRef As Long
-    Dim i As Long
-    Dim geobox As String, geoboxNorm As String
-    Dim chave As String
     Dim jaEstavaAberta As Boolean
 
-    Set wsOrigem = ActiveSheet
+    Dim listaGeobox() As String
+    Dim ultimaLinhaRef As Long
+    Dim i As Long, j As Long, n As Long
+
+    Dim colNovaNum As Long
+    Dim ultimaLinhaDados As Long
+    Dim texto As String
+    Dim achou As String
+    Dim tmp As String
+
+    Set wsDados = ActiveSheet
 
     ' --- Abre (ou reaproveita) a planilha de referencia ---
     jaEstavaAberta = False
@@ -89,47 +53,55 @@ Sub PreencherGeoboxEMatch(colOrigem As String, colGeobox As String, colDestino A
 
     Set wsRef = wbRef.Sheets(ABA_REFERENCIA)
 
-    ' --- Carrega a referencia num dicionario (chave = geobox normalizada) ---
-    Set dicRef = CreateObject("Scripting.Dictionary")
+    ' --- Carrega os valores da coluna A da referencia numa lista ---
     ultimaLinhaRef = wsRef.Cells(wsRef.Rows.Count, COL_REF_GEOBOX).End(xlUp).Row
+    n = 0
+    ReDim listaGeobox(1 To ultimaLinhaRef) ' tamanho maximo possivel
 
-    For i = 2 To ultimaLinhaRef ' assume linha 1 = cabecalho
-        chave = NormalizarGeobox(wsRef.Cells(i, COL_REF_GEOBOX).Value)
-        If chave <> "" And Not dicRef.Exists(chave) Then
-            dicRef.Add chave, Array( _
-                wsRef.Cells(i, COL_REF_MARCA).Value, _
-                wsRef.Cells(i, COL_REF_GAMA).Value, _
-                wsRef.Cells(i, COL_REF_LP).Value, _
-                wsRef.Cells(i, COL_REF_SEGMENTO).Value)
+    For i = 2 To ultimaLinhaRef ' linha 1 = cabecalho
+        tmp = Trim(CStr(wsRef.Cells(i, COL_REF_GEOBOX).Value))
+        If tmp <> "" Then
+            n = n + 1
+            listaGeobox(n) = tmp
         End If
     Next i
+    ReDim Preserve listaGeobox(1 To n)
 
     If Not jaEstavaAberta Then wbRef.Close SaveChanges:=False
 
-    ' --- Percorre a planilha de origem: extrai geobox e faz o match ---
-    ultimaLinhaOrigem = wsOrigem.Cells(wsOrigem.Rows.Count, colOrigem).End(xlUp).Row
-    Dim colDestinoNum As Long
-    colDestinoNum = wsOrigem.Range(colDestino & "1").Column
+    ' --- Ordena a lista do texto MAIS LONGO para o MAIS CURTO ---
+    ' (evita que um valor curto "case" por engano dentro de um mais especifico)
+    Dim a As Long, b As Long
+    For a = 1 To n - 1
+        For b = a + 1 To n
+            If Len(listaGeobox(b)) > Len(listaGeobox(a)) Then
+                tmp = listaGeobox(a)
+                listaGeobox(a) = listaGeobox(b)
+                listaGeobox(b) = tmp
+            End If
+        Next b
+    Next a
 
-    For i = linhaInicial To ultimaLinhaOrigem
-        geobox = ExtrairGeobox(wsOrigem.Range(colOrigem & i).Value)
-        wsOrigem.Range(colGeobox & i).Value = geobox
+    ' --- Cria a coluna nova "Geobox" logo apos a ultima coluna com dados ---
+    colNovaNum = wsDados.Cells(1, wsDados.Columns.Count).End(xlToLeft).Column + 1
+    wsDados.Cells(1, colNovaNum).Value = NOME_COLUNA_NOVA
 
-        geoboxNorm = NormalizarGeobox(geobox)
+    ' --- Percorre a coluna H e procura match exato dentro do texto ---
+    ultimaLinhaDados = wsDados.Cells(wsDados.Rows.Count, COL_DADOS_DESCRICAO).End(xlUp).Row
 
-        If geoboxNorm <> "" And dicRef.Exists(geoboxNorm) Then
-            wsOrigem.Cells(i, colDestinoNum).Value = dicRef(geoboxNorm)(0)     ' Marca
-            wsOrigem.Cells(i, colDestinoNum + 1).Value = dicRef(geoboxNorm)(1) ' Gama
-            wsOrigem.Cells(i, colDestinoNum + 2).Value = dicRef(geoboxNorm)(2) ' LP
-            wsOrigem.Cells(i, colDestinoNum + 3).Value = dicRef(geoboxNorm)(3) ' Segmento
-        Else
-            wsOrigem.Cells(i, colDestinoNum).Value = "NAO ENCONTRADO"
-            wsOrigem.Cells(i, colDestinoNum + 1).Value = ""
-            wsOrigem.Cells(i, colDestinoNum + 2).Value = ""
-            wsOrigem.Cells(i, colDestinoNum + 3).Value = ""
-        End If
+    For i = 2 To ultimaLinhaDados
+        texto = CStr(wsDados.Range(COL_DADOS_DESCRICAO & i).Value)
+        achou = ""
+
+        For j = 1 To n
+            If InStr(1, texto, listaGeobox(j), vbBinaryCompare) > 0 Then
+                achou = listaGeobox(j)
+                Exit For
+            End If
+        Next j
+
+        wsDados.Cells(i, colNovaNum).Value = achou
     Next i
 
-    Set dicRef = Nothing
-    MsgBox "Concluido! " & (ultimaLinhaOrigem - linhaInicial + 1) & " linhas processadas.", vbInformation
+    MsgBox "Concluido! " & (ultimaLinhaDados - 1) & " linhas processadas.", vbInformation
 End Sub

@@ -2,9 +2,8 @@ Attribute VB_Name = "ExtrairGeobox"
 Option Explicit
 
 ' ============================================================
-' CONFIGURACAO - ajuste aqui se mudar caminho/nomes
+' CONFIGURACAO
 ' ============================================================
-Const CAMINHO_REFERENCIA As String = "C:\Users\E125949\OneDrive - MFP Michelin\Área de Trabalho\Teste importados\Tabela_Referencia.xlsx"
 Const ABA_REFERENCIA As String = "Referencia"
 Const COL_REF_GEOBOX As Long = 1   ' coluna A da aba Referencia
 
@@ -13,19 +12,21 @@ Const NOME_COLUNA_NOVA As String = "Geobox"
 
 ' ============================================================
 ' MACRO PRINCIPAL
-' Le a coluna H (Descrição da mercadoria) da planilha ativa.
-' Para cada linha, verifica se algum valor da coluna A da
-' Tabela_Referencia (aba Referencia) aparece EXATAMENTE (como
-' substring) dentro do texto da coluna H. Se encontrar, escreve
-' esse valor numa coluna nova "Geobox", criada apos a ultima
-' coluna com dados. Processa tudo em memoria (arrays) para nao
-' travar em planilhas grandes.
+'
+' IMPORTANTE: deixe a planilha "Tabela_Referencia" ABERTA no Excel
+' antes de rodar esta macro (ela nao abre o arquivo sozinha - isso
+' era o que travava o Excel, provavelmente por causa do OneDrive).
+'
+' Le a coluna H (Descrição da mercadoria) da planilha ativa. Para
+' cada linha, verifica se algum valor da coluna A da aba
+' "Referencia" (em qualquer pasta de trabalho ja aberta) aparece
+' EXATAMENTE dentro do texto da coluna H. Se encontrar, escreve
+' esse valor numa coluna nova "Geobox".
 ' ============================================================
 Sub PreencherColunaGeobox()
     Dim wsDados As Worksheet
-    Dim wbRef As Workbook
     Dim wsRef As Worksheet
-    Dim jaEstavaAberta As Boolean
+    Dim wb As Workbook
 
     Dim listaGeobox() As String
     Dim ultimaLinhaRef As Long
@@ -35,34 +36,35 @@ Sub PreencherColunaGeobox()
     Dim ultimaLinhaDados As Long
     Dim linhasDados As Long
 
-    Dim dadosH As Variant      ' array com a coluna H
-    Dim resultado() As String  ' array com o resultado da coluna Geobox
+    Dim dadosH As Variant
+    Dim resultado() As String
     Dim texto As String
     Dim achou As String
 
     On Error GoTo TratarErro
+
+    Set wsDados = ActiveSheet
+
+    ' --- Procura a aba "Referencia" entre TODAS as pastas de trabalho abertas ---
+    For Each wb In Application.Workbooks
+        On Error Resume Next
+        Set wsRef = wb.Sheets(ABA_REFERENCIA)
+        On Error GoTo TratarErro
+        If Not wsRef Is Nothing Then Exit For
+    Next wb
+
+    If wsRef Is Nothing Then
+        MsgBox "Nao encontrei nenhuma pasta de trabalho aberta com a aba '" & ABA_REFERENCIA & "'." & vbCrLf & _
+               "Abra o arquivo Tabela_Referencia.xlsx manualmente e rode a macro de novo.", vbExclamation
+        Exit Sub
+    End If
 
     Application.ScreenUpdating = False
     Application.Calculation = xlCalculationManual
     Application.EnableEvents = False
     Application.StatusBar = "Carregando tabela de referencia..."
 
-    Set wsDados = ActiveSheet
-
-    ' --- Abre (ou reaproveita) a planilha de referencia ---
-    jaEstavaAberta = False
-    On Error Resume Next
-    Set wbRef = Workbooks("Tabela_Referencia.xlsx")
-    On Error GoTo TratarErro
-    If Not wbRef Is Nothing Then
-        jaEstavaAberta = True
-    Else
-        Set wbRef = Workbooks.Open(CAMINHO_REFERENCIA, ReadOnly:=True)
-    End If
-
-    Set wsRef = wbRef.Sheets(ABA_REFERENCIA)
-
-    ' --- Le a coluna A da referencia de uma vez so (rapido) ---
+    ' --- Le a coluna A da referencia de uma vez so ---
     ultimaLinhaRef = wsRef.Cells(wsRef.Rows.Count, COL_REF_GEOBOX).End(xlUp).Row
 
     If ultimaLinhaRef >= 2 Then
@@ -79,8 +81,6 @@ Sub PreencherColunaGeobox()
         Next i
         If n > 0 Then ReDim Preserve listaGeobox(1 To n)
     End If
-
-    If Not jaEstavaAberta Then wbRef.Close SaveChanges:=False
 
     If n = 0 Then
         MsgBox "A coluna A da aba Referencia esta vazia.", vbExclamation
@@ -102,7 +102,7 @@ Sub PreencherColunaGeobox()
     dadosH = wsDados.Range(wsDados.Cells(2, COL_DADOS_DESCRICAO), wsDados.Cells(ultimaLinhaDados, COL_DADOS_DESCRICAO)).Value
     ReDim resultado(1 To linhasDados, 1 To 1)
 
-    ' --- Faz o match em memoria (rapido) ---
+    ' --- Faz o match em memoria ---
     For i = 1 To linhasDados
         If i Mod 500 = 0 Then Application.StatusBar = "Processando linha " & i & " de " & linhasDados & "..."
 
@@ -110,7 +110,7 @@ Sub PreencherColunaGeobox()
         achou = ""
 
         For j = 1 To n
-            If InStr(1, texto, listaGeobox(j), vbBinaryCompare) > 0 Then
+            If InStr(1, texto, listaGeobox(j), vbTextCompare) > 0 Then
                 achou = listaGeobox(j)
                 Exit For
             End If

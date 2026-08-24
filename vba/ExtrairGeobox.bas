@@ -1,0 +1,174 @@
+Attribute VB_Name = "ExtrairGeobox"
+Option Explicit
+
+' ============================================================
+' CONFIGURACAO
+' ============================================================
+Const ABA_REFERENCIA As String = "Referencia"
+Const COL_REF_GEOBOX As Long = 1   ' coluna A da aba Referencia
+
+Const COL_DADOS_DESCRICAO As String = "H"   ' Descrição da mercadoria
+Const NOME_COLUNA_NOVA As String = "Geobox"
+
+' ============================================================
+' MACRO PRINCIPAL
+'
+' IMPORTANTE: deixe a planilha "Tabela_Referencia" ABERTA no Excel
+' antes de rodar esta macro (ela nao abre o arquivo sozinha - isso
+' era o que travava o Excel, provavelmente por causa do OneDrive).
+'
+' Le a coluna H (Descrição da mercadoria) da planilha ativa. Para
+' cada linha, verifica se algum valor da coluna A da aba
+' "Referencia" (em qualquer pasta de trabalho ja aberta) aparece
+' EXATAMENTE dentro do texto da coluna H. Se encontrar, escreve
+' esse valor numa coluna nova "Geobox".
+' ============================================================
+Sub PreencherColunaGeobox()
+    Dim wsDados As Worksheet
+    Dim wsRef As Worksheet
+    Dim wb As Workbook
+
+    Dim listaGeobox() As String
+    Dim ultimaLinhaRef As Long
+    Dim i As Long, j As Long, n As Long
+
+    Dim colNovaNum As Long
+    Dim ultimaLinhaDados As Long
+    Dim linhasDados As Long
+
+    Dim dadosH As Variant
+    Dim resultado() As String
+    Dim texto As String
+    Dim achou As String
+
+    On Error GoTo TratarErro
+
+    Set wsDados = ActiveSheet
+
+    ' --- Procura a aba "Referencia" entre TODAS as pastas de trabalho abertas ---
+    For Each wb In Application.Workbooks
+        On Error Resume Next
+        Set wsRef = wb.Sheets(ABA_REFERENCIA)
+        On Error GoTo TratarErro
+        If Not wsRef Is Nothing Then Exit For
+    Next wb
+
+    If wsRef Is Nothing Then
+        MsgBox "Nao encontrei nenhuma pasta de trabalho aberta com a aba '" & ABA_REFERENCIA & "'." & vbCrLf & _
+               "Abra o arquivo Tabela_Referencia.xlsx manualmente e rode a macro de novo.", vbExclamation
+        Exit Sub
+    End If
+
+    Application.ScreenUpdating = False
+    Application.Calculation = xlCalculationManual
+    Application.EnableEvents = False
+    Application.StatusBar = "Carregando tabela de referencia..."
+
+    ' --- Le a coluna A da referencia de uma vez so ---
+    ultimaLinhaRef = wsRef.Cells(wsRef.Rows.Count, COL_REF_GEOBOX).End(xlUp).Row
+
+    If ultimaLinhaRef >= 2 Then
+        Dim brutoRef As Variant
+        brutoRef = wsRef.Range(wsRef.Cells(2, COL_REF_GEOBOX), wsRef.Cells(ultimaLinhaRef, COL_REF_GEOBOX)).Value
+
+        n = 0
+        ReDim listaGeobox(1 To UBound(brutoRef, 1))
+        For i = 1 To UBound(brutoRef, 1)
+            If Trim(CStr(brutoRef(i, 1))) <> "" Then
+                n = n + 1
+                listaGeobox(n) = Trim(CStr(brutoRef(i, 1)))
+            End If
+        Next i
+        If n > 0 Then ReDim Preserve listaGeobox(1 To n)
+    End If
+
+    If n = 0 Then
+        MsgBox "A coluna A da aba Referencia esta vazia.", vbExclamation
+        GoTo Finalizar
+    End If
+
+    ' --- Ordena do texto MAIS LONGO para o MAIS CURTO (QuickSort) ---
+    Application.StatusBar = "Ordenando " & n & " valores de referencia..."
+    QuickSortPorTamanho listaGeobox, 1, n
+
+    ' --- Le a coluna H (dados) de uma vez so ---
+    ultimaLinhaDados = wsDados.Cells(wsDados.Rows.Count, COL_DADOS_DESCRICAO).End(xlUp).Row
+    If ultimaLinhaDados < 2 Then
+        MsgBox "Nao ha dados na coluna " & COL_DADOS_DESCRICAO & ".", vbExclamation
+        GoTo Finalizar
+    End If
+
+    linhasDados = ultimaLinhaDados - 1
+    dadosH = wsDados.Range(wsDados.Cells(2, COL_DADOS_DESCRICAO), wsDados.Cells(ultimaLinhaDados, COL_DADOS_DESCRICAO)).Value
+    ReDim resultado(1 To linhasDados, 1 To 1)
+
+    ' --- Faz o match em memoria ---
+    For i = 1 To linhasDados
+        If i Mod 500 = 0 Then Application.StatusBar = "Processando linha " & i & " de " & linhasDados & "..."
+
+        texto = CStr(dadosH(i, 1))
+        achou = ""
+
+        For j = 1 To n
+            If InStr(1, texto, listaGeobox(j), vbTextCompare) > 0 Then
+                achou = listaGeobox(j)
+                Exit For
+            End If
+        Next j
+
+        resultado(i, 1) = achou
+    Next i
+
+    ' --- Cria a coluna nova "Geobox" e escreve tudo de uma vez ---
+    colNovaNum = wsDados.Cells(1, wsDados.Columns.Count).End(xlToLeft).Column + 1
+    wsDados.Cells(1, colNovaNum).Value = NOME_COLUNA_NOVA
+    wsDados.Range(wsDados.Cells(2, colNovaNum), wsDados.Cells(ultimaLinhaDados, colNovaNum)).Value = resultado
+
+Finalizar:
+    Application.StatusBar = False
+    Application.EnableEvents = True
+    Application.Calculation = xlCalculationAutomatic
+    Application.ScreenUpdating = True
+    If linhasDados > 0 Then MsgBox "Concluido! " & linhasDados & " linhas processadas.", vbInformation
+    Exit Sub
+
+TratarErro:
+    Application.StatusBar = False
+    Application.EnableEvents = True
+    Application.Calculation = xlCalculationAutomatic
+    Application.ScreenUpdating = True
+    MsgBox "Erro " & Err.Number & ": " & Err.Description, vbCritical
+End Sub
+
+' ============================================================
+' QuickSort auxiliar: ordena arr(inicio..fim) por Len() decrescente
+' ============================================================
+Sub QuickSortPorTamanho(arr() As String, inicio As Long, fim As Long)
+    Dim i As Long, j As Long
+    Dim pivo As String, tmp As String
+
+    If inicio >= fim Then Exit Sub
+
+    i = inicio
+    j = fim
+    pivo = arr((inicio + fim) \ 2)
+
+    Do While i <= j
+        Do While Len(arr(i)) > Len(pivo)
+            i = i + 1
+        Loop
+        Do While Len(arr(j)) < Len(pivo)
+            j = j - 1
+        Loop
+        If i <= j Then
+            tmp = arr(i)
+            arr(i) = arr(j)
+            arr(j) = tmp
+            i = i + 1
+            j = j - 1
+        End If
+    Loop
+
+    If inicio < j Then QuickSortPorTamanho arr, inicio, j
+    If i < fim Then QuickSortPorTamanho arr, i, fim
+End Sub

@@ -63,8 +63,17 @@ Function CarregarTabelaReferencia(ByRef dicSegLpPorGeobox As Object, _
     Dim dicMarcasUnicas As Object
     Set dicMarcasUnicas = CreateObject("Scripting.Dictionary")
 
+    ' Usa a maior "última linha com dado" entre as 5 colunas (Geobox, Marca,
+    ' Gama, LP, Segmento) em vez de só a coluna A. Uma linha só com Marca
+    ' preenchida (sem Geobox) precisa ser lida do mesmo jeito — se olhássemos
+    ' só a coluna A, o laço pararia antes de chegar nela.
     Dim lastRowRef As Long, i As Long
-    lastRowRef = wsRef.Cells(wsRef.Rows.Count, "A").End(xlUp).Row
+    lastRowRef = 1
+    Dim colRef As Long, ultimaLinhaColRef As Long
+    For colRef = 1 To 5
+        ultimaLinhaColRef = wsRef.Cells(wsRef.Rows.Count, colRef).End(xlUp).Row
+        If ultimaLinhaColRef > lastRowRef Then lastRowRef = ultimaLinhaColRef
+    Next colRef
 
     Dim geo As String, gama As String, marcaRef As String, lp As String, seg As String
 

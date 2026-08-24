@@ -17,6 +17,13 @@ Option Explicit
 ' antes (vírgula->ponto, ×/*->X, espaços ao redor de R/barra/traço) para
 ' bater com mais variações de formatação.
 ' ==========================================================================
+' Tamanho mínimo aceito pra um candidato de DIMENSÃO ser considerado um
+' match válido. Protege contra entradas curtas demais/corrompidas na
+' Tabela de Referência (ex: uma célula com só "R") baterem por acidente
+' em qualquer trecho da descrição e virarem resultado sem sentido — a
+' menor medida real (tipo "9R20") ainda tem pelo menos 4 caracteres.
+Const TAMANHO_MINIMO_DIMENSAO As Long = 4
+
 Function ExtrairDimensao(descricao As String, marca As String, _
                           dicGeoboxPorMarca As Object, dicGeoboxGlobalUnicos As Object, _
                           dicPadroesLegado As Object) As String
@@ -54,7 +61,7 @@ Function ExtrairDimensao(descricao As String, marca As String, _
 
             Dim geoCand As Variant
             For Each geoCand In candidatos
-                If Len(CStr(geoCand)) > 0 Then
+                If Len(CStr(geoCand)) >= TAMANHO_MINIMO_DIMENSAO Then
                     If Len(CStr(geoCand)) > melhorLen Then
                         If InStr(1, textoNorm, CStr(geoCand), vbTextCompare) > 0 _
                            Or InStr(1, textoSemEspaco, CStr(geoCand), vbTextCompare) > 0 Then
@@ -70,7 +77,7 @@ Function ExtrairDimensao(descricao As String, marca As String, _
     ' --- Busca ampla em qualquer medida conhecida (Tabela de Referência) ---
     Dim chaveG As Variant
     For Each chaveG In dicGeoboxGlobalUnicos.Keys
-        If Len(CStr(chaveG)) > 0 Then
+        If Len(CStr(chaveG)) >= TAMANHO_MINIMO_DIMENSAO Then
             If Len(CStr(chaveG)) > melhorLen Then
                 If InStr(1, textoNorm, CStr(chaveG), vbTextCompare) > 0 _
                    Or InStr(1, textoSemEspaco, CStr(chaveG), vbTextCompare) > 0 Then
@@ -89,7 +96,7 @@ Function ExtrairDimensao(descricao As String, marca As String, _
     ' --- Passo 3: lista específica vinda da macro legada (padrão -> valor oficial) ---
     Dim chaveL As Variant
     For Each chaveL In dicPadroesLegado.Keys
-        If Len(CStr(chaveL)) > 0 Then
+        If Len(CStr(chaveL)) >= TAMANHO_MINIMO_DIMENSAO Then
             If Len(CStr(chaveL)) > melhorLen Then
                 If InStr(1, textoNorm, CStr(chaveL), vbTextCompare) > 0 _
                    Or InStr(1, textoSemEspaco, CStr(chaveL), vbTextCompare) > 0 Then
@@ -186,6 +193,16 @@ Function NormalizarTextoDimensao(texto As String) As String
     ' o papel do "R" final, tratado depois pela troca hífen->R na gravação).
     regex.Pattern = "(\d{2,3})-(\d{1,2}\.\d{1,2})R"
     resultado = regex.Replace(resultado, "$1X$2R")
+
+    ' Padrão "NNN-NNRNN" (hífen no lugar de "/", ex: "255-35R19", vindo de
+    ' "255 - 35 R19" na descrição) -> "NNN/NNRNN". Só aplica quando o
+    ' segundo número é inteiro (sem decimal — esse caso já foi tratado pela
+    ' regra acima) e "R" vem logo em seguida — medida radial sempre usa "/"
+    ' entre largura e perfil, então um hífen ali só pode ser troca de
+    ' digitação. Não aplica em pneus diagonais tipo "9.00-20"/"7.50-16",
+    ' que não têm "R" colado logo depois do segundo número.
+    regex.Pattern = "(\d{2,3})-(\d{2,3})R"
+    resultado = regex.Replace(resultado, "$1/$2R")
 
 SemRegex:
     NormalizarTextoDimensao = resultado

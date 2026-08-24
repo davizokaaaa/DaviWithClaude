@@ -8,7 +8,6 @@ Const CAMINHO_REFERENCIA As String = "C:\Users\E125949\OneDrive - MFP Michelin\�
 Const ABA_REFERENCIA As String = "Referencia"
 Const COL_REF_GEOBOX As Long = 1   ' coluna A da aba Referencia
 
-' Coluna de origem, na planilha de dados, com o texto bruto
 Const COL_DADOS_DESCRICAO As String = "H"   ' Descrição da mercadoria
 Const NOME_COLUNA_NOVA As String = "Geobox"
 
@@ -17,10 +16,10 @@ Const NOME_COLUNA_NOVA As String = "Geobox"
 ' Le a coluna H (Descrição da mercadoria) da planilha ativa.
 ' Para cada linha, verifica se algum valor da coluna A da
 ' Tabela_Referencia (aba Referencia) aparece EXATAMENTE (como
-' substring, sem alterar o texto de nenhum dos dois lados) dentro
-' do texto da coluna H. Se encontrar, escreve esse valor numa
-' coluna nova chamada "Geobox", criada logo apos a ultima coluna
-' com dados. Se nao encontrar nenhum, deixa a celula em branco.
+' substring) dentro do texto da coluna H. Se encontrar, escreve
+' esse valor numa coluna nova "Geobox", criada apos a ultima
+' coluna com dados. Processa tudo em memoria (arrays) para nao
+' travar em planilhas grandes.
 ' ============================================================
 Sub PreencherColunaGeobox()
     Dim wsDados As Worksheet
@@ -34,9 +33,19 @@ Sub PreencherColunaGeobox()
 
     Dim colNovaNum As Long
     Dim ultimaLinhaDados As Long
+    Dim linhasDados As Long
+
+    Dim dadosH As Variant      ' array com a coluna H
+    Dim resultado() As String  ' array com o resultado da coluna Geobox
     Dim texto As String
     Dim achou As String
-    Dim tmp As String
+
+    On Error GoTo TratarErro
+
+    Application.ScreenUpdating = False
+    Application.Calculation = xlCalculationManual
+    Application.EnableEvents = False
+    Application.StatusBar = "Carregando tabela de referencia..."
 
     Set wsDados = ActiveSheet
 
@@ -44,7 +53,7 @@ Sub PreencherColunaGeobox()
     jaEstavaAberta = False
     On Error Resume Next
     Set wbRef = Workbooks("Tabela_Referencia.xlsx")
-    On Error GoTo 0
+    On Error GoTo TratarErro
     If Not wbRef Is Nothing Then
         jaEstavaAberta = True
     Else
@@ -53,44 +62,51 @@ Sub PreencherColunaGeobox()
 
     Set wsRef = wbRef.Sheets(ABA_REFERENCIA)
 
-    ' --- Carrega os valores da coluna A da referencia numa lista ---
+    ' --- Le a coluna A da referencia de uma vez so (rapido) ---
     ultimaLinhaRef = wsRef.Cells(wsRef.Rows.Count, COL_REF_GEOBOX).End(xlUp).Row
-    n = 0
-    ReDim listaGeobox(1 To ultimaLinhaRef) ' tamanho maximo possivel
 
-    For i = 2 To ultimaLinhaRef ' linha 1 = cabecalho
-        tmp = Trim(CStr(wsRef.Cells(i, COL_REF_GEOBOX).Value))
-        If tmp <> "" Then
-            n = n + 1
-            listaGeobox(n) = tmp
-        End If
-    Next i
-    ReDim Preserve listaGeobox(1 To n)
+    If ultimaLinhaRef >= 2 Then
+        Dim brutoRef As Variant
+        brutoRef = wsRef.Range(wsRef.Cells(2, COL_REF_GEOBOX), wsRef.Cells(ultimaLinhaRef, COL_REF_GEOBOX)).Value
+
+        n = 0
+        ReDim listaGeobox(1 To UBound(brutoRef, 1))
+        For i = 1 To UBound(brutoRef, 1)
+            If Trim(CStr(brutoRef(i, 1))) <> "" Then
+                n = n + 1
+                listaGeobox(n) = Trim(CStr(brutoRef(i, 1)))
+            End If
+        Next i
+        If n > 0 Then ReDim Preserve listaGeobox(1 To n)
+    End If
 
     If Not jaEstavaAberta Then wbRef.Close SaveChanges:=False
 
-    ' --- Ordena a lista do texto MAIS LONGO para o MAIS CURTO ---
-    ' (evita que um valor curto "case" por engano dentro de um mais especifico)
-    Dim a As Long, b As Long
-    For a = 1 To n - 1
-        For b = a + 1 To n
-            If Len(listaGeobox(b)) > Len(listaGeobox(a)) Then
-                tmp = listaGeobox(a)
-                listaGeobox(a) = listaGeobox(b)
-                listaGeobox(b) = tmp
-            End If
-        Next b
-    Next a
+    If n = 0 Then
+        MsgBox "A coluna A da aba Referencia esta vazia.", vbExclamation
+        GoTo Finalizar
+    End If
 
-    ' --- Cria a coluna nova "Geobox" logo apos a ultima coluna com dados ---
-    colNovaNum = wsDados.Cells(1, wsDados.Columns.Count).End(xlToLeft).Column + 1
-    wsDados.Cells(1, colNovaNum).Value = NOME_COLUNA_NOVA
+    ' --- Ordena do texto MAIS LONGO para o MAIS CURTO (QuickSort) ---
+    Application.StatusBar = "Ordenando " & n & " valores de referencia..."
+    QuickSortPorTamanho listaGeobox, 1, n
 
-    ' --- Percorre a coluna H e procura match exato dentro do texto ---
+    ' --- Le a coluna H (dados) de uma vez so ---
     ultimaLinhaDados = wsDados.Cells(wsDados.Rows.Count, COL_DADOS_DESCRICAO).End(xlUp).Row
+    If ultimaLinhaDados < 2 Then
+        MsgBox "Nao ha dados na coluna " & COL_DADOS_DESCRICAO & ".", vbExclamation
+        GoTo Finalizar
+    End If
 
-    For i = 2 To ultimaLinhaDados
-        texto = CStr(wsDados.Range(COL_DADOS_DESCRICAO & i).Value)
+    linhasDados = ultimaLinhaDados - 1
+    dadosH = wsDados.Range(wsDados.Cells(2, COL_DADOS_DESCRICAO), wsDados.Cells(ultimaLinhaDados, COL_DADOS_DESCRICAO)).Value
+    ReDim resultado(1 To linhasDados, 1 To 1)
+
+    ' --- Faz o match em memoria (rapido) ---
+    For i = 1 To linhasDados
+        If i Mod 500 = 0 Then Application.StatusBar = "Processando linha " & i & " de " & linhasDados & "..."
+
+        texto = CStr(dadosH(i, 1))
         achou = ""
 
         For j = 1 To n
@@ -100,8 +116,59 @@ Sub PreencherColunaGeobox()
             End If
         Next j
 
-        wsDados.Cells(i, colNovaNum).Value = achou
+        resultado(i, 1) = achou
     Next i
 
-    MsgBox "Concluido! " & (ultimaLinhaDados - 1) & " linhas processadas.", vbInformation
+    ' --- Cria a coluna nova "Geobox" e escreve tudo de uma vez ---
+    colNovaNum = wsDados.Cells(1, wsDados.Columns.Count).End(xlToLeft).Column + 1
+    wsDados.Cells(1, colNovaNum).Value = NOME_COLUNA_NOVA
+    wsDados.Range(wsDados.Cells(2, colNovaNum), wsDados.Cells(ultimaLinhaDados, colNovaNum)).Value = resultado
+
+Finalizar:
+    Application.StatusBar = False
+    Application.EnableEvents = True
+    Application.Calculation = xlCalculationAutomatic
+    Application.ScreenUpdating = True
+    If linhasDados > 0 Then MsgBox "Concluido! " & linhasDados & " linhas processadas.", vbInformation
+    Exit Sub
+
+TratarErro:
+    Application.StatusBar = False
+    Application.EnableEvents = True
+    Application.Calculation = xlCalculationAutomatic
+    Application.ScreenUpdating = True
+    MsgBox "Erro " & Err.Number & ": " & Err.Description, vbCritical
+End Sub
+
+' ============================================================
+' QuickSort auxiliar: ordena arr(inicio..fim) por Len() decrescente
+' ============================================================
+Sub QuickSortPorTamanho(arr() As String, inicio As Long, fim As Long)
+    Dim i As Long, j As Long
+    Dim pivo As String, tmp As String
+
+    If inicio >= fim Then Exit Sub
+
+    i = inicio
+    j = fim
+    pivo = arr((inicio + fim) \ 2)
+
+    Do While i <= j
+        Do While Len(arr(i)) > Len(pivo)
+            i = i + 1
+        Loop
+        Do While Len(arr(j)) < Len(pivo)
+            j = j - 1
+        Loop
+        If i <= j Then
+            tmp = arr(i)
+            arr(i) = arr(j)
+            arr(j) = tmp
+            i = i + 1
+            j = j - 1
+        End If
+    Loop
+
+    If inicio < j Then QuickSortPorTamanho arr, inicio, j
+    If i < fim Then QuickSortPorTamanho arr, i, fim
 End Sub

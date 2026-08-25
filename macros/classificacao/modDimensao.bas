@@ -41,6 +41,19 @@ Function ExtrairDimensao(descricao As String, marca As String, _
     textoSemEspaco = Replace(textoNorm, " ", "")
     textoSemEspaco = NormalizarFormatacaoBasica(textoSemEspaco)
 
+    ' --- Medidas escritas por extenso (laudos INMETRO, "BANDA/SÉRIE/ARO" ---
+    ' --- em vários formatos) — lógica isolada em modDimensaoExtenso pra   ---
+    ' --- poder evoluir/reverter sem mexer na extração já validada. Só    ---
+    ' --- ACRESCENTA o candidato montado ao texto de busca; a validação   ---
+    ' --- (existe no catálogo? tamanho mínimo?) continua sendo feita nos  ---
+    ' --- mesmos laços abaixo, como qualquer outro trecho da descrição.   ---
+    Dim candidatoExtenso As String
+    candidatoExtenso = ExtrairDimensaoPorExtenso(descricao)
+    If Len(candidatoExtenso) > 0 Then
+        textoNorm = textoNorm & " " & candidatoExtenso
+        textoSemEspaco = textoSemEspaco & Replace(candidatoExtenso, " ", "")
+    End If
+
     Dim melhor As String, melhorLen As Long
     melhor = ""
     melhorLen = 0
@@ -186,18 +199,6 @@ Function NormalizarTextoDimensao(texto As String) As String
     ' Padrão "NNN E ARO NN,N" -> "NNN/80RNN.N" (assume perfil 80)
     regex.Pattern = "(\d{3})\s*E\s*ARO\s*(\d{2}(?:\.\d)?)"
     resultado = regex.Replace(resultado, "$1/80R$2")
-
-    ' Medida escrita por extenso, como no laudo/etiqueta INMETRO:
-    ' "BANDA: 175, SÉRIE: 75R, ARO: 13" -> "175/75R13". Cada parte (banda,
-    ' série, aro) pode vir separada por qualquer texto no meio (vírgula,
-    ' "E", "MM", " - ", etc.), por isso o "[^0-9]{1,40}" entre elas em vez
-    ' de exigir vizinhança exata. Cobre também rótulos alternativos vistos
-    ' em outros laudos: "LARGURA(BANDA)" no lugar de "BANDA", e "PERFIL" no
-    ' lugar de "SÉRIE"/"SERIE". O "R" da série é opcional no texto de origem
-    ' e sempre recolocado no resultado, já que medida radial sempre usa R
-    ' entre perfil e aro.
-    regex.Pattern = "(?:LARGURA\(BANDA\)|BANDA)[^0-9]{0,10}(\d{2,3})[^0-9]{1,40}(?:S[EÉ]RIE|SERIE|PERFIL)[^0-9]{0,10}(\d{1,3})R?[^0-9]{1,40}ARO[^0-9]{0,10}(\d{1,2}(?:\.\d)?)"
-    resultado = regex.Replace(resultado, "$1/$2R$3")
 
     ' Padrão "NN-NN.NNRNN" (hífen no lugar de "X", ex: "33-12.50R17") ->
     ' "NNXNN.NNRNN". Só aplica quando "R" vem logo depois do decimal, pra

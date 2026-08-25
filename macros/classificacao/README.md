@@ -13,6 +13,7 @@ correções e alterações pontuais.
 | `modReferencia.bas` | Abre e lê a Tabela de Referência externa (abas `Referencia`, `MarcasExtras`/`MarcasExtra`, `ExcecoesMarca`) e monta os dicionários de apoio (`CarregarTabelaReferencia`, `ObterSegmentoELpPorDimensao`). |
 | `modMarca.bas` | Extração da coluna MARCA (`ExtrairMarca`, `BuscarMarcaConhecida`). |
 | `modDimensao.bas` | Normalização de formatação de medida e extração de DIMENSÃO/ARO (`ExtrairDimensao`, `NormalizarFormatacaoBasica`, `NormalizarTextoDimensao`, `ExtrairAro`). |
+| `modDimensaoExtenso.bas` | Reconhecimento de medida escrita por extenso em laudos (`ExtrairDimensaoPorExtenso`) — só acrescenta candidatos ao texto de busca de `modDimensao`, isolado para evoluir/reverter padrões novos sem risco à extração já validada. |
 | `modClassificacaoRegras.bas` | Regras de negócio de LP: fallback por SEGMENTO (`DeduzirLp`) e a regra do ARO ".5" forçando LP="PL" (`AroTerminaEmMeio`). |
 | `modMain.bas` | `Sub ClassificarTudo` — orquestrador: lê colunas de entrada, carrega a Tabela de Referência, aplica as extrações/regras linha a linha e grava as colunas de saída. É a macro que se executa (Alt+F8 → `ClassificarTudo`). |
 
@@ -20,7 +21,9 @@ correções e alterações pontuais.
 
 `modMain` depende de todos os outros. Os demais não dependem de
 `modMain`, mas `modReferencia` e `modDimensao` compartilham
-`NormalizarFormatacaoBasica` (definida em `modDimensao.bas`).
+`NormalizarFormatacaoBasica` (definida em `modDimensao.bas`), e
+`modDimensao` depende de `modDimensaoExtenso`
+(`ExtrairDimensaoPorExtenso`).
 
 ## Como importar no Excel
 

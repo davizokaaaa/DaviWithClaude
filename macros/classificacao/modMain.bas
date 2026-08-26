@@ -95,11 +95,12 @@ Sub ClassificarTudo()
     Dim arrMarcas() As String
     Dim dicGeoboxPorMarca As Object, dicGeoboxGlobalUnicos As Object
     Dim dicGamasPorMarca As Object, dicGamaGlobalUnicos As Object, dicExcecoesGama As Object
+    Dim dicMarcaPorGama As Object
     Dim diagnosticoRef As String
 
     If Not CarregarTabelaReferencia(dicSegPorGeobox, dicLpPorGeobox, arrMarcas, _
                                      dicGeoboxPorMarca, dicGeoboxGlobalUnicos, dicExcecoesMarca, _
-                                     dicGamasPorMarca, dicGamaGlobalUnicos, dicExcecoesGama, diagnosticoRef) Then
+                                     dicGamasPorMarca, dicGamaGlobalUnicos, dicMarcaPorGama, dicExcecoesGama, diagnosticoRef) Then
         MsgBox "Não foi possível abrir a Tabela de Referência em:" & vbCrLf & REF_FILE_PATH, vbCritical
         Exit Sub
     End If
@@ -138,13 +139,17 @@ Sub ClassificarTudo()
 
         ' --- MARCA: extraída da descrição (nome conhecido na Tabela de Referência) ---
         marca = ExtrairMarca(descricao, arrMarcas, dicExcecoesMarca)
-        ws.Cells(i, colMarca).Value = marca
 
         ' --- GAMA: extraída da descrição (exceções/abreviações primeiro,   ---
-        ' --- depois nome completo conhecido na Tabela de Referência)      ---
+        ' --- depois nome completo conhecido na Tabela de Referência). Se   ---
+        ' --- a MARCA não foi encontrada, ExtrairGama também tenta          ---
+        ' --- descobrir a marca a partir da gama achada (gama é tratada    ---
+        ' --- como praticamente exclusiva de uma marca) — por isso "marca" ---
+        ' --- é passada ByRef e pode voltar preenchida daqui.              ---
         Dim gamaLinha As String
-        gamaLinha = ExtrairGama(descricao, marca, dicGamasPorMarca, dicGamaGlobalUnicos, dicExcecoesGama)
+        gamaLinha = ExtrairGama(descricao, marca, dicGamasPorMarca, dicGamaGlobalUnicos, dicMarcaPorGama, dicExcecoesGama)
         ws.Cells(i, colGama).Value = gamaLinha
+        ws.Cells(i, colMarca).Value = marca
 
         ' --- DIMENSÃO: extraída da descrição (medida conhecida na Tabela de Referência) ---
         dimensaoBruta = ExtrairDimensao(descricao, marca, dicGeoboxPorMarca, dicGeoboxGlobalUnicos, dicPadroesLegado)

@@ -12,7 +12,7 @@ correções e alterações pontuais.
 | `modDicionarios.bas` | Dicionários fixos: montadoras (OE), marcas ANIP, lista legada de padrões de GEOBOX. |
 | `modReferencia.bas` | Abre e lê a Tabela de Referência externa (abas `Referencia`, `MarcasExtras`/`MarcasExtra`, `ExcecoesMarca`, `ExcecoesGama`) e monta os dicionários de apoio (`CarregarTabelaReferencia`, `ObterSegmentoELpPorDimensao`). |
 | `modMarca.bas` | Extração da coluna MARCA (`ExtrairMarca`, `BuscarMarcaConhecida`). |
-| `modGama.bas` | Extração da coluna GAMA (`ExtrairGama`) — checa abreviações (aba `ExcecoesGama`, ex: "PTNZ" → "POTENZA") antes de buscar o nome completo conhecido. |
+| `modGama.bas` | Extração da coluna GAMA (`ExtrairGama`) — checa abreviações (aba `ExcecoesGama`, ex: "PTNZ" → "POTENZA") antes de buscar o nome completo conhecido; se a MARCA ainda não foi encontrada, também tenta descobri-la a partir da gama achada (gama é tratada como praticamente exclusiva de uma marca). |
 | `modDimensao.bas` | Normalização de formatação de medida e extração de DIMENSÃO/ARO (`ExtrairDimensao`, `NormalizarFormatacaoBasica`, `NormalizarTextoDimensao`, `ExtrairAro`). |
 | `modDimensaoExtenso.bas` | Reconhecimento de medida escrita por extenso em laudos (`ExtrairDimensaoPorExtenso`) — só acrescenta candidatos ao texto de busca de `modDimensao`, isolado para evoluir/reverter padrões novos sem risco à extração já validada. |
 | `modClassificacaoRegras.bas` | Regras de negócio de LP: fallback por SEGMENTO (`DeduzirLp`) e a regra do ARO ".5" forçando LP="PL" (`AroTerminaEmMeio`). |

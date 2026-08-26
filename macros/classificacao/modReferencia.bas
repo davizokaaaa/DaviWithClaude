@@ -22,6 +22,9 @@ Option Explicit
 '   dicGeoboxGlobalUnicos: chave GEOBOX -> True (todos os geobox únicos, p/ busca ampla)
 '   dicGamasPorMarca     : chave MARCA -> Collection de GAMA únicas daquela marca
 '   dicGamaGlobalUnicos  : chave GAMA -> True (todas as gamas únicas, p/ busca ampla)
+'   dicMarcaPorGama      : chave GAMA -> MARCA dona daquela gama (1ª encontrada na
+'                          Referência) — usado pra "descobrir" a marca a partir da
+'                          gama quando a marca não foi lida na descrição
 '   dicExcecoesGama      : chave PADRÃO ABREVIADO -> GAMA correta (aba "ExcecoesGama",
 '                          ex: "PTNZ" -> "POTENZA"), checada antes da busca normal
 ' ==========================================================================
@@ -29,7 +32,7 @@ Function CarregarTabelaReferencia(ByRef dicSegPorGeobox As Object, ByRef dicLpPo
                                    ByRef arrMarcas() As String, ByRef dicGeoboxPorMarca As Object, _
                                    ByRef dicGeoboxGlobalUnicos As Object, ByRef dicExcecoesMarca As Object, _
                                    ByRef dicGamasPorMarca As Object, ByRef dicGamaGlobalUnicos As Object, _
-                                   ByRef dicExcecoesGama As Object, _
+                                   ByRef dicMarcaPorGama As Object, ByRef dicExcecoesGama As Object, _
                                    ByRef diagnostico As String) As Boolean
 
     On Error GoTo ErroAbrir
@@ -66,6 +69,7 @@ Function CarregarTabelaReferencia(ByRef dicSegPorGeobox As Object, ByRef dicLpPo
     Set dicGeoboxGlobalUnicos = CreateObject("Scripting.Dictionary")
     Set dicGamasPorMarca = CreateObject("Scripting.Dictionary")
     Set dicGamaGlobalUnicos = CreateObject("Scripting.Dictionary")
+    Set dicMarcaPorGama = CreateObject("Scripting.Dictionary")
 
     ' dicVotosSegPorGeo / dicVotosLpPorGeo: chave GEOBOX -> Dictionary(valor -> contagem).
     ' Votações independentes: uma conta SEGMENTO, a outra conta LP, cada
@@ -158,6 +162,13 @@ Function CarregarTabelaReferencia(ByRef dicSegPorGeobox As Object, ByRef dicLpPo
 
         If Len(gama) > 0 Then
             If Not dicGamaGlobalUnicos.Exists(gama) Then dicGamaGlobalUnicos.Add gama, True
+
+            ' Gama é tratada como praticamente exclusiva de uma marca — a
+            ' primeira marca encontrada pra essa gama na Referência "ganha"
+            ' o dicionário reverso (ignora linhas com marca vazia).
+            If Len(marcaRef) > 0 And Not dicMarcaPorGama.Exists(gama) Then
+                dicMarcaPorGama.Add gama, marcaRef
+            End If
         End If
     Next i
 

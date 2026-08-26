@@ -15,7 +15,11 @@ Option Explicit
 ' Em caso de mais de uma medida batendo no texto, fica com a mais longa
 ' (evita pegar "R17" quando na verdade é "R17.5"). O texto é normalizado
 ' antes (vírgula->ponto, ×/*->X, espaços ao redor de R/barra/traço) para
-' bater com mais variações de formatação.
+' bater com mais variações de formatação. Também compara contra uma versão
+' com "D" (construção diagonal, ex: "135/80D15") trocado por "R", pois a
+' Tabela de Referência às vezes só tem a variante radial cadastrada — nesse
+' caso grava o valor com "R" mesmo (como está na Referência), não o "D"
+' original da descrição.
 ' ==========================================================================
 ' Tamanho mínimo aceito pra um candidato de DIMENSÃO ser considerado um
 ' match válido. Protege contra entradas curtas demais/corrompidas na
@@ -54,6 +58,16 @@ Function ExtrairDimensao(descricao As String, marca As String, _
         textoSemEspaco = textoSemEspaco & Replace(candidatoExtenso, " ", "")
     End If
 
+    ' --- Versões com "D" (construção diagonal) trocado por "R", só para   ---
+    ' --- efeito de COMPARAÇÃO com o catálogo. Existem aros com construção ---
+    ' --- diagonal na descrição (ex: "135/80D15") cujo cadastro na Tabela  ---
+    ' --- de Referência só tem a variante radial ("135/80R15") — sem isso, ---
+    ' --- esses aros nunca seriam encontrados. Não reaplica em nenhum      ---
+    ' --- outro lugar do código (marca, gama etc.), só nesta comparação.   ---
+    Dim textoNormDparaR As String, textoSemEspacoDparaR As String
+    textoNormDparaR = Replace(textoNorm, "D", "R")
+    textoSemEspacoDparaR = Replace(textoSemEspaco, "D", "R")
+
     Dim melhor As String, melhorLen As Long
     melhor = ""
     melhorLen = 0
@@ -77,7 +91,9 @@ Function ExtrairDimensao(descricao As String, marca As String, _
                 If Len(CStr(geoCand)) >= TAMANHO_MINIMO_DIMENSAO Then
                     If Len(CStr(geoCand)) > melhorLen Then
                         If InStr(1, textoNorm, CStr(geoCand), vbTextCompare) > 0 _
-                           Or InStr(1, textoSemEspaco, CStr(geoCand), vbTextCompare) > 0 Then
+                           Or InStr(1, textoSemEspaco, CStr(geoCand), vbTextCompare) > 0 _
+                           Or InStr(1, textoNormDparaR, CStr(geoCand), vbTextCompare) > 0 _
+                           Or InStr(1, textoSemEspacoDparaR, CStr(geoCand), vbTextCompare) > 0 Then
                             melhorLen = Len(CStr(geoCand))
                             melhor = CStr(geoCand)
                         End If
@@ -93,7 +109,9 @@ Function ExtrairDimensao(descricao As String, marca As String, _
         If Len(CStr(chaveG)) >= TAMANHO_MINIMO_DIMENSAO Then
             If Len(CStr(chaveG)) > melhorLen Then
                 If InStr(1, textoNorm, CStr(chaveG), vbTextCompare) > 0 _
-                   Or InStr(1, textoSemEspaco, CStr(chaveG), vbTextCompare) > 0 Then
+                   Or InStr(1, textoSemEspaco, CStr(chaveG), vbTextCompare) > 0 _
+                   Or InStr(1, textoNormDparaR, CStr(chaveG), vbTextCompare) > 0 _
+                   Or InStr(1, textoSemEspacoDparaR, CStr(chaveG), vbTextCompare) > 0 Then
                     melhorLen = Len(CStr(chaveG))
                     melhor = CStr(chaveG)
                 End If
@@ -112,7 +130,9 @@ Function ExtrairDimensao(descricao As String, marca As String, _
         If Len(CStr(chaveL)) >= TAMANHO_MINIMO_DIMENSAO Then
             If Len(CStr(chaveL)) > melhorLen Then
                 If InStr(1, textoNorm, CStr(chaveL), vbTextCompare) > 0 _
-                   Or InStr(1, textoSemEspaco, CStr(chaveL), vbTextCompare) > 0 Then
+                   Or InStr(1, textoSemEspaco, CStr(chaveL), vbTextCompare) > 0 _
+                   Or InStr(1, textoNormDparaR, CStr(chaveL), vbTextCompare) > 0 _
+                   Or InStr(1, textoSemEspacoDparaR, CStr(chaveL), vbTextCompare) > 0 Then
                     melhorLen = Len(CStr(chaveL))
                     melhor = dicPadroesLegado(chaveL)
                 End If

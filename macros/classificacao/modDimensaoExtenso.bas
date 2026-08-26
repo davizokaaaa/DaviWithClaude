@@ -43,6 +43,12 @@ Function ExtrairDimensaoPorExtenso(descricao As String) As String
         Exit Function
     End If
 
+    resultado = TentarBandaPerfilAroSemBarra(textoNorm)
+    If Len(resultado) > 0 Then
+        ExtrairDimensaoPorExtenso = resultado
+        Exit Function
+    End If
+
     ExtrairDimensaoPorExtenso = ""
 End Function
 
@@ -113,5 +119,36 @@ Private Function TentarNomenclaturaEntreParenteses(textoNorm As String) As Strin
         TentarNomenclaturaEntreParenteses = regexMedida.Execute(bloco)(0).Value
     Else
         TentarNomenclaturaEntreParenteses = ""
+    End If
+End Function
+
+' ==========================================================================
+' Padrão "NNN NNLNN" — banda e perfil separados só por ESPAÇO (sem "/"),
+' com a letra do tipo de construção/velocidade (R, Z, H...) colada direto
+' no perfil, ex:
+'   "DESCRICAO: 225 55Z19V" -> banda 225, perfil 55, aro 19 (o "Z" e o "V"
+'   depois do aro são índice de velocidade, não fazem parte do GEOBOX)
+'   "DESCRICAO 225 50R17 98W TL" -> banda 225, perfil 50, aro 17
+' Sempre monta o resultado com "R" entre perfil e aro (medida radial usa
+' R), independente da letra encontrada na origem — mesmo critério já usado
+' na limpeza de Z/ZR/ZRF em NormalizarFormatacaoBasica.
+' Isolado neste módulo (só ACRESCENTA candidato ao texto de busca) porque
+' esse padrão já causou uma regressão na leitura de MARCA quando estava
+' embutido direto no normalizador compartilhado (modDimensao) — aqui ele
+' não tem esse risco, pois só é comparado contra o catálogo depois.
+' ==========================================================================
+Private Function TentarBandaPerfilAroSemBarra(textoNorm As String) As String
+    Dim regex As Object
+    Set regex = CreateObject("VBScript.RegExp")
+    regex.Global = False
+    regex.IgnoreCase = True
+    regex.Pattern = "(\d{3})\s(\d{2})[A-Z]{1,2}(\d{2})"
+
+    If regex.Test(textoNorm) Then
+        Dim m As Object
+        Set m = regex.Execute(textoNorm)(0)
+        TentarBandaPerfilAroSemBarra = m.SubMatches(0) & "/" & m.SubMatches(1) & "R" & m.SubMatches(2)
+    Else
+        TentarBandaPerfilAroSemBarra = ""
     End If
 End Function

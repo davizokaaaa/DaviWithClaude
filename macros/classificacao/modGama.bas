@@ -6,18 +6,12 @@ Option Explicit
 ' Extração da coluna GAMA a partir da DESCRIÇÃODA MERCADORIA.
 ' Mesmo modelo de modMarca.bas: exceções/abreviações primeiro (aba
 ' "ExcecoesGama" — ex: "PTNZ" -> "POTENZA", "TRNZ" -> "TURANZA"), depois
-' busca cega pelo nome completo da gama na descrição.
+' busca pelo nome completo (ou por palavra-chave) da gama na descrição.
 ' ==========================================================================
 
 ' ==========================================================================
 ' Normaliza texto SÓ para efeito de comparação (nunca é gravado): remove
-' espaço, barra, hífen e ponto, e coloca em maiúsculas. Resolve casos como
-' catálogo com "FORZA H/T2" (barra, sem espaço antes do "2") vs. descrição
-' com "FORZA HT 2" (sem barra, com espaço) — sem essa normalização, a
-' comparação por substring exata nunca bateria, mesmo sendo claramente a
-' mesma gama. Aplicada nos dois lados (descrição e valor do catálogo) antes
-' de qualquer InStr — a gama GRAVADA continua sendo a forma original do
-' catálogo, nunca a normalizada.
+' espaço, barra, hífen e ponto, e coloca em maiúsculas.
 ' ==========================================================================
 Private Function NormalizarParaComparacao(texto As String) As String
     Dim resultado As String
@@ -30,24 +24,84 @@ Private Function NormalizarParaComparacao(texto As String) As String
 End Function
 
 ' ==========================================================================
-' Extrai a GAMA: 1) checa primeiro o dicionário de EXCEÇÕES/abreviações
-' (dicExcecoesGama, aba "ExcecoesGama") — cobre siglas curtas que a macro
-' não teria como adivinhar sozinha. 2) Se não bater nenhuma exceção e a
-' MARCA já foi identificada, busca primeiro só entre as GAMAS conhecidas
-' DAQUELA marca (mais rápido e mais preciso — evita, por ex., uma gama de
-' outro fabricante bater por coincidência). 3) Se não achar assim (ou se a
-' marca nem foi identificada), faz busca ampla em todas as gamas
-' conhecidas de todas as marcas. 4) Se não achar nada, retorna "".
-' Todas as comparações (exceto exceções, que já costumam ser siglas exatas)
-' são feitas via NormalizarParaComparacao, tolerando diferença de espaço/
-' barra/hífen/ponto entre o texto do catálogo e o da descrição.
+' Conta quantas PALAVRAS de um nome de gama (candidato) aparecem na
+' descrição já normalizada. Quebra o candidato em palavras por espaço, "/",
+' "-" e "." (ex: "FORZA H/T2" -> "FORZA", "H", "T2") e ignora palavras
+' curtas demais (< 4 caracteres) pra não confiar num match tipo "AT" ou
+' "H" sozinho, que apareceria em qualquer texto por acaso.
+' ==========================================================================
+Private Function ContarPalavrasBatendo(candidato As String, descNorm As String) As Long
+    Dim texto As String
+    texto = candidato
+    texto = Replace(texto, "/", " ")
+    texto = Replace(texto, "-", " ")
+    texto = Replace(texto, ".", " ")
+
+    Dim palavras() As String
+    palavras = Split(texto, " ")
+
+    Dim contagem As Long, p As Variant
+    contagem = 0
+    For Each p In palavras
+        If Len(CStr(p)) >= 4 Then
+            If InStr(1, descNorm, NormalizarParaComparacao(CStr(p)), vbTextCompare) > 0 Then
+                contagem = contagem + 1
+            End If
+        End If
+    Next p
+    ContarPalavrasBatendo = contagem
+End Function
+
+' ==========================================================================
+' Varre uma lista de candidatos de GAMA (Collection ou array de chaves de
+' Dictionary) e devolve o que tiver MAIS palavras batendo na descrição
+' (desempate: nome de gama mais longo). Devolve "" se nenhum candidato
+' teve nenhuma palavra batendo.
+' ==========================================================================
+Private Function BuscarGamaPorPalavraChave(candidatos As Variant, descNorm As String) As String
+    Dim melhorGama As String, melhorPontuacao As Long, melhorLen As Long
+    melhorGama = ""
+    melhorPontuacao = 0
+    melhorLen = 0
+
+    Dim item As Variant
+    For Each item In candidatos
+        Dim cand As String
+        cand = CStr(item)
+        If Len(cand) > 0 Then
+            Dim pontos As Long
+            pontos = ContarPalavrasBatendo(cand, descNorm)
+            If pontos > 0 Then
+                If pontos > melhorPontuacao Or (pontos = melhorPontuacao And Len(cand) > melhorLen) Then
+                    melhorPontuacao = pontos
+                    melhorGama = cand
+                    melhorLen = Len(cand)
+                End If
+            End If
+        End If
+    Next item
+
+    BuscarGamaPorPalavraChave = melhorGama
+End Function
+
+' ==========================================================================
+' Extrai a GAMA em camadas, da mais confiável pra mais permissiva:
+'   1) Exceções/abreviações (dicExcecoesGama, aba "ExcecoesGama").
+'   2) Nome completo da gama (normalizado contra espaço/barra/hífen/ponto),
+'      primeiro só entre as gamas DAQUELA marca, depois busca ampla.
+'   3) Se não achou nada assim, cai numa busca por PALAVRA-CHAVE: quebra
+'      cada gama conhecida em palavras e vê se pelo menos uma (>= 4
+'      caracteres) aparece na descrição — primeiro só nas gamas da marca já
+'      identificada, depois busca ampla. Mais permissivo, mas escala melhor
+'      que ficar caçando exceção de pontuação linha por linha; se overmatch
+'      demais em algum caso real, dá pra restringir de volta esse passo.
+' Se nada bateu em nenhuma camada, retorna "".
 '
 ' GAMA é tratada como praticamente exclusiva de uma marca: sempre que ela é
-' descoberta (em qualquer um dos passos acima) e a MARCA da linha ainda
-' está vazia, a marca é preenchida também (ByRef) com a dona daquela gama
+' descoberta (em qualquer camada acima) e a MARCA da linha ainda está
+' vazia, a marca é preenchida também (ByRef) com a dona daquela gama
 ' (dicMarcaPorGama, montado em modReferencia a partir da própria Tabela de
-' Referência) — cobre o caso de uma marca não ter sido lida na descrição,
-' mas a gama (mais específica) sim.
+' Referência).
 ' ==========================================================================
 Function ExtrairGama(descricao As String, ByRef marca As String, _
                       dicGamasPorMarca As Object, dicGamaGlobalUnicos As Object, _
@@ -56,6 +110,7 @@ Function ExtrairGama(descricao As String, ByRef marca As String, _
     Dim descNorm As String
     descNorm = NormalizarParaComparacao(descricao)
 
+    ' --- Camada 1: exceções/abreviações ---
     Dim chaveExc As Variant
     For Each chaveExc In dicExcecoesGama.Keys
         If InStr(1, descricao, CStr(chaveExc), vbTextCompare) > 0 Then
@@ -67,6 +122,7 @@ Function ExtrairGama(descricao As String, ByRef marca As String, _
         End If
     Next chaveExc
 
+    ' --- Camada 2: nome completo (normalizado), marca conhecida primeiro ---
     If Len(marca) > 0 Then
         If dicGamasPorMarca.Exists(marca) Then
             Dim gamaCand As Variant
@@ -81,8 +137,7 @@ Function ExtrairGama(descricao As String, ByRef marca As String, _
         End If
     End If
 
-    ' --- Busca cega em todas as gamas conhecidas — roda mesmo com marca   ---
-    ' --- vazia (é justamente o caso que resolve: marca não identificada). ---
+    ' --- Camada 2: nome completo (normalizado), busca ampla ---
     Dim chaveG As Variant
     For Each chaveG In dicGamaGlobalUnicos.Keys
         If InStr(1, descNorm, NormalizarParaComparacao(CStr(chaveG)), vbTextCompare) > 0 Then
@@ -93,6 +148,28 @@ Function ExtrairGama(descricao As String, ByRef marca As String, _
             Exit Function
         End If
     Next chaveG
+
+    ' --- Camada 3: palavra-chave, marca conhecida primeiro ---
+    Dim resultadoPalavra As String
+    If Len(marca) > 0 Then
+        If dicGamasPorMarca.Exists(marca) Then
+            resultadoPalavra = BuscarGamaPorPalavraChave(dicGamasPorMarca(marca), descNorm)
+            If Len(resultadoPalavra) > 0 Then
+                ExtrairGama = resultadoPalavra
+                Exit Function
+            End If
+        End If
+    End If
+
+    ' --- Camada 3: palavra-chave, busca ampla ---
+    resultadoPalavra = BuscarGamaPorPalavraChave(dicGamaGlobalUnicos.Keys, descNorm)
+    If Len(resultadoPalavra) > 0 Then
+        ExtrairGama = resultadoPalavra
+        If Len(marca) = 0 And dicMarcaPorGama.Exists(ExtrairGama) Then
+            marca = CStr(dicMarcaPorGama(ExtrairGama))
+        End If
+        Exit Function
+    End If
 
     ExtrairGama = ""
 End Function

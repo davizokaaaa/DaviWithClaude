@@ -88,12 +88,12 @@ Sub ClassificarTudo()
     Dim dicPadroesLegado As Object
     Set dicPadroesLegado = CarregarPadroesGeoboxLegado()
 
-    Dim dicSegPorGeobox As Object, dicLpPorGeobox As Object
+    Dim dicSegPorGeobox As Object, dicLpPorGeobox As Object, dicLpPorMarca As Object
     Dim arrMarcas() As String
     Dim dicGeoboxPorMarca As Object, dicGeoboxGlobalUnicos As Object
     Dim diagnosticoRef As String
 
-    If Not CarregarTabelaReferencia(dicSegPorGeobox, dicLpPorGeobox, arrMarcas, _
+    If Not CarregarTabelaReferencia(dicSegPorGeobox, dicLpPorGeobox, dicLpPorMarca, arrMarcas, _
                                      dicGeoboxPorMarca, dicGeoboxGlobalUnicos, dicExcecoesMarca, diagnosticoRef) Then
         MsgBox "Não foi possível abrir a Tabela de Referência em:" & vbCrLf & REF_FILE_PATH, vbCritical
         Exit Sub
@@ -169,7 +169,7 @@ Sub ClassificarTudo()
         ' --- Usa a DIMENSÃO BRUTA (antes do hífen->R) porque é essa forma  ---
         ' --- que bate exatamente com o GEOBOX gravado na Tabela.           ---
         Dim lp As String
-        ObterSegmentoELpPorDimensao dimensaoBruta, dicSegPorGeobox, dicLpPorGeobox, segmento, lp
+        ObterSegmentoELpPorDimensao dimensaoBruta, marca, aro, dicSegPorGeobox, dicLpPorGeobox, dicLpPorMarca, segmento, lp
         ws.Cells(i, colTipoProduto).Value = segmento
 
         ' --- Diagnóstico: conta preenchidos/vazios e guarda uma amostra ---

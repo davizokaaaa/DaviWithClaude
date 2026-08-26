@@ -217,14 +217,6 @@ Function NormalizarTextoDimensao(texto As String) As String
     regex.Pattern = "(\d{2,3})-(\d{2,3})R"
     resultado = regex.Replace(resultado, "$1/$2R")
 
-    ' Padrão "NNN NNRNN" (espaço no lugar de "/", ex: "205 60R15" vindo de
-    ' "BANDA: 205 60R15H") -> "NNN/NNRNN". Mesma lógica do hífen acima,
-    ' mas pra quando a origem simplesmente omitiu o separador e deixou só
-    ' o espaço. Só aplica com "R" colado logo depois do segundo número,
-    ' pelo mesmo motivo (não confundir com outros números soltos no texto).
-    regex.Pattern = "(\d{2,3})\s(\d{2,3})R"
-    resultado = regex.Replace(resultado, "$1/$2R")
-
 SemRegex:
     NormalizarTextoDimensao = resultado
 End Function

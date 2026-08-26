@@ -20,10 +20,16 @@ Option Explicit
 '   arrMarcas()          : array de marcas únicas, ordenado da mais longa p/ mais curta
 '   dicGeoboxPorMarca    : chave MARCA -> Collection de GEOBOX únicos daquela marca
 '   dicGeoboxGlobalUnicos: chave GEOBOX -> True (todos os geobox únicos, p/ busca ampla)
+'   dicGamasPorMarca     : chave MARCA -> Collection de GAMA únicas daquela marca
+'   dicGamaGlobalUnicos  : chave GAMA -> True (todas as gamas únicas, p/ busca ampla)
+'   dicExcecoesGama      : chave PADRÃO ABREVIADO -> GAMA correta (aba "ExcecoesGama",
+'                          ex: "PTNZ" -> "POTENZA"), checada antes da busca normal
 ' ==========================================================================
 Function CarregarTabelaReferencia(ByRef dicSegPorGeobox As Object, ByRef dicLpPorGeobox As Object, _
                                    ByRef arrMarcas() As String, ByRef dicGeoboxPorMarca As Object, _
                                    ByRef dicGeoboxGlobalUnicos As Object, ByRef dicExcecoesMarca As Object, _
+                                   ByRef dicGamasPorMarca As Object, ByRef dicGamaGlobalUnicos As Object, _
+                                   ByRef dicExcecoesGama As Object, _
                                    ByRef diagnostico As String) As Boolean
 
     On Error GoTo ErroAbrir
@@ -58,6 +64,8 @@ Function CarregarTabelaReferencia(ByRef dicSegPorGeobox As Object, ByRef dicLpPo
 
     Set dicGeoboxPorMarca = CreateObject("Scripting.Dictionary")
     Set dicGeoboxGlobalUnicos = CreateObject("Scripting.Dictionary")
+    Set dicGamasPorMarca = CreateObject("Scripting.Dictionary")
+    Set dicGamaGlobalUnicos = CreateObject("Scripting.Dictionary")
 
     ' dicVotosSegPorGeo / dicVotosLpPorGeo: chave GEOBOX -> Dictionary(valor -> contagem).
     ' Votações independentes: uma conta SEGMENTO, a outra conta LP, cada
@@ -132,10 +140,24 @@ Function CarregarTabelaReferencia(ByRef dicSegPorGeobox As Object, ByRef dicLpPo
                 If CStr(geoExistente) = geo Then jaExisteGeo = True: Exit For
             Next geoExistente
             If Not jaExisteGeo And Len(geo) > 0 Then dicGeoboxPorMarca(marcaRef).Add geo
+
+            If Not dicGamasPorMarca.Exists(marcaRef) Then
+                dicGamasPorMarca.Add marcaRef, New Collection
+            End If
+            Dim jaExisteGama As Boolean, gamaExistente As Variant
+            jaExisteGama = False
+            For Each gamaExistente In dicGamasPorMarca(marcaRef)
+                If CStr(gamaExistente) = gama Then jaExisteGama = True: Exit For
+            Next gamaExistente
+            If Not jaExisteGama And Len(gama) > 0 Then dicGamasPorMarca(marcaRef).Add gama
         End If
 
         If Len(geo) > 0 Then
             If Not dicGeoboxGlobalUnicos.Exists(geo) Then dicGeoboxGlobalUnicos.Add geo, True
+        End If
+
+        If Len(gama) > 0 Then
+            If Not dicGamaGlobalUnicos.Exists(gama) Then dicGamaGlobalUnicos.Add gama, True
         End If
     Next i
 
@@ -209,6 +231,37 @@ Function CarregarTabelaReferencia(ByRef dicSegPorGeobox As Object, ByRef dicLpPo
                       ". Exceções lidas (linha 2 até " & lastRowExc & "): " & qtdExcecoesLidas & vbCrLf
     Else
         diagnostico = diagnostico & "Aba ""ExcecoesMarca"" NÃO encontrada nesse arquivo." & vbCrLf
+    End If
+
+    ' --- Carrega exceções/abreviações de GAMA da aba "ExcecoesGama" (se existir) ---
+    ' Mesmo modelo da "ExcecoesMarca": coluna A = padrão abreviado como
+    ' aparece na descrição (ex: "PTNZ"), coluna B = GAMA correta (ex:
+    ' "POTENZA"). Checada antes da busca normal por GAMA em ExtrairGama.
+    Set dicExcecoesGama = CreateObject("Scripting.Dictionary")
+    Dim wsExcecoesGama As Worksheet
+    Set wsExcecoesGama = Nothing
+    On Error Resume Next
+    Set wsExcecoesGama = wbRef.Sheets("ExcecoesGama")
+    On Error GoTo ErroAbrir
+
+    Dim qtdExcecoesGamaLidas As Long
+    qtdExcecoesGamaLidas = 0
+
+    If Not wsExcecoesGama Is Nothing Then
+        Dim lastRowExcGama As Long, padraoGama As String, gamaCorreta As String
+        lastRowExcGama = wsExcecoesGama.Cells(wsExcecoesGama.Rows.Count, "A").End(xlUp).Row
+        For j = 2 To lastRowExcGama
+            padraoGama = UCase(Trim(CStr(wsExcecoesGama.Cells(j, 1).Value)))
+            gamaCorreta = UCase(Trim(CStr(wsExcecoesGama.Cells(j, 2).Value)))
+            If Len(padraoGama) > 0 And Len(gamaCorreta) > 0 Then
+                If Not dicExcecoesGama.Exists(padraoGama) Then dicExcecoesGama.Add padraoGama, gamaCorreta
+                qtdExcecoesGamaLidas = qtdExcecoesGamaLidas + 1
+            End If
+        Next j
+        diagnostico = diagnostico & "Aba ""ExcecoesGama"" encontrada. Última linha: " & lastRowExcGama & _
+                      ". Exceções lidas (linha 2 até " & lastRowExcGama & "): " & qtdExcecoesGamaLidas & vbCrLf
+    Else
+        diagnostico = diagnostico & "Aba ""ExcecoesGama"" NÃO encontrada nesse arquivo (abreviações de GAMA não serão reconhecidas)." & vbCrLf
     End If
 
     diagnostico = diagnostico & "Total de marcas únicas na busca (Referencia + MarcasExtras): " & dicMarcasUnicas.Count

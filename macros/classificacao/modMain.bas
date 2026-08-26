@@ -18,7 +18,7 @@ Option Explicit
 '   - PROVÁVEL ADQUIRENTE (nome configurável em modConfig.COL_ADQUIRENTE_NOME)
 '
 ' Colunas de SAÍDA (a macro cria sozinha se não existirem, nesta ordem
-' quando precisar criar mais de uma): LP, TIPO PRODUTO, MARCA, ANIP,
+' quando precisar criar mais de uma): LP, TIPO PRODUTO, MARCA, GAMA, ANIP,
 ' RT/OE, DIMENSÃO (ou GEOBOX), ARO
 '
 ' Ver regras de extração detalhadas nos comentários de cada módulo
@@ -35,6 +35,8 @@ Option Explicit
 '          à busca, sem precisar mexer no código
 '        - aba "ExcecoesMarca" (opcional): colunas PADRAO_ENCONTRADO_NA_DESCRICAO
 '          e MARCA_CORRETA — checadas antes de tudo na extração de MARCA
+'        - aba "ExcecoesGama" (opcional): mesmo modelo da "ExcecoesMarca",
+'          mas pra abreviações de GAMA (ex: "PTNZ" -> "POTENZA")
 ' ==========================================================================
 
 Sub ClassificarTudo()
@@ -43,7 +45,7 @@ Sub ClassificarTudo()
     Dim lastRow As Long, i As Long
     Dim colDescricao As Long, colAdquirente As Long
     Dim colRtOe As Long, colTipoProduto As Long, colAro As Long, colAnip As Long
-    Dim colLp As Long, colMarca As Long, colDimensao As Long
+    Dim colLp As Long, colMarca As Long, colDimensao As Long, colGama As Long
 
     Set ws = ActiveSheet
 
@@ -71,10 +73,11 @@ Sub ClassificarTudo()
 
     ' --- Colunas de SAÍDA: a macro cria sozinha se ainda não existirem.        ---
     ' --- Ordem de criação (quando faltar mais de uma): LP, TIPO PRODUTO,      ---
-    ' --- MARCA, ANIP, RT/OE, DIMENSÃO, ARO — nessa sequência.                 ---
+    ' --- MARCA, GAMA, ANIP, RT/OE, DIMENSÃO, ARO — nessa sequência.           ---
     colLp = LocalizarOuCriarColuna(ws, "LP")
     colTipoProduto = LocalizarOuCriarColuna(ws, "TIPO PRODUTO")
     colMarca = LocalizarOuCriarColuna(ws, "MARCA")
+    colGama = LocalizarOuCriarColuna(ws, "GAMA")
     colAnip = LocalizarOuCriarColuna(ws, "ANIP")
     colRtOe = LocalizarOuCriarColuna(ws, "RT/OE")
     colDimensao = LocalizarColunaAlternativasOuCriar(ws, Array("DIMENSÃO", "GEOBOX"), "DIMENSÃO")
@@ -91,10 +94,12 @@ Sub ClassificarTudo()
     Dim dicSegPorGeobox As Object, dicLpPorGeobox As Object
     Dim arrMarcas() As String
     Dim dicGeoboxPorMarca As Object, dicGeoboxGlobalUnicos As Object
+    Dim dicGamasPorMarca As Object, dicGamaGlobalUnicos As Object, dicExcecoesGama As Object
     Dim diagnosticoRef As String
 
     If Not CarregarTabelaReferencia(dicSegPorGeobox, dicLpPorGeobox, arrMarcas, _
-                                     dicGeoboxPorMarca, dicGeoboxGlobalUnicos, dicExcecoesMarca, diagnosticoRef) Then
+                                     dicGeoboxPorMarca, dicGeoboxGlobalUnicos, dicExcecoesMarca, _
+                                     dicGamasPorMarca, dicGamaGlobalUnicos, dicExcecoesGama, diagnosticoRef) Then
         MsgBox "Não foi possível abrir a Tabela de Referência em:" & vbCrLf & REF_FILE_PATH, vbCritical
         Exit Sub
     End If
@@ -134,6 +139,12 @@ Sub ClassificarTudo()
         ' --- MARCA: extraída da descrição (nome conhecido na Tabela de Referência) ---
         marca = ExtrairMarca(descricao, arrMarcas, dicExcecoesMarca)
         ws.Cells(i, colMarca).Value = marca
+
+        ' --- GAMA: extraída da descrição (exceções/abreviações primeiro,   ---
+        ' --- depois nome completo conhecido na Tabela de Referência)      ---
+        Dim gamaLinha As String
+        gamaLinha = ExtrairGama(descricao, marca, dicGamasPorMarca, dicGamaGlobalUnicos, dicExcecoesGama)
+        ws.Cells(i, colGama).Value = gamaLinha
 
         ' --- DIMENSÃO: extraída da descrição (medida conhecida na Tabela de Referência) ---
         dimensaoBruta = ExtrairDimensao(descricao, marca, dicGeoboxPorMarca, dicGeoboxGlobalUnicos, dicPadroesLegado)

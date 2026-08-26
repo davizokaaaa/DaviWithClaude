@@ -22,7 +22,6 @@ Option Explicit
 '   dicGeoboxGlobalUnicos: chave GEOBOX -> True (todos os geobox únicos, p/ busca ampla)
 ' ==========================================================================
 Function CarregarTabelaReferencia(ByRef dicSegPorGeobox As Object, ByRef dicLpPorGeobox As Object, _
-                                   ByRef dicLpPorMarca As Object, _
                                    ByRef arrMarcas() As String, ByRef dicGeoboxPorMarca As Object, _
                                    ByRef dicGeoboxGlobalUnicos As Object, ByRef dicExcecoesMarca As Object, _
                                    ByRef diagnostico As String) As Boolean
@@ -66,13 +65,6 @@ Function CarregarTabelaReferencia(ByRef dicSegPorGeobox As Object, ByRef dicLpPo
     Dim dicVotosSegPorGeo As Object, dicVotosLpPorGeo As Object
     Set dicVotosSegPorGeo = CreateObject("Scripting.Dictionary")
     Set dicVotosLpPorGeo = CreateObject("Scripting.Dictionary")
-
-    ' dicVotosLpPorMarca: chave MARCA -> Dictionary(valor LP -> contagem).
-    ' Fallback de LP quando o GEOBOX da linha não bate com nada cadastrado
-    ' (não achou SEGMENTO nem LP por GEOBOX) — usa a LP mais votada para a
-    ' marca já identificada, ignorando linhas com LP vazia.
-    Dim dicVotosLpPorMarca As Object
-    Set dicVotosLpPorMarca = CreateObject("Scripting.Dictionary")
 
     Dim dicMarcasUnicas As Object
     Set dicMarcasUnicas = CreateObject("Scripting.Dictionary")
@@ -128,18 +120,6 @@ Function CarregarTabelaReferencia(ByRef dicSegPorGeobox As Object, ByRef dicLpPo
             End If
         End If
 
-        If Len(marcaRef) > 0 And Len(lp) > 0 Then
-            If Not dicVotosLpPorMarca.Exists(marcaRef) Then
-                dicVotosLpPorMarca.Add marcaRef, CreateObject("Scripting.Dictionary")
-            End If
-            Set subVotos = dicVotosLpPorMarca(marcaRef)
-            If subVotos.Exists(lp) Then
-                subVotos(lp) = subVotos(lp) + 1
-            Else
-                subVotos.Add lp, 1
-            End If
-        End If
-
         If Len(marcaRef) > 0 Then
             If Not dicMarcasUnicas.Exists(marcaRef) Then dicMarcasUnicas.Add marcaRef, True
 
@@ -165,12 +145,10 @@ Function CarregarTabelaReferencia(ByRef dicSegPorGeobox As Object, ByRef dicLpPo
     ' --- encontrado (ordem de leitura da aba "Referencia").                ---
     Set dicSegPorGeobox = MontarDicMaioriaPorGeobox(dicVotosSegPorGeo)
     Set dicLpPorGeobox = MontarDicMaioriaPorGeobox(dicVotosLpPorGeo)
-    Set dicLpPorMarca = MontarDicMaioriaPorGeobox(dicVotosLpPorMarca)
 
     diagnostico = diagnostico & "Última linha lida na aba ""Referencia"": " & lastRowRef & vbCrLf
     diagnostico = diagnostico & "Total de GEOBOX únicos com SEGMENTO mapeado: " & dicSegPorGeobox.Count & vbCrLf
     diagnostico = diagnostico & "Total de GEOBOX únicos com LP mapeado: " & dicLpPorGeobox.Count & vbCrLf
-    diagnostico = diagnostico & "Total de MARCAS únicas com LP mapeado (fallback): " & dicLpPorMarca.Count & vbCrLf
     If wasOpen Then
         diagnostico = diagnostico & vbCrLf & "ATENÇÃO: o arquivo já estava aberto e foi reaproveitado. " & _
                       "Se os números acima parecerem baixos demais, FECHE o arquivo Tabela_Referencia.xlsx " & _
@@ -297,45 +275,34 @@ End Function
 
 ' ==========================================================================
 ' Retorna, para uma DIMENSÃO (GEOBOX) já extraída, o SEGMENTO e a LP.
-' SEGMENTO nunca depende de MARCA — é busca direta por DIMENSÃO. Regra de
-' prioridade do LP:
+' Não depende de MARCA nem de achar a GAMA no texto — é busca direta por
+' DIMENSÃO. Regra de prioridade do LP:
 '   1) Se achou SEGMENTO pra essa dimensão, LP = DeduzirLp(segmento)
 '      (TC para PC/REC/COM, PL para TLD/PPL/BUS, BR para DM).
 '   2) Se DeduzirLp não souber mapear esse segmento (retornou ""), ou se
 '      não achou SEGMENTO nenhum, usa a votação independente de LP
 '      (dicLpPorGeobox) — maioria dos valores de LP não vazios daquele
 '      GEOBOX na Tabela de Referência.
-'   3) Se nem assim achou LP (GEOBOX extraído não bate com nada cadastrado
-'      — grafia diferente, medida faltando na Referência etc.), cai no
-'      fallback por MARCA: usa a LP mais votada para a marca já
-'      identificada na linha (dicLpPorMarca), ignorando linhas com LP
-'      vazia. NÃO aplica esse fallback quando o ARO termina em ".5", pois
-'      esse caso já tem regra própria (força PL) aplicada depois em
-'      modMain — não faz sentido a maioria da marca disputar com ela.
-' DeduzirLp e AroTerminaEmMeio vêm de modClassificacaoRegras.bas.
+' Se a DIMENSÃO não estiver cadastrada em nenhum dos dois dicionários,
+' retorna "" para os dois. DeduzirLp vem de modClassificacaoRegras.bas.
 ' ==========================================================================
-Sub ObterSegmentoELpPorDimensao(dimensao As String, marca As String, aro As String, _
-                                 dicSegPorGeobox As Object, dicLpPorGeobox As Object, dicLpPorMarca As Object, _
+Sub ObterSegmentoELpPorDimensao(dimensao As String, dicSegPorGeobox As Object, dicLpPorGeobox As Object, _
                                  ByRef segmentoOut As String, ByRef lpOut As String)
     segmentoOut = ""
     lpOut = ""
 
-    If Len(dimensao) > 0 Then
-        If dicSegPorGeobox.Exists(dimensao) Then segmentoOut = CStr(dicSegPorGeobox(dimensao))
+    If Len(dimensao) = 0 Then Exit Sub
 
-        Dim lpVotado As String
-        lpVotado = ""
-        If dicLpPorGeobox.Exists(dimensao) Then lpVotado = CStr(dicLpPorGeobox(dimensao))
+    If dicSegPorGeobox.Exists(dimensao) Then segmentoOut = CStr(dicSegPorGeobox(dimensao))
 
-        If Len(segmentoOut) > 0 Then
-            lpOut = DeduzirLp(segmentoOut)
-            If Len(lpOut) = 0 Then lpOut = lpVotado
-        Else
-            lpOut = lpVotado
-        End If
-    End If
+    Dim lpVotado As String
+    lpVotado = ""
+    If dicLpPorGeobox.Exists(dimensao) Then lpVotado = CStr(dicLpPorGeobox(dimensao))
 
-    If Len(lpOut) = 0 And Len(marca) > 0 And Not AroTerminaEmMeio(aro) Then
-        If dicLpPorMarca.Exists(marca) Then lpOut = CStr(dicLpPorMarca(marca))
+    If Len(segmentoOut) > 0 Then
+        lpOut = DeduzirLp(segmentoOut)
+        If Len(lpOut) = 0 Then lpOut = lpVotado
+    Else
+        lpOut = lpVotado
     End If
 End Sub

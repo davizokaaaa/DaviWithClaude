@@ -130,6 +130,17 @@ Sub ClassificarTudo()
         Exit Sub
     End If
 
+    ' --- Desliga recálculo automático/atualização de tela durante o        ---
+    ' --- processamento. Com uma base grande, gravar célula a célula com    ---
+    ' --- recálculo automático ligado (padrão do Excel) fica extremamente   ---
+    ' --- lento — na prática parece um travamento. Restaurado em Finally.   ---
+    Dim calcAnterior As XlCalculation
+    calcAnterior = Application.Calculation
+    On Error GoTo Finally
+    Application.ScreenUpdating = False
+    Application.Calculation = xlCalculationManual
+    Application.EnableEvents = False
+
     Dim marca As String, dimensaoBruta As String, dimensaoFinal As String
     Dim descricao As String, adquirente As String
     Dim aro As String, segmento As String, rtOe As String, anip As String
@@ -232,6 +243,13 @@ Sub ClassificarTudo()
 
     Next i
 
+    ' --- Restaura o estado do Excel assim que o processamento linha a     ---
+    ' --- linha termina (o resto daqui pra baixo só mexe numa aba auxiliar  ---
+    ' --- pequena, não precisa mais ficar com recálculo desligado).         ---
+    Application.EnableEvents = True
+    Application.ScreenUpdating = True
+    Application.Calculation = calcAnterior
+
     ' --- Joga a lista completa de linhas vazias numa aba auxiliar, mais    ---
     ' --- fácil de ler/copiar do que uma caixa de mensagem gigante.        ---
     Dim wsDiagVazios As Worksheet
@@ -267,5 +285,15 @@ Sub ClassificarTudo()
            "Linhas com TIPO PRODUTO preenchido: " & qtdSegmentoPreenchido & vbCrLf & _
            "Linhas com TIPO PRODUTO vazio: " & qtdSegmentoVazio & vbCrLf & vbCrLf & _
            "Lista completa das linhas vazias foi para a aba ""Diagnostico_Vazios"".", vbInformation
+
+    Exit Sub
+
+Finally:
+    ' --- Garante que o Excel não fique "travado" em recálculo manual/tela ---
+    ' --- parada se a macro cair aqui por causa de um erro no meio do laço. ---
+    Application.EnableEvents = True
+    Application.ScreenUpdating = True
+    Application.Calculation = calcAnterior
+    MsgBox "A macro parou por causa de um erro: " & vbCrLf & vbCrLf & Err.Description, vbCritical
 
 End Sub

@@ -86,6 +86,16 @@ Function CarregarTabelaReferencia(ByRef dicSegPorGeobox As Object, ByRef dicLpPo
     Dim dicMarcasUnicas As Object
     Set dicMarcasUnicas = CreateObject("Scripting.Dictionary")
 
+    ' dicGeoboxSetPorMarca / dicGamaSetPorMarca: mesma informação de
+    ' dicGeoboxPorMarca/dicGamasPorMarca, mas como Dictionary (chave = valor
+    ' já visto) em vez de Collection. Usados só pra checar duplicata em O(1)
+    ' ao montar as Collections abaixo — varrer a Collection inteira (O(n))
+    ' pra cada linha da Referência vira O(n²) numa marca com muitos GEOBOX/
+    ' GAMA únicos (caso comum em bases BR/MIN, com centenas por marca).
+    Dim dicGeoboxSetPorMarca As Object, dicGamaSetPorMarca As Object
+    Set dicGeoboxSetPorMarca = CreateObject("Scripting.Dictionary")
+    Set dicGamaSetPorMarca = CreateObject("Scripting.Dictionary")
+
     ' Usa a maior "última linha com dado" entre as 5 colunas (Geobox, Marca,
     ' Gama, LP, Segmento) em vez de só a coluna A. Uma linha só com Marca
     ' preenchida (sem Geobox) precisa ser lida do mesmo jeito — se olhássemos
@@ -159,23 +169,25 @@ Function CarregarTabelaReferencia(ByRef dicSegPorGeobox As Object, ByRef dicLpPo
 
             If Not dicGeoboxPorMarca.Exists(marcaRef) Then
                 dicGeoboxPorMarca.Add marcaRef, New Collection
+                dicGeoboxSetPorMarca.Add marcaRef, CreateObject("Scripting.Dictionary")
             End If
-            Dim jaExisteGeo As Boolean, geoExistente As Variant
-            jaExisteGeo = False
-            For Each geoExistente In dicGeoboxPorMarca(marcaRef)
-                If CStr(geoExistente) = geo Then jaExisteGeo = True: Exit For
-            Next geoExistente
-            If Not jaExisteGeo And Len(geo) > 0 Then dicGeoboxPorMarca(marcaRef).Add geo
+            If Len(geo) > 0 Then
+                If Not dicGeoboxSetPorMarca(marcaRef).Exists(geo) Then
+                    dicGeoboxSetPorMarca(marcaRef).Add geo, True
+                    dicGeoboxPorMarca(marcaRef).Add geo
+                End If
+            End If
 
             If Not dicGamasPorMarca.Exists(marcaRef) Then
                 dicGamasPorMarca.Add marcaRef, New Collection
+                dicGamaSetPorMarca.Add marcaRef, CreateObject("Scripting.Dictionary")
             End If
-            Dim jaExisteGama As Boolean, gamaExistente As Variant
-            jaExisteGama = False
-            For Each gamaExistente In dicGamasPorMarca(marcaRef)
-                If CStr(gamaExistente) = gama Then jaExisteGama = True: Exit For
-            Next gamaExistente
-            If Not jaExisteGama And Len(gama) > 0 Then dicGamasPorMarca(marcaRef).Add gama
+            If Len(gama) > 0 Then
+                If Not dicGamaSetPorMarca(marcaRef).Exists(gama) Then
+                    dicGamaSetPorMarca(marcaRef).Add gama, True
+                    dicGamasPorMarca(marcaRef).Add gama
+                End If
+            End If
         End If
 
         If Len(geo) > 0 Then

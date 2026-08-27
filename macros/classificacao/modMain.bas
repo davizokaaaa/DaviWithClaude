@@ -98,9 +98,19 @@ Sub ClassificarTudo()
     Dim dicMarcaPorGama As Object
     Dim diagnosticoRef As String
 
+    ' --- Pergunta se a base é de BR/MIN (Beyond Road/Mineração). Essas LPs   ---
+    ' --- têm GEOBOX e GAMA próprios, sem interseção com as demais LPs — se  ---
+    ' --- for BR/MIN, a Tabela de Referência é filtrada só para essas duas   ---
+    ' --- LPs, pra não carregar o resto da Referência à toa nessa base.      ---
+    Dim somenteMinBr As Boolean
+    somenteMinBr = (MsgBox("Esta base é de BR/MIN (Beyond Road / Mineração)?" & vbCrLf & vbCrLf & _
+                           "Se SIM, a Tabela de Referência será filtrada para considerar apenas as LP ""MIN"" e ""BR"".", _
+                           vbYesNo + vbQuestion, "Tipo de base") = vbYes)
+
     If Not CarregarTabelaReferencia(dicSegPorGeobox, dicLpPorGeobox, arrMarcas, _
                                      dicGeoboxPorMarca, dicGeoboxGlobalUnicos, dicExcecoesMarca, _
-                                     dicGamasPorMarca, dicGamaGlobalUnicos, dicMarcaPorGama, dicExcecoesGama, diagnosticoRef) Then
+                                     dicGamasPorMarca, dicGamaGlobalUnicos, dicMarcaPorGama, dicExcecoesGama, _
+                                     somenteMinBr, diagnosticoRef) Then
         MsgBox "Não foi possível abrir a Tabela de Referência em:" & vbCrLf & REF_FILE_PATH, vbCritical
         Exit Sub
     End If

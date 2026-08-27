@@ -27,13 +27,18 @@ Option Explicit
 '                          gama quando a marca não foi lida na descrição
 '   dicExcecoesGama      : chave PADRÃO ABREVIADO -> GAMA correta (aba "ExcecoesGama",
 '                          ex: "PTNZ" -> "POTENZA"), checada antes da busca normal
+'
+' somenteMinBr: quando True, ignora (não entra em nenhum dicionário) qualquer
+' linha da aba "Referencia" cuja LP não seja "MIN" ou "BR". Usado pra bases de
+' Beyond Road (MIN/BR têm GEOBOX e GAMA próprios, sem interseção com as
+' demais LPs) — evita carregar o resto da Referência à toa nesse caso.
 ' ==========================================================================
 Function CarregarTabelaReferencia(ByRef dicSegPorGeobox As Object, ByRef dicLpPorGeobox As Object, _
                                    ByRef arrMarcas() As String, ByRef dicGeoboxPorMarca As Object, _
                                    ByRef dicGeoboxGlobalUnicos As Object, ByRef dicExcecoesMarca As Object, _
                                    ByRef dicGamasPorMarca As Object, ByRef dicGamaGlobalUnicos As Object, _
                                    ByRef dicMarcaPorGama As Object, ByRef dicExcecoesGama As Object, _
-                                   ByRef diagnostico As String) As Boolean
+                                   ByVal somenteMinBr As Boolean, ByRef diagnostico As String) As Boolean
 
     On Error GoTo ErroAbrir
 
@@ -94,6 +99,8 @@ Function CarregarTabelaReferencia(ByRef dicSegPorGeobox As Object, ByRef dicLpPo
     Next colRef
 
     Dim geo As String, gama As String, marcaRef As String, lp As String, seg As String
+    Dim qtdLinhasIgnoradasMinBr As Long
+    qtdLinhasIgnoradasMinBr = 0
 
     ' --- Lê as 5 colunas de uma vez só num array em memória. Evita milhares de ---
     ' --- chamadas COM individuais (wsRef.Cells) numa base grande — cada uma é ---
@@ -109,6 +116,14 @@ Function CarregarTabelaReferencia(ByRef dicSegPorGeobox As Object, ByRef dicLpPo
         gama = UCase(Trim(CStr(arrRef(i - 1, 3))))            ' GAMA (não usada na busca de segmento/LP)
         lp = UCase(Trim(CStr(arrRef(i - 1, 4))))              ' LP
         seg = UCase(Trim(CStr(arrRef(i - 1, 5))))             ' SEGMENTO
+
+        ' --- Base BR/MIN: ignora qualquer linha que não seja MIN ou BR ---
+        If somenteMinBr Then
+            If lp <> "MIN" And lp <> "BR" Then
+                qtdLinhasIgnoradasMinBr = qtdLinhasIgnoradasMinBr + 1
+                GoTo ProximaLinhaRef
+            End If
+        End If
 
         ' --- Vota SEGMENTO e LP separadamente para esse GEOBOX, cada um só ---
         ' --- quando o próprio valor não está vazio (linha em branco numa  ---
@@ -177,6 +192,8 @@ Function CarregarTabelaReferencia(ByRef dicSegPorGeobox As Object, ByRef dicLpPo
                 dicMarcaPorGama.Add gama, marcaRef
             End If
         End If
+
+ProximaLinhaRef:
     Next i
 
     ' --- Monta dicSegPorGeobox e dicLpPorGeobox: para cada GEOBOX, fica com ---
@@ -187,6 +204,10 @@ Function CarregarTabelaReferencia(ByRef dicSegPorGeobox As Object, ByRef dicLpPo
     Set dicLpPorGeobox = MontarDicMaioriaPorGeobox(dicVotosLpPorGeo)
 
     diagnostico = diagnostico & "Última linha lida na aba ""Referencia"": " & lastRowRef & vbCrLf
+    diagnostico = diagnostico & "Modo BR/MIN ativado? " & IIf(somenteMinBr, "SIM (só LP=MIN ou LP=BR)", "Não") & vbCrLf
+    If somenteMinBr Then
+        diagnostico = diagnostico & "Linhas da Referência ignoradas (LP diferente de MIN/BR): " & qtdLinhasIgnoradasMinBr & vbCrLf
+    End If
     diagnostico = diagnostico & "Total de GEOBOX únicos com SEGMENTO mapeado: " & dicSegPorGeobox.Count & vbCrLf
     diagnostico = diagnostico & "Total de GEOBOX únicos com LP mapeado: " & dicLpPorGeobox.Count & vbCrLf
     If wasOpen Then

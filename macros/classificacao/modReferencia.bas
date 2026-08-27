@@ -95,13 +95,20 @@ Function CarregarTabelaReferencia(ByRef dicSegPorGeobox As Object, ByRef dicLpPo
 
     Dim geo As String, gama As String, marcaRef As String, lp As String, seg As String
 
+    ' --- Lê as 5 colunas de uma vez só num array em memória. Evita milhares de ---
+    ' --- chamadas COM individuais (wsRef.Cells) numa base grande — cada uma é ---
+    ' --- uma exposição a queda de conexão (ex: sync do OneDrive/SharePoint no ---
+    ' --- meio da leitura, causando erro -2147417848 "_Default do Range falhou"). ---
+    Dim arrRef As Variant
+    arrRef = wsRef.Range(wsRef.Cells(2, 1), wsRef.Cells(lastRowRef, 5)).Value
+
     For i = 2 To lastRowRef
-        geo = UCase(Trim(CStr(wsRef.Cells(i, 1).Value)))     ' GEOBOX
+        geo = UCase(Trim(CStr(arrRef(i - 1, 1))))             ' GEOBOX
         geo = NormalizarFormatacaoBasica(geo)                 ' mesma normalização usada na busca
-        marcaRef = UCase(Trim(CStr(wsRef.Cells(i, 2).Value))) ' MARCA
-        gama = UCase(Trim(CStr(wsRef.Cells(i, 3).Value)))    ' GAMA (não usada na busca de segmento/LP)
-        lp = UCase(Trim(CStr(wsRef.Cells(i, 4).Value)))       ' LP
-        seg = UCase(Trim(CStr(wsRef.Cells(i, 5).Value)))      ' SEGMENTO
+        marcaRef = UCase(Trim(CStr(arrRef(i - 1, 2))))        ' MARCA
+        gama = UCase(Trim(CStr(arrRef(i - 1, 3))))            ' GAMA (não usada na busca de segmento/LP)
+        lp = UCase(Trim(CStr(arrRef(i - 1, 4))))              ' LP
+        seg = UCase(Trim(CStr(arrRef(i - 1, 5))))             ' SEGMENTO
 
         ' --- Vota SEGMENTO e LP separadamente para esse GEOBOX, cada um só ---
         ' --- quando o próprio valor não está vazio (linha em branco numa  ---
@@ -203,8 +210,14 @@ Function CarregarTabelaReferencia(ByRef dicSegPorGeobox As Object, ByRef dicLpPo
     If Not wsMarcasExtras Is Nothing Then
         Dim lastRowExtras As Long, j As Long, mExtra As String
         lastRowExtras = wsMarcasExtras.Cells(wsMarcasExtras.Rows.Count, "A").End(xlUp).Row
+        Dim arrExtras As Variant
+        If lastRowExtras >= 2 Then arrExtras = wsMarcasExtras.Range(wsMarcasExtras.Cells(2, 1), wsMarcasExtras.Cells(lastRowExtras, 1)).Value
         For j = 2 To lastRowExtras
-            mExtra = UCase(Trim(CStr(wsMarcasExtras.Cells(j, 1).Value)))
+            If lastRowExtras = 2 Then
+                mExtra = UCase(Trim(CStr(arrExtras(1, 1))))
+            Else
+                mExtra = UCase(Trim(CStr(arrExtras(j - 1, 1))))
+            End If
             If Len(mExtra) > 0 Then
                 If Not dicMarcasUnicas.Exists(mExtra) Then dicMarcasUnicas.Add mExtra, True
                 qtdMarcasExtrasLidas = qtdMarcasExtrasLidas + 1
@@ -230,9 +243,16 @@ Function CarregarTabelaReferencia(ByRef dicSegPorGeobox As Object, ByRef dicLpPo
     If Not wsExcecoes Is Nothing Then
         Dim lastRowExc As Long, padrao As String, marcaCorreta As String
         lastRowExc = wsExcecoes.Cells(wsExcecoes.Rows.Count, "A").End(xlUp).Row
+        Dim arrExcMarca As Variant
+        If lastRowExc >= 2 Then arrExcMarca = wsExcecoes.Range(wsExcecoes.Cells(2, 1), wsExcecoes.Cells(lastRowExc, 2)).Value
         For j = 2 To lastRowExc
-            padrao = UCase(Trim(CStr(wsExcecoes.Cells(j, 1).Value)))
-            marcaCorreta = UCase(Trim(CStr(wsExcecoes.Cells(j, 2).Value)))
+            If lastRowExc = 2 Then
+                padrao = UCase(Trim(CStr(arrExcMarca(1, 1))))
+                marcaCorreta = UCase(Trim(CStr(arrExcMarca(1, 2))))
+            Else
+                padrao = UCase(Trim(CStr(arrExcMarca(j - 1, 1))))
+                marcaCorreta = UCase(Trim(CStr(arrExcMarca(j - 1, 2))))
+            End If
             If Len(padrao) > 0 And Len(marcaCorreta) > 0 Then
                 If Not dicExcecoesMarca.Exists(padrao) Then dicExcecoesMarca.Add padrao, marcaCorreta
                 qtdExcecoesLidas = qtdExcecoesLidas + 1
@@ -261,9 +281,16 @@ Function CarregarTabelaReferencia(ByRef dicSegPorGeobox As Object, ByRef dicLpPo
     If Not wsExcecoesGama Is Nothing Then
         Dim lastRowExcGama As Long, padraoGama As String, gamaCorreta As String
         lastRowExcGama = wsExcecoesGama.Cells(wsExcecoesGama.Rows.Count, "A").End(xlUp).Row
+        Dim arrExcGama As Variant
+        If lastRowExcGama >= 2 Then arrExcGama = wsExcecoesGama.Range(wsExcecoesGama.Cells(2, 1), wsExcecoesGama.Cells(lastRowExcGama, 2)).Value
         For j = 2 To lastRowExcGama
-            padraoGama = UCase(Trim(CStr(wsExcecoesGama.Cells(j, 1).Value)))
-            gamaCorreta = UCase(Trim(CStr(wsExcecoesGama.Cells(j, 2).Value)))
+            If lastRowExcGama = 2 Then
+                padraoGama = UCase(Trim(CStr(arrExcGama(1, 1))))
+                gamaCorreta = UCase(Trim(CStr(arrExcGama(1, 2))))
+            Else
+                padraoGama = UCase(Trim(CStr(arrExcGama(j - 1, 1))))
+                gamaCorreta = UCase(Trim(CStr(arrExcGama(j - 1, 2))))
+            End If
             If Len(padraoGama) > 0 And Len(gamaCorreta) > 0 Then
                 If Not dicExcecoesGama.Exists(padraoGama) Then dicExcecoesGama.Add padraoGama, gamaCorreta
                 qtdExcecoesGamaLidas = qtdExcecoesGamaLidas + 1

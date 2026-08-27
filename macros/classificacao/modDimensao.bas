@@ -30,10 +30,10 @@ Const TAMANHO_MINIMO_DIMENSAO As Long = 4
 
 Function ExtrairDimensao(descricao As String, marca As String, _
                           dicGeoboxPorMarca As Object, dicGeoboxGlobalUnicos As Object, _
-                          dicPadroesLegado As Object) As String
+                          dicPadroesLegado As Object, Optional somenteMinBr As Boolean = False) As String
 
     Dim textoNorm As String
-    textoNorm = NormalizarTextoDimensao(descricao)
+    textoNorm = NormalizarTextoDimensao(descricao, somenteMinBr)
 
     ' --- Segunda versão do texto, com TODOS os espaços removidos. Cobre   ---
     ' --- casos como "245/35 ZR19" (espaço antes do Z, escapa da regra de  ---
@@ -206,7 +206,7 @@ End Function
 '     igual fazia a macro legada nos dois casos hardcoded que ela tratava)
 ' NÃO sobrescreve a descrição original — usada só internamente na extração.
 ' ==========================================================================
-Function NormalizarTextoDimensao(texto As String) As String
+Function NormalizarTextoDimensao(texto As String, Optional somenteMinBr As Boolean = False) As String
     Dim resultado As String
     resultado = NormalizarFormatacaoBasica(texto)
 
@@ -220,22 +220,28 @@ Function NormalizarTextoDimensao(texto As String) As String
     regex.Pattern = "(\d{3})\s*E\s*ARO\s*(\d{2}(?:\.\d)?)"
     resultado = regex.Replace(resultado, "$1/80R$2")
 
-    ' Padrão "NN-NN.NNRNN" (hífen no lugar de "X", ex: "33-12.50R17") ->
-    ' "NNXNN.NNRNN". Só aplica quando "R" vem logo depois do decimal, pra
-    ' não confundir com o padrão "N.NN-NN" (ex: "9.00-20", onde o hífen faz
-    ' o papel do "R" final, tratado depois pela troca hífen->R na gravação).
-    regex.Pattern = "(\d{2,3})-(\d{1,2}\.\d{1,2})R"
-    resultado = regex.Replace(resultado, "$1X$2R")
+    ' As duas regras de hífen abaixo assumem que "-" numa medida é sempre
+    ' troca de digitação de "X" ou "/". Em bases BR/MIN existem GEOBOX com
+    ' "-" que são válidos como estão (ex: "7.50-16", "9.00-20") — nelas essa
+    ' suposição não vale, então as duas ficam desligadas nesse modo.
+    If Not somenteMinBr Then
+        ' Padrão "NN-NN.NNRNN" (hífen no lugar de "X", ex: "33-12.50R17") ->
+        ' "NNXNN.NNRNN". Só aplica quando "R" vem logo depois do decimal, pra
+        ' não confundir com o padrão "N.NN-NN" (ex: "9.00-20", onde o hífen faz
+        ' o papel do "R" final, tratado depois pela troca hífen->R na gravação).
+        regex.Pattern = "(\d{2,3})-(\d{1,2}\.\d{1,2})R"
+        resultado = regex.Replace(resultado, "$1X$2R")
 
-    ' Padrão "NNN-NNRNN" (hífen no lugar de "/", ex: "255-35R19", vindo de
-    ' "255 - 35 R19" na descrição) -> "NNN/NNRNN". Só aplica quando o
-    ' segundo número é inteiro (sem decimal — esse caso já foi tratado pela
-    ' regra acima) e "R" vem logo em seguida — medida radial sempre usa "/"
-    ' entre largura e perfil, então um hífen ali só pode ser troca de
-    ' digitação. Não aplica em pneus diagonais tipo "9.00-20"/"7.50-16",
-    ' que não têm "R" colado logo depois do segundo número.
-    regex.Pattern = "(\d{2,3})-(\d{2,3})R"
-    resultado = regex.Replace(resultado, "$1/$2R")
+        ' Padrão "NNN-NNRNN" (hífen no lugar de "/", ex: "255-35R19", vindo de
+        ' "255 - 35 R19" na descrição) -> "NNN/NNRNN". Só aplica quando o
+        ' segundo número é inteiro (sem decimal — esse caso já foi tratado pela
+        ' regra acima) e "R" vem logo em seguida — medida radial sempre usa "/"
+        ' entre largura e perfil, então um hífen ali só pode ser troca de
+        ' digitação. Não aplica em pneus diagonais tipo "9.00-20"/"7.50-16",
+        ' que não têm "R" colado logo depois do segundo número.
+        regex.Pattern = "(\d{2,3})-(\d{2,3})R"
+        resultado = regex.Replace(resultado, "$1/$2R")
+    End If
 
 SemRegex:
     NormalizarTextoDimensao = resultado

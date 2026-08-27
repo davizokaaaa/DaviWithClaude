@@ -162,10 +162,17 @@ Sub ClassificarTudo()
         ws.Cells(i, colMarca).Value = marca
 
         ' --- DIMENSÃO: extraída da descrição (medida conhecida na Tabela de Referência) ---
-        dimensaoBruta = ExtrairDimensao(descricao, marca, dicGeoboxPorMarca, dicGeoboxGlobalUnicos, dicPadroesLegado)
+        dimensaoBruta = ExtrairDimensao(descricao, marca, dicGeoboxPorMarca, dicGeoboxGlobalUnicos, dicPadroesLegado, somenteMinBr)
 
         ' --- DIMENSÃO: substitui todo e qualquer hífen por "R" antes de gravar ---
-        dimensaoFinal = Replace(dimensaoBruta, "-", "R")
+        ' --- (pulado em bases BR/MIN: lá o "-" faz parte de GEOBOX válidos    ---
+        ' --- — ex: "7.50-16", "9.00-20" — e a troca forçada corrompe o valor, ---
+        ' --- fazendo comparações futuras darem vazio).                       ---
+        If somenteMinBr Then
+            dimensaoFinal = dimensaoBruta
+        Else
+            dimensaoFinal = Replace(dimensaoBruta, "-", "R")
+        End If
         ws.Cells(i, colDimensao).Value = dimensaoFinal
 
         ' --- RT/OE ---

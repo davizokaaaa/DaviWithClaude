@@ -107,6 +107,13 @@ Sub ClassificarTudo()
                            "Se SIM, a Tabela de Referência será filtrada para considerar apenas as LP ""MIN"" e ""BR"".", _
                            vbYesNo + vbQuestion, "Tipo de base") = vbYes)
 
+    ' --- A lista legada (modDicionarios.CarregarPadroesGeoboxLegado) é uma  ---
+    ' --- lista fixa de medidas de pneu de carro/caminhão, sem relação com   ---
+    ' --- nenhuma LP. Em modo BR/MIN ela NÃO deve entrar como fallback —     ---
+    ' --- era ela que fazia a extração de GEOBOX "vazar" medidas de outras  ---
+    ' --- LPs (ex: "9.00-20") que não têm nada a ver com a base BR/MIN.      ---
+    If somenteMinBr Then Set dicPadroesLegado = CreateObject("Scripting.Dictionary")
+
     If Not CarregarTabelaReferencia(dicSegPorGeobox, dicLpPorGeobox, arrMarcas, _
                                      dicGeoboxPorMarca, dicGeoboxGlobalUnicos, dicExcecoesMarca, _
                                      dicGamasPorMarca, dicGamaGlobalUnicos, dicMarcaPorGama, dicExcecoesGama, _
@@ -154,6 +161,17 @@ Sub ClassificarTudo()
     amostraVazios = ""
 
     For i = 2 To lastRow
+
+        ' --- Progresso na barra de status a cada 100 linhas + DoEvents:    ---
+        ' --- sem isso, o Windows mostra o Excel como "Não está respondendo" ---
+        ' --- durante um laço longo (mesmo funcionando normalmente por      ---
+        ' --- baixo), o que é indistinguível de um crash de verdade. Com    ---
+        ' --- isso dá pra ver o andamento e confirmar que ainda está vivo.  ---
+        If i Mod 100 = 0 Or i = lastRow Then
+            Application.StatusBar = "Classificando linha " & i & " de " & lastRow & _
+                                     " (" & Format((i - 1) / (lastRow - 1), "0%") & ")"
+            DoEvents
+        End If
 
         descricao = UCase(Trim(CStr(ws.Cells(i, colDescricao).Value)))
         adquirente = UCase(Trim(CStr(ws.Cells(i, colAdquirente).Value)))
@@ -249,6 +267,7 @@ Sub ClassificarTudo()
     Application.EnableEvents = True
     Application.ScreenUpdating = True
     Application.Calculation = calcAnterior
+    Application.StatusBar = False
 
     ' --- Joga a lista completa de linhas vazias numa aba auxiliar, mais    ---
     ' --- fácil de ler/copiar do que uma caixa de mensagem gigante.        ---
@@ -294,6 +313,7 @@ Finally:
     Application.EnableEvents = True
     Application.ScreenUpdating = True
     Application.Calculation = calcAnterior
+    Application.StatusBar = False
     MsgBox "A macro parou por causa de um erro: " & vbCrLf & vbCrLf & Err.Description, vbCritical
 
 End Sub

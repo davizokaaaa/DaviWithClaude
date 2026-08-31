@@ -98,13 +98,14 @@ Sub ClassificarTudo()
     Dim dicMarcaPorGama As Object
     Dim diagnosticoRef As String
 
-    ' --- Pergunta se a base é de BR/MIN (Beyond Road/Mineração). Essas LPs   ---
-    ' --- têm GEOBOX e GAMA próprios, sem interseção com as demais LPs — se  ---
-    ' --- for BR/MIN, a Tabela de Referência é filtrada só para essas duas   ---
-    ' --- LPs, pra não carregar o resto da Referência à toa nessa base.      ---
+    ' --- Pergunta se a base é de BR/MIN (Beyond Road/Mineração). Se SIM, a  ---
+    ' --- Tabela de Referência é filtrada pela coluna F ("Base de           ---
+    ' --- referência") — só as 4 fontes STORM de BR/MIN entram — em vez de  ---
+    ' --- LP, pra não carregar o resto da Referência à toa nessa base.       ---
     Dim somenteMinBr As Boolean
     somenteMinBr = (MsgBox("Esta base é de BR/MIN (Beyond Road / Mineração)?" & vbCrLf & vbCrLf & _
-                           "Se SIM, a Tabela de Referência será filtrada para considerar apenas as LP ""MIN"" e ""BR"".", _
+                           "Se SIM, a Tabela de Referência será filtrada pela coluna ""Base de referência"" " & _
+                           "(apenas STORM 40117090, 40118090, 40119090 e 40129090).", _
                            vbYesNo + vbQuestion, "Tipo de base") = vbYes)
 
     ' --- A lista legada (modDicionarios.CarregarPadroesGeoboxLegado) é uma  ---

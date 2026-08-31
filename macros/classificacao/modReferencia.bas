@@ -29,9 +29,11 @@ Option Explicit
 '                          ex: "PTNZ" -> "POTENZA"), checada antes da busca normal
 '
 ' somenteMinBr: quando True, ignora (não entra em nenhum dicionário) qualquer
-' linha da aba "Referencia" cuja LP não seja "MIN" ou "BR". Usado pra bases de
-' Beyond Road (MIN/BR têm GEOBOX e GAMA próprios, sem interseção com as
-' demais LPs) — evita carregar o resto da Referência à toa nesse caso.
+' linha da aba "Referencia" cuja coluna F ("Base de referência") não seja uma
+' das 4 fontes STORM de Beyond Road/Mineração (40117090, 40118090, 40119090,
+' 40129090). Usado pra bases de BR/MIN — evita carregar o resto da Referência
+' à toa, e é mais preciso que filtrar por LP (MIN/BR podem estar espalhados
+' em outras fontes fora do escopo de Beyond Road).
 ' ==========================================================================
 Function CarregarTabelaReferencia(ByRef dicSegPorGeobox As Object, ByRef dicLpPorGeobox As Object, _
                                    ByRef arrMarcas() As String, ByRef dicGeoboxPorMarca As Object, _
@@ -96,28 +98,39 @@ Function CarregarTabelaReferencia(ByRef dicSegPorGeobox As Object, ByRef dicLpPo
     Set dicGeoboxSetPorMarca = CreateObject("Scripting.Dictionary")
     Set dicGamaSetPorMarca = CreateObject("Scripting.Dictionary")
 
-    ' Usa a maior "última linha com dado" entre as 5 colunas (Geobox, Marca,
-    ' Gama, LP, Segmento) em vez de só a coluna A. Uma linha só com Marca
-    ' preenchida (sem Geobox) precisa ser lida do mesmo jeito — se olhássemos
-    ' só a coluna A, o laço pararia antes de chegar nela.
+    ' --- Modo BR/MIN: filtra pela coluna F ("Base de referência") em vez  ---
+    ' --- de LP. Uma mesma LP (MIN/BR) podia estar espalhada em outras     ---
+    ' --- fontes/linhas fora do escopo de Beyond Road — filtrar direto     ---
+    ' --- pela fonte de origem é mais preciso.                             ---
+    Dim dicFontesMinBr As Object
+    Set dicFontesMinBr = CreateObject("Scripting.Dictionary")
+    dicFontesMinBr.Add "STORM 40117090", True
+    dicFontesMinBr.Add "STORM 40118090", True
+    dicFontesMinBr.Add "STORM 40119090", True
+    dicFontesMinBr.Add "STORM 40129090", True
+
+    ' Usa a maior "última linha com dado" entre as 6 colunas (Geobox, Marca,
+    ' Gama, LP, Segmento, Base de referência) em vez de só a coluna A. Uma
+    ' linha só com Marca preenchida (sem Geobox) precisa ser lida do mesmo
+    ' jeito — se olhássemos só a coluna A, o laço pararia antes de chegar nela.
     Dim lastRowRef As Long, i As Long
     lastRowRef = 1
     Dim colRef As Long, ultimaLinhaColRef As Long
-    For colRef = 1 To 5
+    For colRef = 1 To 6
         ultimaLinhaColRef = wsRef.Cells(wsRef.Rows.Count, colRef).End(xlUp).Row
         If ultimaLinhaColRef > lastRowRef Then lastRowRef = ultimaLinhaColRef
     Next colRef
 
-    Dim geo As String, gama As String, marcaRef As String, lp As String, seg As String
+    Dim geo As String, gama As String, marcaRef As String, lp As String, seg As String, baseRef As String
     Dim qtdLinhasIgnoradasMinBr As Long
     qtdLinhasIgnoradasMinBr = 0
 
-    ' --- Lê as 5 colunas de uma vez só num array em memória. Evita milhares de ---
+    ' --- Lê as 6 colunas de uma vez só num array em memória. Evita milhares de ---
     ' --- chamadas COM individuais (wsRef.Cells) numa base grande — cada uma é ---
     ' --- uma exposição a queda de conexão (ex: sync do OneDrive/SharePoint no ---
     ' --- meio da leitura, causando erro -2147417848 "_Default do Range falhou"). ---
     Dim arrRef As Variant
-    arrRef = wsRef.Range(wsRef.Cells(2, 1), wsRef.Cells(lastRowRef, 5)).Value
+    arrRef = wsRef.Range(wsRef.Cells(2, 1), wsRef.Cells(lastRowRef, 6)).Value
 
     For i = 2 To lastRowRef
         geo = UCase(Trim(CStr(arrRef(i - 1, 1))))             ' GEOBOX
@@ -126,10 +139,12 @@ Function CarregarTabelaReferencia(ByRef dicSegPorGeobox As Object, ByRef dicLpPo
         gama = UCase(Trim(CStr(arrRef(i - 1, 3))))            ' GAMA (não usada na busca de segmento/LP)
         lp = UCase(Trim(CStr(arrRef(i - 1, 4))))              ' LP
         seg = UCase(Trim(CStr(arrRef(i - 1, 5))))             ' SEGMENTO
+        baseRef = UCase(Trim(CStr(arrRef(i - 1, 6))))         ' BASE DE REFERÊNCIA
 
-        ' --- Base BR/MIN: ignora qualquer linha que não seja MIN ou BR ---
+        ' --- Base BR/MIN: ignora qualquer linha cuja "Base de referência" ---
+        ' --- não seja uma das 4 fontes STORM de Beyond Road/Mineração.    ---
         If somenteMinBr Then
-            If lp <> "MIN" And lp <> "BR" Then
+            If Not dicFontesMinBr.Exists(baseRef) Then
                 qtdLinhasIgnoradasMinBr = qtdLinhasIgnoradasMinBr + 1
                 GoTo ProximaLinhaRef
             End If
@@ -216,9 +231,9 @@ ProximaLinhaRef:
     Set dicLpPorGeobox = MontarDicMaioriaPorGeobox(dicVotosLpPorGeo)
 
     diagnostico = diagnostico & "Última linha lida na aba ""Referencia"": " & lastRowRef & vbCrLf
-    diagnostico = diagnostico & "Modo BR/MIN ativado? " & IIf(somenteMinBr, "SIM (só LP=MIN ou LP=BR)", "Não") & vbCrLf
+    diagnostico = diagnostico & "Modo BR/MIN ativado? " & IIf(somenteMinBr, "SIM (só ""Base de referência"" = STORM 40117090/40118090/40119090/40129090)", "Não") & vbCrLf
     If somenteMinBr Then
-        diagnostico = diagnostico & "Linhas da Referência ignoradas (LP diferente de MIN/BR): " & qtdLinhasIgnoradasMinBr & vbCrLf
+        diagnostico = diagnostico & "Linhas da Referência ignoradas (Base de referência fora das 4 fontes STORM): " & qtdLinhasIgnoradasMinBr & vbCrLf
     End If
     diagnostico = diagnostico & "Total de GEOBOX únicos com SEGMENTO mapeado: " & dicSegPorGeobox.Count & vbCrLf
     diagnostico = diagnostico & "Total de GEOBOX únicos com LP mapeado: " & dicLpPorGeobox.Count & vbCrLf

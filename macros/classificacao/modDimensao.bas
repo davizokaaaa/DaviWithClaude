@@ -160,6 +160,19 @@ Function NormalizarFormatacaoBasica(texto As String) As String
     resultado = Replace(resultado, Chr(215), "X")   ' fallback caso venha como ANSI
     resultado = Replace(resultado, "*", "X")
 
+    ' Traços "parecidos" com hífen, mas que são caracteres Unicode diferentes
+    ' (comuns em texto colado de Excel/Word/PDF) — todos viram o hífen comum
+    ' "-" (U+002D). Sem isso, um GEOBOX como "33X12-20/7.50" registrado com
+    ' um desses traços nunca bate com a mesma medida digitada com hífen
+    ' normal na descrição (ou vice-versa), mesmo sendo visualmente idênticos.
+    resultado = Replace(resultado, ChrW(8211), "-") ' en dash (U+2013)
+    resultado = Replace(resultado, ChrW(8212), "-") ' em dash (U+2014)
+    resultado = Replace(resultado, ChrW(8722), "-") ' sinal de menos matematico (U+2212)
+    resultado = Replace(resultado, ChrW(8209), "-") ' hifen nao separavel (U+2011)
+    ' Espaço não separável (U+00A0) -> espaço comum, pra não escapar das
+    ' regras de colapso de espaço logo abaixo.
+    resultado = Replace(resultado, ChrW(160), " ")
+
     Dim i As Long
     For i = 1 To 3 ' algumas passadas pra colapsar espaços múltiplos
         resultado = Replace(resultado, " R", "R")

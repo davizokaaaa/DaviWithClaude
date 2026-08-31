@@ -40,7 +40,7 @@ Function CarregarTabelaReferencia(ByRef dicSegPorGeobox As Object, ByRef dicLpPo
                                    ByRef dicGeoboxGlobalUnicos As Object, ByRef dicExcecoesMarca As Object, _
                                    ByRef dicGamasPorMarca As Object, ByRef dicGamaGlobalUnicos As Object, _
                                    ByRef dicMarcaPorGama As Object, ByRef dicExcecoesGama As Object, _
-                                   ByRef dicGeoboxCanonicoParaOriginal As Object, _
+                                   ByRef dicGeoboxTokenParaOriginal As Object, _
                                    ByVal somenteMinBr As Boolean, ByRef diagnostico As String) As Boolean
 
     On Error GoTo ErroAbrir
@@ -73,7 +73,7 @@ Function CarregarTabelaReferencia(ByRef dicSegPorGeobox As Object, ByRef dicLpPo
     Dim wsRef As Worksheet
     Set wsRef = wbRef.Sheets("Referencia")
 
-    Set dicGeoboxCanonicoParaOriginal = CreateObject("Scripting.Dictionary")
+    Set dicGeoboxTokenParaOriginal = CreateObject("Scripting.Dictionary")
 
     Set dicGeoboxPorMarca = CreateObject("Scripting.Dictionary")
     Set dicGeoboxGlobalUnicos = CreateObject("Scripting.Dictionary")
@@ -211,16 +211,19 @@ Function CarregarTabelaReferencia(ByRef dicSegPorGeobox As Object, ByRef dicLpPo
         If Len(geo) > 0 Then
             If Not dicGeoboxGlobalUnicos.Exists(geo) Then dicGeoboxGlobalUnicos.Add geo, True
 
-            ' Forma canônica dessa medida (largura/perfil/aro, ignorando R vs
-            ' "-" e outras diferenças de formatação) -> valor original
-            ' cadastrado. Primeira ocorrência "ganha" em caso de duas linhas
-            ' com formatações diferentes pra mesma medida (mantém consistência
-            ' com o resto do carregamento, que também usa "primeiro encontrado").
-            Dim geoCanon As String
-            geoCanon = CanonicalizarGeobox(geo)
-            If Len(geoCanon) > 0 Then
-                If Not dicGeoboxCanonicoParaOriginal.Exists(geoCanon) Then
-                    dicGeoboxCanonicoParaOriginal.Add geoCanon, geo
+            ' Token normalizado dessa medida (só limpeza de formatação: sem
+            ' espaço, sem hífen sobrando depois de R) -> valor original
+            ' cadastrado. SÓ usado no modo BR/MIN (ver modDimensao.ExtrairDimensao,
+            ' Passo 0) — no modo normal esse dicionário fica vazio e não afeta
+            ' em nada a extração que já funciona. Primeira ocorrência "ganha"
+            ' em caso de duas linhas formatadas diferente pra mesma medida.
+            If somenteMinBr And Len(geo) >= 4 Then
+                Dim geoToken As String
+                geoToken = NormalizarTokenGeobox(geo)
+                If Len(geoToken) > 0 Then
+                    If Not dicGeoboxTokenParaOriginal.Exists(geoToken) Then
+                        dicGeoboxTokenParaOriginal.Add geoToken, geo
+                    End If
                 End If
             End If
         End If

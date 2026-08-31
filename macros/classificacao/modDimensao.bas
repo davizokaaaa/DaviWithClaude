@@ -29,46 +29,51 @@ Option Explicit
 Const TAMANHO_MINIMO_DIMENSAO As Long = 4
 
 ' ==========================================================================
-' Extrai da medida uma forma CANÔNICA "LARGURA/PERFILRARO" (largura 2-3
-' dígitos, perfil 1-3 dígitos, aro 1-2 dígitos com decimal opcional),
-' aceitando "R" OU "-" entre perfil e aro na origem — sempre usando "R" na
-' chave canônica, só para efeito de COMPARAÇÃO (nunca é gravado; o valor
-' escrito continua sendo o que está cadastrado na Referência). Existe pra
-' comparar GEOBOX pela ESTRUTURA da medida, não pelo texto literal — assim
-' "400/60R15.5" bate com "400/60R15.5" mesmo que um dos dois lados tenha
-' vindo com espaço extra, zero a mais/a menos, hífen no lugar de R etc.,
-' sem precisar cadastrar cada variação de formatação manualmente.
-' Devolve "" se o texto não tiver esse formato (ex: medidas tipo "9.00-20",
-' sem barra, continuam só na comparação literal já existente).
+' TOKENIZAÇÃO de GEOBOX — usada SÓ no modo BR/MIN (somenteMinBr = True).
+' Diferente da comparação literal por substring (usada no resto da macro,
+' que já funciona e não é mexida aqui), isto NÃO tenta reconhecer o
+' "formato" da medida (largura/perfil/aro etc.) — só isola um trecho de
+' texto que parece ser um código de medida (dígitos + "." "/" "-" "R" "X"
+' colados) e limpa diferenças puramente de formatação (espaço, "R-" com
+' hífen sobrando) antes de comparar. A decisão de "isso é uma medida
+' válida" continua sendo só: existe EXATAMENTE (depois dessa limpeza) no
+' dicionário da Tabela de Referência? Se não existir, não vira resultado —
+' nunca inventa nem adivinha uma medida que não esteja cadastrada.
 ' ==========================================================================
-Private Const PADRAO_GEOBOX_CANONICO As String = "(\d{2,3})\/(\d{1,3})[R\-](\d{1,2}(?:\.\d{1,2})?)"
 
-Function CanonicalizarGeobox(valor As String) As String
-    On Error GoTo SemMatch
-    Dim regex As Object
-    Set regex = CreateObject("VBScript.RegExp")
-    regex.Global = False
-    regex.IgnoreCase = True
-    regex.Pattern = "^" & PADRAO_GEOBOX_CANONICO & "$"
+' Remove hífen sobrando logo depois de "R" (ex: "50/80R-57" -> "50/80R57")
+' e separadores soltos nas pontas do trecho — só limpeza de formatação,
+' não interpretação de estrutura.
+Function NormalizarTokenGeobox(valor As String) As String
+    Dim resultado As String
+    resultado = UCase(valor)
+    resultado = Replace(resultado, "R-", "R")
 
-    If regex.Test(valor) Then
-        Dim m As Object
-        Set m = regex.Execute(valor)(0)
-        CanonicalizarGeobox = m.SubMatches(0) & "/" & m.SubMatches(1) & "R" & m.SubMatches(2)
-        Exit Function
-    End If
+    Do While Len(resultado) > 0 And InStr("-./", Left(resultado, 1)) > 0
+        resultado = Mid(resultado, 2)
+    Loop
+    Do While Len(resultado) > 0 And InStr("-./", Right(resultado, 1)) > 0
+        resultado = Left(resultado, Len(resultado) - 1)
+    Loop
 
-SemMatch:
-    CanonicalizarGeobox = ""
+    NormalizarTokenGeobox = resultado
 End Function
 
-' ==========================================================================
-' Varre um texto (descrição) inteiro e devolve um Dictionary com todas as
-' formas canônicas de GEOBOX encontradas nele (pode ter mais de uma medida
-' mencionada). Diferente de CanonicalizarGeobox (que exige o texto INTEIRO
-' ser só a medida), aqui o padrão pode aparecer em qualquer trecho.
-' ==========================================================================
-Private Function ExtrairCandidatosCanonicos(texto As String) As Object
+' Um trecho só é candidato a GEOBOX se tiver pelo menos um separador típico
+' de medida (/, -, R ou X) — filtra números soltos (código de pedido,
+' registro etc.) que não têm nenhum desses caracteres.
+Private Function ContemSeparadorGeobox(valor As String) As Boolean
+    ContemSeparadorGeobox = (InStr(1, valor, "/", vbTextCompare) > 0 _
+        Or InStr(1, valor, "-", vbTextCompare) > 0 _
+        Or InStr(1, valor, "R", vbTextCompare) > 0 _
+        Or InStr(1, valor, "X", vbTextCompare) > 0)
+End Function
+
+' Varre um texto (já sem espaços) e devolve um Dictionary com os tokens de
+' GEOBOX normalizados encontrados nele (pode ter mais de uma medida
+' mencionada). Cada token é só um trecho contíguo de caracteres típicos de
+' medida — não uma "forma" pré-definida.
+Function ExtrairCandidatosTokenizados(textoSemEspaco As String) As Object
     Dim dicResultado As Object
     Set dicResultado = CreateObject("Scripting.Dictionary")
 
@@ -77,25 +82,29 @@ Private Function ExtrairCandidatosCanonicos(texto As String) As Object
     Set regex = CreateObject("VBScript.RegExp")
     regex.Global = True
     regex.IgnoreCase = True
-    regex.Pattern = PADRAO_GEOBOX_CANONICO
+    regex.Pattern = "[0-9XR.\-\/]{4,}"
 
-    If regex.Test(texto) Then
+    If regex.Test(textoSemEspaco) Then
         Dim matches As Object, m As Object
-        Set matches = regex.Execute(texto)
+        Set matches = regex.Execute(textoSemEspaco)
         For Each m In matches
-            Dim canon As String
-            canon = m.SubMatches(0) & "/" & m.SubMatches(1) & "R" & m.SubMatches(2)
-            If Not dicResultado.Exists(canon) Then dicResultado.Add canon, True
+            If ContemSeparadorGeobox(m.Value) Then
+                Dim tok As String
+                tok = NormalizarTokenGeobox(m.Value)
+                If Len(tok) >= TAMANHO_MINIMO_DIMENSAO Then
+                    If Not dicResultado.Exists(tok) Then dicResultado.Add tok, True
+                End If
+            End If
         Next m
     End If
 
 SemRegex:
-    Set ExtrairCandidatosCanonicos = dicResultado
+    Set ExtrairCandidatosTokenizados = dicResultado
 End Function
 
 Function ExtrairDimensao(descricao As String, marca As String, _
                           dicGeoboxPorMarca As Object, dicGeoboxGlobalUnicos As Object, _
-                          dicPadroesLegado As Object, dicGeoboxCanonicoParaOriginal As Object, _
+                          dicPadroesLegado As Object, dicGeoboxTokenParaOriginal As Object, _
                           Optional somenteMinBr As Boolean = False) As String
 
     Dim textoNorm As String
@@ -138,24 +147,24 @@ Function ExtrairDimensao(descricao As String, marca As String, _
     melhor = ""
     melhorLen = 0
 
-    ' --- Passo 0: comparação CANÔNICA (por estrutura, não por texto literal) ---
-    ' --- Roda ANTES da comparação literal — se a medida bater estruturalmente ---
-    ' --- (mesma largura/perfil/aro), usa o valor original cadastrado na       ---
-    ' --- Referência, mesmo que a formatação exata (espaço, R vs -, zero à    ---
-    ' --- direita) seja diferente entre descrição e catálogo.                 ---
-    Dim dicCandidatosCanon As Object
-    Set dicCandidatosCanon = ExtrairCandidatosCanonicos(textoNorm)
-    Dim candCanon As Variant
-    For Each candCanon In dicCandidatosCanon.Keys
-        If dicGeoboxCanonicoParaOriginal.Exists(CStr(candCanon)) Then
-            Dim origCanon As String
-            origCanon = CStr(dicGeoboxCanonicoParaOriginal(CStr(candCanon)))
-            If Len(origCanon) > melhorLen Then
-                melhorLen = Len(origCanon)
-                melhor = origCanon
+    ' --- Passo 0: tokenização exata — SÓ no modo BR/MIN --- Fora desse modo,
+    ' --- a extração continua 100% igual à que já funciona (busca literal   ---
+    ' --- por substring abaixo), sem nenhuma mudança de comportamento.      ---
+    If somenteMinBr Then
+        Dim dicCandidatosToken As Object
+        Set dicCandidatosToken = ExtrairCandidatosTokenizados(textoSemEspaco)
+        Dim candToken As Variant
+        For Each candToken In dicCandidatosToken.Keys
+            If dicGeoboxTokenParaOriginal.Exists(CStr(candToken)) Then
+                Dim origToken As String
+                origToken = CStr(dicGeoboxTokenParaOriginal(CStr(candToken)))
+                If Len(origToken) > melhorLen Then
+                    melhorLen = Len(origToken)
+                    melhor = origToken
+                End If
             End If
-        End If
-    Next candCanon
+        Next candToken
+    End If
 
     ' --- Medidas conhecidas DAQUELA marca E busca ampla (qualquer marca) ---
     ' IMPORTANTE: as duas buscas SEMPRE rodam, contra as DUAS versões do

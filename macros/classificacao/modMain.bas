@@ -96,7 +96,7 @@ Sub ClassificarTudo()
     Dim dicGeoboxPorMarca As Object, dicGeoboxGlobalUnicos As Object
     Dim dicGamasPorMarca As Object, dicGamaGlobalUnicos As Object, dicExcecoesGama As Object
     Dim dicMarcaPorGama As Object
-    Dim dicGeoboxCanonicoParaOriginal As Object
+    Dim dicGeoboxTokenParaOriginal As Object
     Dim diagnosticoRef As String
 
     ' --- Pergunta se a base é de BR/MIN (Beyond Road/Mineração). Se SIM, a  ---
@@ -119,7 +119,7 @@ Sub ClassificarTudo()
     If Not CarregarTabelaReferencia(dicSegPorGeobox, dicLpPorGeobox, arrMarcas, _
                                      dicGeoboxPorMarca, dicGeoboxGlobalUnicos, dicExcecoesMarca, _
                                      dicGamasPorMarca, dicGamaGlobalUnicos, dicMarcaPorGama, dicExcecoesGama, _
-                                     dicGeoboxCanonicoParaOriginal, somenteMinBr, diagnosticoRef) Then
+                                     dicGeoboxTokenParaOriginal, somenteMinBr, diagnosticoRef) Then
         MsgBox "Não foi possível abrir a Tabela de Referência em:" & vbCrLf & REF_FILE_PATH, vbCritical
         Exit Sub
     End If
@@ -193,7 +193,7 @@ Sub ClassificarTudo()
         ws.Cells(i, colMarca).Value = marca
 
         ' --- DIMENSÃO: extraída da descrição (medida conhecida na Tabela de Referência) ---
-        dimensaoBruta = ExtrairDimensao(descricao, marca, dicGeoboxPorMarca, dicGeoboxGlobalUnicos, dicPadroesLegado, dicGeoboxCanonicoParaOriginal, somenteMinBr)
+        dimensaoBruta = ExtrairDimensao(descricao, marca, dicGeoboxPorMarca, dicGeoboxGlobalUnicos, dicPadroesLegado, dicGeoboxTokenParaOriginal, somenteMinBr)
 
         ' --- DIMENSÃO: substitui todo e qualquer hífen por "R" antes de gravar ---
         ' --- (pulado em bases BR/MIN: lá o "-" faz parte de GEOBOX válidos    ---

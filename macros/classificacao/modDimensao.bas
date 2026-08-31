@@ -52,7 +52,7 @@ Function ExtrairDimensao(descricao As String, marca As String, _
     ' --- (existe no catálogo? tamanho mínimo?) continua sendo feita nos  ---
     ' --- mesmos laços abaixo, como qualquer outro trecho da descrição.   ---
     Dim candidatoExtenso As String
-    candidatoExtenso = ExtrairDimensaoPorExtenso(descricao)
+    candidatoExtenso = ExtrairDimensaoPorExtenso(descricao, somenteMinBr)
     If Len(candidatoExtenso) > 0 Then
         textoNorm = textoNorm & " " & candidatoExtenso
         textoSemEspaco = textoSemEspaco & Replace(candidatoExtenso, " ", "")

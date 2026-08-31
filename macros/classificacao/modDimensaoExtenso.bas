@@ -25,7 +25,18 @@ Option Explicit
 ' primeiro candidato montado (ou "" se nenhum bateu). Não decide sozinho —
 ' quem valida contra o catálogo é modDimensao.ExtrairDimensao.
 ' ==========================================================================
-Function ExtrairDimensaoPorExtenso(descricao As String) As String
+' somenteMinBr: as 3 funções deste módulo assumem construção RADIAL e sempre
+' montam o candidato com "/" e "R" (ex: "115/70R15"), não importa o que veio
+' na descrição original. Isso é certo pra laudos radiais escritos por
+' extenso, mas errado pra pneus diagonais BR/MIN (que usam "-", ex:
+' "115-70-15") — forçaria um candidato num formato que nunca bate com o
+' catálogo. Por isso, em modo BR/MIN, este módulo não entra em ação.
+Function ExtrairDimensaoPorExtenso(descricao As String, Optional somenteMinBr As Boolean = False) As String
+    If somenteMinBr Then
+        ExtrairDimensaoPorExtenso = ""
+        Exit Function
+    End If
+
     Dim textoNorm As String
     textoNorm = NormalizarFormatacaoBasica(descricao)
 

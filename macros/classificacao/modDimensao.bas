@@ -28,9 +28,75 @@ Option Explicit
 ' menor medida real (tipo "9R20") ainda tem pelo menos 4 caracteres.
 Const TAMANHO_MINIMO_DIMENSAO As Long = 4
 
+' ==========================================================================
+' Extrai da medida uma forma CANÔNICA "LARGURA/PERFILRARO" (largura 2-3
+' dígitos, perfil 1-3 dígitos, aro 1-2 dígitos com decimal opcional),
+' aceitando "R" OU "-" entre perfil e aro na origem — sempre usando "R" na
+' chave canônica, só para efeito de COMPARAÇÃO (nunca é gravado; o valor
+' escrito continua sendo o que está cadastrado na Referência). Existe pra
+' comparar GEOBOX pela ESTRUTURA da medida, não pelo texto literal — assim
+' "400/60R15.5" bate com "400/60R15.5" mesmo que um dos dois lados tenha
+' vindo com espaço extra, zero a mais/a menos, hífen no lugar de R etc.,
+' sem precisar cadastrar cada variação de formatação manualmente.
+' Devolve "" se o texto não tiver esse formato (ex: medidas tipo "9.00-20",
+' sem barra, continuam só na comparação literal já existente).
+' ==========================================================================
+Private Const PADRAO_GEOBOX_CANONICO As String = "(\d{2,3})\/(\d{1,3})[R\-](\d{1,2}(?:\.\d{1,2})?)"
+
+Function CanonicalizarGeobox(valor As String) As String
+    On Error GoTo SemMatch
+    Dim regex As Object
+    Set regex = CreateObject("VBScript.RegExp")
+    regex.Global = False
+    regex.IgnoreCase = True
+    regex.Pattern = "^" & PADRAO_GEOBOX_CANONICO & "$"
+
+    If regex.Test(valor) Then
+        Dim m As Object
+        Set m = regex.Execute(valor)(0)
+        CanonicalizarGeobox = m.SubMatches(0) & "/" & m.SubMatches(1) & "R" & m.SubMatches(2)
+        Exit Function
+    End If
+
+SemMatch:
+    CanonicalizarGeobox = ""
+End Function
+
+' ==========================================================================
+' Varre um texto (descrição) inteiro e devolve um Dictionary com todas as
+' formas canônicas de GEOBOX encontradas nele (pode ter mais de uma medida
+' mencionada). Diferente de CanonicalizarGeobox (que exige o texto INTEIRO
+' ser só a medida), aqui o padrão pode aparecer em qualquer trecho.
+' ==========================================================================
+Private Function ExtrairCandidatosCanonicos(texto As String) As Object
+    Dim dicResultado As Object
+    Set dicResultado = CreateObject("Scripting.Dictionary")
+
+    On Error GoTo SemRegex
+    Dim regex As Object
+    Set regex = CreateObject("VBScript.RegExp")
+    regex.Global = True
+    regex.IgnoreCase = True
+    regex.Pattern = PADRAO_GEOBOX_CANONICO
+
+    If regex.Test(texto) Then
+        Dim matches As Object, m As Object
+        Set matches = regex.Execute(texto)
+        For Each m In matches
+            Dim canon As String
+            canon = m.SubMatches(0) & "/" & m.SubMatches(1) & "R" & m.SubMatches(2)
+            If Not dicResultado.Exists(canon) Then dicResultado.Add canon, True
+        Next m
+    End If
+
+SemRegex:
+    Set ExtrairCandidatosCanonicos = dicResultado
+End Function
+
 Function ExtrairDimensao(descricao As String, marca As String, _
                           dicGeoboxPorMarca As Object, dicGeoboxGlobalUnicos As Object, _
-                          dicPadroesLegado As Object, Optional somenteMinBr As Boolean = False) As String
+                          dicPadroesLegado As Object, dicGeoboxCanonicoParaOriginal As Object, _
+                          Optional somenteMinBr As Boolean = False) As String
 
     Dim textoNorm As String
     textoNorm = NormalizarTextoDimensao(descricao, somenteMinBr)
@@ -71,6 +137,25 @@ Function ExtrairDimensao(descricao As String, marca As String, _
     Dim melhor As String, melhorLen As Long
     melhor = ""
     melhorLen = 0
+
+    ' --- Passo 0: comparação CANÔNICA (por estrutura, não por texto literal) ---
+    ' --- Roda ANTES da comparação literal — se a medida bater estruturalmente ---
+    ' --- (mesma largura/perfil/aro), usa o valor original cadastrado na       ---
+    ' --- Referência, mesmo que a formatação exata (espaço, R vs -, zero à    ---
+    ' --- direita) seja diferente entre descrição e catálogo.                 ---
+    Dim dicCandidatosCanon As Object
+    Set dicCandidatosCanon = ExtrairCandidatosCanonicos(textoNorm)
+    Dim candCanon As Variant
+    For Each candCanon In dicCandidatosCanon.Keys
+        If dicGeoboxCanonicoParaOriginal.Exists(CStr(candCanon)) Then
+            Dim origCanon As String
+            origCanon = CStr(dicGeoboxCanonicoParaOriginal(CStr(candCanon)))
+            If Len(origCanon) > melhorLen Then
+                melhorLen = Len(origCanon)
+                melhor = origCanon
+            End If
+        End If
+    Next candCanon
 
     ' --- Medidas conhecidas DAQUELA marca E busca ampla (qualquer marca) ---
     ' IMPORTANTE: as duas buscas SEMPRE rodam, contra as DUAS versões do

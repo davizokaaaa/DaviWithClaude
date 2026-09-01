@@ -83,13 +83,6 @@ Sub ClassificarTudo()
     colDimensao = LocalizarColunaAlternativasOuCriar(ws, Array("DIMENSÃO", "GEOBOX"), "DIMENSÃO")
     colAro = LocalizarOuCriarColuna(ws, "ARO")
 
-    ' --- Coluna de diagnóstico (DE-PARA cego), só se MODO_TESTE_MATCH_EXATO ---
-    Dim colDimensaoExata As Long
-    colDimensaoExata = 0
-    If MODO_TESTE_MATCH_EXATO Then
-        colDimensaoExata = LocalizarOuCriarColuna(ws, "DIMENSÃO (TESTE EXATO)")
-    End If
-
     ' --- Carrega dicionários auxiliares ---
     Dim dicMontadoras As Object, dicAnip As Object, dicExcecoesMarca As Object
     Set dicMontadoras = CarregarMontadoras()
@@ -184,13 +177,6 @@ Sub ClassificarTudo()
 
         descricao = UCase(Trim(CStr(ws.Cells(i, colDescricao).Value)))
         adquirente = UCase(Trim(CStr(ws.Cells(i, colAdquirente).Value)))
-
-        ' --- Diagnóstico: DE-PARA cego, sem nenhuma normalização (nem a  ---
-        ' --- maiúscula acima) — usa o valor cru direto da célula.       ---
-        If MODO_TESTE_MATCH_EXATO Then
-            ws.Cells(i, colDimensaoExata).Value = _
-                ExtrairDimensaoExata(CStr(ws.Cells(i, colDescricao).Value), dicGeoboxGlobalUnicos)
-        End If
 
         ' --- MARCA: extraída da descrição (nome conhecido na Tabela de Referência) ---
         marca = ExtrairMarca(descricao, arrMarcas, dicExcecoesMarca)

@@ -268,6 +268,15 @@ Sub ClassificarTudo()
         ' --- em ".5" sempre força "PL", independente do que veio antes.   ---
         If Len(lp) = 0 Then lp = DeduzirLp(segmento)
         If AroTerminaEmMeio(aro) Then lp = "PL"
+
+        ' --- BR/MIN: o TIPO PRODUTO manda por cima de tudo o que veio      ---
+        ' --- antes (GEOBOX/dedução/regra do ARO) — só nesse modo.          ---
+        If somenteMinBr Then
+            Dim lpBrMin As String
+            lpBrMin = DeduzirLpBrMin(segmento)
+            If Len(lpBrMin) > 0 Then lp = lpBrMin
+        End If
+
         ws.Cells(i, colLp).Value = lp
 
     Next i

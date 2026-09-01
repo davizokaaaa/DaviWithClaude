@@ -28,13 +28,16 @@ Option Explicit
 '   dicExcecoesGama      : chave PADRÃO ABREVIADO -> GAMA correta (aba "ExcecoesGama",
 '                          ex: "PTNZ" -> "POTENZA"), checada antes da busca normal
 '
-' somenteMinBr: quando True, ignora (não entra em nenhum dicionário) qualquer
-' linha da aba "Referencia" cuja coluna F ("Base de referência") não seja uma
-' das 4 fontes STORM de Beyond Road/Mineração (40117090, 40118090, 40119090,
-' 40129090), "Dicionário WW" ou "Input manual" (GEOBOX classificados à mão
-' pelo usuário). Usado pra bases de BR/MIN — evita carregar o resto da
-' Referência à toa, e é mais preciso que filtrar por LP (MIN/BR podem estar
-' espalhados em outras fontes fora do escopo de Beyond Road).
+' somenteMinBr: quando True, restringe SÓ os dicionários de GEOBOX (dicSegPorGeobox,
+' dicLpPorGeobox, dicGeoboxPorMarca, dicGeoboxGlobalUnicos) às linhas da aba
+' "Referencia" cuja coluna F ("Base de referência") seja uma das 4 fontes
+' STORM de Beyond Road/Mineração (40117090, 40118090, 40119090, 40129090),
+' "Dicionário WW" ou "Input manual" (GEOBOX classificados à mão pelo
+' usuário) — essas LPs não têm interseção de GEOBOX entre si, então
+' restringir evita ambiguidade. MARCA e GAMA (arrMarcas, dicGamasPorMarca,
+' dicGamaGlobalUnicos, dicMarcaPorGama) continuam sendo montados a partir da
+' Referência INTEIRA, sem esse filtro — uma marca/gama pode estar cadastrada
+' fora dessas fontes e mesmo assim ser a marca/gama certa do produto.
 ' ==========================================================================
 Function CarregarTabelaReferencia(ByRef dicSegPorGeobox As Object, ByRef dicLpPorGeobox As Object, _
                                    ByRef arrMarcas() As String, ByRef dicGeoboxPorMarca As Object, _
@@ -151,55 +154,60 @@ Function CarregarTabelaReferencia(ByRef dicSegPorGeobox As Object, ByRef dicLpPo
         seg = UCase(Trim(CStr(arrRef(i - 1, 5))))             ' SEGMENTO
         baseRef = UCase(Trim(CStr(arrRef(i - 1, 6))))         ' BASE DE REFERÊNCIA
 
-        ' --- Base BR/MIN: ignora qualquer linha cuja "Base de referência" ---
-        ' --- não seja uma das 4 fontes STORM de Beyond Road/Mineração.    ---
-        If somenteMinBr Then
-            If Not dicFontesMinBr.Exists(baseRef) Then
-                qtdLinhasIgnoradasMinBr = qtdLinhasIgnoradasMinBr + 1
-                GoTo ProximaLinhaRef
-            End If
-        End If
+        ' --- Base BR/MIN: só restringe o que é ESPECÍFICO DE GEOBOX (essas   ---
+        ' --- LPs não têm interseção de geobox entre si, então limitar às    ---
+        ' --- 4 fontes STORM/WW/Input manual evita ambiguidade ali). MARCA e ---
+        ' --- GAMA continuam sendo buscadas na Referência INTEIRA, mesmo em  ---
+        ' --- modo BR/MIN — uma marca/gama pode estar cadastrada só fora     ---
+        ' --- dessas fontes e ainda assim ser a marca/gama certa do produto. ---
+        Dim geoBrOk As Boolean
+        geoBrOk = (Not somenteMinBr) Or dicFontesMinBr.Exists(baseRef)
+        If somenteMinBr And Not geoBrOk Then qtdLinhasIgnoradasMinBr = qtdLinhasIgnoradasMinBr + 1
 
         ' --- Vota SEGMENTO e LP separadamente para esse GEOBOX, cada um só ---
         ' --- quando o próprio valor não está vazio (linha em branco numa  ---
         ' --- delas não conta como voto nem "suja" a outra votação).       ---
         Dim subVotos As Object
 
-        If Len(geo) > 0 And Len(seg) > 0 Then
-            If Not dicVotosSegPorGeo.Exists(geo) Then
-                dicVotosSegPorGeo.Add geo, CreateObject("Scripting.Dictionary")
+        If geoBrOk Then
+            If Len(geo) > 0 And Len(seg) > 0 Then
+                If Not dicVotosSegPorGeo.Exists(geo) Then
+                    dicVotosSegPorGeo.Add geo, CreateObject("Scripting.Dictionary")
+                End If
+                Set subVotos = dicVotosSegPorGeo(geo)
+                If subVotos.Exists(seg) Then
+                    subVotos(seg) = subVotos(seg) + 1
+                Else
+                    subVotos.Add seg, 1
+                End If
             End If
-            Set subVotos = dicVotosSegPorGeo(geo)
-            If subVotos.Exists(seg) Then
-                subVotos(seg) = subVotos(seg) + 1
-            Else
-                subVotos.Add seg, 1
-            End If
-        End If
 
-        If Len(geo) > 0 And Len(lp) > 0 Then
-            If Not dicVotosLpPorGeo.Exists(geo) Then
-                dicVotosLpPorGeo.Add geo, CreateObject("Scripting.Dictionary")
-            End If
-            Set subVotos = dicVotosLpPorGeo(geo)
-            If subVotos.Exists(lp) Then
-                subVotos(lp) = subVotos(lp) + 1
-            Else
-                subVotos.Add lp, 1
+            If Len(geo) > 0 And Len(lp) > 0 Then
+                If Not dicVotosLpPorGeo.Exists(geo) Then
+                    dicVotosLpPorGeo.Add geo, CreateObject("Scripting.Dictionary")
+                End If
+                Set subVotos = dicVotosLpPorGeo(geo)
+                If subVotos.Exists(lp) Then
+                    subVotos(lp) = subVotos(lp) + 1
+                Else
+                    subVotos.Add lp, 1
+                End If
             End If
         End If
 
         If Len(marcaRef) > 0 Then
             If Not dicMarcasUnicas.Exists(marcaRef) Then dicMarcasUnicas.Add marcaRef, True
 
-            If Not dicGeoboxPorMarca.Exists(marcaRef) Then
-                dicGeoboxPorMarca.Add marcaRef, New Collection
-                dicGeoboxSetPorMarca.Add marcaRef, CreateObject("Scripting.Dictionary")
-            End If
-            If Len(geo) > 0 Then
-                If Not dicGeoboxSetPorMarca(marcaRef).Exists(geo) Then
-                    dicGeoboxSetPorMarca(marcaRef).Add geo, True
-                    dicGeoboxPorMarca(marcaRef).Add geo
+            If geoBrOk Then
+                If Not dicGeoboxPorMarca.Exists(marcaRef) Then
+                    dicGeoboxPorMarca.Add marcaRef, New Collection
+                    dicGeoboxSetPorMarca.Add marcaRef, CreateObject("Scripting.Dictionary")
+                End If
+                If Len(geo) > 0 Then
+                    If Not dicGeoboxSetPorMarca(marcaRef).Exists(geo) Then
+                        dicGeoboxSetPorMarca(marcaRef).Add geo, True
+                        dicGeoboxPorMarca(marcaRef).Add geo
+                    End If
                 End If
             End If
 
@@ -215,8 +223,10 @@ Function CarregarTabelaReferencia(ByRef dicSegPorGeobox As Object, ByRef dicLpPo
             End If
         End If
 
-        If Len(geo) > 0 Then
-            If Not dicGeoboxGlobalUnicos.Exists(geo) Then dicGeoboxGlobalUnicos.Add geo, True
+        If geoBrOk Then
+            If Len(geo) > 0 Then
+                If Not dicGeoboxGlobalUnicos.Exists(geo) Then dicGeoboxGlobalUnicos.Add geo, True
+            End If
         End If
 
         If Len(gama) > 0 Then
@@ -229,8 +239,6 @@ Function CarregarTabelaReferencia(ByRef dicSegPorGeobox As Object, ByRef dicLpPo
                 dicMarcaPorGama.Add gama, marcaRef
             End If
         End If
-
-ProximaLinhaRef:
     Next i
 
     ' --- Monta dicSegPorGeobox e dicLpPorGeobox: para cada GEOBOX, fica com ---
@@ -241,9 +249,9 @@ ProximaLinhaRef:
     Set dicLpPorGeobox = MontarDicMaioriaPorGeobox(dicVotosLpPorGeo)
 
     diagnostico = diagnostico & "Última linha lida na aba ""Referencia"": " & lastRowRef & vbCrLf
-    diagnostico = diagnostico & "Modo BR/MIN ativado? " & IIf(somenteMinBr, "SIM (só ""Base de referência"" = STORM 40117090/40118090/40119090/40129090, Dicionário WW ou Input manual)", "Não") & vbCrLf
+    diagnostico = diagnostico & "Modo BR/MIN ativado? " & IIf(somenteMinBr, "SIM (GEOBOX restrito a ""Base de referência"" = STORM 40117090/40118090/40119090/40129090, Dicionário WW ou Input manual; MARCA e GAMA continuam buscando na Referência inteira)", "Não") & vbCrLf
     If somenteMinBr Then
-        diagnostico = diagnostico & "Linhas da Referência ignoradas (Base de referência fora das 4 fontes STORM): " & qtdLinhasIgnoradasMinBr & vbCrLf
+        diagnostico = diagnostico & "Linhas da Referência fora dessas fontes (não contam para GEOBOX, mas contam para MARCA/GAMA): " & qtdLinhasIgnoradasMinBr & vbCrLf
     End If
     diagnostico = diagnostico & "Total de GEOBOX únicos com SEGMENTO mapeado: " & dicSegPorGeobox.Count & vbCrLf
     diagnostico = diagnostico & "Total de GEOBOX únicos com LP mapeado: " & dicLpPorGeobox.Count & vbCrLf

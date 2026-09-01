@@ -101,17 +101,24 @@ End Sub
 
 ' ==========================================================================
 ' Match LITERAL do valor exatamente como cadastrado na Referência, dentro da
-' descrição crua — sem nenhuma outra transformação, EXCETO duas: remover
-' espaços dos dois lados, e trocar vírgula por ponto (decimal) dos dois
-' lados, antes de comparar. Sem maiúscula, sem mexer em traço/barra. Fica a
-' mais longa em caso de mais de uma bater. O valor GRAVADO continua sendo o
-' original da Referência (com espaço/vírgula, se tiver) — as trocas são só
-' para efeito da COMPARAÇÃO.
+' descrição crua — sem nenhuma outra transformação, EXCETO: trocar vírgula
+' por ponto (decimal), e testar o espaço de DUAS formas (espaço pode ser um
+' separador decorativo, tipo "175/75 R13", OU pode estar no lugar de uma
+' barra que faltou, tipo "520 85 R42" -> "520/85R42"):
+'   1) espaço removido ("520 85 R42" -> "52085R42")
+'   2) espaço virando "/" ("520 85 R42" -> "520/85/R42")
+' Sem maiúscula, sem mexer em traço. Fica a mais longa em caso de mais de uma
+' bater, entre as duas variantes. O valor GRAVADO continua sendo o original
+' da Referência (com espaço/vírgula, se tiver) — as trocas são só para
+' efeito da COMPARAÇÃO.
 ' ==========================================================================
 Private Function ExtrairDimensaoExata(descricaoCrua As String, dicGeoboxGlobalUnicos As Object) As String
-    Dim descricaoSemEspaco As String
-    descricaoSemEspaco = Replace(descricaoCrua, " ", "")
-    descricaoSemEspaco = Replace(descricaoSemEspaco, ",", ".")
+    Dim descricaoComPonto As String
+    descricaoComPonto = Replace(descricaoCrua, ",", ".")
+
+    Dim descricaoSemEspaco As String, descricaoEspacoViraBarra As String
+    descricaoSemEspaco = Replace(descricaoComPonto, " ", "")
+    descricaoEspacoViraBarra = Replace(descricaoComPonto, " ", "/")
 
     Dim melhor As String, melhorLen As Long
     melhor = ""
@@ -119,12 +126,15 @@ Private Function ExtrairDimensaoExata(descricaoCrua As String, dicGeoboxGlobalUn
 
     Dim chaveG As Variant
     For Each chaveG In dicGeoboxGlobalUnicos.Keys
+        Dim geoComPonto As String
+        geoComPonto = Replace(CStr(chaveG), ",", ".")
+
         Dim geoSemEspaco As String
-        geoSemEspaco = Replace(CStr(chaveG), " ", "")
-        geoSemEspaco = Replace(geoSemEspaco, ",", ".")
+        geoSemEspaco = Replace(geoComPonto, " ", "")
 
         If Len(geoSemEspaco) > melhorLen Then
-            If InStr(1, descricaoSemEspaco, geoSemEspaco, vbTextCompare) > 0 Then
+            If InStr(1, descricaoSemEspaco, geoSemEspaco, vbTextCompare) > 0 _
+               Or InStr(1, descricaoEspacoViraBarra, geoSemEspaco, vbTextCompare) > 0 Then
                 melhorLen = Len(geoSemEspaco)
                 melhor = CStr(chaveG)
             End If

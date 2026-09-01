@@ -101,15 +101,17 @@ End Sub
 
 ' ==========================================================================
 ' Match LITERAL do valor exatamente como cadastrado na Referência, dentro da
-' descrição crua — sem nenhuma transformação, EXCETO remover espaços dos
-' dois lados antes de comparar (só isso: sem maiúscula, sem vírgula->ponto,
-' sem mexer em traço/barra). Fica a mais longa em caso de mais de uma bater.
-' O valor GRAVADO continua sendo o original da Referência (com espaço, se
-' tiver) — a remoção de espaço é só para efeito da COMPARAÇÃO.
+' descrição crua — sem nenhuma outra transformação, EXCETO duas: remover
+' espaços dos dois lados, e trocar vírgula por ponto (decimal) dos dois
+' lados, antes de comparar. Sem maiúscula, sem mexer em traço/barra. Fica a
+' mais longa em caso de mais de uma bater. O valor GRAVADO continua sendo o
+' original da Referência (com espaço/vírgula, se tiver) — as trocas são só
+' para efeito da COMPARAÇÃO.
 ' ==========================================================================
 Private Function ExtrairDimensaoExata(descricaoCrua As String, dicGeoboxGlobalUnicos As Object) As String
     Dim descricaoSemEspaco As String
     descricaoSemEspaco = Replace(descricaoCrua, " ", "")
+    descricaoSemEspaco = Replace(descricaoSemEspaco, ",", ".")
 
     Dim melhor As String, melhorLen As Long
     melhor = ""
@@ -119,6 +121,7 @@ Private Function ExtrairDimensaoExata(descricaoCrua As String, dicGeoboxGlobalUn
     For Each chaveG In dicGeoboxGlobalUnicos.Keys
         Dim geoSemEspaco As String
         geoSemEspaco = Replace(CStr(chaveG), " ", "")
+        geoSemEspaco = Replace(geoSemEspaco, ",", ".")
 
         If Len(geoSemEspaco) > melhorLen Then
             If InStr(1, descricaoSemEspaco, geoSemEspaco, vbTextCompare) > 0 Then

@@ -46,13 +46,12 @@ Sub TestarMatchExatoGeobox()
     Dim dicGeoboxPorMarca As Object, dicGeoboxGlobalUnicos As Object
     Dim dicGamasPorMarca As Object, dicGamaGlobalUnicos As Object, dicExcecoesGama As Object
     Dim dicMarcaPorGama As Object, dicExcecoesMarca As Object
-    Dim dicGeoboxTokenParaOriginal As Object
     Dim diagnosticoRef As String
 
     If Not CarregarTabelaReferencia(dicSegPorGeobox, dicLpPorGeobox, arrMarcas, _
                                      dicGeoboxPorMarca, dicGeoboxGlobalUnicos, dicExcecoesMarca, _
                                      dicGamasPorMarca, dicGamaGlobalUnicos, dicMarcaPorGama, dicExcecoesGama, _
-                                     dicGeoboxTokenParaOriginal, somenteMinBr, diagnosticoRef) Then
+                                     somenteMinBr, diagnosticoRef) Then
         MsgBox "Não foi possível abrir a Tabela de Referência em:" & vbCrLf & REF_FILE_PATH, vbCritical
         Exit Sub
     End If

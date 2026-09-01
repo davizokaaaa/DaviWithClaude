@@ -29,82 +29,40 @@ Option Explicit
 Const TAMANHO_MINIMO_DIMENSAO As Long = 4
 
 ' ==========================================================================
-' TOKENIZAÇÃO de GEOBOX — usada SÓ no modo BR/MIN (somenteMinBr = True).
-' Diferente da comparação literal por substring (usada no resto da macro,
-' que já funciona e não é mexida aqui), isto NÃO tenta reconhecer o
-' "formato" da medida (largura/perfil/aro etc.) — só isola um trecho de
-' texto que parece ser um código de medida (dígitos + "." "/" "-" "R" "X"
-' colados) e limpa diferenças puramente de formatação (espaço, "R-" com
-' hífen sobrando) antes de comparar. A decisão de "isso é uma medida
-' válida" continua sendo só: existe EXATAMENTE (depois dessa limpeza) no
-' dicionário da Tabela de Referência? Se não existir, não vira resultado —
-' nunca inventa nem adivinha uma medida que não esteja cadastrada.
+' DE-PARA CEGO de GEOBOX — usado SÓ no modo BR/MIN (somenteMinBr = True).
+' Validado num teste isolado (modTesteMatchExato) contra a base real antes
+' de virar padrão aqui: match LITERAL do valor exatamente como cadastrado na
+' Tabela de Referência dentro da descrição, sem tentar reconhecer "formato"
+' de medida (largura/perfil/aro) — só duas limpezas puramente de
+' formatação, aplicadas nos DOIS lados antes de comparar:
+'   1) vírgula -> ponto decimal
+'   2) zero à direita depois do ponto removido (".50" e ".5" tratados iguais)
+' E o espaço é testado de duas formas (pode ser decorativo OU estar no
+' lugar de uma barra que faltou): espaço removido, e espaço virando "/".
+' Nunca inventa nem adivinha — só bate se existir exatamente (depois dessa
+' limpeza) no dicionário da Tabela de Referência.
 ' ==========================================================================
-
-' Remove hífen sobrando logo depois de "R" (ex: "50/80R-57" -> "50/80R57")
-' e separadores soltos nas pontas do trecho — só limpeza de formatação,
-' não interpretação de estrutura.
-Function NormalizarTokenGeobox(valor As String) As String
-    Dim resultado As String
-    resultado = UCase(valor)
-    resultado = Replace(resultado, "R-", "R")
-
-    Do While Len(resultado) > 0 And InStr("-./", Left(resultado, 1)) > 0
-        resultado = Mid(resultado, 2)
-    Loop
-    Do While Len(resultado) > 0 And InStr("-./", Right(resultado, 1)) > 0
-        resultado = Left(resultado, Len(resultado) - 1)
-    Loop
-
-    NormalizarTokenGeobox = resultado
-End Function
-
-' Um trecho só é candidato a GEOBOX se tiver pelo menos um separador típico
-' de medida (/, -, R ou X) — filtra números soltos (código de pedido,
-' registro etc.) que não têm nenhum desses caracteres.
-Private Function ContemSeparadorGeobox(valor As String) As Boolean
-    ContemSeparadorGeobox = (InStr(1, valor, "/", vbTextCompare) > 0 _
-        Or InStr(1, valor, "-", vbTextCompare) > 0 _
-        Or InStr(1, valor, "R", vbTextCompare) > 0 _
-        Or InStr(1, valor, "X", vbTextCompare) > 0)
-End Function
-
-' Varre um texto (já sem espaços) e devolve um Dictionary com os tokens de
-' GEOBOX normalizados encontrados nele (pode ter mais de uma medida
-' mencionada). Cada token é só um trecho contíguo de caracteres típicos de
-' medida — não uma "forma" pré-definida.
-Function ExtrairCandidatosTokenizados(textoSemEspaco As String) As Object
-    Dim dicResultado As Object
-    Set dicResultado = CreateObject("Scripting.Dictionary")
-
-    On Error GoTo SemRegex
-    Dim regex As Object
-    Set regex = CreateObject("VBScript.RegExp")
-    regex.Global = True
-    regex.IgnoreCase = True
-    regex.Pattern = "[0-9XR.\-\/]{4,}"
-
-    If regex.Test(textoSemEspaco) Then
-        Dim matches As Object, m As Object
-        Set matches = regex.Execute(textoSemEspaco)
-        For Each m In matches
-            If ContemSeparadorGeobox(m.Value) Then
-                Dim tok As String
-                tok = NormalizarTokenGeobox(m.Value)
-                If Len(tok) >= TAMANHO_MINIMO_DIMENSAO Then
-                    If Not dicResultado.Exists(tok) Then dicResultado.Add tok, True
-                End If
-            End If
-        Next m
+Private Function NormalizarZerosDecimais(valor As String) As String
+    Static regexZeroFinal As Object, regexPontoZero As Object
+    If regexZeroFinal Is Nothing Then
+        Set regexZeroFinal = CreateObject("VBScript.RegExp")
+        regexZeroFinal.Global = True
+        regexZeroFinal.Pattern = "(\.\d*[1-9])0+"
+        Set regexPontoZero = CreateObject("VBScript.RegExp")
+        regexPontoZero.Global = True
+        regexPontoZero.Pattern = "\.0+"
     End If
 
-SemRegex:
-    Set ExtrairCandidatosTokenizados = dicResultado
+    Dim resultado As String
+    resultado = regexZeroFinal.Replace(valor, "$1")   ' "17.50" -> "17.5", "17.500" -> "17.5"
+    resultado = regexPontoZero.Replace(resultado, "")  ' "20.0" -> "20", "20.00" -> "20"
+
+    NormalizarZerosDecimais = resultado
 End Function
 
 Function ExtrairDimensao(descricao As String, marca As String, _
                           dicGeoboxPorMarca As Object, dicGeoboxGlobalUnicos As Object, _
-                          dicPadroesLegado As Object, dicGeoboxTokenParaOriginal As Object, _
+                          dicPadroesLegado As Object, _
                           Optional somenteMinBr As Boolean = False) As String
 
     Dim textoNorm As String
@@ -147,23 +105,35 @@ Function ExtrairDimensao(descricao As String, marca As String, _
     melhor = ""
     melhorLen = 0
 
-    ' --- Passo 0: tokenização exata — SÓ no modo BR/MIN --- Fora desse modo,
-    ' --- a extração continua 100% igual à que já funciona (busca literal   ---
-    ' --- por substring abaixo), sem nenhuma mudança de comportamento.      ---
+    ' --- Passo 0: DE-PARA cego — SÓ no modo BR/MIN --- Fora desse modo, a
+    ' --- extração continua 100% igual à que já funciona (busca literal por ---
+    ' --- substring abaixo), sem nenhuma mudança de comportamento.          ---
     If somenteMinBr Then
-        Dim dicCandidatosToken As Object
-        Set dicCandidatosToken = ExtrairCandidatosTokenizados(textoSemEspaco)
-        Dim candToken As Variant
-        For Each candToken In dicCandidatosToken.Keys
-            If dicGeoboxTokenParaOriginal.Exists(CStr(candToken)) Then
-                Dim origToken As String
-                origToken = CStr(dicGeoboxTokenParaOriginal(CStr(candToken)))
-                If Len(origToken) > melhorLen Then
-                    melhorLen = Len(origToken)
-                    melhor = origToken
+        Dim descComPonto As String
+        descComPonto = Replace(descricao, ",", ".")
+        descComPonto = NormalizarZerosDecimais(descComPonto)
+
+        Dim descBrSemEspaco As String, descBrEspacoBarra As String
+        descBrSemEspaco = Replace(descComPonto, " ", "")
+        descBrEspacoBarra = Replace(descComPonto, " ", "/")
+
+        Dim chaveBr As Variant
+        For Each chaveBr In dicGeoboxGlobalUnicos.Keys
+            Dim geoBrComPonto As String
+            geoBrComPonto = Replace(CStr(chaveBr), ",", ".")
+            geoBrComPonto = NormalizarZerosDecimais(geoBrComPonto)
+
+            Dim geoBrSemEspaco As String
+            geoBrSemEspaco = Replace(geoBrComPonto, " ", "")
+
+            If Len(geoBrSemEspaco) > melhorLen Then
+                If InStr(1, descBrSemEspaco, geoBrSemEspaco, vbTextCompare) > 0 _
+                   Or InStr(1, descBrEspacoBarra, geoBrSemEspaco, vbTextCompare) > 0 Then
+                    melhorLen = Len(geoBrSemEspaco)
+                    melhor = CStr(chaveBr)
                 End If
             End If
-        Next candToken
+        Next chaveBr
     End If
 
     ' --- Medidas conhecidas DAQUELA marca E busca ampla (qualquer marca) ---

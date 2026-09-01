@@ -100,21 +100,47 @@ Finally:
 End Sub
 
 ' ==========================================================================
+' Remove zero(s) à direita depois do ponto decimal — só isso, pra "17.50" e
+' "17.5" (ou "20.0" e "20") serem tratados como o mesmo número na
+' COMPARAÇÃO. Não mexe em nada que não seja decimal (não afeta "50" sozinho,
+' só ".50" depois de um ponto).
+' ==========================================================================
+Private Function NormalizarZerosDecimais(valor As String) As String
+    Static regexZeroFinal As Object, regexPontoZero As Object
+    If regexZeroFinal Is Nothing Then
+        Set regexZeroFinal = CreateObject("VBScript.RegExp")
+        regexZeroFinal.Global = True
+        regexZeroFinal.Pattern = "(\.\d*[1-9])0+"
+        Set regexPontoZero = CreateObject("VBScript.RegExp")
+        regexPontoZero.Global = True
+        regexPontoZero.Pattern = "\.0+"
+    End If
+
+    Dim resultado As String
+    resultado = regexZeroFinal.Replace(valor, "$1")   ' "17.50" -> "17.5", "17.500" -> "17.5"
+    resultado = regexPontoZero.Replace(resultado, "")  ' "20.0" -> "20", "20.00" -> "20"
+
+    NormalizarZerosDecimais = resultado
+End Function
+
+' ==========================================================================
 ' Match LITERAL do valor exatamente como cadastrado na Referência, dentro da
 ' descrição crua — sem nenhuma outra transformação, EXCETO: trocar vírgula
-' por ponto (decimal), e testar o espaço de DUAS formas (espaço pode ser um
-' separador decorativo, tipo "175/75 R13", OU pode estar no lugar de uma
-' barra que faltou, tipo "520 85 R42" -> "520/85R42"):
+' por ponto (decimal), remover zero à direita depois do ponto decimal
+' (".50"/".5" tratados iguais), e testar o espaço de DUAS formas (espaço
+' pode ser um separador decorativo, tipo "175/75 R13", OU pode estar no
+' lugar de uma barra que faltou, tipo "520 85 R42" -> "520/85R42"):
 '   1) espaço removido ("520 85 R42" -> "52085R42")
 '   2) espaço virando "/" ("520 85 R42" -> "520/85/R42")
 ' Sem maiúscula, sem mexer em traço. Fica a mais longa em caso de mais de uma
 ' bater, entre as duas variantes. O valor GRAVADO continua sendo o original
-' da Referência (com espaço/vírgula, se tiver) — as trocas são só para
+' da Referência (com espaço/vírgula/zero, se tiver) — as trocas são só para
 ' efeito da COMPARAÇÃO.
 ' ==========================================================================
 Private Function ExtrairDimensaoExata(descricaoCrua As String, dicGeoboxGlobalUnicos As Object) As String
     Dim descricaoComPonto As String
     descricaoComPonto = Replace(descricaoCrua, ",", ".")
+    descricaoComPonto = NormalizarZerosDecimais(descricaoComPonto)
 
     Dim descricaoSemEspaco As String, descricaoEspacoViraBarra As String
     descricaoSemEspaco = Replace(descricaoComPonto, " ", "")
@@ -128,6 +154,7 @@ Private Function ExtrairDimensaoExata(descricaoCrua As String, dicGeoboxGlobalUn
     For Each chaveG In dicGeoboxGlobalUnicos.Keys
         Dim geoComPonto As String
         geoComPonto = Replace(CStr(chaveG), ",", ".")
+        geoComPonto = NormalizarZerosDecimais(geoComPonto)
 
         Dim geoSemEspaco As String
         geoSemEspaco = Replace(geoComPonto, " ", "")

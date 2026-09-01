@@ -4,13 +4,16 @@ Option Explicit
 ' ==========================================================================
 ' MODULO: modTesteMarca
 ' Macro de TESTE, isolada da macro principal (ClassificarTudo, em modMain) —
-' não lê nem grava nenhuma coluna/variável dela. Roda SÓ a extração de
-' MARCA (modMarca.ExtrairMarca, a função de produção de verdade — não uma
-' cópia) linha a linha, sem GEOBOX/GAMA/TIPO PRODUTO/etc., pra dar uma
-' resposta rápida sobre a busca CEGA de marca (exceções + procura direta na
-' descrição) sem esperar a macro inteira (que numa base BR/MIN grande passa
-' de 10 minutos). Escreve o resultado numa coluna própria
-' ("MARCA (TESTE CEGO)") e não mexe em nenhuma outra coluna da planilha.
+' não lê nem grava nenhuma coluna/variável dela. Testa uma ordem diferente
+' pra MARCA, reaproveitando as funções de produção de verdade (não cópias):
+'   1) modGama.ExtrairGama primeiro — se achar GAMA e essa GAMA tiver uma
+'      MARCA dona conhecida (dicMarcaPorGama), usa essa marca.
+'   2) Se a busca por GAMA não resolveu a marca, cai na busca CEGA de marca
+'      (modMarca.ExtrairMarca — exceções + substring livre na descrição).
+' Sem GEOBOX/TIPO PRODUTO/etc., pra dar resposta rápida sem esperar a macro
+' inteira (que numa base BR/MIN grande passa de 10 minutos). Escreve o
+' resultado numa coluna própria ("MARCA (TESTE GAMA->CEGA)") e não mexe em
+' nenhuma outra coluna da planilha.
 ' ==========================================================================
 Sub TestarMarcaCega()
 
@@ -32,7 +35,7 @@ Sub TestarMarcaCega()
     End If
 
     Dim colResultado As Long
-    colResultado = LocalizarOuCriarColuna(ws, "MARCA (TESTE CEGO)")
+    colResultado = LocalizarOuCriarColuna(ws, "MARCA (TESTE GAMA->CEGA)")
 
     ' --- Carrega a Tabela de Referência (precisa pra montar arrMarcas e     ---
     ' --- dicExcecoesMarca) — mesmo carregamento da macro principal, só que  ---
@@ -77,9 +80,19 @@ Sub TestarMarcaCega()
             DoEvents
         End If
 
-        Dim descricao As String, marcaAchada As String
+        Dim descricao As String, marcaAchada As String, gamaAchada As String
         descricao = UCase(Trim(CStr(ws.Cells(i, colDescricao).Value)))
-        marcaAchada = ExtrairMarca(descricao, arrMarcas, dicExcecoesMarca, somenteMinBr)
+
+        ' --- Passo 1: acha GAMA primeiro; se tiver marca dona conhecida, ---
+        ' --- ExtrairGama já preenche marcaAchada (ByRef) sozinha.        ---
+        marcaAchada = ""
+        gamaAchada = ExtrairGama(descricao, marcaAchada, dicGamasPorMarca, dicGamaGlobalUnicos, dicMarcaPorGama, dicExcecoesGama)
+
+        ' --- Passo 2: se a GAMA não resolveu a marca, cai na busca cega. ---
+        If Len(marcaAchada) = 0 Then
+            marcaAchada = ExtrairMarca(descricao, arrMarcas, dicExcecoesMarca)
+        End If
+
         ws.Cells(i, colResultado).Value = marcaAchada
         If Len(marcaAchada) > 0 Then qtdAchou = qtdAchou + 1
     Next i
@@ -89,10 +102,10 @@ Sub TestarMarcaCega()
     Application.EnableEvents = True
     Application.StatusBar = False
 
-    MsgBox "Teste de MARCA cega concluído." & vbCrLf & vbCrLf & _
+    MsgBox "Teste de MARCA (GAMA -> cega) concluído." & vbCrLf & vbCrLf & _
            "Linhas testadas: " & (lastRow - 1) & vbCrLf & _
            "Marca encontrada: " & qtdAchou & " (" & Format(qtdAchou / (lastRow - 1), "0%") & ")" & vbCrLf & vbCrLf & _
-           "Resultado na coluna ""MARCA (TESTE CEGO)"".", vbInformation
+           "Resultado na coluna ""MARCA (TESTE GAMA->CEGA)"".", vbInformation
     Exit Sub
 
 Finally:

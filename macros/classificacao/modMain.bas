@@ -188,7 +188,7 @@ Sub ClassificarTudo()
         adquirente = UCase(Trim(CStr(ws.Cells(i, colAdquirente).Value)))
 
         ' --- MARCA: extraída da descrição (nome conhecido na Tabela de Referência) ---
-        marca = ExtrairMarca(descricao, arrMarcas, dicExcecoesMarca)
+        marca = ExtrairMarca(descricao, arrMarcas, dicExcecoesMarca, somenteMinBr)
 
         ' --- GAMA: extraída da descrição (exceções/abreviações primeiro,   ---
         ' --- depois nome completo conhecido na Tabela de Referência). Se   ---

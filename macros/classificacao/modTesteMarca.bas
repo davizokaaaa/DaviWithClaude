@@ -79,7 +79,7 @@ Sub TestarMarcaCega()
 
         Dim descricao As String, marcaAchada As String
         descricao = UCase(Trim(CStr(ws.Cells(i, colDescricao).Value)))
-        marcaAchada = ExtrairMarca(descricao, arrMarcas, dicExcecoesMarca)
+        marcaAchada = ExtrairMarca(descricao, arrMarcas, dicExcecoesMarca, somenteMinBr)
         ws.Cells(i, colResultado).Value = marcaAchada
         If Len(marcaAchada) > 0 Then qtdAchou = qtdAchou + 1
     Next i

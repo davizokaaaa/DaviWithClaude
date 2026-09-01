@@ -139,6 +139,13 @@ Function CarregarTabelaReferencia(ByRef dicSegPorGeobox As Object, ByRef dicLpPo
         geo = UCase(Trim(CStr(arrRef(i - 1, 1))))             ' GEOBOX
         geo = NormalizarFormatacaoBasica(geo)                 ' mesma normalização usada na busca
         marcaRef = UCase(Trim(CStr(arrRef(i - 1, 2))))        ' MARCA
+        ' Placeholders de "marca desconhecida" na Referência (erro de       ---
+        ' digitação/preenchimento provisório) — tratados como célula vazia, ---
+        ' senão viram "marca" válida e batem em quase qualquer descrição    ---
+        ' (ex: "-" acha hífen em qualquer texto, "0" acha o dígito 0).      ---
+        If marcaRef = "-" Or marcaRef = "0" Or marcaRef = "0000" Or marcaRef = "N/A" Or marcaRef = "NA" Then
+            marcaRef = ""
+        End If
         gama = UCase(Trim(CStr(arrRef(i - 1, 3))))            ' GAMA (não usada na busca de segmento/LP)
         lp = UCase(Trim(CStr(arrRef(i - 1, 4))))              ' LP
         seg = UCase(Trim(CStr(arrRef(i - 1, 5))))             ' SEGMENTO

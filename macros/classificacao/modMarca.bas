@@ -11,8 +11,9 @@ Option Explicit
 ' digitação/apelidos conhecidos, ex: "MGNUM" -> "MAGNUM", "X WORKS" ->
 ' "MICHELIN") — igual fazia a macro legada, antes de qualquer outra coisa.
 ' 2) Se não bater nenhuma exceção, busca cega na descrição inteira por
-' qualquer marca conhecida (arrMarcas, que já reúne as marcas da Tabela de
-' Referência + a lista legada de ~160 marcas, da mais longa p/ mais curta).
+' qualquer marca conhecida (arrMarcas, que reúne as marcas da Tabela de
+' Referência + da aba "MarcasExtras"/"MarcasExtra", da mais longa p/ mais
+' curta — ver modReferencia.CarregarTabelaReferencia).
 ' 3) Se não achar nada, retorna "".
 ' ==========================================================================
 Function ExtrairMarca(descricao As String, arrMarcas() As String, dicExcecoesMarca As Object) As String

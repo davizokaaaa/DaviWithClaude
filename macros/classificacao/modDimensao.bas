@@ -102,6 +102,32 @@ SemRegex:
     Set ExtrairCandidatosTokenizados = dicResultado
 End Function
 
+' ==========================================================================
+' DE-PARA CEGO (diagnóstico) — match LITERAL do valor exato cadastrado na
+' Referência dentro da descrição CRUA, sem nenhuma transformação prévia
+' (nem maiúscula, nem espaço, nem vírgula->ponto, nada). Só pra medir, numa
+' base de teste, quantas linhas já batem sem qualquer normalização — ver
+' modConfig.MODO_TESTE_MATCH_EXATO. Não é usada na extração real (essa
+' continua sendo ExtrairDimensao, com toda a normalização já validada).
+' ==========================================================================
+Function ExtrairDimensaoExata(descricaoCrua As String, dicGeoboxGlobalUnicos As Object) As String
+    Dim melhor As String, melhorLen As Long
+    melhor = ""
+    melhorLen = 0
+
+    Dim chaveG As Variant
+    For Each chaveG In dicGeoboxGlobalUnicos.Keys
+        If Len(CStr(chaveG)) > melhorLen Then
+            If InStr(1, descricaoCrua, CStr(chaveG), vbTextCompare) > 0 Then
+                melhorLen = Len(CStr(chaveG))
+                melhor = CStr(chaveG)
+            End If
+        End If
+    Next chaveG
+
+    ExtrairDimensaoExata = melhor
+End Function
+
 Function ExtrairDimensao(descricao As String, marca As String, _
                           dicGeoboxPorMarca As Object, dicGeoboxGlobalUnicos As Object, _
                           dicPadroesLegado As Object, dicGeoboxTokenParaOriginal As Object, _

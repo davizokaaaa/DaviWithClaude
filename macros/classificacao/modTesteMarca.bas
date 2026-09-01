@@ -44,10 +44,14 @@ Sub TestarMarcaCega()
     Dim dicMarcaPorGama As Object, dicExcecoesMarca As Object
     Dim diagnosticoRef As String
 
-    ' BR/MIN fixo aqui: este teste existe pra validar a busca CEGA de marca
-    ' nesse modo (sem a descoberta "de trás pra frente" via GAMA).
+    ' Mesma pergunta da macro principal — mantém o filtro de fonte BR/MIN
+    ' (STORM/Dicionário WW/Input manual) ligado nessa etapa também.
     Dim somenteMinBr As Boolean
-    somenteMinBr = True
+    somenteMinBr = (MsgBox("Esta base é de BR/MIN (Beyond Road / Mineração)?" & vbCrLf & vbCrLf & _
+                           "Se SIM, a busca de GEOBOX será restrita à coluna ""Base de referência""" & vbCrLf & _
+                           "(STORM 40117090, 40118090, 40119090, 40129090, Dicionário WW e Input manual), igual à macro principal." & vbCrLf & _
+                           "A busca de MARCA continua na Referência inteira, sempre cega (sem descoberta via GAMA).", _
+                           vbYesNo + vbQuestion, "Tipo de base (teste)") = vbYes)
 
     If Not CarregarTabelaReferencia(dicSegPorGeobox, dicLpPorGeobox, arrMarcas, _
                                      dicGeoboxPorMarca, dicGeoboxGlobalUnicos, dicExcecoesMarca, _

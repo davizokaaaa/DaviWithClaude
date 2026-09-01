@@ -124,6 +124,15 @@ Sub ClassificarTudo()
         Exit Sub
     End If
 
+    ' --- Em BR/MIN, a busca de MARCA é só CEGA (ExtrairMarca): exceções +   ---
+    ' --- procura direta da marca conhecida na descrição. A descoberta       ---
+    ' --- "de trás pra frente" (achou GAMA -> assume a marca dona daquela    ---
+    ' --- gama, dentro de ExtrairGama) fica DESLIGADA nesse modo — estava    ---
+    ' --- causando confusão de GAMA que se propagava pra MARCA errada.       ---
+    ' --- Passar um dicionário vazio neutraliza essa etapa sem mexer em      ---
+    ' --- modGama.bas.                                                      ---
+    If somenteMinBr Then Set dicMarcaPorGama = CreateObject("Scripting.Dictionary")
+
     If MOSTRAR_DIAGNOSTICO_REFERENCIA Then
         MsgBox "DIAGNÓSTICO DA TABELA DE REFERÊNCIA:" & vbCrLf & vbCrLf & diagnosticoRef, vbInformation
     End If

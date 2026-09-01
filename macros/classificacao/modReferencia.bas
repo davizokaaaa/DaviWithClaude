@@ -14,9 +14,11 @@ Option Explicit
 '                          valores NÃO VAZIOS daquele GEOBOX na aba
 '                          "Referencia" (linhas com Segmento vazio não
 '                          entram na votação)
-'   dicLpPorGeobox       : chave GEOBOX -> LP mais frequente entre os
-'                          valores NÃO VAZIOS daquele GEOBOX — votação
-'                          totalmente independente da de Segmento
+'   dicLpPorGeobox       : chave GEOBOX -> LP. Fora de BR/MIN: LP mais
+'                          frequente entre os valores NÃO VAZIOS daquele
+'                          GEOBOX (maioria, votação independente da de
+'                          Segmento). Em BR/MIN: LP da PRIMEIRA linha da
+'                          Referência com aquele GEOBOX, sem votação.
 '   arrMarcas()          : array de marcas únicas, ordenado da mais longa p/ mais curta
 '   dicGeoboxPorMarca    : chave MARCA -> Collection de GEOBOX únicos daquela marca
 '   dicGeoboxGlobalUnicos: chave GEOBOX -> True (todos os geobox únicos, p/ busca ampla)
@@ -88,6 +90,12 @@ Function CarregarTabelaReferencia(ByRef dicSegPorGeobox As Object, ByRef dicLpPo
     Dim dicVotosSegPorGeo As Object, dicVotosLpPorGeo As Object
     Set dicVotosSegPorGeo = CreateObject("Scripting.Dictionary")
     Set dicVotosLpPorGeo = CreateObject("Scripting.Dictionary")
+
+    ' GEOBOX -> LP da PRIMEIRA linha encontrada com esse GEOBOX. Só usado em
+    ' modo BR/MIN (ver mais abaixo) — substitui a votação por maioria, que
+    ' nesse modo estava juntando LP de linhas que não deveriam contar.
+    Dim dicLpPrimeiraOcorrenciaMinBr As Object
+    Set dicLpPrimeiraOcorrenciaMinBr = CreateObject("Scripting.Dictionary")
 
     Dim dicMarcasUnicas As Object
     Set dicMarcasUnicas = CreateObject("Scripting.Dictionary")
@@ -183,14 +191,23 @@ Function CarregarTabelaReferencia(ByRef dicSegPorGeobox As Object, ByRef dicLpPo
             End If
 
             If Len(geo) > 0 And Len(lp) > 0 Then
-                If Not dicVotosLpPorGeo.Exists(geo) Then
-                    dicVotosLpPorGeo.Add geo, CreateObject("Scripting.Dictionary")
-                End If
-                Set subVotos = dicVotosLpPorGeo(geo)
-                If subVotos.Exists(lp) Then
-                    subVotos(lp) = subVotos(lp) + 1
+                If somenteMinBr Then
+                    ' --- Em BR/MIN, LP não é por maioria de votos — fica com a  ---
+                    ' --- PRIMEIRA linha da Referência que tiver esse GEOBOX     ---
+                    ' --- (ordem da própria planilha), sem contar ocorrências.   ---
+                    If Not dicLpPrimeiraOcorrenciaMinBr.Exists(geo) Then
+                        dicLpPrimeiraOcorrenciaMinBr.Add geo, lp
+                    End If
                 Else
-                    subVotos.Add lp, 1
+                    If Not dicVotosLpPorGeo.Exists(geo) Then
+                        dicVotosLpPorGeo.Add geo, CreateObject("Scripting.Dictionary")
+                    End If
+                    Set subVotos = dicVotosLpPorGeo(geo)
+                    If subVotos.Exists(lp) Then
+                        subVotos(lp) = subVotos(lp) + 1
+                    Else
+                        subVotos.Add lp, 1
+                    End If
                 End If
             End If
         End If
@@ -241,12 +258,19 @@ Function CarregarTabelaReferencia(ByRef dicSegPorGeobox As Object, ByRef dicLpPo
         End If
     Next i
 
-    ' --- Monta dicSegPorGeobox e dicLpPorGeobox: para cada GEOBOX, fica com ---
-    ' --- o valor NÃO VAZIO mais votado (maioria) em cada votação, cada uma ---
-    ' --- totalmente independente da outra. Em empate, fica com o primeiro  ---
-    ' --- encontrado (ordem de leitura da aba "Referencia").                ---
+    ' --- Monta dicSegPorGeobox: fica com o valor NÃO VAZIO mais votado       ---
+    ' --- (maioria); em empate, o primeiro encontrado (ordem da Referencia). ---
     Set dicSegPorGeobox = MontarDicMaioriaPorGeobox(dicVotosSegPorGeo)
-    Set dicLpPorGeobox = MontarDicMaioriaPorGeobox(dicVotosLpPorGeo)
+
+    ' --- dicLpPorGeobox: em modo BR/MIN, é a PRIMEIRA linha da Referência   ---
+    ' --- com aquele GEOBOX (dicLpPrimeiraOcorrenciaMinBr) — não é mais      ---
+    ' --- maioria de votos, pra não misturar LP de linhas que não deveriam.  ---
+    ' --- Fora de BR/MIN, continua sendo maioria, como sempre foi.          ---
+    If somenteMinBr Then
+        Set dicLpPorGeobox = dicLpPrimeiraOcorrenciaMinBr
+    Else
+        Set dicLpPorGeobox = MontarDicMaioriaPorGeobox(dicVotosLpPorGeo)
+    End If
 
     diagnostico = diagnostico & "Última linha lida na aba ""Referencia"": " & lastRowRef & vbCrLf
     diagnostico = diagnostico & "Modo BR/MIN ativado? " & IIf(somenteMinBr, "SIM (GEOBOX restrito a ""Base de referência"" = STORM 40117090/40118090/40119090/40129090, Dicionário WW ou Input manual; MARCA e GAMA continuam buscando na Referência inteira)", "Não") & vbCrLf

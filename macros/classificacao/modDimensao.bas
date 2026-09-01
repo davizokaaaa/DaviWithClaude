@@ -33,32 +33,15 @@ Const TAMANHO_MINIMO_DIMENSAO As Long = 4
 ' Validado num teste isolado (modTesteMatchExato) contra a base real antes
 ' de virar padrão aqui: match LITERAL do valor exatamente como cadastrado na
 ' Tabela de Referência dentro da descrição, sem tentar reconhecer "formato"
-' de medida (largura/perfil/aro) — só duas limpezas puramente de
-' formatação, aplicadas nos DOIS lados antes de comparar:
-'   1) vírgula -> ponto decimal
-'   2) zero à direita depois do ponto removido (".50" e ".5" tratados iguais)
-' E o espaço é testado de duas formas (pode ser decorativo OU estar no
-' lugar de uma barra que faltou): espaço removido, e espaço virando "/".
-' Nunca inventa nem adivinha — só bate se existir exatamente (depois dessa
-' limpeza) no dicionário da Tabela de Referência.
+' de medida (largura/perfil/aro) — só uma limpeza puramente de formatação,
+' aplicada nos DOIS lados antes de comparar: vírgula -> ponto decimal.
+' (A regra de tratar ".50" e ".5" como iguais foi removida daqui — estava
+' gerando GEOBOX errado ao juntar medidas diferentes que só coincidem depois
+' de arredondar o zero.) E o espaço é testado de duas formas (pode ser
+' decorativo OU estar no lugar de uma barra que faltou): espaço removido, e
+' espaço virando "/". Nunca inventa nem adivinha — só bate se existir
+' exatamente (depois dessa limpeza) no dicionário da Tabela de Referência.
 ' ==========================================================================
-Private Function NormalizarZerosDecimais(valor As String) As String
-    Static regexZeroFinal As Object, regexPontoZero As Object
-    If regexZeroFinal Is Nothing Then
-        Set regexZeroFinal = CreateObject("VBScript.RegExp")
-        regexZeroFinal.Global = True
-        regexZeroFinal.Pattern = "(\.\d*[1-9])0+"
-        Set regexPontoZero = CreateObject("VBScript.RegExp")
-        regexPontoZero.Global = True
-        regexPontoZero.Pattern = "\.0+"
-    End If
-
-    Dim resultado As String
-    resultado = regexZeroFinal.Replace(valor, "$1")   ' "17.50" -> "17.5", "17.500" -> "17.5"
-    resultado = regexPontoZero.Replace(resultado, "")  ' "20.0" -> "20", "20.00" -> "20"
-
-    NormalizarZerosDecimais = resultado
-End Function
 
 Function ExtrairDimensao(descricao As String, marca As String, _
                           dicGeoboxPorMarca As Object, dicGeoboxGlobalUnicos As Object, _
@@ -111,7 +94,6 @@ Function ExtrairDimensao(descricao As String, marca As String, _
     If somenteMinBr Then
         Dim descComPonto As String
         descComPonto = Replace(descricao, ",", ".")
-        descComPonto = NormalizarZerosDecimais(descComPonto)
 
         Dim descBrSemEspaco As String, descBrEspacoBarra As String
         descBrSemEspaco = Replace(descComPonto, " ", "")
@@ -121,7 +103,6 @@ Function ExtrairDimensao(descricao As String, marca As String, _
         For Each chaveBr In dicGeoboxGlobalUnicos.Keys
             Dim geoBrComPonto As String
             geoBrComPonto = Replace(CStr(chaveBr), ",", ".")
-            geoBrComPonto = NormalizarZerosDecimais(geoBrComPonto)
 
             Dim geoBrSemEspaco As String
             geoBrSemEspaco = Replace(geoBrComPonto, " ", "")

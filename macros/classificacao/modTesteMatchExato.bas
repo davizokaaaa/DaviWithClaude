@@ -37,7 +37,7 @@ Sub TestarMatchExatoGeobox()
     Dim somenteMinBr As Boolean
     somenteMinBr = (MsgBox("Esta base é de BR/MIN (Beyond Road / Mineração)?" & vbCrLf & vbCrLf & _
                            "Se SIM, a Tabela de Referência será filtrada pela coluna ""Base de referência"" " & _
-                           "(apenas STORM 40117090, 40118090, 40119090 e 40129090), igual à macro principal.", _
+                           "(STORM 40117090, 40118090, 40119090, 40129090 e Dicionário WW), igual à macro principal.", _
                            vbYesNo + vbQuestion, "Tipo de base (teste)") = vbYes)
 
     ' --- Carrega só o dicionário de GEOBOX da Referência — nada mais. ---

@@ -106,7 +106,7 @@ Sub ClassificarTudo()
     Dim somenteMinBr As Boolean
     somenteMinBr = (MsgBox("Esta base é de BR/MIN (Beyond Road / Mineração)?" & vbCrLf & vbCrLf & _
                            "Se SIM, a Tabela de Referência será filtrada pela coluna ""Base de referência"" " & _
-                           "(apenas STORM 40117090, 40118090, 40119090 e 40129090).", _
+                           "(STORM 40117090, 40118090, 40119090, 40129090 e Dicionário WW).", _
                            vbYesNo + vbQuestion, "Tipo de base") = vbYes)
 
     ' --- A lista legada (modDicionarios.CarregarPadroesGeoboxLegado) é uma  ---

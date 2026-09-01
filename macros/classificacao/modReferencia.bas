@@ -31,9 +31,10 @@ Option Explicit
 ' somenteMinBr: quando True, ignora (não entra em nenhum dicionário) qualquer
 ' linha da aba "Referencia" cuja coluna F ("Base de referência") não seja uma
 ' das 4 fontes STORM de Beyond Road/Mineração (40117090, 40118090, 40119090,
-' 40129090) OU "Dicionário WW". Usado pra bases de BR/MIN — evita carregar o
-' resto da Referência à toa, e é mais preciso que filtrar por LP (MIN/BR
-' podem estar espalhados em outras fontes fora do escopo de Beyond Road).
+' 40129090), "Dicionário WW" ou "Input manual" (GEOBOX classificados à mão
+' pelo usuário). Usado pra bases de BR/MIN — evita carregar o resto da
+' Referência à toa, e é mais preciso que filtrar por LP (MIN/BR podem estar
+' espalhados em outras fontes fora do escopo de Beyond Road).
 ' ==========================================================================
 Function CarregarTabelaReferencia(ByRef dicSegPorGeobox As Object, ByRef dicLpPorGeobox As Object, _
                                    ByRef arrMarcas() As String, ByRef dicGeoboxPorMarca As Object, _
@@ -112,6 +113,7 @@ Function CarregarTabelaReferencia(ByRef dicSegPorGeobox As Object, ByRef dicLpPo
     dicFontesMinBr.Add "STORM 40119090", True
     dicFontesMinBr.Add "STORM 40129090", True
     dicFontesMinBr.Add UCase("Dicionário WW"), True ' baseRef é comparado em UCase mais abaixo
+    dicFontesMinBr.Add UCase("Input manual"), True ' geobox classificados manualmente pelo usuário
 
     ' Usa a maior "última linha com dado" entre as 6 colunas (Geobox, Marca,
     ' Gama, LP, Segmento, Base de referência) em vez de só a coluna A. Uma
@@ -251,7 +253,7 @@ ProximaLinhaRef:
     Set dicLpPorGeobox = MontarDicMaioriaPorGeobox(dicVotosLpPorGeo)
 
     diagnostico = diagnostico & "Última linha lida na aba ""Referencia"": " & lastRowRef & vbCrLf
-    diagnostico = diagnostico & "Modo BR/MIN ativado? " & IIf(somenteMinBr, "SIM (só ""Base de referência"" = STORM 40117090/40118090/40119090/40129090 ou Dicionário WW)", "Não") & vbCrLf
+    diagnostico = diagnostico & "Modo BR/MIN ativado? " & IIf(somenteMinBr, "SIM (só ""Base de referência"" = STORM 40117090/40118090/40119090/40129090, Dicionário WW ou Input manual)", "Não") & vbCrLf
     If somenteMinBr Then
         diagnostico = diagnostico & "Linhas da Referência ignoradas (Base de referência fora das 4 fontes STORM): " & qtdLinhasIgnoradasMinBr & vbCrLf
     End If

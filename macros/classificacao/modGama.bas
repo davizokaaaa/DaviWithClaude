@@ -225,11 +225,23 @@ End Function
 ' candidatas curtas (<=4 caracteres) ou puramente numéricas — evita que uma
 ' gama tipo "520" bata só por estar dentro de "1.520MM". Fora de BR/MIN,
 ' mantém o comportamento antigo (substring livre) em toda a camada 2.
+'
+' Em BR/MIN, GAMA só é procurada se a MARCA da linha já tiver sido
+' encontrada antes (marca não vazia) — uma gama "solta" sem marca conhecida
+' tende a ser falso positivo (número da descrição batendo com gama numérica
+' tipo "550", ou palavra-chave genérica tipo "FLORESTAL" sem ligação real
+' com nenhuma marca confirmada). Fora de BR/MIN, mantém o comportamento
+' antigo (procura mesmo com marca vazia).
 ' ==========================================================================
 Function ExtrairGama(descricao As String, ByRef marca As String, _
                       dicGamasPorMarca As Object, dicGamaGlobalUnicos As Object, _
                       dicMarcaPorGama As Object, dicExcecoesGama As Object, _
                       Optional somenteMinBr As Boolean = False) As String
+
+    If somenteMinBr And Len(marca) = 0 Then
+        ExtrairGama = ""
+        Exit Function
+    End If
 
     Dim descNorm As String
     descNorm = NormalizarParaComparacao(descricao)

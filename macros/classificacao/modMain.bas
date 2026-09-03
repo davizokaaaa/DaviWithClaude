@@ -277,18 +277,25 @@ Sub ClassificarTudo()
         End If
 
         ' --- LP: se a Tabela não trouxe LP pra essa dimensão, cai no      ---
-        ' --- fallback de deduzir pelo SEGMENTO; por fim, ARO terminado    ---
-        ' --- em ".5" sempre força "PL", independente do que veio antes.   ---
+        ' --- fallback de deduzir pelo SEGMENTO.                           ---
         If Len(lp) = 0 Then lp = DeduzirLp(segmento)
-        If AroTerminaEmMeio(aro) Then lp = "PL"
 
         ' --- BR/MIN: o TIPO PRODUTO manda por cima de tudo o que veio      ---
-        ' --- antes (GEOBOX/dedução/regra do ARO) — só nesse modo.          ---
+        ' --- antes (combinação GEOBOX+MARCA, GEOBOX puro, dedução) — só     ---
+        ' --- nesse modo. DeduzirLpBrMin cobre TODOS os TIPO PRODUTO         ---
+        ' --- válidos em BR/MIN (PL, TC, BR e MIN) — um TIPO PRODUTO nunca   ---
+        ' --- pode "vazar" pra uma LP que ele não representa.                ---
         If somenteMinBr Then
             Dim lpBrMin As String
             lpBrMin = DeduzirLpBrMin(segmento)
             If Len(lpBrMin) > 0 Then lp = lpBrMin
         End If
+
+        ' --- ARO terminado em ".5" força "PL" — mas só como ÚLTIMO recurso, ---
+        ' --- se depois de TODAS as etapas acima (GEOBOX+MARCA, GEOBOX puro, ---
+        ' --- dedução por SEGMENTO, override de TIPO PRODUTO em BR/MIN)      ---
+        ' --- nenhuma LP foi determinada.                                    ---
+        If Len(lp) = 0 And AroTerminaEmMeio(aro) Then lp = "PL"
 
         ws.Cells(i, colLp).Value = lp
 

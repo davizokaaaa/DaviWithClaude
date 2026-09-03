@@ -41,52 +41,64 @@ End Function
 
 ' ==========================================================================
 ' Override de LP a partir do TIPO PRODUTO (SEGMENTO) — SÓ pra bases BR/MIN
-' (chamado de modMain só quando somenteMinBr = True). O LP vindo da Tabela
-' de Referência/dedução normal pode vir incompatível com o TIPO PRODUTO
-' nessa base; essa regra tem prioridade final sobre tudo o que veio antes
-' (busca por GEOBOX, DeduzirLp, regra do ARO ".5").
-'   AG, CL, CO, COLHEITADEIRA, COLHEITADEIRA/HPT, COMPACT, DM, FLORESTAL,
-'   HPT, IMPLEMENTO, INDUS, INFRA, LPT, MH, MILITAR, MPT, PÁ CARREGADEIRA,
-'   PNEUMÁTICO, PORTOS, PORTS, PULVERIZADOR, SÓLIDO -> "BR"
+' (chamado de modMain só quando somenteMinBr = True). Cada TIPO PRODUTO só
+' pode pertencer à LP que ele representa — essa regra tem prioridade final
+' sobre tudo o que veio antes (combinação GEOBOX+MARCA, GEOBOX puro,
+' DeduzirLp). A regra do ARO ".5" só é aplicada DEPOIS desta, e só se
+' nenhuma LP tiver sido determinada em nenhuma etapa (ver modMain).
+'   TLD, PPL, BUS -> "PL"
+'   REC, COM, PC -> "TC"
+'   AG, CL, CO, COLHEITADEIRA, COLHEITADEIRA/HPT, DM, HPT, IMPLEMENTO,
+'   INDUS, INFRA, LPT, MH, MILITAR, MPT, OUTRO, PNEUMÁTICO, PORTOS, PORTS,
+'   PULVERIZADOR, QUADRICICLO, SM, SÓLIDO -> "BR"
 '   MIN -> "MIN"
 '   Qualquer outro TIPO PRODUTO (incl. vazio) -> "" (não força nada, mantém
 '   o LP que já tinha sido determinado antes desta regra).
 ' ==========================================================================
 Function DeduzirLpBrMin(segmento As String) As String
-    Static dicSegmentosBr As Object
-    If dicSegmentosBr Is Nothing Then
-        Set dicSegmentosBr = CreateObject("Scripting.Dictionary")
-        dicSegmentosBr.Add "AG", True
-        dicSegmentosBr.Add "CL", True
-        dicSegmentosBr.Add "CO", True
-        dicSegmentosBr.Add "COLHEITADEIRA", True
-        dicSegmentosBr.Add "COLHEITADEIRA/HPT", True
-        dicSegmentosBr.Add "COMPACT", True
-        dicSegmentosBr.Add "DM", True
-        dicSegmentosBr.Add "FLORESTAL", True
-        dicSegmentosBr.Add "HPT", True
-        dicSegmentosBr.Add "IMPLEMENTO", True
-        dicSegmentosBr.Add "INDUS", True
-        dicSegmentosBr.Add "INFRA", True
-        dicSegmentosBr.Add "LPT", True
-        dicSegmentosBr.Add "MH", True
-        dicSegmentosBr.Add "MILITAR", True
-        dicSegmentosBr.Add "MPT", True
-        dicSegmentosBr.Add "PÁ CARREGADEIRA", True
-        dicSegmentosBr.Add "PNEUMÁTICO", True
-        dicSegmentosBr.Add "PORTOS", True
-        dicSegmentosBr.Add "PORTS", True
-        dicSegmentosBr.Add "PULVERIZADOR", True
-        dicSegmentosBr.Add "SÓLIDO", True
+    Static dicLpPorSegmentoBrMin As Object
+    If dicLpPorSegmentoBrMin Is Nothing Then
+        Set dicLpPorSegmentoBrMin = CreateObject("Scripting.Dictionary")
+
+        dicLpPorSegmentoBrMin.Add "TLD", "PL"
+        dicLpPorSegmentoBrMin.Add "PPL", "PL"
+        dicLpPorSegmentoBrMin.Add "BUS", "PL"
+
+        dicLpPorSegmentoBrMin.Add "REC", "TC"
+        dicLpPorSegmentoBrMin.Add "COM", "TC"
+        dicLpPorSegmentoBrMin.Add "PC", "TC"
+
+        dicLpPorSegmentoBrMin.Add "AG", "BR"
+        dicLpPorSegmentoBrMin.Add "CL", "BR"
+        dicLpPorSegmentoBrMin.Add "CO", "BR"
+        dicLpPorSegmentoBrMin.Add "COLHEITADEIRA", "BR"
+        dicLpPorSegmentoBrMin.Add "COLHEITADEIRA/HPT", "BR"
+        dicLpPorSegmentoBrMin.Add "DM", "BR"
+        dicLpPorSegmentoBrMin.Add "HPT", "BR"
+        dicLpPorSegmentoBrMin.Add "IMPLEMENTO", "BR"
+        dicLpPorSegmentoBrMin.Add "INDUS", "BR"
+        dicLpPorSegmentoBrMin.Add "INFRA", "BR"
+        dicLpPorSegmentoBrMin.Add "LPT", "BR"
+        dicLpPorSegmentoBrMin.Add "MH", "BR"
+        dicLpPorSegmentoBrMin.Add "MILITAR", "BR"
+        dicLpPorSegmentoBrMin.Add "MPT", "BR"
+        dicLpPorSegmentoBrMin.Add "OUTRO", "BR"
+        dicLpPorSegmentoBrMin.Add "PNEUMÁTICO", "BR"
+        dicLpPorSegmentoBrMin.Add "PORTOS", "BR"
+        dicLpPorSegmentoBrMin.Add "PORTS", "BR"
+        dicLpPorSegmentoBrMin.Add "PULVERIZADOR", "BR"
+        dicLpPorSegmentoBrMin.Add "QUADRICICLO", "BR"
+        dicLpPorSegmentoBrMin.Add "SM", "BR"
+        dicLpPorSegmentoBrMin.Add "SÓLIDO", "BR"
+
+        dicLpPorSegmentoBrMin.Add "MIN", "MIN"
     End If
 
     Dim segNorm As String
     segNorm = UCase(Trim(segmento))
 
-    If segNorm = "MIN" Then
-        DeduzirLpBrMin = "MIN"
-    ElseIf dicSegmentosBr.Exists(segNorm) Then
-        DeduzirLpBrMin = "BR"
+    If dicLpPorSegmentoBrMin.Exists(segNorm) Then
+        DeduzirLpBrMin = CStr(dicLpPorSegmentoBrMin(segNorm))
     Else
         DeduzirLpBrMin = ""
     End If

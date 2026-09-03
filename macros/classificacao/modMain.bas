@@ -91,7 +91,7 @@ Sub ClassificarTudo()
     Dim dicPadroesLegado As Object
     Set dicPadroesLegado = CarregarPadroesGeoboxLegado()
 
-    Dim dicSegPorGeobox As Object, dicLpPorGeobox As Object
+    Dim dicSegPorGeobox As Object, dicLpPorGeobox As Object, dicLpPorGeoboxMarca As Object
     Dim arrMarcas() As String
     Dim dicGeoboxPorMarca As Object, dicGeoboxGlobalUnicos As Object
     Dim dicGamasPorMarca As Object, dicGamaGlobalUnicos As Object, dicExcecoesGama As Object
@@ -116,7 +116,7 @@ Sub ClassificarTudo()
     ' --- LPs (ex: "9.00-20") que não têm nada a ver com a base BR/MIN.      ---
     If somenteMinBr Then Set dicPadroesLegado = CreateObject("Scripting.Dictionary")
 
-    If Not CarregarTabelaReferencia(dicSegPorGeobox, dicLpPorGeobox, arrMarcas, _
+    If Not CarregarTabelaReferencia(dicSegPorGeobox, dicLpPorGeobox, dicLpPorGeoboxMarca, arrMarcas, _
                                      dicGeoboxPorMarca, dicGeoboxGlobalUnicos, dicExcecoesMarca, _
                                      dicGamasPorMarca, dicGamaGlobalUnicos, dicMarcaPorGama, dicExcecoesGama, _
                                      somenteMinBr, diagnosticoRef) Then
@@ -243,6 +243,19 @@ Sub ClassificarTudo()
         ' --- que bate exatamente com o GEOBOX gravado na Tabela.           ---
         Dim lp As String
         ObterSegmentoELpPorDimensao dimensaoBruta, dicSegPorGeobox, dicLpPorGeobox, segmento, lp
+
+        ' --- BR/MIN: antes de aceitar o LP achado só por GEOBOX acima,       ---
+        ' --- tenta primeiro a combinação GEOBOX + MARCA (mais específica —   ---
+        ' --- LP dominante entre as linhas da Referência com essa marca       ---
+        ' --- E esse geobox exatos). Só cai no LP por GEOBOX puro (já em lp)  ---
+        ' --- se essa combinação não existir na Referência.                   ---
+        If somenteMinBr And Len(marca) > 0 Then
+            Dim chaveLpGeoMarca As String
+            chaveLpGeoMarca = dimensaoBruta & "|@|" & marca
+            If dicLpPorGeoboxMarca.Exists(chaveLpGeoMarca) Then
+                lp = CStr(dicLpPorGeoboxMarca(chaveLpGeoMarca))
+            End If
+        End If
         ws.Cells(i, colTipoProduto).Value = segmento
 
         ' --- Diagnóstico: conta preenchidos/vazios e guarda uma amostra ---

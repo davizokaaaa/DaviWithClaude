@@ -19,6 +19,13 @@ Option Explicit
 '                          GEOBOX (maioria, votação independente da de
 '                          Segmento). Em BR/MIN: LP da PRIMEIRA linha da
 '                          Referência com aquele GEOBOX, sem votação.
+'   dicLpPorGeoboxMarca  : chave GEOBOX & "|@|" & MARCA -> LP mais frequente
+'                          (maioria) entre as linhas da Referência que têm
+'                          ESSA combinação exata de GEOBOX e MARCA. Só
+'                          montado em modo BR/MIN — usado como 1ª tentativa
+'                          de LP em modMain (mais específico que só GEOBOX);
+'                          se a combinação não existir, cai no dicLpPorGeobox
+'                          normal (só GEOBOX).
 '   arrMarcas()          : array de marcas únicas, ordenado da mais longa p/ mais curta
 '   dicGeoboxPorMarca    : chave MARCA -> Collection de GEOBOX únicos daquela marca
 '   dicGeoboxGlobalUnicos: chave GEOBOX -> True (todos os geobox únicos, p/ busca ampla)
@@ -42,6 +49,7 @@ Option Explicit
 ' fora dessas fontes e mesmo assim ser a marca/gama certa do produto.
 ' ==========================================================================
 Function CarregarTabelaReferencia(ByRef dicSegPorGeobox As Object, ByRef dicLpPorGeobox As Object, _
+                                   ByRef dicLpPorGeoboxMarca As Object, _
                                    ByRef arrMarcas() As String, ByRef dicGeoboxPorMarca As Object, _
                                    ByRef dicGeoboxGlobalUnicos As Object, ByRef dicExcecoesMarca As Object, _
                                    ByRef dicGamasPorMarca As Object, ByRef dicGamaGlobalUnicos As Object, _
@@ -96,6 +104,11 @@ Function CarregarTabelaReferencia(ByRef dicSegPorGeobox As Object, ByRef dicLpPo
     ' nesse modo estava juntando LP de linhas que não deveriam contar.
     Dim dicLpPrimeiraOcorrenciaMinBr As Object
     Set dicLpPrimeiraOcorrenciaMinBr = CreateObject("Scripting.Dictionary")
+
+    ' chave GEOBOX & "|@|" & MARCA -> Dictionary(LP -> contagem). Só usado em
+    ' modo BR/MIN — vira dicLpPorGeoboxMarca (maioria) no fim da função.
+    Dim dicVotosLpPorGeoMarca As Object
+    Set dicVotosLpPorGeoMarca = CreateObject("Scripting.Dictionary")
 
     Dim dicMarcasUnicas As Object
     Set dicMarcasUnicas = CreateObject("Scripting.Dictionary")
@@ -209,6 +222,24 @@ Function CarregarTabelaReferencia(ByRef dicSegPorGeobox As Object, ByRef dicLpPo
                         subVotos.Add lp, 1
                     End If
                 End If
+
+                ' --- Votação por GEOBOX + MARCA combinados (só BR/MIN) —      ---
+                ' --- mais específica que a votação só por GEOBOX acima; usada ---
+                ' --- em modMain como 1ª tentativa de LP, antes de cair na de  ---
+                ' --- só GEOBOX.                                               ---
+                If somenteMinBr And Len(marcaRef) > 0 Then
+                    Dim chaveGeoMarca As String
+                    chaveGeoMarca = geo & "|@|" & marcaRef
+                    If Not dicVotosLpPorGeoMarca.Exists(chaveGeoMarca) Then
+                        dicVotosLpPorGeoMarca.Add chaveGeoMarca, CreateObject("Scripting.Dictionary")
+                    End If
+                    Set subVotos = dicVotosLpPorGeoMarca(chaveGeoMarca)
+                    If subVotos.Exists(lp) Then
+                        subVotos(lp) = subVotos(lp) + 1
+                    Else
+                        subVotos.Add lp, 1
+                    End If
+                End If
             End If
         End If
 
@@ -268,8 +299,10 @@ Function CarregarTabelaReferencia(ByRef dicSegPorGeobox As Object, ByRef dicLpPo
     ' --- Fora de BR/MIN, continua sendo maioria, como sempre foi.          ---
     If somenteMinBr Then
         Set dicLpPorGeobox = dicLpPrimeiraOcorrenciaMinBr
+        Set dicLpPorGeoboxMarca = MontarDicMaioriaPorGeobox(dicVotosLpPorGeoMarca)
     Else
         Set dicLpPorGeobox = MontarDicMaioriaPorGeobox(dicVotosLpPorGeo)
+        Set dicLpPorGeoboxMarca = CreateObject("Scripting.Dictionary")
     End If
 
     diagnostico = diagnostico & "Última linha lida na aba ""Referencia"": " & lastRowRef & vbCrLf

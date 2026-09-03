@@ -149,20 +149,27 @@ Function ExtrairDimensao(descricao As String, marca As String, _
     End If
 
     ' --- Busca ampla em qualquer medida conhecida (Tabela de Referência) ---
-    Dim chaveG As Variant
-    For Each chaveG In dicGeoboxGlobalUnicos.Keys
-        If Len(CStr(chaveG)) >= TAMANHO_MINIMO_DIMENSAO Then
-            If Len(CStr(chaveG)) > melhorLen Then
-                If InStr(1, textoNorm, CStr(chaveG), vbTextCompare) > 0 _
-                   Or InStr(1, textoSemEspaco, CStr(chaveG), vbTextCompare) > 0 _
-                   Or InStr(1, textoNormDparaR, CStr(chaveG), vbTextCompare) > 0 _
-                   Or InStr(1, textoSemEspacoDparaR, CStr(chaveG), vbTextCompare) > 0 Then
-                    melhorLen = Len(CStr(chaveG))
-                    melhor = CStr(chaveG)
+    ' --- SÓ fora de BR/MIN: em BR/MIN, o Passo 0 (DE-PARA cego, acima) já    ---
+    ' --- varreu esse MESMO dicGeoboxGlobalUnicos inteiro pra achar o melhor ---
+    ' --- match; repetir a varredura aqui (com 4 InStr por item) é trabalho  ---
+    ' --- em dobro por linha — e com milhares de GEOBOX únicos numa base     ---
+    ' --- BR/MIN, isso é o que deixava a macro lentíssima/travando.          ---
+    If Not somenteMinBr Then
+        Dim chaveG As Variant
+        For Each chaveG In dicGeoboxGlobalUnicos.Keys
+            If Len(CStr(chaveG)) >= TAMANHO_MINIMO_DIMENSAO Then
+                If Len(CStr(chaveG)) > melhorLen Then
+                    If InStr(1, textoNorm, CStr(chaveG), vbTextCompare) > 0 _
+                       Or InStr(1, textoSemEspaco, CStr(chaveG), vbTextCompare) > 0 _
+                       Or InStr(1, textoNormDparaR, CStr(chaveG), vbTextCompare) > 0 _
+                       Or InStr(1, textoSemEspacoDparaR, CStr(chaveG), vbTextCompare) > 0 Then
+                        melhorLen = Len(CStr(chaveG))
+                        melhor = CStr(chaveG)
+                    End If
                 End If
             End If
-        End If
-    Next chaveG
+        Next chaveG
+    End If
 
     If melhorLen > 0 Then
         ExtrairDimensao = melhor

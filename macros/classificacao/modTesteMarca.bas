@@ -105,55 +105,64 @@ Finally:
 End Sub
 
 ' ==========================================================================
-' Escapa caracteres especiais de regex num texto literal (pra usar como
-' padrão exato dentro de \b...\b, sem que "." "+" "(" etc. sejam
-' interpretados como metacaracteres).
+' True se o caractere for uma letra A-Z (maiúscula ou minúscula). String
+' vazia (posição fora do texto — início/fim) conta como "não é letra", ou
+' seja, já é fronteira válida.
 ' ==========================================================================
-Private Function EscaparRegexTeste(texto As String) As String
-    Dim especiais As String
-    especiais = "\^$.|?*+()[]{}"
-
-    Dim resultado As String, i As Long, c As String
-    resultado = ""
-    For i = 1 To Len(texto)
-        c = Mid(texto, i, 1)
-        If InStr(especiais, c) > 0 Then
-            resultado = resultado & "\" & c
-        Else
-            resultado = resultado & c
-        End If
-    Next i
-    EscaparRegexTeste = resultado
+Private Function EhLetra(c As String) As Boolean
+    If Len(c) = 0 Then
+        EhLetra = False
+        Exit Function
+    End If
+    Dim cu As String
+    cu = UCase(c)
+    EhLetra = (cu >= "A" And cu <= "Z")
 End Function
 
 ' ==========================================================================
 ' Procura, dentro do texto, a PRIMEIRA marca de arrMarcas (já ordenado do
-' nome mais longo pro mais curto) que aparece como PALAVRA ISOLADA — \b nos
-' dois lados, sem substring livre. Retorna "" se nenhuma bater.
+' nome mais longo pro mais curto) que aparece como PALAVRA ISOLADA — sem
+' regex: pra cada ocorrência (InStr, varrendo TODAS, não só a primeira),
+' olha o caractere logo antes e logo depois e só aceita se nenhum dos dois
+' for outra LETRA colada (dígito, espaço, pontuação, início/fim de texto
+' contam como separador válido — ex: "MRL" em "MRL7.50-16" é aceito porque
+' "7" não é letra; "GRI" dentro de "AGRICOLA" continua rejeitado porque "A"
+' e "C" são letras). Retorna "" se nenhuma marca bater assim.
 ' ==========================================================================
 Private Function BuscarMarcaPalavraSeca(texto As String, arrMarcas() As String) As String
-    Static regex As Object
-    If regex Is Nothing Then
-        Set regex = CreateObject("VBScript.RegExp")
-        regex.Global = False
-        regex.IgnoreCase = True
-    End If
-
     Dim i As Long
     For i = LBound(arrMarcas) To UBound(arrMarcas)
-        If Len(arrMarcas(i)) > 0 Then
-            ' Fronteira "só letra": \b comum trata letra e dígito como o
-            ' mesmo tipo de caractere, então nunca acha fronteira entre
-            ' "MRL" e "7" em "MRL7.50-16" ou entre "BKT" e "4040" em
-            ' "BKT4040" — fica tudo grudado. Aqui só outra LETRA colada
-            ' conta como "não é fronteira"; dígito, espaço, pontuação etc.
-            ' já contam como separador válido. Continua protegendo contra
-            ' "GRI" dentro de "AGRICOLA" (letra colada nos dois lados).
-            regex.Pattern = "(?:^|[^A-Z])" & EscaparRegexTeste(arrMarcas(i)) & "(?:[^A-Z]|$)"
-            If regex.Test(texto) Then
-                BuscarMarcaPalavraSeca = arrMarcas(i)
-                Exit Function
-            End If
+        Dim cand As String
+        cand = arrMarcas(i)
+        If Len(cand) > 0 Then
+            Dim posBusca As Long, posAchada As Long
+            posBusca = 1
+            Do
+                posAchada = InStr(posBusca, texto, cand, vbTextCompare)
+                If posAchada = 0 Then Exit Do
+
+                Dim charAntes As String, charDepois As String
+                If posAchada > 1 Then
+                    charAntes = Mid(texto, posAchada - 1, 1)
+                Else
+                    charAntes = ""
+                End If
+
+                Dim posDepois As Long
+                posDepois = posAchada + Len(cand)
+                If posDepois <= Len(texto) Then
+                    charDepois = Mid(texto, posDepois, 1)
+                Else
+                    charDepois = ""
+                End If
+
+                If Not EhLetra(charAntes) And Not EhLetra(charDepois) Then
+                    BuscarMarcaPalavraSeca = cand
+                    Exit Function
+                End If
+
+                posBusca = posAchada + 1 ' tenta a próxima ocorrência dessa mesma marca
+            Loop
         End If
     Next i
     BuscarMarcaPalavraSeca = ""

@@ -155,6 +155,33 @@ Private Function PrecedidoPorRotuloMarca(texto As String, posAchada As Long) As 
 End Function
 
 ' ==========================================================================
+' True se o trecho imediatamente DEPOIS de posDepois for um dos rótulos de
+' campo conhecidos (LARGURA, SERIE, TAMANHO, PEDIDO, ITEM, FATURA, DIMENSAO,
+' ARO) colado direto, sem separador — ex: "...MARCA: MICHELINLARGURA: 650",
+' "...MARCA JUNGHEINRICHPEDIDO: 065034". Igual à ideia do rótulo "MARCA" à
+' esquerda: esses nomes só aparecem colados como próximo campo do formulário,
+' não colidem por acaso (diferente de "GRI" em "AGRICOLA"), então esse caso
+' é aceito mesmo com letra colada à direita.
+' ==========================================================================
+Private Function SeguidoPorRotuloCampo(texto As String, posDepois As Long) As Boolean
+    Static arrRotulos As Variant
+    arrRotulos = Array("LARGURA", "SERIE", "TAMANHO", "PEDIDO", "ITEM", "FATURA", "DIMENSAO", "ARO")
+
+    Dim j As Long
+    For j = LBound(arrRotulos) To UBound(arrRotulos)
+        Dim rotulo As String
+        rotulo = arrRotulos(j)
+        If posDepois + Len(rotulo) - 1 <= Len(texto) Then
+            If UCase(Mid(texto, posDepois, Len(rotulo))) = rotulo Then
+                SeguidoPorRotuloCampo = True
+                Exit Function
+            End If
+        End If
+    Next j
+    SeguidoPorRotuloCampo = False
+End Function
+
+' ==========================================================================
 ' Procura, dentro do texto, a PRIMEIRA marca de arrMarcas (já ordenado do
 ' nome mais longo pro mais curto) que aparece como PALAVRA ISOLADA — sem
 ' regex: pra cada ocorrência (InStr, varrendo TODAS, não só a primeira),
@@ -163,7 +190,9 @@ End Function
 ' contam como separador válido — ex: "MRL" em "MRL7.50-16" é aceito porque
 ' "7" não é letra; "GRI" dentro de "AGRICOLA" continua rejeitado porque "A"
 ' e "C" são letras), EXCETO quando o lado esquerdo for a palavra "MARCA"
-' colada (ver PrecedidoPorRotuloMarca). Retorna "" se nenhuma marca bater.
+' colada (ver PrecedidoPorRotuloMarca) ou o lado direito for um rótulo de
+' campo conhecido colado (LARGURA, SERIE, TAMANHO, PEDIDO, ITEM, FATURA,
+' DIMENSAO, ARO — ver SeguidoPorRotuloCampo). Retorna "" se nenhuma marca bater.
 ' ==========================================================================
 Private Function BuscarMarcaPalavraSeca(texto As String, arrMarcas() As String) As String
     Dim i As Long
@@ -192,10 +221,11 @@ Private Function BuscarMarcaPalavraSeca(texto As String, arrMarcas() As String) 
                     charDepois = ""
                 End If
 
-                Dim ladoEsquerdoOk As Boolean
+                Dim ladoEsquerdoOk As Boolean, ladoDireitoOk As Boolean
                 ladoEsquerdoOk = (Not EhLetra(charAntes)) Or PrecedidoPorRotuloMarca(texto, posAchada)
+                ladoDireitoOk = (Not EhLetra(charDepois)) Or SeguidoPorRotuloCampo(texto, posDepois)
 
-                If ladoEsquerdoOk And Not EhLetra(charDepois) Then
+                If ladoEsquerdoOk And ladoDireitoOk Then
                     BuscarMarcaPalavraSeca = cand
                     Exit Function
                 End If

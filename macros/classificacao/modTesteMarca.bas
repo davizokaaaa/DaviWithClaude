@@ -142,7 +142,14 @@ Private Function BuscarMarcaPalavraSeca(texto As String, arrMarcas() As String) 
     Dim i As Long
     For i = LBound(arrMarcas) To UBound(arrMarcas)
         If Len(arrMarcas(i)) > 0 Then
-            regex.Pattern = "\b" & EscaparRegexTeste(arrMarcas(i)) & "\b"
+            ' Fronteira "só letra": \b comum trata letra e dígito como o
+            ' mesmo tipo de caractere, então nunca acha fronteira entre
+            ' "MRL" e "7" em "MRL7.50-16" ou entre "BKT" e "4040" em
+            ' "BKT4040" — fica tudo grudado. Aqui só outra LETRA colada
+            ' conta como "não é fronteira"; dígito, espaço, pontuação etc.
+            ' já contam como separador válido. Continua protegendo contra
+            ' "GRI" dentro de "AGRICOLA" (letra colada nos dois lados).
+            regex.Pattern = "(?:^|[^A-Z])" & EscaparRegexTeste(arrMarcas(i)) & "(?:[^A-Z]|$)"
             If regex.Test(texto) Then
                 BuscarMarcaPalavraSeca = arrMarcas(i)
                 Exit Function

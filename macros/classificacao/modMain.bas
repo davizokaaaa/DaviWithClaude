@@ -197,7 +197,7 @@ Sub ClassificarTudo()
         ' --- como praticamente exclusiva de uma marca) — por isso "marca" ---
         ' --- é passada ByRef e pode voltar preenchida daqui.              ---
         Dim gamaLinha As String
-        gamaLinha = ExtrairGama(descricao, marca, dicGamasPorMarca, dicGamaGlobalUnicos, dicMarcaPorGama, dicExcecoesGama)
+        gamaLinha = ExtrairGama(descricao, marca, dicGamasPorMarca, dicGamaGlobalUnicos, dicMarcaPorGama, dicExcecoesGama, somenteMinBr)
         ws.Cells(i, colGama).Value = gamaLinha
         ws.Cells(i, colMarca).Value = marca
 

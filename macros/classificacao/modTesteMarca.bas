@@ -86,7 +86,7 @@ Sub TestarMarcaCega()
         ' --- Passo 1: acha GAMA primeiro; se tiver marca dona conhecida, ---
         ' --- ExtrairGama já preenche marcaAchada (ByRef) sozinha.        ---
         marcaAchada = ""
-        gamaAchada = ExtrairGama(descricao, marcaAchada, dicGamasPorMarca, dicGamaGlobalUnicos, dicMarcaPorGama, dicExcecoesGama)
+        gamaAchada = ExtrairGama(descricao, marcaAchada, dicGamasPorMarca, dicGamaGlobalUnicos, dicMarcaPorGama, dicExcecoesGama, somenteMinBr)
 
         ' --- Passo 2: se a GAMA não resolveu a marca, cai na busca cega. ---
         If Len(marcaAchada) = 0 Then

@@ -166,7 +166,7 @@ End Function
 Private Function SeguidoPorRotuloCampo(texto As String, posDepois As Long) As Boolean
     Static arrRotulos As Variant
     arrRotulos = Array("LARGURA", "SERIE", "TAMANHO", "PEDIDO", "ITEM", "FATURA", "DIMENSAO", "ARO", _
-                        "REGISTRO", "MODELO", "COR", "CARGA", "INDICE", "REF", "NCM", "DIAMETRO")
+                        "REGISTRO", "MODELO", "COR", "CARGA", "INDICE", "REF", "NCM", "DIAMETRO", "DESIGNACAO")
 
     Dim j As Long
     For j = LBound(arrRotulos) To UBound(arrRotulos)

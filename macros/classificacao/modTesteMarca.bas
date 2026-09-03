@@ -5,13 +5,17 @@ Option Explicit
 ' MODULO: modTesteMarca
 ' Macro de TESTE, isolada da macro principal (ClassificarTudo, em modMain) —
 ' não lê nem grava nenhuma coluna/variável dela. Busca de MARCA reformulada
-' do zero, "seca": procura cada marca conhecida (arrMarcas, Referência +
-' MarcasExtras) como PALAVRA ISOLADA (limite \b nos dois lados) direto na
-' descrição — sem exceções, sem GAMA, sem substring livre. Fica com a
-' primeira que bater (arrMarcas já vem ordenado do nome mais longo pro mais
-' curto, então a primeira que bater já é a mais longa/específica). Escreve
-' o resultado numa coluna própria ("MARCA (TESTE PALAVRA SECA)") e não mexe
-' em nenhuma outra coluna da planilha.
+' do zero, "seca":
+'   1) Exceções/apelidos (dicExcecoesMarca, aba "ExcecoesMarca") — igual
+'      sempre foi em modMarca.ExtrairMarca, substring livre (lista curada
+'      manualmente, baixo risco de colisão).
+'   2) Se não bater exceção, procura cada marca conhecida (arrMarcas,
+'      Referência + MarcasExtras) como PALAVRA ISOLADA direto na descrição
+'      — sem GAMA, sem substring livre. Fica com a primeira que bater
+'      (arrMarcas já vem ordenado do nome mais longo pro mais curto, então
+'      a primeira que bater já é a mais longa/específica).
+' Escreve o resultado numa coluna própria ("MARCA (TESTE PALAVRA SECA)") e
+' não mexe em nenhuma outra coluna da planilha.
 ' ==========================================================================
 Sub TestarMarcaCega()
 
@@ -80,7 +84,20 @@ Sub TestarMarcaCega()
 
         Dim descricao As String, marcaAchada As String
         descricao = UCase(Trim(CStr(ws.Cells(i, colDescricao).Value)))
-        marcaAchada = BuscarMarcaPalavraSeca(descricao, arrMarcas)
+
+        marcaAchada = ""
+        Dim chaveExc As Variant
+        For Each chaveExc In dicExcecoesMarca.Keys
+            If InStr(1, descricao, CStr(chaveExc), vbTextCompare) > 0 Then
+                marcaAchada = CStr(dicExcecoesMarca(chaveExc))
+                Exit For
+            End If
+        Next chaveExc
+
+        If Len(marcaAchada) = 0 Then
+            marcaAchada = BuscarMarcaPalavraSeca(descricao, arrMarcas)
+        End If
+
         ws.Cells(i, colResultado).Value = marcaAchada
         If Len(marcaAchada) > 0 Then qtdAchou = qtdAchou + 1
     Next i
@@ -120,6 +137,24 @@ Private Function EhLetra(c As String) As Boolean
 End Function
 
 ' ==========================================================================
+' True se o trecho imediatamente ANTES de posAchada for a palavra "MARCA"
+' colada (sem espaço/pontuação no meio) — ex: "MODELO T510, MARCATRELLEBORG,
+' INDICE...". Aqui "MARCA" é claramente um rótulo, não uma palavra que
+' colide por acaso (como "AGRI" em "AGRICOLA") — então esse caso específico
+' é aceito mesmo com letra colada, sem abrir mão da proteção geral.
+' ==========================================================================
+Private Function PrecedidoPorRotuloMarca(texto As String, posAchada As Long) As Boolean
+    Const ROTULO As String = "MARCA"
+    Dim inicioRotulo As Long
+    inicioRotulo = posAchada - Len(ROTULO)
+    If inicioRotulo < 1 Then
+        PrecedidoPorRotuloMarca = False
+        Exit Function
+    End If
+    PrecedidoPorRotuloMarca = (UCase(Mid(texto, inicioRotulo, Len(ROTULO))) = ROTULO)
+End Function
+
+' ==========================================================================
 ' Procura, dentro do texto, a PRIMEIRA marca de arrMarcas (já ordenado do
 ' nome mais longo pro mais curto) que aparece como PALAVRA ISOLADA — sem
 ' regex: pra cada ocorrência (InStr, varrendo TODAS, não só a primeira),
@@ -127,7 +162,8 @@ End Function
 ' for outra LETRA colada (dígito, espaço, pontuação, início/fim de texto
 ' contam como separador válido — ex: "MRL" em "MRL7.50-16" é aceito porque
 ' "7" não é letra; "GRI" dentro de "AGRICOLA" continua rejeitado porque "A"
-' e "C" são letras). Retorna "" se nenhuma marca bater assim.
+' e "C" são letras), EXCETO quando o lado esquerdo for a palavra "MARCA"
+' colada (ver PrecedidoPorRotuloMarca). Retorna "" se nenhuma marca bater.
 ' ==========================================================================
 Private Function BuscarMarcaPalavraSeca(texto As String, arrMarcas() As String) As String
     Dim i As Long
@@ -156,7 +192,10 @@ Private Function BuscarMarcaPalavraSeca(texto As String, arrMarcas() As String) 
                     charDepois = ""
                 End If
 
-                If Not EhLetra(charAntes) And Not EhLetra(charDepois) Then
+                Dim ladoEsquerdoOk As Boolean
+                ladoEsquerdoOk = (Not EhLetra(charAntes)) Or PrecedidoPorRotuloMarca(texto, posAchada)
+
+                If ladoEsquerdoOk And Not EhLetra(charDepois) Then
                     BuscarMarcaPalavraSeca = cand
                     Exit Function
                 End If

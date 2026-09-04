@@ -114,9 +114,15 @@ Private Function CandidatoGamaArriscado(candidatoNorm As String) As Boolean
         Exit Function
     End If
 
-    Dim regexSoDigitos As Object
-    Set regexSoDigitos = CreateObject("VBScript.RegExp")
-    regexSoDigitos.Pattern = "^\d+$"
+    ' --- Regex cacheado (Static) — criar um objeto VBScript.RegExp novo a  ---
+    ' --- cada chamada é caro, e essa função roda pra CADA candidato de     ---
+    ' --- gama, em CADA linha da planilha. Sem cache, isso sozinho já       ---
+    ' --- travava/deixava a macro lentíssima em bases grandes.              ---
+    Static regexSoDigitos As Object
+    If regexSoDigitos Is Nothing Then
+        Set regexSoDigitos = CreateObject("VBScript.RegExp")
+        regexSoDigitos.Pattern = "^\d+$"
+    End If
     CandidatoGamaArriscado = regexSoDigitos.Test(candidatoNorm)
 End Function
 

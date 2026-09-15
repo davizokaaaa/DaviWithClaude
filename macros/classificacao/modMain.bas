@@ -82,6 +82,8 @@ Sub ClassificarTudo()
     colRtOe = LocalizarOuCriarColuna(ws, "RT/OE")
     colDimensao = LocalizarColunaAlternativasOuCriar(ws, Array("DIMENSÃO", "GEOBOX"), "DIMENSÃO")
     colAro = LocalizarOuCriarColuna(ws, "ARO")
+    Dim colEstepe As Long
+    colEstepe = LocalizarOuCriarColuna(ws, "ESTEPE/LCV")
 
     ' --- Carrega dicionários auxiliares ---
     Dim dicMontadoras As Object, dicAnip As Object, dicExcecoesMarca As Object
@@ -186,6 +188,11 @@ Sub ClassificarTudo()
 
         descricao = UCase(Trim(CStr(ws.Cells(i, colDescricao).Value)))
         adquirente = UCase(Trim(CStr(ws.Cells(i, colAdquirente).Value)))
+
+        ' --- ESTEPE/LCV: portado da macro legada "estepe()" — reaproveita a ---
+        ' --- própria "descricao" (já lida/normalizada acima), em vez de     ---
+        ' --- reler a célula de novo como a macro legada fazia.              ---
+        ws.Cells(i, colEstepe).Value = ClassificarEstepe(descricao)
 
         ' --- MARCA: extraída da descrição (nome conhecido na Tabela de Referência) ---
         marca = ExtrairMarca(descricao, arrMarcas, dicExcecoesMarca, somenteMinBr)

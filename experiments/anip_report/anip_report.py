@@ -15,15 +15,35 @@ import csv
 import io
 import os
 import re
+import ssl
 import sys
+from datetime import date
 from pathlib import Path
 
-import truststore
-truststore.inject_into_ssl()
-
+import certifi
 import openpyxl
 import requests
+import urllib3
+from requests.adapters import HTTPAdapter
 from dotenv import load_dotenv
+
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+
+
+class NoVerifyAdapter(HTTPAdapter):
+    """Desliga a verificacao de certificado, mas pre-carrega um bundle valido
+    (certifi) para evitar um bug do urllib3 no Windows: mesmo com verify=False,
+    ele tenta carregar os certificados padrao do sistema operacional e quebra
+    se houver algum certificado corrompido no repositorio do Windows."""
+
+    def init_poolmanager(self, *args, **kwargs):
+        context = ssl.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
+        context.load_verify_locations(certifi.where())
+        context.check_hostname = False
+        context.verify_mode = ssl.CERT_NONE
+        kwargs["ssl_context"] = context
+        return super().init_poolmanager(*args, **kwargs)
+
 
 BASE_URL = "https://matis-anip.anura.biz"
 LOGIN_URL = (
@@ -37,6 +57,19 @@ MONTH_ABBREV_PT = {
     "May": "MAI", "June": "JUN", "July": "JUL", "August": "AGO",
     "September": "SET", "October": "OUT", "November": "NOV", "December": "DEZ",
 }
+
+MONTH_NAME_EN = [
+    "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December",
+]
+
+
+def expected_period() -> tuple[int, str]:
+    """O ANIP publica o relatorio do mes anterior (M-1): hoje setembro -> esperado agosto."""
+    today = date.today()
+    prev_month = today.month - 1 or 12
+    prev_year = today.year if today.month > 1 else today.year - 1
+    return prev_year, MONTH_NAME_EN[prev_month - 1]
 
 # Segmento -> linha na aba (layout atual: B5:B11).
 SEGMENT_ROW = {
@@ -79,7 +112,7 @@ def login(session: requests.Session, username: str, password: str) -> None:
         raise RuntimeError("Login parece ter falhado: cookie FedAuth nao foi definido. Confira usuario/senha.")
 
 
-def load_report_session_info(session: requests.Session) -> tuple[str, str, str]:
+def load_report_session_info(session: requests.Session) -> tuple[str, str, int, str]:
     resp = session.get(REPORT_URL)
     resp.raise_for_status()
     html = resp.text
@@ -95,7 +128,7 @@ def load_report_session_info(session: requests.Session) -> tuple[str, str, str]:
     if not period_match:
         raise RuntimeError("Nao foi possivel extrair o periodo (ano/mes) do relatorio.")
 
-    return session_match.group(1), control_match.group(1), period_match.group(2)
+    return session_match.group(1), control_match.group(1), int(period_match.group(1)), period_match.group(2)
 
 
 def export_csv(session: requests.Session, report_session: str, control_id: str) -> str:
@@ -175,13 +208,23 @@ def main() -> None:
 
     session = requests.Session()
     session.headers.update({"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"})
+    session.verify = False  # rede corporativa faz TLS interception no dominio do ANIP
+    session.mount("https://", NoVerifyAdapter())
 
     print("Fazendo login no ANIP...")
     login(session, username, password)
 
     print("Carregando relatorio e extraindo sessao...")
-    report_session, control_id, period_label = load_report_session_info(session)
-    print(f"Periodo do relatorio: {period_label}")
+    report_session, control_id, period_year, period_label = load_report_session_info(session)
+    print(f"Periodo do relatorio: {period_year} - {period_label}")
+
+    expected_year, expected_label = expected_period()
+    if (period_year, period_label) != (expected_year, expected_label):
+        print(
+            f"AVISO: esperava {expected_year} - {expected_label} (mes atual - 1), "
+            f"mas o ANIP retornou {period_year} - {period_label}. "
+            "O ANIP pode ainda nao ter publicado o mes esperado."
+        )
 
     print("Exportando CSV...")
     csv_text = export_csv(session, report_session, control_id)

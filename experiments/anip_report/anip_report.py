@@ -183,9 +183,10 @@ def write_to_excel(excel_path: str, sheet_name: str, rows: list[dict]) -> None:
         excel_row = SEGMENT_ROW.get(row["code"])
         if excel_row is None:
             continue
-        sheet[f"D{excel_row}"] = row["replacement"]
-        sheet[f"E{excel_row}"] = row["original_equipment"]
-        sheet[f"F{excel_row}"] = row["import_qtd"]
+        for column, value in (("D", row["replacement"]), ("E", row["original_equipment"]), ("F", row["import_qtd"])):
+            cell = sheet[f"{column}{excel_row}"]
+            cell.value = value
+            cell.number_format = "#,##0"
 
     workbook.save(path)
 

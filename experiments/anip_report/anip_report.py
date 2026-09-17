@@ -19,6 +19,7 @@ import ssl
 import sys
 from datetime import date
 from pathlib import Path
+from typing import Optional
 
 import certifi
 import openpyxl
@@ -143,9 +144,9 @@ def export_csv(session: requests.Session, report_session: str, control_id: str) 
     return resp.text
 
 
-def to_number(value: str) -> float:
+def to_number(value: str) -> Optional[float]:
     cleaned = (value or "").replace(",", "").strip()
-    return float(cleaned) if cleaned else 0.0
+    return float(cleaned) if cleaned else None
 
 
 def parse_csv(csv_text: str) -> list[dict]:
@@ -186,7 +187,8 @@ def write_to_excel(excel_path: str, sheet_name: str, rows: list[dict]) -> None:
         for column, value in (("D", row["replacement"]), ("E", row["original_equipment"]), ("F", row["import_qtd"])):
             cell = sheet[f"{column}{excel_row}"]
             cell.value = value
-            cell.number_format = "#,##0"
+            if value is not None:
+                cell.number_format = "#,##0"
 
     workbook.save(path)
 
@@ -222,10 +224,12 @@ def main() -> None:
     expected_year, expected_label = expected_period()
     if (period_year, period_label) != (expected_year, expected_label):
         print(
-            f"AVISO: esperava {expected_year} - {expected_label} (mes atual - 1), "
-            f"mas o ANIP retornou {period_year} - {period_label}. "
-            "O ANIP pode ainda nao ter publicado o mes esperado."
+            f"O ANIP ainda nao publicou o periodo esperado ({expected_year} - {expected_label}, "
+            f"mes atual - 1). O relatorio disponivel no momento e {period_year} - {period_label}. "
+            "Nada sera escrito na planilha; rode o script novamente mais tarde.",
+            file=sys.stderr,
         )
+        sys.exit(1)
 
     print("Exportando CSV...")
     csv_text = export_csv(session, report_session, control_id)

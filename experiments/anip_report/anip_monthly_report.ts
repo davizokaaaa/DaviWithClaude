@@ -152,21 +152,58 @@ async function exportCsv(
   return await resp.text();
 }
 
-// PENDENTE: ajustar assim que soubermos o formato real do CSV exportado.
+// Formato real confirmado (ex.):
+//   textbox79,textbox85,textbox86,Textbox5
+//    1000 - TRUCK/BUSES,"324,253 ","172,628 ","6,264"
+//    4000 - TWO WHEELS,"658,512 ", ,"32,059"
+// Primeira coluna (segmento) nunca tem aspas. As demais vem entre aspas quando tem
+// separador de milhar (virgula, formato US), sem aspas quando o valor cabe sem virgula,
+// e campos vazios aparecem como um espaco em branco (ou nada) sem aspas.
+function splitCsvLine(line: string): string[] {
+  const result: string[] = [];
+  let current = "";
+  let inQuotes = false;
+
+  for (let i = 0; i < line.length; i++) {
+    const ch = line[i];
+    if (inQuotes) {
+      if (ch === '"') {
+        if (line[i + 1] === '"') {
+          current += '"';
+          i++;
+        } else {
+          inQuotes = false;
+        }
+      } else {
+        current += ch;
+      }
+    } else if (ch === '"') {
+      inQuotes = true;
+    } else if (ch === ",") {
+      result.push(current);
+      current = "";
+    } else {
+      current += ch;
+    }
+  }
+  result.push(current);
+  return result;
+}
+
 function parseCsv(csvText: string): SegmentRow[] {
   const lines = csvText.split(/\r?\n/).filter(l => l.trim().length > 0);
   const rows: SegmentRow[] = [];
 
+  const toNumber = (s: string | undefined) => {
+    const cleaned = (s || "").replace(/,/g, "").trim();
+    return cleaned === "" ? 0 : Number(cleaned);
+  };
+
   for (const line of lines) {
-    const cols = line.split(","); // TODO: confirmar se precisa lidar com aspas/milhar
+    const cols = splitCsvLine(line);
     const segmentLabel = cols[0]?.trim();
     const codeMatch = segmentLabel?.match(/^(\d{4})/);
-    if (!codeMatch) continue; // pula cabecalho ou linhas nao-segmento
-
-    const toNumber = (s: string) => {
-      const cleaned = (s || "0").replace(/\./g, "").replace(",", ".").trim();
-      return cleaned === "" ? 0 : Number(cleaned);
-    };
+    if (!codeMatch) continue; // pula cabecalho (textbox79,...) ou linhas nao-segmento
 
     rows.push({
       code: codeMatch[1],

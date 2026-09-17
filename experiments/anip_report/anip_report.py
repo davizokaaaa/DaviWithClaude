@@ -18,6 +18,9 @@ import re
 import sys
 from pathlib import Path
 
+import truststore
+truststore.inject_into_ssl()
+
 import openpyxl
 import requests
 from dotenv import load_dotenv

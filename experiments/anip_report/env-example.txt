@@ -1,0 +1,3 @@
+ANIP_USERNAME=d.bastos
+ANIP_PASSWORD=
+ANIP_EXCEL_PATH=C:\Users\E125949\OneDrive - MFP Michelin\Equipe VALUE - 04 - MINT\01.Base de dados\01.ANIP\Base ANIP 2026.xlsx

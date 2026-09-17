@@ -7,8 +7,8 @@ Sub AtualizarANIP()
     Dim scriptPath As String
     Dim comando As String
 
-    pythonExe = "C:\Users\E125949\AppData\Local\Programs\Python\Python312\python.exe" ' TODO: ajustar
-    scriptPath = "C:\Users\E125949\OneDrive - MFP Michelin\...\anip_report\anip_report.py" ' TODO: ajustar
+    pythonExe = "C:\Bib\Prod\Miniforge3\python.exe"
+    scriptPath = "C:\Users\E125949\OneDrive - MFP Michelin\Scripts\ANIP Report\anip_report.py"
 
     ThisWorkbook.Save ' garante que nao ha alteracoes pendentes antes de o script reabrir o arquivo
 

@@ -43,7 +43,7 @@ function extractHiddenField(html: string, fieldName: string): string {
   return match[1];
 }
 
-function collectSetCookies(response: any): string[] {
+function collectSetCookies(response: Response): string[] {
   // Office Script Response nao expoe getSetCookie() nativamente em toda versao;
   // isso e o ponto mais provavel de quebrar. Se headers.get("set-cookie") vier vazio,
   // precisamos de outra estrategia (ver notas no topo do arquivo).

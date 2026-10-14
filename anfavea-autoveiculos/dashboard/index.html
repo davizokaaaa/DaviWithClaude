@@ -1,0 +1,1855 @@
+<style>
+  @import url("https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300..700&family=Inter+Tight:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap");
+  /* Editorial: papel, tinta, filetes finos e um único vermelhão de destaque. Modo escuro com passos próprios. */
+  .av {
+    --mode: light;
+    --bg: #f7f4ee; --surface: #efebe3; --fg: #1b1a18; --muted: #6e6a62; --rule: #1b1a18;
+    --line: rgba(27,26,24,.14); --grid: rgba(27,26,24,.09); --accent: #c8452c; --on-accent: #fff;
+    --up: #2f7d55; --down: #b8432f; --heat-lo: #ebe5d9; --heat-hi: #1f3f66; --tile-mid: #e4ded2; --empty: rgba(27,26,24,.07);
+    --pop: rgba(251,249,245,.9); --shadow: 0 1px 0 rgba(27,26,24,.06), 0 12px 32px -12px rgba(27,26,24,.28);
+    --serif: "Fraunces", Georgia, "Times New Roman", serif; --sans: "Inter Tight", system-ui, sans-serif; --mono: "IBM Plex Mono", ui-monospace, monospace;
+    --ease: cubic-bezier(.3,.8,.25,1); --spring: cubic-bezier(.2,.9,.25,1.05);
+    color-scheme: light;
+    position: relative; display: grid; gap: 28px; padding: 28px clamp(16px, 4vw, 44px) 40px;
+    background: var(--bg); color: var(--fg); font-family: var(--sans); font-size: 14px; line-height: 1.5; -webkit-font-smoothing: antialiased;
+  }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .av {
+    --mode: dark; --bg: #161514; --surface: #1f1d1b; --fg: #ece8e1; --muted: #9a958c; --rule: #ece8e1;
+    --line: rgba(236,232,225,.14); --grid: rgba(236,232,225,.08); --accent: #e0603f; --on-accent: #161514;
+    --up: #6cbf8f; --down: #e5785f; --heat-lo: #25231f; --heat-hi: #a6c6ec; --tile-mid: #2b2926; --empty: rgba(236,232,225,.08);
+    --pop: rgba(32,30,28,.9); --shadow: 0 12px 32px -12px rgba(0,0,0,.6); color-scheme: dark; } }
+  :root[data-theme="dark"] .av {
+    --mode: dark; --bg: #161514; --surface: #1f1d1b; --fg: #ece8e1; --muted: #9a958c; --rule: #ece8e1;
+    --line: rgba(236,232,225,.14); --grid: rgba(236,232,225,.08); --accent: #e0603f; --on-accent: #161514;
+    --up: #6cbf8f; --down: #e5785f; --heat-lo: #25231f; --heat-hi: #a6c6ec; --tile-mid: #2b2926; --empty: rgba(236,232,225,.08);
+    --pop: rgba(32,30,28,.9); --shadow: 0 12px 32px -12px rgba(0,0,0,.6); color-scheme: dark; }
+  .av :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  /* cabeçalho de jornal */
+  .av-mast { display: grid; gap: 14px; border-bottom: 3px double var(--rule); padding-bottom: 18px; }
+  .av-mast-bar { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; font: 600 11px/1.2 var(--sans); letter-spacing: .14em; text-transform: uppercase; border-bottom: 1px solid var(--rule); padding-bottom: 8px; }
+  .av-mast-bar span:last-child { color: var(--muted); }
+  .av-title { margin: 0; font: 400 clamp(40px, 7.5vw, 92px)/.92 var(--serif); font-variation-settings: "opsz" 144; letter-spacing: -.035em; text-wrap: balance; }
+  .av-title em { font-style: italic; font-weight: 300; color: var(--accent); }
+  .av-dek { display: flex; align-items: flex-start; gap: 10px; max-width: 46rem; font: 400 clamp(17px, 2vw, 21px)/1.35 var(--serif); font-variation-settings: "opsz" 24; color: var(--fg); }
+  .av-title, .av-dek { animation: av-rise .9s var(--ease) both; }
+  .av-dek { animation-delay: .15s; }
+  @keyframes av-rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+
+  /* letreiro de indicadores */
+  .av-ticker { overflow: hidden; border-block: 1px solid var(--rule); padding: 9px 0; mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent); margin-top: -12px; }
+  .av-ticker-in { display: inline-flex; gap: 40px; white-space: nowrap; animation: av-tick 70s linear infinite; padding-left: 40px; }
+  .av-ticker:hover .av-ticker-in { animation-play-state: paused; }
+  .av-ticker-in > span { font: 500 12.5px var(--mono); font-variant-numeric: tabular-nums; }
+  .av-ticker-in b { font: 600 11px var(--sans); letter-spacing: .12em; text-transform: uppercase; margin-right: 8px; }
+  .av-ticker-in i { font-style: normal; margin-left: 8px; }
+  @keyframes av-tick { to { transform: translateX(-50%); } }
+
+  /* navegação de seções (fixa no topo) */
+  .av-dock { position: sticky; top: 0; z-index: 10; display: flex; gap: 4px; overflow-x: auto; scrollbar-width: none; margin: -8px calc(-1 * clamp(16px, 4vw, 44px)) 0; padding: 0 clamp(16px, 4vw, 44px); background: color-mix(in srgb, var(--bg) 84%, transparent); -webkit-backdrop-filter: blur(14px) saturate(160%); backdrop-filter: blur(14px) saturate(160%); border-bottom: 1px solid var(--line); }
+  .av-dock::-webkit-scrollbar { display: none; }
+  .av-dock button { padding: 14px 14px 13px; font: 600 13px var(--sans); letter-spacing: .02em; }
+  .av-dock button::before { content: attr(data-n); font: 500 10.5px var(--mono); color: var(--muted); margin-right: 7px; }
+
+  /* controles segmentados: texto com sublinhado deslizante */
+  .av-seg { position: relative; display: inline-flex; gap: 2px; max-width: 100%; overflow-x: auto; scrollbar-width: none; }
+  .av-seg::-webkit-scrollbar { display: none; }
+  .av-seg button { position: relative; z-index: 1; flex: none; font: 500 13px/1.2 var(--sans); padding: 7px 10px; border: 0; background: none; color: var(--muted); cursor: pointer; white-space: nowrap; transition: color .25s; }
+  .av-seg button:hover { color: var(--fg); }
+  .av-seg button[aria-pressed="true"], .av-seg button[aria-selected="true"] { color: var(--fg); }
+  .av-pill { position: absolute; z-index: 0; left: 0; width: 0; top: auto !important; bottom: 0; height: 2px !important; background: var(--accent); opacity: 0; transition: left .55s var(--spring), width .55s var(--spring), opacity .2s; pointer-events: none; }
+
+  /* filtros */
+  .av-filters { display: flex; flex-wrap: wrap; gap: 14px 28px; align-items: flex-end; padding-bottom: 14px; border-bottom: 1px solid var(--line); }
+  .av-field { display: grid; gap: 4px; min-width: 0; max-width: 100%; }
+  .av-field > span:first-child { font: 600 10.5px/1.2 var(--sans); letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+  .av select { font: 500 13px var(--sans); padding: 6px 2px; border: 0; border-bottom: 1px solid var(--rule); background: transparent; color: var(--fg); max-width: 100%; }
+  .av select option { background: var(--bg); color: var(--fg); }
+  .av-range { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; color: var(--muted); }
+  .av-reset { font: 500 12.5px var(--sans); background: none; border: 0; color: var(--accent); text-decoration: underline; text-underline-offset: 4px; cursor: pointer; padding: 8px 0; }
+
+  /* lente da marca: aparece no topo de cada aba quando há uma marca escolhida */
+  .av-lens { display: grid; grid-template-columns: minmax(0, 16rem) minmax(0, 1fr); gap: 18px 36px; padding: 16px 0 18px; border-top: 2px solid var(--accent); border-bottom: 1px solid var(--line); animation: av-lens-in .6s var(--ease) both; }
+  .av-lens[hidden] { display: none; }
+  @keyframes av-lens-in { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: none; } }
+  .av-lens-id { display: grid; gap: 8px; align-content: start; }
+  .av-lens-name { display: flex; align-items: center; gap: 10px; margin: 0; font: 400 32px/1.05 var(--serif); font-variation-settings: "opsz" 144; letter-spacing: -.02em; }
+  .av-lens-name .av-logo { width: 34px; height: 34px; margin: 0; color: var(--brand, var(--fg)); }
+  .av-lens-name .av-logo svg { width: 18px; height: 18px; }
+  .av-lens-nums { display: grid; grid-template-columns: repeat(3, auto); justify-content: start; gap: 18px; margin-top: 4px; }
+  .av-lens-nums > div { display: grid; gap: 2px; }
+  .av-lens-nums span { font: 600 10px/1.3 var(--sans); letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+  .av-lens-nums b { font: 400 26px/1.05 var(--serif); font-weight: 400; font-variant-numeric: lining-nums tabular-nums; letter-spacing: -.02em; }
+  .av-lens-x { justify-self: start; font: 500 12.5px var(--sans); background: none; border: 0; padding: 4px 0; color: var(--accent); text-decoration: underline; text-underline-offset: 4px; cursor: pointer; }
+  .av-lens-main { display: grid; gap: 10px; align-content: start; min-width: 0; }
+  .av-lens-split { display: flex; gap: 2px; height: 8px; }
+  .av-lens-split i { display: block; height: 100%; min-width: 2px; transition: flex-grow .8s var(--ease); }
+  .av-lens-leg { display: flex; flex-wrap: wrap; gap: 4px 16px; font: 500 11.5px var(--mono); color: var(--muted); }
+  .av-lens-leg span { display: inline-flex; align-items: center; gap: 6px; }
+  .av-lens-leg i { width: 8px; height: 8px; display: inline-block; }
+  .av-lens-note { margin: 0; font: italic 400 14px/1.45 var(--serif); color: var(--muted); max-width: 46rem; }
+  @media (max-width: 640px) { .av-lens { grid-template-columns: 1fr; } }
+
+  /* linha do tempo */
+  .av-tl { display: grid; gap: 4px; margin-top: -10px; }
+  .av-tl-head { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; font: 600 10.5px/1.2 var(--sans); letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+  .av-tl-head b { font: 500 12px var(--mono); letter-spacing: 0; text-transform: none; color: var(--fg); }
+  #tl { position: relative; height: 70px; }
+  #tl svg { display: block; overflow: visible; }
+  #tl text { font: 10.5px var(--mono); fill: var(--muted); }
+  #tl .selection { fill: var(--accent); fill-opacity: .06; stroke: var(--accent); stroke-opacity: .7; shape-rendering: crispEdges; }
+  #tl .handle { fill: var(--accent); }
+  #tl .overlay { cursor: crosshair; }
+
+  /* lede de cada seção */
+  .av-page { display: grid; gap: 28px; }
+  .av-page.av-in { animation: av-view .6s var(--ease) both; }
+  @keyframes av-view { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+  .av-lede { display: grid; gap: 8px; max-width: 52rem; }
+  .av-kicker { font: 600 11px/1.2 var(--sans); letter-spacing: .16em; text-transform: uppercase; color: var(--accent); }
+  .av-h { display: flex; gap: 10px; align-items: flex-start; margin: 0; font: 400 clamp(24px, 3.4vw, 38px)/1.12 var(--serif); font-variation-settings: "opsz" 72; letter-spacing: -.02em; text-wrap: balance; }
+  .av-row { display: flex; flex-wrap: wrap; gap: 12px 20px; align-items: flex-end; justify-content: space-between; }
+
+  /* ⓘ e popovers */
+  .av-info { position: relative; display: inline-flex; flex: none; align-self: center; }
+  .av-ib { width: 20px; height: 20px; border-radius: 50%; border: 1px solid var(--line); background: transparent; color: var(--muted); font: italic 600 12px var(--serif); cursor: pointer; padding: 0; transition: color .2s, border-color .2s, background .2s; }
+  .av-ib:hover, .av-info.is-open .av-ib { color: var(--bg); background: var(--fg); border-color: var(--fg); }
+  .av-pop { position: absolute; left: 0; top: calc(100% + 8px); z-index: 20; width: min(330px, 80vw); padding: 12px 14px; font: 400 13px/1.5 var(--sans); color: var(--fg); background: var(--pop); -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px); border: 1px solid var(--line); border-top: 2px solid var(--accent); box-shadow: var(--shadow); opacity: 0; transform: translateY(-4px); pointer-events: none; transition: opacity .2s, transform .35s var(--spring); text-transform: none; letter-spacing: 0; white-space: normal; font-variation-settings: normal; }
+  .av-info.av-r .av-pop { left: auto; right: 0; }
+  .av-info.is-open .av-pop { opacity: 1; transform: none; pointer-events: auto; }
+
+  /* KPIs: números grandes em serifa separados por filetes */
+  .av-kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr)); border-top: 2px solid var(--rule); }
+  .av-kpi { display: grid; gap: 4px; align-content: start; min-width: 0; padding: 14px 18px 12px; border-right: 1px solid var(--line); }
+  .av-kpi:first-child { padding-left: 0; }
+  .av-kpi:last-child { border-right: 0; }
+  .av-kpi-l { font: 600 10.5px/1.3 var(--sans); letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+  .av-kpi-v { font: 400 44px/1.05 var(--serif); font-variation-settings: "opsz" 144; letter-spacing: -.03em; font-variant-numeric: lining-nums tabular-nums; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .av-kpi-d { font: 500 12px/1.4 var(--mono); font-variant-numeric: tabular-nums; color: var(--muted); }
+  .av-up { color: var(--up) !important; } .av-down { color: var(--down) !important; }
+  .av-spark { height: 30px; margin-top: 8px; }
+  .av-spark svg { display: block; overflow: visible; }
+
+  /* cards: sem caixa, só o filete grosso no topo */
+  .av-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 24rem), 1fr)); gap: 28px 36px; }
+  .av-card { position: relative; display: grid; gap: 12px; align-content: start; min-width: 0; padding-top: 12px; border-top: 2px solid var(--rule); }
+  .av-card-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 12px; }
+  .av-card-head > div { display: flex; align-items: center; gap: 8px; min-width: 0; }
+  .av-card h3 { margin: 0; font: 600 12px/1.3 var(--sans); letter-spacing: .12em; text-transform: uppercase; }
+  .av-rv { opacity: 0; transform: translateY(16px); }
+  .av-rv.av-rv-in { opacity: 1; transform: none; transition: opacity .7s ease, transform .9s var(--ease); transition-delay: var(--d, 0ms); }
+  .av-rv.av-rv-in.av-card::before { transform: scaleX(1); }
+  .av-card::before { content: ""; position: absolute; left: 0; top: -2px; width: 56px; height: 2px; background: var(--accent); transform: scaleX(0); transform-origin: left; transition: transform .9s var(--ease) .25s; }
+  .av-card:not(.av-rv)::before { transform: scaleX(1); }
+  .av-sub { font: 600 10.5px/1.3 var(--sans); color: var(--muted); letter-spacing: .12em; text-transform: uppercase; }
+
+  .av-chart { position: relative; min-height: 260px; }
+  .av-chart.av-tall { min-height: 320px; }
+  .av-chart text { font-family: var(--mono); }
+  .av-legend { display: flex; flex-wrap: wrap; gap: 6px 16px; font: 500 12px var(--sans); color: var(--muted); }
+  .av-legend i { display: inline-block; width: 10px; height: 10px; margin-right: 6px; vertical-align: -1px; }
+  .av-legend i.av-ln { height: 2px; width: 14px; vertical-align: 3px; }
+  .av-tt { position: absolute; z-index: 6; pointer-events: none; padding: 8px 11px; font: 500 12px/1.5 var(--mono); font-variant-numeric: tabular-nums; white-space: nowrap; color: var(--fg); background: var(--pop); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); border: 1px solid var(--line); box-shadow: var(--shadow); }
+  .av-tt b { display: block; font: 600 10.5px var(--sans); letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin-bottom: 3px; }
+  .av-tt i { display: inline-block; width: 8px; height: 8px; margin-right: 6px; }
+
+  /* tabelas */
+  .av-tablebox { max-height: 30rem; overflow: auto; }
+  .av-table { width: 100%; border-collapse: collapse; font-size: 13px; font-variant-numeric: tabular-nums; }
+  .av-table th { position: sticky; top: 0; z-index: 1; background: var(--bg); text-align: right; font: 600 10.5px var(--sans); letter-spacing: .12em; text-transform: uppercase; color: var(--muted); padding: 8px 10px; border-bottom: 1px solid var(--rule); white-space: nowrap; }
+  .av-table th button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; letter-spacing: inherit; text-transform: inherit; }
+  .av-table th:first-child, .av-table td:first-child, .av-table th.av-l, .av-table td.av-l { text-align: left; }
+  .av-table th:first-child, .av-table td:first-child { padding-left: 0; }
+  .av-table td { text-align: right; padding: 8px 10px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+  .av-table td.av-num { font-family: var(--mono); font-size: 12.5px; }
+  .av-table tbody tr { transition: background .2s; }
+  .av-table tbody tr.av-click { cursor: pointer; }
+  .av-table tbody tr.av-click:hover, .av-table tbody tr.av-sel { background: var(--surface); }
+  .av-table tbody tr.av-sel td:first-child { box-shadow: inset 3px 0 0 var(--accent); padding-left: 8px; }
+  .av-table tbody tr:hover .av-logo { color: var(--brand, var(--fg)); }
+  .av-bar { display: inline-block; height: 6px; background: var(--fg); opacity: .75; vertical-align: middle; margin-right: 8px; }
+  .av-search { font: 500 13px var(--sans); padding: 6px 2px; border: 0; border-bottom: 1px solid var(--rule); background: transparent; color: var(--fg); max-width: 16rem; width: 100%; }
+
+  /* logos */
+  .av-logo { display: inline-grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; background: var(--surface); border: 1px solid var(--line); color: var(--fg); vertical-align: middle; margin-right: 8px; transition: color .3s; flex: none; }
+  .av-logo svg { width: 14px; height: 14px; fill: currentColor; }
+  .av-logo b { font: 700 7px/1 var(--sans); letter-spacing: .02em; text-align: center; overflow: hidden; max-width: 22px; }
+
+  /* disputa de share */
+  .av-race { position: relative; }
+  .av-race-row { position: absolute; left: 0; right: 0; height: 32px; display: grid; grid-template-columns: 22px 28px minmax(0, 1fr) 58px 54px; align-items: center; gap: 10px; transition: transform .75s var(--ease), opacity .5s; }
+  .av-race-row:hover .av-logo { color: var(--brand, var(--fg)); }
+  .av-race-row .av-logo { margin: 0; }
+  .av-race-pos { font: 400 15px var(--serif); color: var(--muted); text-align: right; font-variant-numeric: tabular-nums; }
+  .av-race-bar { position: relative; height: 22px; min-width: 0; }
+  .av-race-bar i { position: absolute; left: 0; top: 0; bottom: 0; width: 0; background: var(--fg); transition: width .75s var(--ease); }
+  .av-race-row.av-lead .av-race-bar i, .av-race-row.av-sel .av-race-bar i { background: var(--accent); }
+  .av-race-row.av-sel .av-race-pos { color: var(--accent); }
+  .av-race.av-has-sel .av-race-row:not(.av-sel) > * { opacity: .42; }
+  .av-race-bar span { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); font: 600 11.5px var(--sans); letter-spacing: .06em; text-transform: uppercase; color: var(--bg); white-space: nowrap; mix-blend-mode: normal; }
+  .av-race-sh { font: 500 13px var(--mono); text-align: right; font-variant-numeric: tabular-nums; }
+  .av-race-d { font: 500 11.5px var(--mono); text-align: right; font-variant-numeric: tabular-nums; color: var(--muted); }
+  .av-scrub { display: flex; align-items: center; gap: 12px; }
+  .av-scrub input { flex: 1; min-width: 0; accent-color: var(--accent); }
+  .av-play { width: 34px; height: 34px; flex: none; border-radius: 50%; display: grid; place-items: center; cursor: pointer; color: var(--bg); background: var(--fg); border: 0; padding: 0; transition: background .2s; }
+  .av-play:hover { background: var(--accent); }
+  .av-play svg { width: 12px; height: 12px; fill: currentColor; }
+  .av-mlabel { font: 500 12.5px var(--mono); min-width: 56px; text-align: right; }
+
+  /* mapa de calor, treemap, waffle, múltiplos */
+  .av-heat text { font-family: var(--mono); }
+  .av-ramp { display: flex; align-items: center; gap: 8px; font: 500 11px var(--mono); color: var(--muted); }
+  .av-ramp i { display: block; width: 96px; height: 6px; }
+  .av-tree g.av-tile { cursor: pointer; }
+  .av-tree g.av-tile rect { transition: filter .25s; }
+  .av-tree g.av-tile:hover rect { filter: brightness(.94) contrast(1.05); }
+  .av-tree text { font-family: var(--sans); pointer-events: none; }
+  .av-waf { display: grid; grid-template-columns: minmax(0, 220px) minmax(0, 1fr); gap: 24px; align-items: center; }
+  @container (max-width: 420px) { .av-waf { grid-template-columns: 1fr; } }
+  .av-waf-list { display: grid; gap: 12px; }
+  .av-waf-item { display: grid; grid-template-columns: 10px 1fr auto; gap: 10px; align-items: baseline; font: 500 13px var(--sans); border-bottom: 1px solid var(--line); padding-bottom: 8px; }
+  .av-waf-item i { width: 10px; height: 10px; }
+  .av-waf-item b { font: 400 24px var(--serif); font-variation-settings: "opsz" 72; font-variant-numeric: lining-nums tabular-nums; }
+  .av-waf-item.av-tot { border-bottom: 0; border-top: 2px solid var(--rule); padding-top: 10px; }
+  .av-waf-item.av-tot b { font-size: 40px; color: var(--accent); }
+  .av-sm { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 11rem), 1fr)); gap: 0; border-left: 1px solid var(--line); }
+  .av-sm-c { display: grid; gap: 2px; padding: 4px 14px 6px; border-right: 1px solid var(--line); min-width: 0; }
+  .av-sm-h { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+  .av-sm-v { font: 400 28px/1.15 var(--serif); font-variation-settings: "opsz" 72; font-variant-numeric: lining-nums tabular-nums; white-space: nowrap; }
+  .av-sm-m { font: 500 11px var(--mono); color: var(--muted); }
+  .av-sm-c svg { display: block; overflow: visible; cursor: crosshair; }
+  .av-seg.av-mini button { padding: 4px 8px; font-size: 12px; }
+
+  .av-hide-narrow { }
+  @container (max-width: 560px) { .av-hide-narrow { display: none; } }
+  .av-cq { container-type: inline-size; }
+  .av-fail { display: flex; align-items: center; justify-content: center; gap: .5rem; min-height: inherit; color: var(--muted); font-size: 12px; }
+  .av-fail::before { content: ""; width: .375rem; height: .375rem; border-radius: 50%; background: var(--down); }
+  .av [data-dash-source-state=refreshing] { opacity: .5; transition: opacity .4s; }
+  .av [data-dash-source-state=empty] { color: transparent; }
+  @media (prefers-reduced-motion: reduce) { .av *, .av *::before { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; } .av-ticker-in { animation: none; } }
+</style>
+
+
+<div class="av" id="av">
+  <header class="av-mast" id="topo">
+    <div class="av-mast-bar"><span>ANFAVEA · Central de Dados · Autoveículos</span><span id="ed" data-source="series">—</span></div>
+    <h1 class="av-title">Autoveículos <em>no Brasil</em></h1>
+    <div class="av-dek" data-source="series"><span id="takeaway-h">—</span><span class="av-info"><button type="button" class="av-ib" aria-label="Resumo completo" aria-expanded="false">i</button><span class="av-pop" id="takeaway">—</span></span></div>
+  </header>
+  <div class="av-ticker" data-source="series combustivel procedencia marcas" aria-label="Indicadores do período"><div class="av-ticker-in" id="ticker"></div></div>
+  <nav class="av-dock av-seg" role="tablist" aria-label="Seções">
+    <button type="button" role="tab" data-tab="mercado" id="tab-mercado" data-n="01">Mercado</button>
+    <button type="button" role="tab" data-tab="marcas" id="tab-marcas" data-n="02">Marcas</button>
+    <button type="button" role="tab" data-tab="eletrificacao" id="tab-eletrificacao" data-n="03">Eletrificação</button>
+    <button type="button" role="tab" data-tab="importados" id="tab-importados" data-n="04">Importados</button>
+    <button type="button" role="tab" data-tab="caminhoes" id="tab-caminhoes" data-n="05">Caminhões</button>
+  </nav>
+
+  <section class="av-filters" id="filtros" aria-label="Filtros">
+    <label class="av-field"><span>Período</span>
+      <span class="av-range">
+        <select id="f-inicio" aria-label="Mês inicial" data-source="series"></select>
+        <span aria-hidden="true">até</span>
+        <select id="f-fim" aria-label="Mês final" data-source="series"></select>
+      </span>
+    </label>
+    <div class="av-field"><span>Atalhos</span>
+      <div class="av-seg" id="f-atalho" role="group" aria-label="Atalhos de período">
+        <button type="button" data-v="ytd">Ano atual</button>
+        <button type="button" data-v="12m">12 meses</button>
+        <button type="button" data-v="tudo">Desde 2023</button>
+      </div>
+    </div>
+    <div class="av-field"><span>Indicador</span>
+      <div class="av-seg" id="f-tipo" role="group" aria-label="Indicador">
+        <button type="button" data-v="Emplacamento">Emplacamento</button>
+        <button type="button" data-v="Produção">Produção</button>
+        <button type="button" data-v="Exportação">Exportação</button>
+      </div>
+    </div>
+    <div class="av-field"><span>Categoria</span>
+      <div class="av-seg" id="f-cat" role="group" aria-label="Categoria">
+        <button type="button" data-v="Todas">Todas</button>
+        <button type="button" data-v="Leves">Leves</button>
+        <button type="button" data-v="Automóveis">Automóveis</button>
+        <button type="button" data-v="Comerciais leves">Comerciais leves</button>
+        <button type="button" data-v="Caminhões">Caminhões</button>
+        <button type="button" data-v="Ônibus">Ônibus</button>
+      </div>
+    </div>
+    <label class="av-field"><span>Marca</span>
+      <select id="f-marca" aria-label="Marca" data-source="marcas"></select>
+    </label>
+    <button type="button" class="av-reset" id="f-reset">Limpar filtros</button>
+  </section>
+
+  <section class="av-tl" aria-label="Linha do tempo">
+    <div class="av-tl-head"><span id="tl-t">Linha do tempo · arraste para escolher o período</span><b id="tl-lbl"></b></div>
+    <div id="tl" class="dash-skeleton" data-source="series"></div>
+  </section>
+
+  <!-- MERCADO -->
+  <section class="av-page" id="mercado" role="tabpanel" aria-labelledby="tab-mercado">
+    <div class="av-lede"><span class="av-kicker">01 · Mercado</span><h2 class="av-h" data-source="series"><span id="h-mercado">—</span><span class="av-info"><button type="button" class="av-ib" aria-label="Detalhes" aria-expanded="false">i</button><span class="av-pop" id="ins-mercado">—</span></span></h2></div>
+    <div class="av-kpis" id="kpi-mercado">
+      <div class="av-kpi" data-source="series"><span class="av-kpi-l" id="k1l">Emplacamento</span><span class="av-kpi-v dash-skeleton" id="k1v">—</span><span class="av-kpi-d" id="k1d"></span><div class="av-spark" id="k1s" data-source="series"></div></div>
+      <div class="av-kpi" data-source="series"><span class="av-kpi-l" id="k2l">Produção</span><span class="av-kpi-v dash-skeleton" id="k2v">—</span><span class="av-kpi-d" id="k2d"></span><div class="av-spark" id="k2s" data-source="series"></div></div>
+      <div class="av-kpi" data-source="series"><span class="av-kpi-l" id="k3l">Exportação</span><span class="av-kpi-v dash-skeleton" id="k3v">—</span><span class="av-kpi-d" id="k3d"></span><div class="av-spark" id="k3s" data-source="series"></div></div>
+      <div class="av-kpi" data-source="series"><span class="av-kpi-l" id="k4l">Exportação sobre produção</span><span class="av-kpi-v dash-skeleton" id="k4v">—</span><span class="av-kpi-d" id="k4d"></span><div class="av-spark" id="k4s" data-source="series"></div></div>
+    </div>
+    <div class="av-grid">
+      <article class="av-card" id="card-mensal">
+        <div class="av-card-head"><div><h3 id="t-mensal">Volume mensal</h3><span class="av-info"><button type="button" class="av-ib" aria-label="Sobre o gráfico" aria-expanded="false">i</button><span class="av-pop" id="s-mensal">Barras: período escolhido. Linha tracejada: mesmo mês do ano anterior.</span></span></div></div>
+        <div class="av-chart dash-skeleton" id="ch-mensal" data-source="series"></div>
+      </article>
+      <article class="av-card" id="card-fluxo">
+        <div class="av-card-head"><div><h3>Produção contra mercado</h3><span class="av-info"><button type="button" class="av-ib" aria-label="Sobre o gráfico" aria-expanded="false">i</button><span class="av-pop">Faixa verde: a indústria produziu mais do que o mercado emplacou (sobra para exportar ou estocar). Faixa vermelha: o mercado emplacou mais do que se produziu, espaço ocupado por importados e estoque.</span></span></div></div>
+        <div class="av-legend" id="lg-fluxo"></div>
+        <div class="av-chart dash-skeleton" id="ch-fluxo" data-source="series"></div>
+      </article>
+    </div>
+    <div class="av-grid">
+      <article class="av-card av-cq" id="card-heat">
+        <div class="av-card-head"><div><h3 id="t-heat">Sazonalidade</h3><span class="av-info"><button type="button" class="av-ib" aria-label="Sobre o gráfico" aria-expanded="false">i</button><span class="av-pop" id="s-heat">Cada célula é um mês; quanto mais clara, maior o volume. Meses fora do período escolhido ficam apagados.</span></span></div><div class="av-ramp" id="rp-heat"></div></div>
+        <div class="av-chart av-heat dash-skeleton" id="ch-heat" data-source="series"></div>
+      </article>
+      <article class="av-card av-cq" id="card-cat">
+        <div class="av-card-head"><div><h3 id="t-cat">Por categoria</h3><span class="av-info"><button type="button" class="av-ib" aria-label="Sobre a tabela" aria-expanded="false">i</button><span class="av-pop" id="s-cat">—</span></span></div></div>
+        <div class="av-tablebox" data-source="series"><table class="av-table" id="tb-cat"></table></div>
+      </article>
+    </div>
+  </section>
+
+  <!-- MARCAS -->
+  <section class="av-page" id="marcas" role="tabpanel" aria-labelledby="tab-marcas" hidden>
+    <div class="av-row">
+      <div class="av-lede"><span class="av-kicker">02 · Marcas</span>
+        <h2 class="av-h" data-source="marcas"><span id="h-marcas">—</span><span class="av-info"><button type="button" class="av-ib" aria-label="Detalhes" aria-expanded="false">i</button><span class="av-pop"><span id="ins-marcas">—</span><br><br><span id="nota-marcas">Emplacamento por marca existe na ANFAVEA só a partir de jan/2026.</span></span></span></h2>
+      </div>
+      <div class="av-seg" id="f-proc" role="group" aria-label="Procedência">
+        <button type="button" data-v="Todas">Nacional e importado</button>
+        <button type="button" data-v="Nacional">Nacional</button>
+        <button type="button" data-v="Importado">Importado</button>
+      </div>
+    </div>
+    <div class="av-kpis" id="kpi-marcas">
+      <div class="av-kpi" data-source="marcas"><span class="av-kpi-l" id="m1l">Mercado no recorte</span><span class="av-kpi-v dash-skeleton" id="m1v">—</span><span class="av-kpi-d" id="m1d"></span></div>
+      <div class="av-kpi" data-source="marcas"><span class="av-kpi-l" id="m2l">Líder</span><span class="av-kpi-v dash-skeleton" id="m2v">—</span><span class="av-kpi-d" id="m2d"></span></div>
+      <div class="av-kpi" data-source="marcas"><span class="av-kpi-l" id="m3l">5 maiores marcas</span><span class="av-kpi-v dash-skeleton" id="m3v">—</span><span class="av-kpi-d" id="m3d"></span></div>
+      <div class="av-kpi" data-source="marcas"><span class="av-kpi-l" id="m4l">Marcas chinesas</span><span class="av-kpi-v dash-skeleton" id="m4v">—</span><span class="av-kpi-d" id="m4d"></span></div>
+    </div>
+    <article class="av-card" id="card-tree">
+      <div class="av-card-head"><div><h3>Mapa do mercado</h3><span class="av-info"><button type="button" class="av-ib" aria-label="Sobre o gráfico" aria-expanded="false">i</button><span class="av-pop">Área = participação no recorte. Cor = tendência da participação, do início ao fim do período. Clique numa marca para filtrar o painel.</span></span></div><div class="av-legend" id="lg-tree"></div></div>
+      <div class="av-chart av-tree av-tall dash-skeleton" id="ch-tree" data-source="marcas"></div>
+    </article>
+    <article class="av-card" id="card-race">
+      <div class="av-card-head"><div><h3>Disputa de participação, mês a mês</h3><span class="av-info"><button type="button" class="av-ib" aria-label="Sobre o gráfico" aria-expanded="false">i</button><span class="av-pop">As 10 maiores marcas de cada mês no recorte escolhido. Aperte o play ou arraste a barra para ver quem ultrapassou quem. À direita, a variação em p.p. desde o primeiro mês do recorte.</span></span></div><span class="av-mlabel" id="race-m"></span></div>
+      <div class="av-race" id="race" data-source="marcas"></div>
+      <div class="av-scrub"><button type="button" class="av-play" id="race-play" aria-label="Reproduzir meses"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2 1l9 5-9 5z"/></svg></button><input type="range" id="race-r" min="0" max="0" value="0" aria-label="Mês"></div>
+    </article>
+    <div class="av-grid">
+      <article class="av-card" id="card-share">
+        <div class="av-card-head"><div><h3 id="t-share">Posição das maiores marcas</h3><span class="av-info"><button type="button" class="av-ib" aria-label="Sobre o gráfico" aria-expanded="false">i</button><span class="av-pop" id="s-share">Escolha uma marca no filtro ou na tabela para destacá-la.</span></span></div>
+          <div class="av-seg av-mini" id="f-share" role="group" aria-label="Visão"><button type="button" data-v="pos">Posição</button><button type="button" data-v="part">Participação</button></div></div>
+        <div class="av-legend" id="lg-share"></div>
+        <div class="av-chart dash-skeleton" id="ch-share" data-source="marcas"></div>
+      </article>
+      <article class="av-card" id="card-ganhos">
+        <div class="av-card-head"><div><h3>Quem ganhou e quem perdeu</h3><span class="av-info"><button type="button" class="av-ib" aria-label="Sobre o gráfico" aria-expanded="false">i</button><span class="av-pop" id="s-ganhos">—</span></span></div></div>
+        <div class="av-chart av-tall dash-skeleton" id="ch-ganhos" data-source="marcas"></div>
+      </article>
+    </div>
+    <article class="av-card av-cq" id="card-ranking">
+      <div class="av-card-head"><div><h3>Ranking de marcas</h3><span class="av-info"><button type="button" class="av-ib" aria-label="Sobre a tabela" aria-expanded="false">i</button><span class="av-pop">Clique numa linha para filtrar o painel pela marca. Part. = participação no recorte. Tendência = variação da participação entre o início e o fim do período. Chinesas: BYD, CAOA Changan, Chery, CRRC, Foton, GAC, Geely, GWM, Higer, JAC, Jetour, Leapmotor, MG, Omoda, Sany, Shineray, Zeekr.</span></span></div><input class="av-search" id="busca-marca" type="search" placeholder="Buscar marca ou empresa" aria-label="Buscar marca ou empresa"></div>
+      <div class="av-tablebox" data-source="marcas"><table class="av-table" id="tb-marcas"></table></div>
+    </article>
+  </section>
+
+  <!-- ELETRIFICAÇÃO -->
+  <section class="av-page" id="eletrificacao" role="tabpanel" aria-labelledby="tab-eletrificacao" hidden>
+    <div class="av-lede"><span class="av-kicker">03 · Eletrificação</span><h2 class="av-h" data-source="combustivel"><span id="h-ele">—</span><span class="av-info"><button type="button" class="av-ib" aria-label="Detalhes" aria-expanded="false">i</button><span class="av-pop"><span id="ins-ele">—</span><br><br>Eletrificados = elétrico a bateria + híbrido plug-in + híbrido, na classificação da ANFAVEA.</span></span></h2></div>
+    <div class="av-kpis">
+      <div class="av-kpi" data-source="combustivel"><span class="av-kpi-l" id="e1l">Eletrificados</span><span class="av-kpi-v dash-skeleton" id="e1v">—</span><span class="av-kpi-d" id="e1d"></span></div>
+      <div class="av-kpi" data-source="combustivel"><span class="av-kpi-l">Elétricos (BEV)</span><span class="av-kpi-v dash-skeleton" id="e2v">—</span><span class="av-kpi-d" id="e2d"></span></div>
+      <div class="av-kpi" data-source="combustivel"><span class="av-kpi-l">Híbridos plug-in</span><span class="av-kpi-v dash-skeleton" id="e3v">—</span><span class="av-kpi-d" id="e3d"></span></div>
+      <div class="av-kpi" data-source="combustivel"><span class="av-kpi-l">Flex</span><span class="av-kpi-v dash-skeleton" id="e4v">—</span><span class="av-kpi-d" id="e4d"></span></div>
+    </div>
+    <div class="av-grid">
+      <article class="av-card av-cq" id="card-waffle">
+        <div class="av-card-head"><div><h3 id="t-waffle">A cada 100 emplacados</h3><span class="av-info"><button type="button" class="av-ib" aria-label="Sobre o gráfico" aria-expanded="false">i</button><span class="av-pop" id="s-waffle">Cada quadrado é 1% do emplacamento no período.</span></span></div></div>
+        <div class="av-chart dash-skeleton" id="ch-waffle" data-source="combustivel"></div>
+      </article>
+      <article class="av-card" id="card-ele">
+        <div class="av-card-head"><div><h3>Eletrificados mês a mês</h3><span class="av-info"><button type="button" class="av-ib" aria-label="Sobre o gráfico" aria-expanded="false">i</button><span class="av-pop" id="s-ele">Elétrico, híbrido plug-in e híbrido empilhados, em % do emplacamento mensal.</span></span></div></div>
+        <div class="av-legend" id="lg-ele"></div>
+        <div class="av-chart dash-skeleton" id="ch-ele" data-source="combustivel"></div>
+      </article>
+    </div>
+    <article class="av-card av-cq" id="card-comb">
+      <div class="av-card-head"><div><h3>Combustíveis no período</h3><span class="av-info"><button type="button" class="av-ib" aria-label="Sobre a tabela" aria-expanded="false">i</button><span class="av-pop" id="s-comb">—</span></span></div></div>
+      <div class="av-tablebox" data-source="combustivel"><table class="av-table" id="tb-comb"></table></div>
+    </article>
+  </section>
+
+  <!-- IMPORTADOS -->
+  <section class="av-page" id="importados" role="tabpanel" aria-labelledby="tab-importados" hidden>
+    <div class="av-lede"><span class="av-kicker">04 · Importados</span><h2 class="av-h" data-source="procedencia"><span id="h-imp">—</span><span class="av-info"><button type="button" class="av-ib" aria-label="Detalhes" aria-expanded="false">i</button><span class="av-pop" id="ins-imp">—</span></span></h2></div>
+    <div class="av-kpis">
+      <div class="av-kpi" data-source="procedencia"><span class="av-kpi-l" id="i1l">Importados no emplacamento</span><span class="av-kpi-v dash-skeleton" id="i1v">—</span><span class="av-kpi-d" id="i1d"></span></div>
+      <div class="av-kpi" data-source="procedencia"><span class="av-kpi-l" id="i2l">Unidades importadas</span><span class="av-kpi-v dash-skeleton" id="i2v">—</span><span class="av-kpi-d" id="i2d"></span></div>
+      <div class="av-kpi" data-source="procedencia"><span class="av-kpi-l" id="i3l">Unidades nacionais</span><span class="av-kpi-v dash-skeleton" id="i3v">—</span><span class="av-kpi-d" id="i3d"></span></div>
+    </div>
+    <article class="av-card" id="card-bfly">
+      <div class="av-card-head"><div><h3 id="t-bfly">Nacionais e importados</h3><span class="av-info"><button type="button" class="av-ib" aria-label="Sobre o gráfico" aria-expanded="false">i</button><span class="av-pop">Emplacamento mensal: nacionais para cima, importados para baixo, na mesma escala.</span></span></div><div class="av-legend" id="lg-bfly"></div></div>
+      <div class="av-chart dash-skeleton" id="ch-bfly" data-source="procedencia"></div>
+    </article>
+    <div class="av-grid">
+      <article class="av-card" id="card-imp">
+        <div class="av-card-head"><div><h3>Importados por categoria</h3><span class="av-info"><button type="button" class="av-ib" aria-label="Sobre o gráfico" aria-expanded="false">i</button><span class="av-pop">% do emplacamento mensal de cada categoria que é importado.</span></span></div></div>
+        <div class="av-legend" id="lg-imp"></div>
+        <div class="av-chart dash-skeleton" id="ch-imp" data-source="procedencia"></div>
+      </article>
+      <article class="av-card" id="card-slope">
+        <div class="av-card-head"><div><h3>Antes e agora</h3><span class="av-info"><button type="button" class="av-ib" aria-label="Sobre o gráfico" aria-expanded="false">i</button><span class="av-pop" id="s-slope">Fatia importada de cada categoria: mesmo período do ano anterior à esquerda, período escolhido à direita.</span></span></div></div>
+        <div class="av-chart dash-skeleton" id="ch-slope" data-source="procedencia"></div>
+      </article>
+    </div>
+  </section>
+
+  <!-- CAMINHÕES -->
+  <section class="av-page" id="caminhoes" role="tabpanel" aria-labelledby="tab-caminhoes" hidden>
+    <div class="av-lede"><span class="av-kicker">05 · Caminhões</span><h2 class="av-h" data-source="caminhoes"><span id="h-cam">—</span><span class="av-info"><button type="button" class="av-ib" aria-label="Detalhes" aria-expanded="false">i</button><span class="av-pop" id="ins-cam">—</span></span></h2></div>
+    <article class="av-card" id="card-cam">
+      <div class="av-card-head"><div><h3 id="t-cam">Caminhões por subsegmento</h3><span class="av-info"><button type="button" class="av-ib" aria-label="Sobre o gráfico" aria-expanded="false">i</button><span class="av-pop">Volume mensal do indicador escolhido, um gráfico por subsegmento. Cada um tem sua própria escala, para mostrar a forma da curva; compare volumes pelos números. Passe o mouse para ler o mesmo mês em todos.</span></span></div><span class="av-mlabel" id="cam-m"></span></div>
+      <div class="av-sm" id="ch-cam" data-source="caminhoes"></div>
+    </article>
+    <article class="av-card av-cq" id="card-camtb">
+      <div class="av-card-head"><div><h3>Subsegmentos no período</h3><span class="av-info"><button type="button" class="av-ib" aria-label="Sobre a tabela" aria-expanded="false">i</button><span class="av-pop" id="s-camtb">—</span></span></div></div>
+      <div class="av-tablebox" data-source="caminhoes"><table class="av-table" id="tb-cam"></table></div>
+    </article>
+  </section>
+
+</div>
+
+<script src="logos.js"></script>
+<script>
+(() => {
+  const MES = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'];
+  const nf = new Intl.NumberFormat('pt-BR');
+  const cf = new Intl.NumberFormat('pt-BR', { notation: 'compact', maximumFractionDigits: 2 });
+  const cf0 = new Intl.NumberFormat('pt-BR', { notation: 'compact', maximumFractionDigits: 0 });
+  const big = (v) => (Math.abs(v) >= 10000 ? cf.format(v) : nf.format(Math.round(v)));
+  const pc = (v, d = 1) => (v == null || !isFinite(v) ? '—' : (v * 100).toFixed(d).replace('.', ',') + '%');
+  const sgn = (v, d = 1) => (v > 0 ? '+' : v < 0 ? '−' : '') + Math.abs(v * 100).toFixed(d).replace('.', ',');
+  const dpct = (a, b) => (b ? a / b - 1 : null);
+  const mesLbl = (p) => MES[+p.slice(5, 7) - 1] + '/' + p.slice(2, 4);
+  const addM = (p, n) => { const d = new Date(Date.UTC(+p.slice(0, 4), +p.slice(5, 7) - 1 + n, 1)); return d.toISOString().slice(0, 7); };
+  const janela = (a, b) => (a.slice(0, 4) === b.slice(0, 4)
+    ? (a === b ? MES[+a.slice(5) - 1] + ' ' + a.slice(0, 4) : MES[+a.slice(5) - 1] + '–' + MES[+b.slice(5) - 1] + ' ' + a.slice(0, 4))
+    : mesLbl(a) + '–' + mesLbl(b));
+  const LEVES = ['Automóveis', 'Comerciais leves'];
+  const CHINESAS = ["BYD", "CAOA CHANGAN", "CHERY", "CRRC ELETRIC", "FOTON", "GAC", "GEELY", "GREAT WALL", "HIGER", "JAC", "JETOUR", "LEAPMOTOR", "MG", "OMODA", "SANY", "SHINERAY", "ZEEKR"];
+  // Séries: oito tons editoriais validados para daltonismo, um conjunto para papel e outro para o modo escuro.
+  // A cor segue a entidade, nunca a posição; o vermelhão (2º) é também o destaque do painel.
+  const CATS = {
+    light: ['#2a62a0', '#c8452c', '#1f8a70', '#b07a1f', '#8a4f8f', '#6b7d2a', '#c0577a', '#5b5fc7'],
+    dark: ['#5a8fd0', '#e0603f', '#2fa385', '#b8842a', '#a874b2', '#8a9c3f', '#d06f94', '#8a86e8'],
+  };
+  let C = {}, CAT = CATS.light;
+  const RM = () => window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const root = document.getElementById('av');
+  // cores lidas dos tokens CSS a cada desenho, para seguir o tema claro/escuro da página
+  const readTok = () => {
+    const cs = getComputedStyle(root), g = (n) => cs.getPropertyValue(n).trim();
+    const dark = g('--mode') === 'dark';
+    CAT = dark ? CATS.dark : CATS.light;
+    C = { fg: g('--fg'), muted: g('--muted'), grid: g('--grid'), line: g('--line'), accent: g('--accent'), up: g('--up'), down: g('--down'),
+      bg: g('--bg'), s1: g('--bg'), s2: g('--surface'), heatLo: g('--heat-lo'), heatHi: g('--heat-hi'), mid: g('--tile-mid'), empty: g('--empty'), dark };
+  };
+  readTok();
+  let UID = 0;
+  const uid = (p) => `av-${p}-${++UID}`;
+
+  // tooltip de vidro comum a todos os gráficos; rows: [[cor, nome, valor]]
+  const tipBox = (el) => { const t = document.createElement('div'); t.className = 'av-tt'; t.hidden = true; el.append(t); return t; };
+  const tipShow = (el, tt, title, rows, px, py) => {
+    tt.replaceChildren();
+    const h = document.createElement('b'); h.textContent = title; tt.append(h);
+    rows.forEach(([c, n, v]) => {
+      const r = document.createElement('div');
+      if (c) { const i = document.createElement('i'); i.style.background = c; r.append(i); }
+      r.append(document.createTextNode(n ? n + ': ' + v : v)); tt.append(r);
+    });
+    tt.hidden = false;
+    const bw = el.clientWidth, bh = el.clientHeight, tw = tt.offsetWidth, th = tt.offsetHeight;
+    let l = px + 14; if (l + tw > bw) l = px - tw - 14;
+    tt.style.left = Math.max(0, Math.min(bw - tw, l)) + 'px';
+    tt.style.top = Math.max(0, Math.min(Math.max(0, bh - th), py - th / 2)) + 'px';
+  };
+  // revela um grupo SVG da esquerda para a direita
+  const reveal = (svg, g, W, H, ms = 1100, delay = 0) => {
+    const id = uid('clip');
+    const r = svg.append('defs').append('clipPath').attr('id', id).append('rect').attr('x', -4).attr('y', -20).attr('height', H + 40).attr('width', 0);
+    g.attr('clip-path', `url(#${id})`);
+    r.transition().delay(delay).duration(ms).ease(d3.easeCubicInOut).attr('width', W + 8).on('end', () => g.attr('clip-path', null));
+  };
+  const prep = (el) => { el.classList.remove('dash-skeleton'); el.replaceChildren(); };
+  const anim = (el, sig) => { const a = el._sig !== sig && !RM(); el._sig = sig; return a; };
+
+  const rowsOf = (id) => {
+    const d = dash.data(id);
+    if (d.status !== 'ok') return null;
+    return d.data.map((r) => ({ ...r, valor: Number(r.valor) || 0 }));
+  };
+  const catOk = (cat, c) => cat === 'Todas' || (cat === 'Leves' ? LEVES.includes(c) : c === cat);
+  const sum = (rows, f) => rows.reduce((s, r) => (f(r) ? s + r.valor : s), 0);
+  const inWin = (p, a, b) => p >= a && p <= b;
+
+  // ---------- logos ----------
+  const L = window.AV_LOGOS || { paths: {}, hex: {}, brand: {} };
+  const MONO = { 'GREAT WALL': 'GWM', 'CAOA CHANGAN': 'CHANGAN', 'CRRC ELETRIC': 'CRRC', 'OUTRAS MARCAS': '···' };
+  const lum = (h) => { const n = parseInt(h.slice(1), 16); return (0.299 * (n >> 16) + 0.587 * ((n >> 8) & 255) + 0.114 * (n & 255)) / 255; };
+  const SVGNS = 'http://www.w3.org/2000/svg';
+  function logoEl(marca) {
+    const s = document.createElement('span');
+    s.className = 'av-logo';
+    const slug = L.brand[marca];
+    if (slug && L.paths[slug]) {
+      const hex = L.hex[slug] || C.fg;
+      s.style.setProperty('--brand', lum(hex) < 0.25 ? C.fg : hex);
+      const svg = document.createElementNS(SVGNS, 'svg'); svg.setAttribute('viewBox', '0 0 24 24'); svg.setAttribute('aria-hidden', 'true');
+      const p = document.createElementNS(SVGNS, 'path'); p.setAttribute('d', L.paths[slug]); svg.append(p); s.append(svg);
+    } else {
+      const b = document.createElement('b'); b.textContent = MONO[marca] || marca.split(/[ /]/)[0].slice(0, 5); s.append(b);
+    }
+    return s;
+  }
+  const nice = (m) => ({ 'GREAT WALL': 'GWM', 'VOLKS CAMINHOES': 'VW Caminhões' }[m] || m);
+
+  // ---------- estado ----------
+  const P = () => dash.params();
+  const set = (o) => dash.setParams(o);
+  let MESES = [];
+  const win = () => {
+    const last = MESES[MESES.length - 1];
+    let a = P().inicio || (last ? last.slice(0, 4) + '-01' : null);
+    let b = P().fim || last;
+    if (a && b && a > b) [a, b] = [b, a];
+    return [a, b];
+  };
+
+  // ---------- vidro: reflexo e pílula ----------
+  root.querySelectorAll('.av-glass').forEach((g) => g.addEventListener('pointermove', (e) => {
+    const r = g.getBoundingClientRect(); g.style.setProperty('--mx', (e.clientX - r.left) + 'px'); g.style.setProperty('--my', (e.clientY - r.top) + 'px');
+  }));
+  root.addEventListener('pointermove', (e) => {
+    const c = e.target.closest('.av-card, .av-kpi');
+    if (!c) return;
+    const r = c.getBoundingClientRect(); c.style.setProperty('--mx', (e.clientX - r.left) + 'px'); c.style.setProperty('--my', (e.clientY - r.top) + 'px');
+  });
+  // entrada dos cards ao aparecerem na tela, em cascata por linha
+  if ('IntersectionObserver' in window && !RM()) {
+    const io = new IntersectionObserver((es) => {
+      es.filter((x) => x.isIntersecting).forEach((x, k) => { x.target.style.setProperty('--d', (k * 70) + 'ms'); x.target.classList.add('av-rv-in'); io.unobserve(x.target); });
+    }, { threshold: 0.08 });
+    root.querySelectorAll('.av-card, .av-kpi').forEach((c) => { c.classList.add('av-rv'); io.observe(c); });
+  }
+  const segEls = [...root.querySelectorAll('.av-seg')];
+  segEls.forEach((s) => { const p = document.createElement('span'); p.className = 'av-pill'; s.prepend(p); });
+  const placePill = (seg) => {
+    const b = seg.querySelector('button[aria-pressed="true"], button[aria-selected="true"]'), p = seg.querySelector('.av-pill');
+    if (!p) return;
+    if (!b) { p.style.opacity = 0; return; }
+    p.style.left = b.offsetLeft + 'px'; p.style.top = b.offsetTop + 'px'; p.style.width = b.offsetWidth + 'px'; p.style.height = b.offsetHeight + 'px'; p.style.opacity = 1;
+  };
+  const placeAll = () => segEls.forEach(placePill);
+  if (document.fonts) document.fonts.ready.then(placeAll);
+
+  // ---------- popovers ⓘ ----------
+  root.addEventListener('click', (e) => {
+    const b = e.target.closest('.av-ib');
+    const openNow = b ? b.parentElement : null;
+    root.querySelectorAll('.av-info.is-open').forEach((x) => { if (x !== openNow) { x.classList.remove('is-open'); x.querySelector('.av-ib').setAttribute('aria-expanded', 'false'); } });
+    if (openNow && !e.target.closest('.av-pop')) {
+      const r = openNow.getBoundingClientRect(), rr = root.getBoundingClientRect();
+      openNow.classList.toggle('av-r', r.left - rr.left > rr.width - 340);
+      const o = openNow.classList.toggle('is-open'); b.setAttribute('aria-expanded', String(o));
+    }
+  });
+  root.addEventListener('keydown', (e) => { if (e.key === 'Escape') root.querySelectorAll('.av-info.is-open').forEach((x) => x.classList.remove('is-open')); });
+
+  // ---------- controles ----------
+  const segs = { 'f-tipo': 'tipo', 'f-cat': 'categoria', 'f-proc': 'procedencia' };
+  Object.entries(segs).forEach(([id, key]) => {
+    document.getElementById(id).addEventListener('click', (e) => {
+      const b = e.target.closest('button[data-v]');
+      if (b) set({ [key]: b.dataset.v });
+    });
+  });
+  let shareMode = 'pos';
+  document.getElementById('f-share').addEventListener('click', (e) => {
+    const b = e.target.closest('button[data-v]');
+    if (b && b.dataset.v !== shareMode) { shareMode = b.dataset.v; draw(); }
+  });
+  document.getElementById('f-atalho').addEventListener('click', (e) => {
+    const b = e.target.closest('button[data-v]');
+    if (!b || !MESES.length) return;
+    const last = MESES[MESES.length - 1];
+    if (b.dataset.v === 'ytd') set({ inicio: last.slice(0, 4) + '-01', fim: last });
+    if (b.dataset.v === '12m') set({ inicio: addM(last, -11), fim: last });
+    if (b.dataset.v === 'tudo') set({ inicio: MESES[0], fim: last });
+  });
+  const selI = document.getElementById('f-inicio');
+  const selF = document.getElementById('f-fim');
+  const selM = document.getElementById('f-marca');
+  selI.addEventListener('change', () => set({ inicio: selI.value }));
+  selF.addEventListener('change', () => set({ fim: selF.value }));
+  selM.addEventListener('change', () => set({ marca: selM.value || null }));
+  document.getElementById('f-reset').addEventListener('click', () => dash.resetParams());
+
+  // ---------- abas (dock) ----------
+  const TABS = ['mercado', 'marcas', 'eletrificacao', 'importados', 'caminhoes'];
+  let tab = TABS.includes(location.hash.slice(1)) ? location.hash.slice(1) : 'mercado';
+  const showTab = (t, link) => {
+    const changed = t !== tab;
+    tab = t;
+    TABS.forEach((x) => {
+      const pg = document.getElementById(x);
+      pg.hidden = x !== t;
+      if (x === t && changed && !RM()) { pg.classList.remove('av-in'); void pg.offsetWidth; pg.classList.add('av-in'); }
+      document.getElementById('tab-' + x).setAttribute('aria-selected', String(x === t));
+    });
+    if (link) dash.setLink(t);
+    draw();
+  };
+  document.querySelector('.av-dock').addEventListener('click', (e) => {
+    const b = e.target.closest('button[data-tab]');
+    if (b) showTab(b.dataset.tab, true);
+  });
+
+  // ---------- números com contagem ----------
+  const setNum = (id, v, fmt) => {
+    const e = document.getElementById(id);
+    e.classList.remove('dash-skeleton', 'av-up', 'av-down');
+    const from = e._v; e._v = v;
+    if (RM() || !isFinite(v) || (from != null && from === v)) { d3.select(e).interrupt(); e.textContent = fmt(v); return; }
+    const i = d3.interpolateNumber(from != null && isFinite(from) ? from : 0, v);
+    d3.select(e).transition('n').duration(from == null ? 1100 : 700).ease(d3.easeCubicOut).tween('n', () => (t) => { e.textContent = fmt(i(t)); }).on('end', () => { e.textContent = fmt(v); });
+  };
+
+  // ---------- gráficos ----------
+  const measure = (svg, txt) => {
+    const t = svg.append('text').attr('font-size', 11).attr('font-family', 'IBM Plex Mono, ui-monospace, monospace').text(txt);
+    const w = t.node().getComputedTextLength();
+    t.remove();
+    return w;
+  };
+  const fail = (el) => { el.classList.remove('dash-skeleton'); el.replaceChildren(); const d = document.createElement('div'); d.className = 'av-fail'; d.textContent = 'Não carregou'; el.append(d); };
+  const sigOf = (months, bars, lines) => months.join() + '|' + (bars ? months.map((m) => bars.values[m] || 0).join() : '') + '|' + lines.map((s) => s.name + ':' + months.map((m) => s.values[m] ?? '').join()).join(';');
+
+  // x: lista de meses; series: [{name,color,values:{mes:v},dash?}]; bars: {name,color,values}
+  function chart(el, { months, bars, lines = [], yFmt = big, height = 260, highlight = null, gap = null, tipExtra = null }) {
+    el.classList.remove('dash-skeleton');
+    el.replaceChildren();
+    if (!months.length) return;
+    const sig = sigOf(months, bars, lines) + '|' + highlight;
+    const animate = el._sig !== sig && !RM();
+    el._sig = sig;
+    const W = Math.max(el.clientWidth, 280);
+    const svg = d3.select(el).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${height}`);
+    const all = [];
+    if (bars) months.forEach((m) => all.push(bars.values[m] || 0));
+    lines.forEach((s) => months.forEach((m) => { if (s.values[m] != null) all.push(s.values[m]); }));
+    const ymax = d3.max(all) || 1;
+    const y = d3.scaleLinear([0, ymax], [height - 24, 8]).nice(5);
+    const ticks = y.ticks(5);
+    const ml = Math.ceil(d3.max(ticks, (t) => measure(svg, yFmt(t)))) + 10;
+    const endW = lines.some((s) => s.label) ? d3.max(lines.filter((s) => s.label), (s) => measure(svg, s.label)) + 10 : 6;
+    const x = d3.scaleBand(months, [ml, W - endW]).paddingInner(0.28).paddingOuter(0.1);
+    svg.append('g').selectAll('line').data(ticks).join('line')
+      .attr('x1', ml).attr('x2', W - endW).attr('y1', (t) => y(t)).attr('y2', (t) => y(t))
+      .attr('stroke', C.grid).attr('stroke-dasharray', (t) => (t === 0 ? null : '2 4'));
+    svg.append('g').selectAll('text').data(ticks).join('text')
+      .attr('x', ml - 8).attr('y', (t) => y(t)).attr('dy', '0.32em').attr('text-anchor', 'end')
+      .attr('font-size', 11).attr('fill', C.muted).text(yFmt);
+    const lw = measure(svg, 'set/26') + 8;
+    const step = Math.max(1, Math.ceil(lw / x.step()));
+    const lastIdx = months.length - 1;
+    svg.append('g').selectAll('text').data(months.filter((m, i) => (lastIdx - i) % step === 0)).join('text')
+      .attr('x', (m) => x(m) + x.bandwidth() / 2).attr('y', height - 6).attr('text-anchor', 'middle')
+      .attr('font-size', 11).attr('fill', C.muted).text(mesLbl);
+    if (bars) {
+      const r = svg.append('g').selectAll('rect').data(months).join('rect')
+        .attr('x', (m) => x(m)).attr('width', x.bandwidth())
+        .attr('rx', Math.min(1.5, x.bandwidth() / 2))
+        .attr('fill', (m, i) => (i === lastIdx ? (bars.last || bars.color) : d3.color(bars.color).copy({ opacity: bars.last ? 0.32 : 0.55 })));
+      if (animate) {
+        r.attr('y', y(0)).attr('height', 0).transition().duration(700).delay((m, i) => i * Math.min(18, 600 / months.length)).ease(d3.easeCubicOut)
+          .attr('y', (m) => y(bars.values[m] || 0)).attr('height', (m) => y(0) - y(bars.values[m] || 0));
+      } else r.attr('y', (m) => y(bars.values[m] || 0)).attr('height', (m) => y(0) - y(bars.values[m] || 0));
+    }
+    if (gap) {
+      // faixa entre duas linhas: verde onde a primeira fica acima, vermelha onde a segunda passa
+      const [sa, sb] = gap.map((n) => lines.find((s) => s.name === n));
+      const pts = months.filter((m) => sa.values[m] != null && sb.values[m] != null);
+      const cx = (m) => x(m) + x.bandwidth() / 2;
+      const defs = svg.append('defs'), above = uid('gap'), below = uid('gap');
+      defs.append('clipPath').attr('id', above).append('path').attr('d', d3.area().x(cx).y0(0).y1((m) => y(sa.values[m])).curve(d3.curveMonotoneX)(pts));
+      defs.append('clipPath').attr('id', below).append('path').attr('d', d3.area().x(cx).y0(height).y1((m) => y(sa.values[m])).curve(d3.curveMonotoneX)(pts));
+      const band = d3.area().x(cx).y0((m) => y(sa.values[m])).y1((m) => y(sb.values[m])).curve(d3.curveMonotoneX)(pts);
+      const g = svg.append('g').attr('opacity', animate ? 0 : 1);
+      g.append('path').attr('d', band).attr('fill', C.down).attr('fill-opacity', 0.28).attr('clip-path', `url(#${above})`);
+      g.append('path').attr('d', band).attr('fill', C.up).attr('fill-opacity', 0.24).attr('clip-path', `url(#${below})`);
+      if (animate) g.transition().delay(900).duration(700).attr('opacity', 1);
+    }
+    lines.forEach((s, k) => {
+      const pts = months.filter((m) => s.values[m] != null);
+      const hi = highlight == null || highlight === s.name;
+      const path = svg.append('path').datum(pts)
+        .attr('d', d3.line().x((m) => x(m) + x.bandwidth() / 2).y((m) => y(s.values[m])).curve(d3.curveMonotoneX))
+        .attr('fill', 'none').attr('stroke', s.color).attr('stroke-width', hi ? 2.2 : 1.4)
+        .attr('stroke-opacity', hi ? 1 : 0.3)
+        .attr('stroke-linecap', 'round').attr('stroke-linejoin', 'round');
+      if (animate && pts.length > 1) {
+        const len = path.node().getTotalLength();
+        path.attr('stroke-dasharray', `${len} ${len}`).attr('stroke-dashoffset', len)
+          .transition().delay(k * 90).duration(1300).ease(d3.easeCubicInOut).attr('stroke-dashoffset', 0)
+          .on('end', () => path.attr('stroke-dasharray', s.dash ? '4 4' : null));
+      } else if (s.dash) path.attr('stroke-dasharray', '4 4');
+      if (pts.length && hi && lines.length <= 2 && !s.dash) {
+        const m = pts[pts.length - 1];
+        svg.append('circle').attr('cx', x(m) + x.bandwidth() / 2).attr('cy', y(s.values[m])).attr('r', 3.5).attr('fill', s.color).attr('stroke', C.bg).attr('stroke-width', 2);
+      }
+      if (s.label && pts.length) s._ly = y(s.values[pts[pts.length - 1]]);
+    });
+    const labeled = lines.filter((s) => s.label && s._ly != null).sort((a, b) => a._ly - b._ly);
+    for (let i = 1; i < labeled.length; i++) if (labeled[i]._ly - labeled[i - 1]._ly < 12) labeled[i]._ly = labeled[i - 1]._ly + 12;
+    labeled.forEach((s) => {
+      svg.append('text').attr('x', W - endW + 6).attr('y', s._ly).attr('dy', '0.32em').attr('font-size', 11)
+        .attr('fill', s.color).attr('fill-opacity', highlight == null || highlight === s.name ? 1 : 0.45).text(s.label);
+    });
+    // tooltip
+    const tt = document.createElement('div');
+    tt.className = 'av-tt'; tt.hidden = true; el.append(tt);
+    const rule = svg.append('line').attr('y1', 8).attr('y2', height - 24).attr('stroke', C.accent).attr('stroke-opacity', 0.45).attr('opacity', 0);
+    svg.append('g').selectAll('rect').data(months).join('rect')
+      .attr('x', (m) => x(m) - (x.step() - x.bandwidth()) / 2).attr('width', x.step())
+      .attr('y', 0).attr('height', height).attr('fill', 'transparent')
+      .on('mousemove', (ev, m) => {
+        const cx = x(m) + x.bandwidth() / 2;
+        rule.attr('x1', cx).attr('x2', cx).attr('opacity', 1);
+        tt.replaceChildren();
+        const h = document.createElement('b'); h.textContent = mesLbl(m); tt.append(h);
+        const add = (name, color, v) => {
+          const r = document.createElement('div');
+          const sw = document.createElement('i'); sw.style.background = color;
+          r.append(sw, document.createTextNode(name + ': ' + (v == null ? '—' : typeof v === 'string' ? v : yFmt === big ? nf.format(v) : yFmt(v))));
+          tt.append(r);
+        };
+        if (bars) add(bars.name, bars.color, bars.values[m] || 0);
+        lines.slice().sort((a, b) => (b.values[m] ?? -1) - (a.values[m] ?? -1)).slice(0, 10).forEach((s) => add(s.name, s.color, s.values[m]));
+        if (tipExtra) tipExtra(m).forEach(([c, n, v]) => add(n, c, v));
+        tt.hidden = false;
+        const box = el.getBoundingClientRect();
+        const px = (cx / W) * box.width;
+        const tw = tt.offsetWidth;
+        tt.style.left = Math.max(0, Math.min(box.width - tw, px + 12 > box.width - tw ? px - tw - 12 : px + 12)) + 'px';
+        tt.style.top = '8px';
+      })
+      .on('mouseleave', () => { tt.hidden = true; rule.attr('opacity', 0); });
+  }
+
+  function diverging(el, items, fmt) {
+    el.classList.remove('dash-skeleton');
+    el.replaceChildren();
+    if (!items.length) return;
+    const sig = items.map((d) => d.label + d.v + (d.hi ? '*' : '')).join();
+    const animate = el._sig !== sig && !RM();
+    const anyHi = items.some((d) => d.hi);
+    el._sig = sig;
+    const W = Math.max(el.clientWidth, 280), rowH = 24, H = items.length * rowH + 8;
+    const svg = d3.select(el).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`);
+    const lab = d3.max(items, (d) => measure(svg, nice(d.label))) + 10;
+    const valW = d3.max(items, (d) => measure(svg, fmt(d.v))) + 8;
+    const m = d3.max(items, (d) => Math.abs(d.v)) || 1;
+    const x = d3.scaleLinear([-m, m], [lab + valW, W - valW]);
+    svg.append('line').attr('x1', x(0)).attr('x2', x(0)).attr('y1', 0).attr('y2', H).attr('stroke', C.grid);
+    const g = svg.append('g').selectAll('g').data(items).join('g').attr('transform', (d, i) => `translate(0,${i * rowH + 4})`);
+    g.attr('opacity', (d) => (anyHi && !d.hi ? 0.38 : 1));
+    g.append('text').attr('x', lab - 6).attr('y', rowH / 2).attr('dy', '0.32em').attr('text-anchor', 'end').attr('font-size', 11).attr('font-weight', (d) => (d.hi ? 700 : null)).attr('fill', C.fg).text((d) => nice(d.label));
+    const r = g.append('rect').attr('y', 5).attr('height', rowH - 10).attr('rx', 3)
+      .attr('fill', (d) => (d.v >= 0 ? C.accent : C.down));
+    const fx = (d) => Math.min(x(0), x(d.v)), fw = (d) => Math.abs(x(d.v) - x(0));
+    if (animate) r.attr('x', x(0)).attr('width', 0).transition().duration(650).delay((d, i) => i * 35).ease(d3.easeCubicOut).attr('x', fx).attr('width', fw);
+    else r.attr('x', fx).attr('width', fw);
+    g.append('text').attr('x', (d) => (d.v >= 0 ? x(d.v) + 4 : x(d.v) - 4)).attr('y', rowH / 2).attr('dy', '0.32em')
+      .attr('text-anchor', (d) => (d.v >= 0 ? 'start' : 'end')).attr('font-size', 11).attr('fill', C.muted).text((d) => fmt(d.v));
+  }
+
+  function legend(el, items) {
+    el.replaceChildren(...items.map((it) => {
+      const s = document.createElement('span');
+      const i = document.createElement('i'); i.style.background = it.color; if (it.line) i.className = 'av-ln';
+      s.append(i, document.createTextNode(it.name));
+      return s;
+    }));
+  }
+
+  function table(el, cols, rows, opt = {}) {
+    // cols: [{key,label,fmt,left,hideNarrow,bar,logo,num}]
+    const st = el._sort || (el._sort = { key: opt.sortKey || cols[1].key, dir: -1 });
+    const sorted = rows.slice().sort((a, b) => {
+      const va = a[st.key], vb = b[st.key];
+      if (typeof va === 'string') return st.dir * va.localeCompare(vb, 'pt-BR');
+      return st.dir * ((va ?? -Infinity) - (vb ?? -Infinity));
+    });
+    const thead = document.createElement('thead'), tr = document.createElement('tr');
+    cols.forEach((c) => {
+      const th = document.createElement('th');
+      if (c.left) th.className = 'av-l';
+      if (c.hideNarrow) th.classList.add('av-hide-narrow');
+      const b = document.createElement('button'); b.type = 'button'; b.textContent = c.label;
+      b.addEventListener('click', () => { st.dir = st.key === c.key ? -st.dir : (c.left ? 1 : -1); st.key = c.key; table(el, cols, rows, opt); });
+      th.setAttribute('aria-sort', st.key === c.key ? (st.dir > 0 ? 'ascending' : 'descending') : 'none');
+      th.append(b); tr.append(th);
+    });
+    thead.append(tr);
+    const tbody = document.createElement('tbody');
+    const barMax = {};
+    cols.filter((c) => c.bar).forEach((c) => { barMax[c.key] = d3.max(rows, (r) => r[c.key]) || 1; });
+    sorted.forEach((r) => {
+      const t = document.createElement('tr');
+      if (opt.onClick) { t.className = 'av-click'; t.addEventListener('click', () => opt.onClick(r)); }
+      if (opt.selected && opt.selected(r)) t.classList.add('av-sel');
+      cols.forEach((c) => {
+        const td = document.createElement('td');
+        if (c.left) td.className = 'av-l'; else if (c.key !== 'rank') td.className = 'av-num';
+        if (c.hideNarrow) td.classList.add('av-hide-narrow');
+        if (c.cls) { const k = c.cls(r[c.key]); if (k) td.classList.add(k); }
+        if (c.logo) td.append(logoEl(r[c.key]));
+        if (c.bar) { const s = document.createElement('span'); s.className = 'av-bar'; s.style.width = (3 * r[c.key] / barMax[c.key]) + 'rem'; td.append(s); }
+        td.append(document.createTextNode(c.fmt ? c.fmt(r[c.key], r) : r[c.key]));
+        t.append(td);
+      });
+      tbody.append(t);
+    });
+    el.replaceChildren(thead, tbody);
+  }
+  const upDown = (v) => (v == null ? null : v > 0 ? 'av-up' : v < 0 ? 'av-down' : null);
+  const setTxt = (id, t, cls) => { const e = document.getElementById(id); e.textContent = t; e.classList.remove('dash-skeleton', 'av-up', 'av-down'); if (cls) e.classList.add(cls); };
+  const delta = (id, cur, prev, label) => {
+    const d = dpct(cur, prev);
+    setTxt(id, d == null ? 'sem base de comparação' : (d >= 0 ? '▲ ' : '▼ ') + sgn(d).replace(/^[+−]/, '') + '% vs ' + label, upDown(d));
+  };
+  const ppDelta = (id, v, label, extra = '') => setTxt(id, v == null ? 'sem base de comparação' + extra : (v >= 0 ? '▲ ' : '▼ ') + sgn(v).replace(/^[+−]/, '') + ' p.p. vs ' + label + extra, upDown(v));
+
+  // ---------- minigráfico dos KPIs ----------
+  function spark(el, vals, color) {
+    color = color || C.fg;
+    prep(el);
+    if (vals.length < 2) return;
+    const W = Math.max(el.clientWidth, 100), H = 30;
+    const animate = anim(el, vals.join() + W);
+    const x = d3.scaleLinear([0, vals.length - 1], [1, W - 4]);
+    const [lo, hi] = d3.extent(vals);
+    const y = d3.scaleLinear([lo, hi === lo ? lo + 1 : hi], [H - 3, 3]);
+    const svg = d3.select(el).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`).attr('aria-hidden', 'true');
+    const gid = uid('sg');
+    const gr = svg.append('defs').append('linearGradient').attr('id', gid).attr('x1', 0).attr('x2', 0).attr('y1', 0).attr('y2', 1);
+    gr.append('stop').attr('offset', 0).attr('stop-color', color).attr('stop-opacity', 0.14);
+    gr.append('stop').attr('offset', 1).attr('stop-color', color).attr('stop-opacity', 0);
+    const g = svg.append('g');
+    g.append('path').attr('d', d3.area().x((d, i) => x(i)).y0(H).y1((d) => y(d)).curve(d3.curveMonotoneX)(vals)).attr('fill', `url(#${gid})`);
+    g.append('path').attr('d', d3.line().x((d, i) => x(i)).y((d) => y(d)).curve(d3.curveMonotoneX)(vals)).attr('fill', 'none').attr('stroke', color).attr('stroke-width', 1.6).attr('stroke-linejoin', 'round');
+    g.append('circle').attr('cx', x(vals.length - 1)).attr('cy', y(vals[vals.length - 1])).attr('r', 2.8).attr('fill', C.accent).attr('stroke', C.s1).attr('stroke-width', 1.5);
+    if (animate) reveal(svg, g, W, H, 1000, 150);
+  }
+
+  // ---------- linha do tempo com seleção arrastável ----------
+  let tlBusy = false;
+  function timeline(series, a, b) {
+    const el = document.getElementById('tl');
+    const { tipo, categoria } = P();
+    const n = MESES.length;
+    const W = Math.max(el.clientWidth, 280), H = 70, top = 4, base = H - 18, pad = 2;
+    const vals = MESES.map((m) => sum(series, (r) => r.tipo_dado === tipo && catOk(categoria, r.categoria) && r.periodo === m));
+    const step = (W - pad * 2) / n;
+    const ia = Math.max(0, MESES.indexOf(a)), ib = Math.max(ia, MESES.indexOf(b));
+    document.getElementById('tl-lbl').textContent = janela(a, b) + ' · ' + (ib - ia + 1) + (ib === ia ? ' mês' : ' meses');
+    document.getElementById('tl-t').textContent = `${tipo} · ${categoria === 'Todas' ? 'todas as categorias' : categoria} · arraste para escolher o período`;
+    const sig = vals.join() + W + C.bg;
+    const sx = (i) => pad + i * step;
+    if (el._sig !== sig) {
+      const first = el._sig == null;
+      el._sig = sig;
+      prep(el);
+      const svg = d3.select(el).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`);
+      const y = d3.scaleLinear([0, d3.max(vals) || 1], [base, top]);
+      const cx = (i) => sx(i) + step / 2;
+      const gid = uid('tlg');
+      const gr = svg.append('defs').append('linearGradient').attr('id', gid).attr('x1', 0).attr('x2', 0).attr('y1', 0).attr('y2', 1);
+      gr.append('stop').attr('offset', 0).attr('stop-color', C.fg).attr('stop-opacity', 0.16);
+      gr.append('stop').attr('offset', 1).attr('stop-color', C.fg).attr('stop-opacity', 0.01);
+      const g = svg.append('g');
+      g.append('path').attr('d', d3.area().x((d, i) => cx(i)).y0(base).y1((d) => y(d)).curve(d3.curveMonotoneX)(vals)).attr('fill', `url(#${gid})`);
+      g.append('path').attr('d', d3.line().x((d, i) => cx(i)).y((d) => y(d)).curve(d3.curveMonotoneX)(vals)).attr('fill', 'none').attr('stroke', C.fg).attr('stroke-width', 1.3);
+      // anos
+      const yrs = MESES.map((m, i) => [m, i]).filter(([m]) => m.endsWith('-01'));
+      svg.append('g').selectAll('line').data(yrs).join('line').attr('x1', ([, i]) => sx(i)).attr('x2', ([, i]) => sx(i)).attr('y1', top).attr('y2', base + 4).attr('stroke', C.grid);
+      svg.append('g').selectAll('text').data(yrs).join('text').attr('x', ([, i]) => sx(i) + 4).attr('y', H - 4).text(([m]) => m.slice(0, 4));
+      // fora da seleção: véu escuro
+      const veil = svg.append('g').attr('pointer-events', 'none');
+      veil.append('rect').attr('class', 'av-v0').attr('x', 0).attr('y', top - 2).attr('height', base - top + 2).attr('fill', C.bg).attr('fill-opacity', 0.55);
+      veil.append('rect').attr('class', 'av-v1').attr('y', top - 2).attr('height', base - top + 2).attr('fill', C.bg).attr('fill-opacity', 0.55);
+      const setVeil = (x0, x1) => { veil.select('.av-v0').attr('width', Math.max(0, x0)); veil.select('.av-v1').attr('x', x1).attr('width', Math.max(0, W - x1)); };
+      const toIdx = ([x0, x1]) => { const i0 = Math.max(0, Math.min(n - 1, Math.round((x0 - pad) / step))); const i1 = Math.max(i0, Math.min(n - 1, Math.round((x1 - pad) / step) - 1)); return [i0, i1]; };
+      const brush = d3.brushX().extent([[0, top - 2], [W, base]]).handleSize(10)
+        .on('start', () => { tlBusy = true; })
+        .on('brush', (ev) => {
+          if (!ev.selection) return;
+          setVeil(...ev.selection);
+          const [i0, i1] = toIdx(ev.selection);
+          document.getElementById('tl-lbl').textContent = janela(MESES[i0], MESES[i1]) + ' · ' + (i1 - i0 + 1) + (i1 === i0 ? ' mês' : ' meses');
+        })
+        .on('end', (ev) => {
+          tlBusy = false;
+          if (!ev.sourceEvent) return;
+          let [i0, i1] = ev.selection ? toIdx(ev.selection) : [ia, ib];
+          if (!ev.selection) { // clique sem arrastar: seleciona o ano do mês clicado
+            const [px] = d3.pointer(ev.sourceEvent, svg.node());
+            const yr = MESES[Math.max(0, Math.min(n - 1, Math.floor((px - pad) / step)))].slice(0, 4);
+            i0 = MESES.findIndex((m) => m.startsWith(yr)); i1 = MESES.length - 1 - [...MESES].reverse().findIndex((m) => m.startsWith(yr));
+          }
+          gb.call(brush.move, [sx(i0), sx(i1 + 1)]); setVeil(sx(i0), sx(i1 + 1));
+          set({ inicio: MESES[i0], fim: MESES[i1] });
+        });
+      const gb = svg.append('g').call(brush);
+      gb.selectAll('.handle').attr('rx', 1);
+      el._tl = { gb, brush, setVeil };
+      if (first && !RM()) reveal(svg, g, W, H, 1400);
+    }
+    if (!tlBusy) {
+      const s = [sx(ia), sx(ib + 1)];
+      el._tl.gb.call(el._tl.brush.move, s);
+      el._tl.setVeil(...s);
+    }
+  }
+
+  // ---------- mapa de calor ano × mês ----------
+  function heat(el, vals, a, b, fmt) {
+    prep(el);
+    const years = [...new Set(MESES.map((m) => m.slice(0, 4)))];
+    const W = Math.max(el.clientWidth, 280), lab = 40, gap = 3;
+    const cw = (W - lab) / 12, ch = Math.max(22, Math.min(40, cw * 0.66));
+    const H = 18 + years.length * ch;
+    const animate = anim(el, MESES.map((m) => vals[m]).join() + a + b + W);
+    const ext = d3.extent(MESES, (m) => vals[m]);
+    const col = d3.scaleSequential([ext[0], ext[1] === ext[0] ? ext[0] + 1 : ext[1]], d3.interpolateRgb(C.heatLo, C.heatHi));
+    document.getElementById('rp-heat').replaceChildren(...(() => {
+      const lo = document.createElement('span'); lo.textContent = big(ext[0]);
+      const i = document.createElement('i'); i.style.background = `linear-gradient(90deg, ${col(ext[0])}, ${col(ext[1])})`;
+      const hi = document.createElement('span'); hi.textContent = big(ext[1]);
+      return [lo, i, hi];
+    })());
+    const svg = d3.select(el).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`);
+    svg.append('g').selectAll('text').data(MES).join('text').attr('x', (d, i) => lab + i * cw + cw / 2).attr('y', 10).attr('text-anchor', 'middle').attr('font-size', 10.5).attr('fill', C.muted).text((d) => d);
+    svg.append('g').selectAll('text').data(years).join('text').attr('x', 0).attr('y', (d, i) => 18 + i * ch + ch / 2).attr('dy', '0.32em').attr('font-size', 11).attr('fill', C.muted).text((d) => d);
+    const cells = MESES.map((m) => ({ m, r: years.indexOf(m.slice(0, 4)), c: +m.slice(5) - 1, v: vals[m], on: inWin(m, a, b) }));
+    const g = svg.append('g').selectAll('g').data(cells).join('g').attr('transform', (d) => `translate(${lab + d.c * cw},${18 + d.r * ch})`);
+    const rect = g.append('rect').attr('x', gap / 2).attr('y', gap / 2).attr('width', cw - gap).attr('height', ch - gap).attr('rx', 2)
+      .attr('fill', (d) => col(d.v)).attr('stroke', (d) => (d.on ? C.line : 'none'));
+    const txt = cw >= 58 ? g.append('text').attr('x', cw / 2).attr('y', ch / 2).attr('dy', '0.32em').attr('text-anchor', 'middle').attr('font-size', 10.5)
+      .attr('fill', (d) => ((d.v - ext[0]) / ((ext[1] - ext[0]) || 1) > 0.6 ? C.bg : C.fg)).attr('fill-opacity', 0.85).text((d) => fmt(d.v)) : null;
+    const op = (d) => (d.on ? 1 : 0.32);
+    if (animate) {
+      g.attr('opacity', 0).transition().delay((d) => (d.c + d.r * 3) * 28).duration(500).ease(d3.easeCubicOut).attr('opacity', op);
+      rect.attr('transform', `translate(${cw / 2},${ch / 2}) scale(0.4) translate(${-cw / 2},${-ch / 2})`)
+        .transition().delay((d) => (d.c + d.r * 3) * 28).duration(650).ease(d3.easeBackOut.overshoot(1.4)).attr('transform', 'translate(0,0) scale(1)');
+    } else g.attr('opacity', op);
+    const tt = tipBox(el);
+    g.on('mousemove', (ev, d) => {
+      const [px, py] = d3.pointer(ev, el);
+      const p = addM(d.m, -12), pv = vals[p];
+      tipShow(el, tt, mesLbl(d.m), [[col(d.v), '', nf.format(d.v)], ...(pv ? [[null, '', `${sgn(d.v / pv - 1)}% vs ${mesLbl(p)}`]] : [])], px, py);
+      rect.attr('stroke', (x) => (x === d ? C.fg : x.on ? C.line : 'none'));
+    }).on('mouseleave', () => { tt.hidden = true; rect.attr('stroke', (x) => (x.on ? C.line : 'none')); });
+    if (txt) txt.attr('pointer-events', 'none');
+  }
+
+  // ---------- treemap de marcas com logos ----------
+  function treemap(el, rows, sel) {
+    prep(el);
+    if (!rows.length) return;
+    const W = Math.max(el.clientWidth, 280), H = Math.round(Math.max(280, Math.min(420, W * 0.46)));
+    const N = W < 520 ? 14 : 24;
+    const topR = rows.filter((r) => r.marca !== 'OUTRAS MARCAS').slice(0, N);
+    const sr = sel && rows.find((r) => r.marca === sel);
+    if (sr && !topR.includes(sr)) topR.push(sr);
+    const rest = rows.filter((r) => !topR.includes(r));
+    const kids = topR.map((r) => ({ id: r.marca, v: r.valor, part: r.part, tend: r.tend }));
+    if (rest.length) kids.push({ id: 'Outras', v: d3.sum(rest, (r) => r.valor), part: d3.sum(rest, (r) => r.part), tend: null, n: rest.length });
+    const animate = anim(el, kids.map((k) => k.id + k.v).join() + W);
+    const op = (d) => (sr && d.data.id !== sel ? 0.36 : 1);
+    const h = d3.hierarchy({ children: kids }).sum((d) => d.v || 0).sort((p, q) => q.value - p.value);
+    d3.treemap().size([W, H]).paddingInner(3).round(true).tile(d3.treemapSquarify.ratio(1.15))(h);
+    const m = d3.max(kids, (k) => Math.abs(k.tend || 0)) || 0.01;
+    const neg = d3.interpolateRgb(C.mid, C.down)(0.62), pos = d3.interpolateRgb(C.mid, C.up)(0.58);
+    const fill = (t) => (t == null ? C.mid : d3.scaleLinear([-m, 0, m], [neg, C.mid, pos]).clamp(true)(t));
+    legend(document.getElementById('lg-tree'), [{ name: 'perde', color: neg }, { name: 'estável', color: C.mid }, { name: 'ganha', color: pos }]);
+    const svg = d3.select(el).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`);
+    const leaves = h.leaves();
+    const g = svg.append('g').selectAll('g').data(leaves).join('g').attr('class', 'av-tile')
+      .attr('transform', (d) => `translate(${d.x0},${d.y0})`);
+    g.append('rect').attr('width', (d) => Math.max(0, d.x1 - d.x0)).attr('height', (d) => Math.max(0, d.y1 - d.y0)).attr('rx', 2)
+      .attr('fill', (d) => fill(d.data.tend))
+      .attr('stroke', (d) => (sel && d.data.id === sel ? C.accent : C.line)).attr('stroke-width', (d) => (sel && d.data.id === sel ? 2.5 : 1));
+    g.each(function (d) {
+      const w = d.x1 - d.x0, hh = d.y1 - d.y0, s = d3.select(this);
+      const name = d.data.id === 'Outras' ? `Outras ${d.data.n}` : nice(d.data.id);
+      const slug = L.brand[d.data.id];
+      const big2 = w > 92 && hh > 62;
+      if (big2 && slug && L.paths[slug]) {
+        const z = Math.min(26, hh * 0.3);
+        s.append('svg').attr('x', 10).attr('y', 10).attr('width', z).attr('height', z).attr('viewBox', '0 0 24 24').append('path').attr('d', L.paths[slug]).attr('fill', C.fg).attr('fill-opacity', 0.92);
+      }
+      if (w > 54 && hh > 34) {
+        s.append('text').attr('x', 10).attr('y', hh - (big2 ? 28 : 12)).attr('font-size', big2 ? 12.5 : 11).attr('font-weight', 600).attr('fill', C.fg).attr('letter-spacing', '.02em')
+          .text(name.length * 7 > w - 14 ? name.slice(0, Math.max(3, Math.floor((w - 14) / 7))) + '…' : name);
+        if (big2) s.append('text').attr('x', 10).attr('y', hh - 11).attr('font-size', Math.min(26, 14 + w / 30)).attr('font-weight', 400).style('font-family', 'var(--serif)').attr('fill', C.fg).text(pc(d.data.part));
+      }
+    });
+    if (animate) {
+      g.attr('opacity', 0).attr('transform', (d) => `translate(${(d.x0 + d.x1) / 2},${(d.y0 + d.y1) / 2}) scale(0.5) translate(${-(d.x1 - d.x0) / 2},${-(d.y1 - d.y0) / 2})`)
+        .transition().delay((d, i) => 60 + i * 32).duration(750).ease(d3.easeCubicOut)
+        .attr('opacity', op).attr('transform', (d) => `translate(${d.x0},${d.y0}) scale(1) translate(0,0)`);
+    } else g.attr('opacity', op);
+    const tt = tipBox(el);
+    g.on('mousemove', (ev, d) => {
+      const [px, py] = d3.pointer(ev, el);
+      const r = d.data;
+      tipShow(el, tt, r.id === 'Outras' ? `Outras ${r.n} marcas` : nice(r.id), [[null, 'Unidades', nf.format(r.v)], [null, 'Participação', pc(r.part)], ...(r.tend != null ? [[null, 'Tendência', sgn(r.tend) + ' p.p.']] : [])], px, py);
+    }).on('mouseleave', () => { tt.hidden = true; })
+      .on('click', (ev, d) => { if (d.data.id !== 'Outras') set({ marca: d.data.id === sel ? null : d.data.id }); });
+  }
+
+  // ---------- gráfico de posições (bump chart) ----------
+  function bump(el, ms, byM, brands, sel) {
+    prep(el);
+    if (ms.length < 2 || !brands.length) return;
+    const MAXR = 12;
+    const ranks = ms.map((mo) => {
+      const mm = byM.get(mo) || new Map(), T = d3.sum([...mm.values()]) || 1;
+      const order = [...mm].filter(([m, v]) => v > 0 && m !== 'OUTRAS MARCAS').sort((p, q) => q[1] - p[1]).map(([m]) => m);
+      return { mo, pos: new Map(order.map((m, i) => [m, i + 1])), sh: new Map([...mm].map(([m, v]) => [m, v / T])) };
+    });
+    const W = Math.max(el.clientWidth, 280), H = 300;
+    const animate = anim(el, ms.join() + brands.join() + sel + W);
+    const svg = d3.select(el).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`);
+    const endW = d3.max(brands, (b) => measure(svg, nice(b.m))) + 40;
+    const x = d3.scalePoint(ms, [34, W - endW]);
+    const y = d3.scaleLinear([1, MAXR + 1], [14, H - 24]);
+    const yr = (r) => y(r == null || r > MAXR ? MAXR + 1 : r);
+    svg.append('g').selectAll('text').data(d3.range(1, MAXR + 1)).join('text').attr('x', 0).attr('y', (r) => y(r)).attr('dy', '0.32em').attr('font-size', 10.5).attr('fill', C.muted).text((r) => r + 'º');
+    svg.append('g').selectAll('line').data(d3.range(1, MAXR + 1)).join('line').attr('x1', 26).attr('x2', W - endW).attr('y1', (r) => y(r)).attr('y2', (r) => y(r)).attr('stroke', C.grid).attr('stroke-dasharray', '2 4');
+    const lw = measure(svg, 'set/26') + 8, stp = Math.max(1, Math.ceil(lw / (x.step() || lw)));
+    svg.append('g').selectAll('text').data(ms.filter((m, i) => (ms.length - 1 - i) % stp === 0)).join('text').attr('x', (m) => x(m)).attr('y', H - 4).attr('text-anchor', 'middle').attr('font-size', 11).attr('fill', C.muted).text(mesLbl);
+    const line = d3.line().x((d) => x(d.mo)).y((d) => yr(d.r)).curve(d3.curveBumpX);
+    const gs = svg.append('g').selectAll('g').data(brands).join('g');
+    const dim = (b) => (sel && b.m !== sel ? 0.22 : 1);
+    gs.attr('opacity', dim);
+    const paths = gs.append('path').attr('d', (b) => line(ranks.map((k) => ({ mo: k.mo, r: k.pos.get(b.m) }))))
+      .attr('fill', 'none').attr('stroke', (b) => b.color).attr('stroke-width', (b) => (b.m === sel ? 3.2 : 2.4)).attr('stroke-linecap', 'round');
+    gs.selectAll('circle').data((b) => ranks.map((k) => ({ b, mo: k.mo, r: k.pos.get(b.m), s: k.sh.get(b.m) || 0 }))).join('circle')
+      .attr('cx', (d) => x(d.mo)).attr('cy', (d) => yr(d.r)).attr('r', 4).attr('fill', (d) => d.b.color).attr('stroke', C.s1).attr('stroke-width', 2)
+      .attr('opacity', (d) => (d.r == null || d.r > MAXR ? 0 : 1));
+    const end = gs.append('g').attr('transform', (b) => `translate(${W - endW + 10},${yr(ranks[ranks.length - 1].pos.get(b.m))})`);
+    end.append('text').attr('x', 0).attr('dy', '0.32em').attr('font-size', 11.5).style('font-family', 'var(--sans)').attr('font-weight', 600).attr('fill', C.fg).text((b) => nice(b.m));
+    if (animate) {
+      paths.each(function (b, i) {
+        const len = this.getTotalLength();
+        d3.select(this).attr('stroke-dasharray', `${len} ${len}`).attr('stroke-dashoffset', len)
+          .transition().delay(i * 80).duration(1200).ease(d3.easeCubicInOut).attr('stroke-dashoffset', 0).on('end', function () { d3.select(this).attr('stroke-dasharray', null); });
+      });
+      gs.selectAll('circle').attr('r', 0).transition().delay((d, i) => 300 + i * 70).duration(400).ease(d3.easeBackOut).attr('r', 4);
+      end.attr('opacity', 0).transition().delay((b, i) => 900 + i * 80).duration(400).attr('opacity', 1);
+    }
+    const tt = tipBox(el);
+    gs.on('mouseenter', (ev, b) => { gs.transition('h').duration(200).attr('opacity', (o) => (o === b ? 1 : 0.15)); })
+      .on('mouseleave', () => { gs.transition('h').duration(250).attr('opacity', dim); tt.hidden = true; });
+    gs.selectAll('circle').on('mousemove', (ev, d) => {
+      const [px, py] = d3.pointer(ev, el);
+      tipShow(el, tt, `${nice(d.b.m)} · ${mesLbl(d.mo)}`, [[d.b.color, 'Posição', d.r ? d.r + 'º' : '—'], [null, 'Participação', pc(d.s)]], px, py);
+    });
+  }
+
+  // ---------- waffle 10 × 10 ----------
+  function waffle(el, parts, total) {
+    prep(el);
+    const cnt = parts.map((p) => Math.floor(p.v * 100));
+    const rem = parts.map((p, i) => [p.v * 100 - cnt[i], i]).sort((p, q) => q[0] - p[0]);
+    let left = Math.round(d3.sum(parts, (p) => p.v) * 100) - d3.sum(cnt);
+    for (const [, i] of rem) { if (left <= 0) break; cnt[i] += 1; left -= 1; }
+    const cells = [];
+    parts.forEach((p, i) => { for (let k = 0; k < cnt[i]; k++) cells.push(p); });
+    while (cells.length < 100) cells.push(null);
+    const animate = anim(el, cnt.join() + el.clientWidth);
+    const box = document.createElement('div'); box.className = 'av-waf';
+    const S = Math.min(220, Math.max(140, el.clientWidth * 0.45)), gap = 3, cs = (S - gap * 9) / 10;
+    const svg = d3.select(box).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${S} ${S}`).style('max-width', S + 'px');
+    // preenche de baixo para cima, linha a linha
+    const pos = (i) => ({ x: (i % 10) * (cs + gap), y: (9 - Math.floor(i / 10)) * (cs + gap) });
+    const r = svg.selectAll('rect').data(cells).join('rect').attr('x', (d, i) => pos(i).x).attr('y', (d, i) => pos(i).y).attr('width', cs).attr('height', cs).attr('rx', 1)
+      .attr('fill', (d) => (d ? d.color : C.empty));
+    if (animate) {
+      r.attr('opacity', 0).attr('transform', (d, i) => `translate(${pos(i).x + cs / 2},${pos(i).y + cs / 2}) scale(0) translate(${-pos(i).x - cs / 2},${-pos(i).y - cs / 2})`)
+        .transition().delay((d, i) => (d ? i * 22 : 400 + i * 4)).duration(420).ease(d3.easeBackOut.overshoot(1.8))
+        .attr('opacity', 1).attr('transform', (d, i) => `translate(${pos(i).x + cs / 2},${pos(i).y + cs / 2}) scale(1) translate(${-pos(i).x - cs / 2},${-pos(i).y - cs / 2})`);
+    }
+    const list = document.createElement('div'); list.className = 'av-waf-list';
+    parts.forEach((p) => {
+      const it = document.createElement('div'); it.className = 'av-waf-item';
+      const i = document.createElement('i'); i.style.background = p.color;
+      const n = document.createElement('span'); n.textContent = p.name;
+      const v = document.createElement('b'); v.textContent = pc(p.v);
+      it.append(i, n, v); list.append(it);
+    });
+    const it = document.createElement('div'); it.className = 'av-waf-item av-tot';
+    const n = document.createElement('span'); n.textContent = 'Eletrificados';
+    const v = document.createElement('b'); v.id = 'waf-tot';
+    it.append(document.createElement('span'), n, v); list.append(it);
+    box.append(svg.node(), list); el.append(box);
+    if (animate) setNum('waf-tot', total, (x) => pc(x)); else v.textContent = pc(total);
+    const tt = tipBox(el);
+    r.on('mousemove', (ev, d) => {
+      const [px, py] = d3.pointer(ev, el);
+      tipShow(el, tt, d ? d.name : 'Demais combustíveis', [[d ? d.color : null, '', d ? pc(d.v) : pc(1 - total)]], px, py);
+      r.attr('opacity', (x) => (x === d ? 1 : 0.35));
+    }).on('mouseleave', () => { tt.hidden = true; r.attr('opacity', 1); });
+  }
+
+  // ---------- área empilhada ----------
+  function stackArea(el, ms, series, yFmt, totalLabel) {
+    prep(el);
+    if (ms.length < 1) return;
+    const W = Math.max(el.clientWidth, 280), H = 260;
+    const animate = anim(el, ms.join() + series.map((s) => ms.map((m) => s.values[m]).join()).join('|') + W);
+    const rowsS = ms.map((m) => Object.fromEntries([['m', m], ...series.map((s) => [s.name, s.values[m] || 0])]));
+    const st = d3.stack().keys(series.map((s) => s.name))(rowsS);
+    const svg = d3.select(el).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`);
+    const y = d3.scaleLinear([0, d3.max(st[st.length - 1], (d) => d[1]) || 1], [H - 24, 10]).nice(4);
+    const ticks = y.ticks(4);
+    const ml = Math.ceil(d3.max(ticks, (t) => measure(svg, yFmt(t)))) + 10;
+    const endW = measure(svg, totalLabel(ms[ms.length - 1])) + 14;
+    const x = d3.scalePoint(ms, [ml, W - endW]);
+    svg.append('g').selectAll('line').data(ticks).join('line').attr('x1', ml).attr('x2', W - endW).attr('y1', (t) => y(t)).attr('y2', (t) => y(t)).attr('stroke', C.grid).attr('stroke-dasharray', (t) => (t === 0 ? null : '2 4'));
+    svg.append('g').selectAll('text').data(ticks).join('text').attr('x', ml - 8).attr('y', (t) => y(t)).attr('dy', '0.32em').attr('text-anchor', 'end').attr('font-size', 11).attr('fill', C.muted).text(yFmt);
+    const lw = measure(svg, 'set/26') + 8, stp = Math.max(1, Math.ceil(lw / (x.step() || lw)));
+    svg.append('g').selectAll('text').data(ms.filter((m, i) => (ms.length - 1 - i) % stp === 0)).join('text').attr('x', (m) => x(m)).attr('y', H - 6).attr('text-anchor', 'middle').attr('font-size', 11).attr('fill', C.muted).text(mesLbl);
+    const g = svg.append('g');
+    const ar = d3.area().x((d) => x(d.data.m)).y0((d) => y(d[0])).y1((d) => y(d[1])).curve(d3.curveMonotoneX);
+    g.selectAll('path.a').data(st).join('path').attr('class', 'a').attr('d', ar).attr('fill', (d, i) => series[i].color).attr('fill-opacity', 0.82).attr('stroke', C.s1).attr('stroke-width', 1.5);
+    const topLine = d3.line().x((d) => x(d.data.m)).y((d) => y(d[1])).curve(d3.curveMonotoneX);
+    g.append('path').attr('d', topLine(st[st.length - 1])).attr('fill', 'none').attr('stroke', C.fg).attr('stroke-width', 1.4).attr('stroke-opacity', 0.8);
+    const lm = ms[ms.length - 1], ly = y(st[st.length - 1][ms.length - 1][1]);
+    g.append('circle').attr('cx', x(lm)).attr('cy', ly).attr('r', 3.5).attr('fill', C.fg).attr('stroke', C.s1).attr('stroke-width', 2);
+    g.append('text').attr('x', x(lm) + 8).attr('y', ly).attr('dy', '0.32em').attr('font-size', 11.5).attr('fill', C.fg).text(totalLabel(lm));
+    if (animate) reveal(svg, g, W, H, 1300);
+    const tt = tipBox(el);
+    const rule = svg.append('line').attr('y1', 10).attr('y2', H - 24).attr('stroke', C.accent).attr('stroke-opacity', 0.45).attr('opacity', 0);
+    svg.append('rect').attr('x', ml).attr('width', W - endW - ml).attr('y', 0).attr('height', H).attr('fill', 'transparent')
+      .on('mousemove', (ev) => {
+        const [mx] = d3.pointer(ev);
+        const i = Math.max(0, Math.min(ms.length - 1, Math.round((mx - ml) / (x.step() || 1)))), m = ms[i];
+        rule.attr('x1', x(m)).attr('x2', x(m)).attr('opacity', 1);
+        const [px, py] = d3.pointer(ev, el);
+        tipShow(el, tt, mesLbl(m), [...series.slice().reverse().map((s) => [s.color, s.name, yFmt(s.values[m] || 0)]), [C.fg, 'Total', yFmt(d3.sum(series, (s) => s.values[m] || 0))]], px, Math.min(py, 90));
+      }).on('mouseleave', () => { tt.hidden = true; rule.attr('opacity', 0); });
+  }
+
+  // ---------- nacionais × importados espelhado ----------
+  function butterfly(el, ms, nac, imp) {
+    prep(el);
+    if (!ms.length) return;
+    const W = Math.max(el.clientWidth, 280), H = 280;
+    const animate = anim(el, ms.map((m) => nac[m] + ':' + imp[m]).join() + W);
+    const mN = d3.max(ms, (m) => nac[m]) || 1, mI = d3.max(ms, (m) => imp[m]) || 0;
+    const usable = H - 34, k = usable / (mN + mI || 1);
+    const mid = 6 + mN * k;
+    const svg = d3.select(el).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`);
+    const ml = 64;
+    const x = d3.scaleBand(ms, [ml, W - 6]).paddingInner(0.25).paddingOuter(0.05);
+    // grade simétrica com a mesma escala dos dois lados
+    const tk = d3.ticks(0, mN, 3).filter((t) => t > 0);
+    const ti = d3.ticks(0, mI, 2).filter((t) => t > 0 && t * k > 14);
+    svg.append('g').selectAll('line').data([...tk.map((t) => mid - t * k), ...ti.map((t) => mid + t * k)]).join('line').attr('x1', ml).attr('x2', W - 6).attr('y1', (d) => d).attr('y2', (d) => d).attr('stroke', C.grid).attr('stroke-dasharray', '2 4');
+    svg.append('g').selectAll('text').data([...tk.map((t) => [t, mid - t * k]), ...ti.map((t) => [t, mid + t * k])]).join('text').attr('x', ml - 8).attr('y', (d) => d[1]).attr('dy', '0.32em').attr('text-anchor', 'end').attr('font-size', 11).attr('fill', C.muted).text((d) => big(d[0]));
+    svg.append('text').attr('x', 0).attr('y', 12).attr('font-size', 11).attr('fill', C.fg).style('font-family', 'var(--sans)').attr('font-weight', 600).text('Nacional ↑');
+    svg.append('text').attr('x', 0).attr('y', H - 22).attr('font-size', 11).attr('fill', C.accent).style('font-family', 'var(--sans)').attr('font-weight', 600).text('Importado ↓');
+    const rx = Math.min(1.5, x.bandwidth() / 2);
+    const up = svg.append('g').selectAll('rect').data(ms).join('rect').attr('x', (m) => x(m)).attr('width', x.bandwidth()).attr('rx', rx).attr('fill', C.fg).attr('fill-opacity', 0.85);
+    const dn = svg.append('g').selectAll('rect').data(ms).join('rect').attr('x', (m) => x(m)).attr('width', x.bandwidth()).attr('rx', rx).attr('fill', C.accent).attr('fill-opacity', 0.85);
+    const setUp = (s) => s.attr('y', (m) => mid - 1 - (nac[m] || 0) * k).attr('height', (m) => (nac[m] || 0) * k);
+    const setDn = (s) => s.attr('y', mid + 1).attr('height', (m) => (imp[m] || 0) * k);
+    if (animate) {
+      const dl = (m, i) => i * Math.min(20, 700 / ms.length);
+      up.attr('y', mid - 1).attr('height', 0).transition().delay(dl).duration(700).ease(d3.easeCubicOut).call(setUp);
+      dn.attr('y', mid + 1).attr('height', 0).transition().delay((m, i) => 200 + dl(m, i)).duration(700).ease(d3.easeCubicOut).call(setDn);
+    } else { setUp(up); setDn(dn); }
+    svg.append('line').attr('x1', ml).attr('x2', W - 6).attr('y1', mid).attr('y2', mid).attr('stroke', C.bg).attr('stroke-width', 2);
+    const lw = measure(svg, 'set/26') + 8, stp = Math.max(1, Math.ceil(lw / x.step()));
+    svg.append('g').selectAll('text').data(ms.filter((m, i) => (ms.length - 1 - i) % stp === 0)).join('text').attr('x', (m) => x(m) + x.bandwidth() / 2).attr('y', H - 4).attr('text-anchor', 'middle').attr('font-size', 11).attr('fill', C.muted).text(mesLbl);
+    legend(document.getElementById('lg-bfly'), [{ name: 'Nacional', color: C.fg }, { name: 'Importado', color: C.accent }]);
+    const tt = tipBox(el);
+    svg.append('g').selectAll('rect').data(ms).join('rect').attr('x', (m) => x(m) - (x.step() - x.bandwidth()) / 2).attr('width', x.step()).attr('y', 0).attr('height', H).attr('fill', 'transparent')
+      .on('mousemove', (ev, m) => {
+        const [px, py] = d3.pointer(ev, el);
+        up.attr('fill-opacity', (o) => (o === m ? 1 : 0.5)); dn.attr('fill-opacity', (o) => (o === m ? 1 : 0.5));
+        const t = (nac[m] || 0) + (imp[m] || 0);
+        tipShow(el, tt, mesLbl(m), [[C.fg, 'Nacional', nf.format(nac[m] || 0)], [C.accent, 'Importado', nf.format(imp[m] || 0)], [null, 'Importados', pc(t ? (imp[m] || 0) / t : null)]], px, py);
+      }).on('mouseleave', () => { tt.hidden = true; up.attr('fill-opacity', 0.85); dn.attr('fill-opacity', 0.85); });
+  }
+
+  // ---------- slope: antes e agora ----------
+  function slope(el, items, la, lb) {
+    prep(el);
+    if (!items.length || items.every((d) => d.a == null)) {
+      const d = document.createElement('div'); d.className = 'av-fail'; d.textContent = 'Sem o mesmo período do ano anterior para comparar'; el.append(d); return;
+    }
+    const W = Math.max(el.clientWidth, 280), H = 260;
+    const animate = anim(el, items.map((d) => d.name + d.a + d.b).join() + W);
+    const svg = d3.select(el).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`);
+    const nameW = d3.max(items, (d) => measure(svg, d.name)) + 70;
+    const x0 = 58, x1 = Math.max(x0 + 80, W - nameW);
+    const y = d3.scaleLinear([0, d3.max(items, (d) => Math.max(d.a || 0, d.b || 0)) || 1], [H - 16, 34]).nice();
+    svg.append('text').attr('x', x0).attr('y', 12).attr('text-anchor', 'middle').attr('font-size', 11).attr('fill', C.muted).text(la);
+    svg.append('text').attr('x', x1).attr('y', 12).attr('text-anchor', 'middle').attr('font-size', 11).attr('fill', C.fg).text(lb);
+    [x0, x1].forEach((xx) => svg.append('line').attr('x1', xx).attr('x2', xx).attr('y1', 24).attr('y2', H - 10).attr('stroke', C.grid));
+    // rótulos sem colisão
+    const spread = (arr, key) => { const s = arr.slice().sort((p, q) => p[key] - q[key]); for (let i = 1; i < s.length; i++) if (s[i][key] - s[i - 1][key] < 15) s[i][key] = s[i - 1][key] + 15; };
+    items.forEach((d) => { d.ya = y(d.a || 0); d.yb = y(d.b || 0); d.la = d.ya; d.lb = d.yb; });
+    spread(items, 'la'); spread(items, 'lb');
+    const g = svg.append('g').selectAll('g').data(items).join('g');
+    const ln = g.append('line').attr('x1', x0).attr('y1', (d) => d.ya).attr('stroke', (d) => d.color).attr('stroke-width', (d) => (d.hi ? 3 : 2)).attr('stroke-opacity', (d) => (d.dim ? 0.3 : 1)).attr('stroke-linecap', 'round');
+    g.append('circle').attr('cx', x0).attr('cy', (d) => d.ya).attr('r', 4.5).attr('fill', (d) => d.color).attr('stroke', C.s1).attr('stroke-width', 2);
+    const cb = g.append('circle').attr('cy', (d) => d.yb).attr('r', 4.5).attr('fill', (d) => d.color).attr('stroke', C.s1).attr('stroke-width', 2);
+    g.append('text').attr('x', x0 - 10).attr('y', (d) => d.la).attr('dy', '0.32em').attr('text-anchor', 'end').attr('font-size', 11).attr('fill', C.muted).text((d) => pc(d.a));
+    const lab = g.append('text').attr('x', x1 + 10).attr('y', (d) => d.lb).attr('dy', '0.32em').attr('font-size', 11.5).attr('fill', C.fg);
+    lab.append('tspan').style('font-family', 'var(--mono)').text((d) => pc(d.b) + '  ');
+    lab.append('tspan').style('font-family', 'var(--sans)').attr('fill', C.muted).text((d) => d.name);
+    if (animate) {
+      ln.attr('x2', x0).attr('y2', (d) => d.ya).transition().delay((d, i) => i * 120).duration(900).ease(d3.easeCubicInOut).attr('x2', x1).attr('y2', (d) => d.yb);
+      cb.attr('cx', x0).attr('cy', (d) => d.ya).transition().delay((d, i) => i * 120).duration(900).ease(d3.easeCubicInOut).attr('cx', x1).attr('cy', (d) => d.yb);
+      lab.attr('opacity', 0).transition().delay((d, i) => 700 + i * 120).duration(400).attr('opacity', 1);
+    } else { ln.attr('x2', x1).attr('y2', (d) => d.yb); cb.attr('cx', x1); }
+    const tt = tipBox(el);
+    g.on('mousemove', (ev, d) => {
+      const [px, py] = d3.pointer(ev, el);
+      tipShow(el, tt, d.name, [[d.color, la, pc(d.a)], [d.color, lb, pc(d.b)], [null, 'Variação', d.a == null ? '—' : sgn(d.b - d.a) + ' p.p.']], px, py);
+      g.attr('opacity', (o) => (o === d ? 1 : 0.3));
+    }).on('mouseleave', () => { tt.hidden = true; g.attr('opacity', 1); });
+  }
+
+  // ---------- pequenos múltiplos sincronizados ----------
+  function multiples(el, ms, series, prevTot) {
+    el.replaceChildren();
+    if (!ms.length) return;
+    const animate = anim(el, ms.join() + series.map((s) => ms.map((m) => s.values[m]).join()).join('|') + el.clientWidth);
+    const lbl = document.getElementById('cam-m');
+    const cards = series.map((s, k) => {
+      const c = document.createElement('div'); c.className = 'av-sm-c';
+      const h = document.createElement('div'); h.className = 'av-sm-h';
+      const n = document.createElement('span'); n.className = 'av-sub'; n.textContent = s.name;
+      const d = document.createElement('span'); d.className = 'av-sm-m';
+      const tot = d3.sum(ms, (m) => s.values[m] || 0), pv = prevTot[s.name];
+      if (pv) { d.textContent = (tot >= pv ? '▲ ' : '▼ ') + sgn(tot / pv - 1).replace(/^[+−]/, '') + '%'; d.classList.add(tot >= pv ? 'av-up' : 'av-down'); }
+      h.append(n, d);
+      const v = document.createElement('span'); v.className = 'av-sm-v'; v.id = 'sm-v' + k;
+      c.append(h, v); el.append(c);
+      if (animate) setNum(v.id, tot, big); else v.textContent = big(tot);
+      return { c, v, tot, s };
+    });
+    const W = Math.max(cards[0].c.clientWidth - 24, 120), H = 64;
+    const x = d3.scalePoint(ms, [3, W - 3]);
+    const hooks = cards.map(({ c, s }, k) => {
+      const vals = ms.map((m) => s.values[m] || 0);
+      const y = d3.scaleLinear([0, d3.max(vals) || 1], [H - 2, 6]);
+      const svg = d3.select(c).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`);
+      const gid = uid('sm');
+      const gr = svg.append('defs').append('linearGradient').attr('id', gid).attr('x1', 0).attr('x2', 0).attr('y1', 0).attr('y2', 1);
+      gr.append('stop').attr('offset', 0).attr('stop-color', s.color).attr('stop-opacity', 0.4);
+      gr.append('stop').attr('offset', 1).attr('stop-color', s.color).attr('stop-opacity', 0.02);
+      const g = svg.append('g');
+      g.append('path').attr('d', d3.area().x((d, i) => x(ms[i])).y0(H - 2).y1((d) => y(d)).curve(d3.curveMonotoneX)(vals)).attr('fill', `url(#${gid})`);
+      g.append('path').attr('d', d3.line().x((d, i) => x(ms[i])).y((d) => y(d)).curve(d3.curveMonotoneX)(vals)).attr('fill', 'none').attr('stroke', s.color).attr('stroke-width', 1.8);
+      if (animate) reveal(svg, g, W, H, 1100, k * 110);
+      const rule = svg.append('line').attr('y1', 0).attr('y2', H).attr('stroke', C.fg).attr('stroke-opacity', 0.35).attr('opacity', 0);
+      const dot = svg.append('circle').attr('r', 3.5).attr('fill', s.color).attr('stroke', C.bg).attr('stroke-width', 2).attr('opacity', 0);
+      svg.append('rect').attr('width', W).attr('height', H).attr('fill', 'transparent')
+        .on('mousemove', (ev) => { const [mx] = d3.pointer(ev); syncAll(Math.max(0, Math.min(ms.length - 1, Math.round((mx - 3) / (x.step() || 1))))); })
+        .on('mouseleave', () => syncAll(null));
+      return (i) => {
+        if (i == null) { rule.attr('opacity', 0); dot.attr('opacity', 0); return; }
+        const m = ms[i]; rule.attr('x1', x(m)).attr('x2', x(m)).attr('opacity', 1); dot.attr('cx', x(m)).attr('cy', y(vals[i])).attr('opacity', 1);
+      };
+    });
+    const syncAll = (i) => {
+      hooks.forEach((f) => f(i));
+      cards.forEach(({ v, tot, s }) => { d3.select(v).interrupt(); v.textContent = i == null ? big(tot) : nf.format(s.values[ms[i]] || 0); v._v = tot; });
+      lbl.textContent = i == null ? '' : mesLbl(ms[i]);
+    };
+  }
+
+  // ---------- disputa de share (ranking animado) ----------
+  const race = { el: document.getElementById('race'), rows: {}, months: [], data: [], i: 0, timer: null, key: '' };
+  const raceRange = document.getElementById('race-r'), racePlay = document.getElementById('race-play'), playIco = racePlay.innerHTML;
+  const RACE_N = 10, RACE_GAP = 38;
+  function raceSet(i) {
+    race.i = i; raceRange.value = i;
+    const mo = race.months[i]; document.getElementById('race-m').textContent = mo ? mesLbl(mo) : '';
+    const top = race.data[i] || [];
+    race.el.classList.toggle('av-has-sel', top.some((d) => d.m === P().marca));
+    race.el.style.height = (Math.max(top.length, 1) * RACE_GAP) + 'px';
+    const max = d3.max(race.data.flat(), (d) => d.s) || 1;
+    const seen = new Set();
+    top.forEach((d, k) => {
+      let r = race.rows[d.m];
+      if (!r) {
+        r = document.createElement('div'); r.className = 'av-race-row';
+        const pos = document.createElement('span'); pos.className = 'av-race-pos';
+        const bar = document.createElement('div'); bar.className = 'av-race-bar'; bar.append(document.createElement('i'), document.createElement('span'));
+        bar.lastChild.textContent = nice(d.m);
+        const sh = document.createElement('span'); sh.className = 'av-race-sh';
+        const dd = document.createElement('span'); dd.className = 'av-race-d';
+        r.append(pos, logoEl(d.m), bar, sh, dd);
+        r.style.transform = `translateY(${RACE_N * RACE_GAP}px)`; r.style.opacity = 0;
+        race.el.append(r); race.rows[d.m] = r; r.getBoundingClientRect();
+      }
+      seen.add(d.m);
+      r.style.opacity = 1; r.style.transform = `translateY(${k * RACE_GAP}px)`;
+      r.classList.toggle('av-lead', k === 0 && !P().marca); r.classList.toggle('av-sel', d.m === P().marca);
+      r.children[0].textContent = d.r || k + 1;
+      r.children[2].firstChild.style.width = (d.s / max * 100) + '%';
+      r.children[3].textContent = pc(d.s);
+      const dd = r.children[4]; dd.textContent = d.d == null ? '' : sgn(d.d) ; dd.className = 'av-race-d ' + (upDown(d.d) || '');
+    });
+    Object.keys(race.rows).forEach((m) => { if (!seen.has(m)) { race.rows[m].style.opacity = 0; race.rows[m].style.transform = `translateY(${RACE_N * RACE_GAP}px)`; } });
+  }
+  const raceStop = () => { clearInterval(race.timer); race.timer = null; racePlay.innerHTML = playIco; racePlay.setAttribute('aria-label', 'Reproduzir meses'); };
+  raceRange.addEventListener('input', () => { raceStop(); raceSet(+raceRange.value); });
+  racePlay.addEventListener('click', () => {
+    if (race.timer) return raceStop();
+    let i = race.i >= race.months.length - 1 ? 0 : race.i;
+    raceSet(i);
+    racePlay.innerHTML = '<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2 1h3v10H2zM7 1h3v10H7z"/></svg>'; racePlay.setAttribute('aria-label', 'Pausar');
+    race.timer = setInterval(() => { i += 1; if (i >= race.months.length) { raceStop(); return; } raceSet(i); }, RM() ? 400 : 1000);
+  });
+  function drawRace(base, ms) {
+    const byM = d3.rollup(base, (v) => d3.sum(v, (r) => r.valor), (r) => r.periodo, (r) => r.marca);
+    const first = byM.get(ms[0]) || new Map(), firstT = d3.sum([...first.values()]) || 1;
+    const data = ms.map((mo) => {
+      const mm = byM.get(mo) || new Map(), T = d3.sum([...mm.values()]) || 1;
+      const all = [...mm].filter(([m, v]) => v > 0 && m !== 'OUTRAS MARCAS').map(([m, v]) => ({ m, s: v / T, d: ms.length > 1 ? v / T - (first.get(m) || 0) / firstT : null }))
+        .sort((a, b) => b.s - a.s);
+      all.forEach((d, k) => { d.r = k + 1; });
+      const top = all.slice(0, RACE_N), sel = P().marca;
+      const extra = sel && all.find((d) => d.m === sel && d.r > RACE_N);
+      return extra ? [...top, extra] : top;
+    });
+    const key = ms.join() + '|' + base.length + '|' + d3.sum(base, (r) => r.valor);
+    race.months = ms; race.data = data; raceRange.max = Math.max(0, ms.length - 1);
+    if (key !== race.key) { raceStop(); race.key = key; raceSet(ms.length - 1); } else raceSet(Math.min(race.i, ms.length - 1));
+  }
+
+  // ---------- lente da marca ----------
+  const lensEls = {};
+  function lensEl(page) {
+    if (lensEls[page]) return lensEls[page];
+    const pg = document.getElementById(page);
+    const el = document.createElement('article');
+    el.className = 'av-lens'; el.hidden = true; el.dataset.source = 'marcas';
+    el.innerHTML = '<div class="av-lens-id"><span class="av-kicker">Lente da marca</span><h3 class="av-lens-name"></h3><div class="av-lens-nums"></div><button type="button" class="av-lens-x">Limpar marca ×</button></div>'
+      + '<div class="av-lens-main"><div class="av-chart av-lens-ch"></div><div class="av-lens-split"></div><div class="av-lens-leg"></div><p class="av-lens-note"></p></div>';
+    el.querySelector('.av-lens-x').addEventListener('click', () => set({ marca: null }));
+    pg.querySelector(':scope > .av-row, :scope > .av-lede').after(el);
+    return (lensEls[page] = el);
+  }
+  // cat: recorte de categoria da lente; note: o que muda (ou não) nos gráficos da aba
+  function lens(page, marcas, a0, b, { cat, note }) {
+    const { marca } = P();
+    Object.entries(lensEls).forEach(([k, e]) => { if (k !== page) e.hidden = true; });
+    const el = lensEl(page);
+    if (!marca || !marcas) { el.hidden = true; return; }
+    el.hidden = false;
+    const first = d3.min(marcas, (r) => r.periodo);
+    const a = a0 < first ? first : a0;
+    const ms = MESES.filter((m) => inWin(m, a, b));
+    const base = marcas.filter((r) => catOk(cat, r.categoria) && inWin(r.periodo, a, b));
+    const mine = base.filter((r) => r.marca === marca);
+    const tot = d3.sum(base, (r) => r.valor), v = d3.sum(mine, (r) => r.valor);
+    const order = d3.rollups(base.filter((r) => r.marca !== 'OUTRAS MARCAS'), (x) => d3.sum(x, (r) => r.valor), (r) => r.marca).sort((p, q) => q[1] - p[1]);
+    const rank = order.findIndex(([m]) => m === marca) + 1;
+    el.querySelector('.av-lens-name').replaceChildren(logoEl(marca), document.createTextNode(nice(marca)));
+    const nums = [['Unidades', nf.format(v)], ['Participação', pc(tot ? v / tot : 0)], ['Posição', rank && v ? `${rank}º de ${order.length}` : '—']];
+    el.querySelector('.av-lens-nums').replaceChildren(...nums.map(([l, x]) => {
+      const d = document.createElement('div'), sp = document.createElement('span'), bb = document.createElement('b');
+      sp.textContent = l; bb.textContent = x; d.append(sp, bb); return d;
+    }));
+    const byM = d3.rollup(mine, (x) => d3.sum(x, (r) => r.valor), (r) => r.periodo);
+    const totM = d3.rollup(base, (x) => d3.sum(x, (r) => r.valor), (r) => r.periodo);
+    chart(el.querySelector('.av-lens-ch'), {
+      months: ms, height: 170,
+      bars: { name: nice(marca), color: C.fg, last: C.accent, values: Object.fromEntries(ms.map((m) => [m, byM.get(m) || 0])) },
+      tipExtra: (m) => [[C.accent, 'Participação no mês', pc(totM.get(m) ? (byM.get(m) || 0) / totM.get(m) : 0)]],
+    });
+    // divisão: por categoria quando a lente cobre várias, senão nacional × importado
+    const byCat = ['Todas', 'Leves'].includes(cat);
+    const keys = byCat ? ['Automóveis', 'Comerciais leves', 'Caminhões', 'Ônibus'] : ['Nacional', 'Importado'];
+    const cols = byCat ? CAT : [C.fg, C.accent];
+    const parts = keys.map((k, i) => ({ k, v: d3.sum(mine, (r) => ((byCat ? r.categoria : r.procedencia) === k ? r.valor : 0)), c: cols[i] })).filter((x) => x.v > 0);
+    el.querySelector('.av-lens-split').replaceChildren(...parts.map((x) => { const i = document.createElement('i'); i.style.flexGrow = x.v; i.style.background = x.c; i.title = x.k; return i; }));
+    el.querySelector('.av-lens-leg').replaceChildren(...parts.map((x) => {
+      const sp = document.createElement('span'), i = document.createElement('i'); i.style.background = x.c;
+      sp.append(i, document.createTextNode(`${x.k} ${pc(x.v / (v || 1), 0)}`)); return sp;
+    }));
+    const catTxt = cat === 'Todas' ? '' : cat === 'Leves' ? ' de leves' : ` de ${cat.toLowerCase()}`;
+    el.querySelector('.av-lens-note').textContent = v ? note : `${nice(marca)} não teve emplacamento${catTxt} em ${janela(a, b)}. ${note}`;
+  }
+
+  // ---------- páginas ----------
+  function drawMercado(series, a, b, pa, pb, wl, pl) {
+    const { tipo, categoria } = P();
+    const f = (t, a1, b1, c = categoria) => sum(series, (r) => r.tipo_dado === t && catOk(c, r.categoria) && inWin(r.periodo, a1, b1));
+    const hasPrev = pa >= MESES[0];
+    const tipos = ['Emplacamento', 'Produção', 'Exportação'];
+    tipos.forEach((t, i) => {
+      const cur = f(t, a, b), prev = hasPrev ? f(t, pa, pb) : 0;
+      setTxt(`k${i + 1}l`, t + ' · ' + wl);
+      setNum(`k${i + 1}v`, cur, big);
+      delta(`k${i + 1}d`, cur, prev, pl);
+    });
+    const r = f('Exportação', a, b) / (f('Produção', a, b) || 1);
+    const rp = hasPrev ? f('Exportação', pa, pb) / (f('Produção', pa, pb) || 1) : null;
+    setTxt('k4l', 'Exportação ÷ produção · ' + wl);
+    setNum('k4v', r, (v) => pc(v));
+    ppDelta('k4d', rp == null ? null : r - rp, pl);
+
+    const ms = MESES.filter((m) => inWin(m, a, b));
+    const byM = (t, c = categoria) => Object.fromEntries(MESES.map((m) => [m, sum(series, (x) => x.tipo_dado === t && catOk(c, x.categoria) && x.periodo === m)]));
+    const cur = byM(tipo);
+    const prevVals = {};
+    ms.forEach((m) => { const p = addM(m, -12); if (p >= MESES[0]) prevVals[m] = cur[p]; });
+    document.getElementById('t-mensal').textContent = `${tipo} mensal · ${categoria === 'Todas' ? 'todas as categorias' : categoria}`;
+    chart(document.getElementById('ch-mensal'), {
+      months: ms, bars: { name: tipo, color: C.fg, last: C.accent, values: cur },
+      lines: Object.keys(prevVals).length ? [{ name: 'Ano anterior', color: C.accent, values: prevVals, dash: true }] : [],
+    });
+    // minigráficos dos KPIs
+    const ser = Object.fromEntries(tipos.map((t) => [t, byM(t)]));
+    tipos.forEach((t, i) => spark(document.getElementById(`k${i + 1}s`), ms.map((m) => ser[t][m]), C.fg));
+    spark(document.getElementById('k4s'), ms.map((m) => (ser['Produção'][m] ? ser['Exportação'][m] / ser['Produção'][m] : 0)), C.fg);
+    // produção contra mercado, com a faixa da diferença
+    const fl = [
+      { name: 'Produção', color: C.fg, values: ser['Produção'] },
+      { name: 'Emplacamento', color: C.accent, values: ser['Emplacamento'] },
+      { name: 'Exportação', color: C.muted, values: ser['Exportação'], dash: true },
+    ];
+    legend(document.getElementById('lg-fluxo'), [...fl.map((s) => ({ name: s.name, color: s.color, line: true })), { name: 'produziu mais', color: `color-mix(in srgb, ${C.up} 40%, transparent)` }, { name: 'emplacou mais', color: `color-mix(in srgb, ${C.down} 40%, transparent)` }]);
+    chart(document.getElementById('ch-fluxo'), {
+      months: ms, lines: fl, gap: ['Produção', 'Emplacamento'],
+      tipExtra: (m) => [[null, 'Produção − emplacamento', (ser['Produção'][m] || 0) - (ser['Emplacamento'][m] || 0)]],
+    });
+    // sazonalidade: todos os meses da base, recorte destacado
+    document.getElementById('t-heat').textContent = `Sazonalidade · ${tipo.toLowerCase()}`;
+    heat(document.getElementById('ch-heat'), cur, a, b, (v) => cf0.format(v));
+
+    const cats = ['Automóveis', 'Comerciais leves', 'Caminhões', 'Ônibus'];
+    const tot = f(tipo, a, b, 'Todas');
+    const rows = cats.map((c) => {
+      const v = f(tipo, a, b, c), p = hasPrev ? f(tipo, pa, pb, c) : null;
+      return { categoria: c, valor: v, anterior: p, var: p ? v / p - 1 : null, part: tot ? v / tot : 0 };
+    });
+    document.getElementById('t-cat').textContent = `${tipo} por categoria`;
+    document.getElementById('s-cat').textContent = `${wl} comparado com ${pl}.`;
+    table(document.getElementById('tb-cat'), [
+      { key: 'categoria', label: 'Categoria', left: true },
+      { key: 'valor', label: wl, fmt: (v) => nf.format(v), bar: true },
+      { key: 'anterior', label: pl, fmt: (v) => (v == null ? '—' : nf.format(v)), hideNarrow: true },
+      { key: 'var', label: 'Var.', fmt: (v) => (v == null ? '—' : sgn(v) + '%'), cls: upDown },
+      { key: 'part', label: 'Part.', fmt: (v) => pc(v) },
+    ], rows, { sortKey: 'valor' });
+
+    // insight: frase curta no chip, explicação no ⓘ
+    const e = f('Emplacamento', a, b), ep = hasPrev ? f('Emplacamento', pa, pb) : 0;
+    const pr = f('Produção', a, b), pp = hasPrev ? f('Produção', pa, pb) : 0;
+    const ex = f('Exportação', a, b), exp = hasPrev ? f('Exportação', pa, pb) : 0;
+    const best = rows.filter((x) => x.var != null).sort((x, y) => y.var - x.var);
+    const tv = f(tipo, a, b), tp = hasPrev ? f(tipo, pa, pb) : 0;
+    setTxt('h-mercado', tp ? `${tipo} ${tv >= tp ? 'cresce' : 'cai'} ${sgn(Math.abs(tv / tp - 1)).replace('+', '')}% vs ${pl}` : `${tipo}: ${big(tv)} em ${wl}`);
+    let s = `${categoria === 'Todas' ? 'Autoveículos' : categoria}, ${wl}: emplacamento de ${big(e)}${ep ? ` (${sgn(e / ep - 1)}% a/a)` : ''}, produção de ${big(pr)}${pp ? ` (${sgn(pr / pp - 1)}%)` : ''} e exportação de ${big(ex)}${exp ? ` (${sgn(ex / exp - 1)}%)` : ''}.`;
+    if (e > pr) s += ` O mercado interno absorveu ${big(e - pr)} unidades a mais do que a indústria produziu, sinal de espaço ocupado por importados.`;
+    if (best.length > 1 && categoria === 'Todas') s += ` Em ${tipo.toLowerCase()}, ${best[0].categoria.toLowerCase()} cresceu mais (${sgn(best[0].var)}%) e ${best[best.length - 1].categoria.toLowerCase()} menos (${sgn(best[best.length - 1].var)}%).`;
+    setTxt('ins-mercado', s);
+    return { e, ep, pr, pp, ex, exp };
+  }
+
+  function drawMarcas(marcas, a0, b) {
+    const { categoria, procedencia, marca } = P();
+    const first = d3.min(marcas, (r) => r.periodo);
+    const a = a0 < first ? first : a0;
+    const note = document.getElementById('nota-marcas');
+    note.textContent = a0 < first
+      ? `Emplacamento por marca existe na ANFAVEA só a partir de ${mesLbl(first)}. Este recorte usa ${janela(a, b)}.`
+      : `Recorte: ${janela(a, b)}. Emplacamento por marca existe na ANFAVEA desde ${mesLbl(first)}.`;
+    if (b < first) {
+      ['ins-marcas', 'h-marcas', 'm1v', 'm2v', 'm3v', 'm4v'].forEach((id) => setTxt(id, '—'));
+      ['ch-share', 'ch-ganhos', 'ch-tree'].forEach((id) => { const e = document.getElementById(id); e.classList.remove('dash-skeleton'); e.replaceChildren(); });
+      document.getElementById('tb-marcas').replaceChildren();
+      drawRace([], []);
+      return;
+    }
+    const base = marcas.filter((r) => catOk(categoria, r.categoria) && (procedencia === 'Todas' || r.procedencia === procedencia) && inWin(r.periodo, a, b));
+    const ms = MESES.filter((m) => inWin(m, a, b));
+    const tot = d3.sum(base, (r) => r.valor);
+    const byMonthTot = d3.rollup(base, (v) => d3.sum(v, (r) => r.valor), (r) => r.periodo);
+    const g = d3.rollup(base, (v) => ({
+      valor: d3.sum(v, (r) => r.valor),
+      imp: d3.sum(v, (r) => (r.procedencia === 'Importado' ? r.valor : 0)),
+      empresa: v[0].empresa,
+      mes: d3.rollup(v, (w) => d3.sum(w, (r) => r.valor), (r) => r.periodo),
+    }), (r) => r.marca);
+    // janelas de tendência: primeiros vs últimos 3 meses (ou 1 se a janela for curta)
+    const k = ms.length >= 6 ? 3 : 1;
+    const ini = ms.slice(0, k), fim = ms.slice(-k);
+    const shareIn = (o, list) => { const t = d3.sum(list, (m) => byMonthTot.get(m) || 0); return t ? d3.sum(list, (m) => o.mes.get(m) || 0) / t : 0; };
+    const rows = [...g].filter(([, o]) => o.valor > 0).map(([m, o]) => ({
+      marca: m, empresa: o.empresa, valor: o.valor, part: tot ? o.valor / tot : 0,
+      imp: o.valor ? o.imp / o.valor : 0, tend: ms.length > 1 ? shareIn(o, fim) - shareIn(o, ini) : null, _o: o,
+    }));
+    rows.sort((x, y) => y.valor - x.valor);
+    rows.forEach((r, i) => { r.rank = i + 1; });
+    const wl = janela(a, b);
+
+    // KPIs
+    setTxt('m1l', 'Mercado no recorte · ' + wl);
+    setNum('m1v', tot, big);
+    setTxt('m1d', `${rows.length} marcas com emplacamento`);
+    const sel = marca ? rows.find((r) => r.marca === marca) : null;
+    if (sel) {
+      setTxt('m2l', nice(marca));
+      setNum('m2v', sel.part, (v) => pc(v));
+      setTxt('m2d', `${sel.rank}º lugar · ${nf.format(sel.valor)} un. · ${pc(sel.imp, 0)} importado`);
+    } else if (rows[0]) {
+      setTxt('m2l', 'Líder: ' + nice(rows[0].marca));
+      setNum('m2v', rows[0].part, (v) => pc(v));
+      setTxt('m2d', `${nf.format(rows[0].valor)} un. · ${pc(rows[0].imp, 0)} importado`);
+    }
+    const cr5 = d3.sum(rows.slice(0, 5), (r) => r.part);
+    setNum('m3v', cr5, (v) => pc(v));
+    setTxt('m3d', rows.slice(0, 5).map((r) => nice(r.marca)).join(', '));
+    const isCn = (r) => CHINESAS.includes(r.marca);
+    const cn = d3.sum(rows.filter(isCn), (r) => r.part);
+    const cnT = d3.sum(rows.filter(isCn), (r) => r.tend || 0);
+    setNum('m4v', cn, (v) => pc(v));
+    if (ms.length > 1) ppDelta('m4d', cnT, janela(ini[0], ini[ini.length - 1])); else setTxt('m4d', '');
+
+    drawRace(base, ms);
+    treemap(document.getElementById('ch-tree'), rows, marca);
+
+    // gráfico de participação
+    const top = rows.slice(0, 6).map((r) => r.marca);
+    if (sel && !top.includes(sel.marca)) top.push(sel.marca);
+    const lines = top.map((m, i) => {
+      const o = g.get(m);
+      return { name: nice(m), label: nice(m), color: CAT[i % CAT.length], values: Object.fromEntries(ms.map((x) => [x, (byMonthTot.get(x) ? (o.mes.get(x) || 0) / byMonthTot.get(x) : 0)])) };
+    });
+    const chS = document.getElementById('ch-share');
+    if (shareMode === 'pos' && ms.length > 1) {
+      document.getElementById('t-share').textContent = sel ? `Posição: ${nice(sel.marca)} e maiores` : 'Posição das maiores marcas';
+      document.getElementById('s-share').textContent = 'Posição de cada marca no ranking mensal (1º no alto). Abaixo de 12º, a linha encosta no fundo. Passe o mouse para isolar uma marca.';
+      legend(document.getElementById('lg-share'), []);
+      bump(chS, ms, d3.rollup(base, (v) => d3.sum(v, (r) => r.valor), (r) => r.periodo, (r) => r.marca), top.map((m, i) => ({ m, color: CAT[i % CAT.length] })), sel ? sel.marca : null);
+    } else {
+      document.getElementById('t-share').textContent = sel ? `Participação mensal: ${nice(sel.marca)} e maiores` : 'Participação mensal das maiores marcas';
+      document.getElementById('s-share').textContent = 'Participação de cada marca no emplacamento do mês. Escolha uma marca no filtro, no mapa ou na tabela para destacá-la.';
+      legend(document.getElementById('lg-share'), lines.map((l) => ({ name: l.name, color: l.color, line: true })));
+      chart(chS, { months: ms, lines, yFmt: (v) => pc(v, 0), highlight: sel ? nice(sel.marca) : null });
+    }
+
+    // ganhos e perdas
+    const mov = rows.filter((r) => r.tend != null && r.part >= 0.002).sort((x, y) => y.tend - x.tend);
+    const pick = [...mov.slice(0, 6), ...mov.slice(-6).filter((r) => r.tend < 0 && !mov.slice(0, 6).includes(r))];
+    if (sel && sel.tend != null && !pick.includes(sel)) { pick.push(sel); pick.sort((x, y) => y.tend - x.tend); }
+    const items = pick.map((r) => ({ label: r.marca, v: r.tend, hi: sel && r === sel }));
+    document.getElementById('s-ganhos').textContent = ms.length > 1
+      ? `Variação da participação, em pontos percentuais: ${janela(fim[0], fim[fim.length - 1])} contra ${janela(ini[0], ini[ini.length - 1])}.`
+      : 'Escolha um período com mais de um mês para ver a tendência.';
+    diverging(document.getElementById('ch-ganhos'), items, (v) => sgn(v) + ' p.p.');
+
+    // ranking
+    const q = (document.getElementById('busca-marca').value || '').trim().toLowerCase();
+    const shown = rows.filter((r) => !q || r.marca.toLowerCase().includes(q) || r.empresa.toLowerCase().includes(q));
+    table(document.getElementById('tb-marcas'), [
+      { key: 'rank', label: '#', fmt: (v) => v },
+      { key: 'marca', label: 'Marca', left: true, logo: true, fmt: (v) => nice(v) },
+      { key: 'empresa', label: 'Empresa', left: true, hideNarrow: true },
+      { key: 'valor', label: 'Unidades', fmt: (v) => nf.format(v), bar: true },
+      { key: 'part', label: 'Part.', fmt: (v) => pc(v) },
+      { key: 'tend', label: 'Tendência', fmt: (v) => (v == null ? '—' : sgn(v) + ' p.p.'), cls: upDown },
+      { key: 'imp', label: '% importado', fmt: (v) => pc(v, 0), hideNarrow: true },
+    ], shown, { sortKey: 'valor', onClick: (r) => set({ marca: r.marca === marca ? null : r.marca }), selected: (r) => r.marca === marca });
+
+    // insight
+    const gain = mov[0], lose = mov[mov.length - 1];
+    setTxt('h-marcas', sel ? `${nice(sel.marca)}: ${sel.rank}º lugar, ${pc(sel.part)}` : rows[0] ? `${nice(rows[0].marca)} lidera com ${pc(rows[0].part)} · chinesas ${pc(cn)}` : '—');
+    let s = `${wl}: ${rows[0] ? nice(rows[0].marca) + ' lidera com ' + pc(rows[0].part) : ''}, e as 5 maiores somam ${pc(cr5)} do recorte.`;
+    if (gain && gain.tend > 0) s += ` ${nice(gain.marca)} foi quem mais ganhou participação (${sgn(gain.tend)} p.p.)`;
+    if (lose && lose.tend < 0) s += `, e ${nice(lose.marca)} quem mais perdeu (${sgn(lose.tend)} p.p.).`; else if (gain) s += '.';
+    s += ` Marcas chinesas têm ${pc(cn)} do recorte.`;
+    if (sel) s += ` ${nice(sel.marca)}: ${sel.rank}º lugar, ${pc(sel.part)} de participação${sel.tend != null ? ` (${sgn(sel.tend)} p.p. no período)` : ''}.`;
+    setTxt('ins-marcas', s);
+  }
+
+  function drawEle(comb, a, b, pa, pb, wl, pl) {
+    const { categoria } = P();
+    const c = categoria === 'Todas' ? 'Todas' : categoria;
+    const base = comb.filter((r) => catOk(c, r.categoria));
+    const hasPrev = pa >= MESES[0];
+    const tot = (a1, b1, f = () => true) => sum(base, (r) => inWin(r.periodo, a1, b1) && f(r));
+    const ELE = ['Elétrico', 'Híbrido Plug-In', 'Híbrido'];
+    const share = (a1, b1, f) => tot(a1, b1, f) / (tot(a1, b1) || 1);
+    const kp = [
+      ['e1', (r) => ELE.includes(r.combustivel)], ['e2', (r) => r.combustivel === 'Elétrico'],
+      ['e3', (r) => r.combustivel === 'Híbrido Plug-In'], ['e4', (r) => r.combustivel === 'Flex Fuel'],
+    ];
+    kp.forEach(([id, f]) => {
+      const s = share(a, b, f);
+      setNum(id + 'v', s, (v) => pc(v));
+      ppDelta(id + 'd', hasPrev ? s - share(pa, pb, f) : null, pl, ` · ${big(tot(a, b, f))} un.`);
+    });
+    setTxt('e1l', `Eletrificados · ${wl}`);
+    const ms = MESES.filter((m) => inWin(m, a, b));
+    const mt = d3.rollup(base, (v) => d3.sum(v, (r) => r.valor), (r) => r.periodo);
+    const lines = ELE.map((f, i) => ({
+      name: f, label: f, color: CAT[i],
+      values: Object.fromEntries(ms.map((m) => [m, sum(base, (r) => r.periodo === m && r.combustivel === f) / (mt.get(m) || 1)])),
+    }));
+    legend(document.getElementById('lg-ele'), [...lines.map((l) => ({ name: l.name, color: l.color })), { name: 'Total', color: C.fg, line: true }]);
+    document.getElementById('s-ele').textContent = `Elétrico, híbrido plug-in e híbrido empilhados, em % do emplacamento mensal · ${categoria === 'Todas' ? 'todas as categorias' : categoria}.`;
+    stackArea(document.getElementById('ch-ele'), ms, lines, (v) => pc(v, 0), (m) => pc(d3.sum(lines, (l) => l.values[m] || 0)));
+    lines.push({ name: 'Total eletrificados', values: Object.fromEntries(ms.map((m) => [m, d3.sum(lines, (l) => l.values[m])])) });
+    // waffle: a cada 100 emplacados no período
+    const NOMES = { 'Elétrico': 'Elétrico (BEV)', 'Híbrido Plug-In': 'Híbrido plug-in', 'Híbrido': 'Híbrido' };
+    const wp = ELE.map((f, i) => ({ name: NOMES[f], color: CAT[i], v: share(a, b, (r) => r.combustivel === f) }));
+    document.getElementById('t-waffle').textContent = `A cada 100 emplacados · ${wl}`;
+    document.getElementById('s-waffle').textContent = `Cada quadrado é 1% do emplacamento (${categoria === 'Todas' ? 'todas as categorias' : categoria.toLowerCase()}) em ${wl}. Cinza: demais combustíveis.`;
+    waffle(document.getElementById('ch-waffle'), wp, d3.sum(wp, (p) => p.v));
+
+    const fuels = [...new Set(base.map((r) => r.combustivel))];
+    const T = tot(a, b);
+    const rows = fuels.map((f) => {
+      const v = tot(a, b, (r) => r.combustivel === f), p = hasPrev ? tot(pa, pb, (r) => r.combustivel === f) : null;
+      return { combustivel: f, valor: v, part: T ? v / T : 0, var: p ? v / p - 1 : null };
+    }).filter((r) => r.valor > 0 || r.var != null);
+    document.getElementById('s-comb').textContent = `Emplacamento ${wl}${hasPrev ? ', variação contra ' + pl : ''}.`;
+    table(document.getElementById('tb-comb'), [
+      { key: 'combustivel', label: 'Combustível', left: true },
+      { key: 'valor', label: 'Unidades', fmt: (v) => nf.format(v), bar: true },
+      { key: 'part', label: 'Part.', fmt: (v) => pc(v) },
+      { key: 'var', label: 'Var. a/a', fmt: (v) => (v == null ? '—' : sgn(v) + '%'), cls: upDown },
+    ], rows, { sortKey: 'valor' });
+    const se = share(a, b, kp[0][1]), sep = hasPrev ? share(pa, pb, kp[0][1]) : null;
+    const fast = rows.filter((r) => r.var != null && r.valor > 1000).sort((x, y) => y.var - x.var)[0];
+    setTxt('h-ele', `Eletrificados: ${pc(se)} do emplacamento${sep != null ? ` (${sgn(se - sep)} p.p.)` : ''}`);
+    let s = `Eletrificados foram ${pc(se)} do emplacamento (${categoria === 'Todas' ? 'todas as categorias' : categoria.toLowerCase()}) em ${wl}`;
+    s += sep != null ? `, ${sgn(se - sep)} p.p. sobre ${pl}.` : '.';
+    if (fast) s += ` O combustível que mais cresceu foi ${fast.combustivel.toLowerCase()} (${sgn(fast.var)}%).`;
+    const last = ms[ms.length - 1];
+    if (last) s += ` Em ${mesLbl(last)}, a fatia chegou a ${pc(lines[3].values[last])}.`;
+    setTxt('ins-ele', s);
+    return se;
+  }
+
+  function drawImp(proc, a0, b, pa, pb, wl0, pl, brand) {
+    const { categoria } = P();
+    const first = brand ? (d3.min(proc, (r) => r.periodo) || MESES[0]) : MESES[0];
+    const a = a0 < first ? first : a0, wl = a === a0 ? wl0 : janela(a, b);
+    const hasPrev = pa >= first;
+    const who = brand ? nice(brand) : null;
+    setTxt('i1l', who ? `Fatia importada · ${who}` : 'Importados no emplacamento');
+    setTxt('i2l', who ? `Importadas · ${who}` : 'Unidades importadas');
+    setTxt('i3l', who ? `Nacionais · ${who}` : 'Unidades nacionais');
+    const f = (a1, b1, pr, c = categoria) => sum(proc, (r) => catOk(c, r.categoria) && inWin(r.periodo, a1, b1) && (!pr || r.procedencia === pr));
+    const s = f(a, b, 'Importado') / (f(a, b) || 1);
+    const sp = hasPrev ? f(pa, pb, 'Importado') / (f(pa, pb) || 1) : null;
+    setNum('i1v', s, (v) => pc(v));
+    ppDelta('i1d', sp == null ? null : s - sp, pl);
+    setNum('i2v', f(a, b, 'Importado'), big);
+    delta('i2d', f(a, b, 'Importado'), hasPrev ? f(pa, pb, 'Importado') : 0, pl);
+    setNum('i3v', f(a, b, 'Nacional'), big);
+    delta('i3d', f(a, b, 'Nacional'), hasPrev ? f(pa, pb, 'Nacional') : 0, pl);
+    const ms = MESES.filter((m) => inWin(m, a, b));
+    const cats = ['Automóveis', 'Comerciais leves', 'Caminhões', 'Ônibus'].filter((c) => !brand || f(a, b, null, c) > 0);
+    const lines = cats.map((c, i) => ({
+      name: c, label: c, color: CAT[i],
+      values: Object.fromEntries(ms.map((m) => [m, f(m, m, 'Importado', c) / (f(m, m, null, c) || 1)])),
+    }));
+    legend(document.getElementById('lg-imp'), lines.map((l) => ({ name: l.name, color: l.color, line: true })));
+    const hl = ['Todas', 'Leves'].includes(categoria) ? null : categoria;
+    chart(document.getElementById('ch-imp'), { months: ms, lines, yFmt: (v) => pc(v, 0), highlight: hl });
+    // espelhado: nacionais acima, importados abaixo
+    document.getElementById('t-bfly').textContent = `Nacionais e importados · ${who ? who + ' · ' : ''}${categoria === 'Todas' ? 'todas as categorias' : categoria}`;
+    const byP = (pr) => Object.fromEntries(ms.map((m) => [m, f(m, m, pr)]));
+    butterfly(document.getElementById('ch-bfly'), ms, byP('Nacional'), byP('Importado'));
+    // antes e agora, por categoria
+    const sh = (a1, b1, c) => { const t = f(a1, b1, null, c); return t ? f(a1, b1, 'Importado', c) / t : null; };
+    slope(document.getElementById('ch-slope'), cats.map((c, i) => ({
+      name: c, color: CAT[i], a: hasPrev ? sh(pa, pb, c) : null, b: sh(a, b, c), hi: hl === c, dim: hl != null && hl !== c,
+    })), pl, wl);
+    setTxt('h-imp', who ? `${who}: ${pc(s)} importado, ${pc(1 - s)} feito no Brasil` : `Importados: ${pc(s)} do emplacamento${sp != null ? ` (${sgn(s - sp)} p.p.)` : ''}`);
+    let t = `${who ? who + ': i' : 'I'}mportados foram ${pc(s)} do emplacamento${who ? ' da marca' : ''} (${categoria === 'Todas' ? 'todas as categorias' : categoria.toLowerCase()}) em ${wl}`;
+    t += sp != null ? `, ${sgn(s - sp)} p.p. sobre ${pl}.` : '.';
+    const iv = f(a, b, 'Importado'), ivp = hasPrev ? f(pa, pb, 'Importado') : 0, nv = f(a, b, 'Nacional'), nvp = hasPrev ? f(pa, pb, 'Nacional') : 0;
+    if (ivp && nvp) t += ` Os importados ${iv >= ivp ? 'cresceram' : 'caíram'} ${sgn(Math.abs(iv / ivp - 1)).replace('+', '')}% e os nacionais ${nv >= nvp ? 'cresceram' : 'caíram'} ${sgn(Math.abs(nv / nvp - 1)).replace('+', '')}%.`;
+    setTxt('ins-imp', t);
+  }
+
+  function drawCam(cam, a, b, pa, pb, wl, pl) {
+    const { tipo } = P();
+    const hasPrev = pa >= MESES[0];
+    const base = cam.filter((r) => r.tipo_dado === tipo);
+    const subs = ['Semileves', 'Leves', 'Médios', 'Semipesados', 'Pesados'];
+    const ms = MESES.filter((m) => inWin(m, a, b));
+    const lines = subs.map((s, i) => ({ name: s, label: s, color: CAT[i], values: Object.fromEntries(ms.map((m) => [m, sum(base, (r) => r.periodo === m && r.subsegmento === s)])) }));
+    document.getElementById('t-cam').textContent = `Caminhões por subsegmento · ${tipo.toLowerCase()}`;
+    multiples(document.getElementById('ch-cam'), ms, lines, hasPrev ? Object.fromEntries(subs.map((s) => [s, sum(base, (r) => r.subsegmento === s && inWin(r.periodo, pa, pb))])) : {});
+    const T = sum(base, (r) => inWin(r.periodo, a, b));
+    const rows = subs.map((s) => {
+      const v = sum(base, (r) => r.subsegmento === s && inWin(r.periodo, a, b));
+      const p = hasPrev ? sum(base, (r) => r.subsegmento === s && inWin(r.periodo, pa, pb)) : null;
+      return { subsegmento: s, valor: v, part: T ? v / T : 0, var: p ? v / p - 1 : null };
+    });
+    document.getElementById('s-camtb').textContent = `${tipo} ${wl}${hasPrev ? ', variação contra ' + pl : ''}.`;
+    table(document.getElementById('tb-cam'), [
+      { key: 'subsegmento', label: 'Subsegmento', left: true },
+      { key: 'valor', label: 'Unidades', fmt: (v) => nf.format(v), bar: true },
+      { key: 'part', label: 'Part.', fmt: (v) => pc(v) },
+      { key: 'var', label: 'Var. a/a', fmt: (v) => (v == null ? '—' : sgn(v) + '%'), cls: upDown },
+    ], rows, { sortKey: 'valor' });
+    const sorted = rows.filter((r) => r.var != null).sort((x, y) => y.var - x.var);
+    const p = hasPrev ? sum(base, (r) => inWin(r.periodo, pa, pb)) : 0;
+    setTxt('h-cam', `Caminhões: ${big(T)} un. em ${wl}${p ? ` (${sgn(T / p - 1)}% a/a)` : ''}`);
+    let s = `${tipo} de caminhões em ${wl}: ${big(T)} unidades${p ? ` (${sgn(T / p - 1)}% a/a)` : ''}. Pesados respondem por ${pc(rows[4].part)} do volume.`;
+    if (sorted.length > 1) s += ` ${sorted[0].subsegmento} teve o melhor desempenho (${sgn(sorted[0].var)}%) e ${sorted[sorted.length - 1].subsegmento.toLowerCase()} o pior (${sgn(sorted[sorted.length - 1].var)}%).`;
+    setTxt('ins-cam', s);
+  }
+
+  // ---------- desenho ----------
+  const markSeg = (id, v) => document.querySelectorAll(`#${id} button`).forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.v === v)));
+  function draw() {
+    readTok();
+    const series = rowsOf('series');
+    const status = dash.data('series').status;
+    placeAll();
+    if (!series) {
+      if (status === 'error') ['ch-mensal', 'ch-fluxo', 'ch-heat', 'tl'].forEach((id) => fail(document.getElementById(id)));
+      return;
+    }
+    MESES = [...new Set(series.map((r) => r.periodo))].sort();
+    const [a, b] = win();
+    const pa = addM(a, -12), pb = addM(b, -12);
+    const wl = janela(a, b), pl = janela(pa, pb);
+    const p = P();
+    markSeg('f-tipo', p.tipo); markSeg('f-cat', p.categoria); markSeg('f-proc', p.procedencia); markSeg('f-share', shareMode);
+    const last = MESES[MESES.length - 1];
+    markSeg('f-atalho', a === last.slice(0, 4) + '-01' && b === last ? 'ytd' : a === addM(last, -11) && b === last ? '12m' : a === MESES[0] && b === last ? 'tudo' : '');
+    placeAll();
+    const opts = (sel, v) => { sel.replaceChildren(...MESES.slice().reverse().map((m) => new Option(mesLbl(m), m))); sel.value = v; };
+    opts(selI, a); opts(selF, b);
+
+    const marcas = rowsOf('marcas');
+    if (marcas) {
+      const ms = [...new Set(marcas.map((r) => r.marca))].sort((x, y) => x.localeCompare(y, 'pt-BR'));
+      if (selM.options.length !== ms.length + 1) selM.replaceChildren(new Option('Todas as marcas', ''), ...ms.map((m) => new Option(m, m)));
+      selM.value = p.marca || '';
+    }
+
+    timeline(series, a, b);
+    const m = drawMercado(series, a, b, pa, pb, wl, pl);
+    let ele = null;
+    const comb = rowsOf('combustivel');
+    if (tab === 'eletrificacao') { if (comb) ele = drawEle(comb, a, b, pa, pb, wl, pl); else if (dash.data('combustivel').status === 'error') ['ch-ele', 'ch-waffle'].forEach((id) => fail(document.getElementById(id))); }
+    if (tab === 'marcas') { if (marcas) drawMarcas(marcas, a, b); else if (dash.data('marcas').status === 'error') ['ch-share', 'ch-ganhos', 'ch-tree'].forEach((id) => fail(document.getElementById(id))); }
+    if (tab === 'importados') { const pr = rowsOf('procedencia'); const bm = p.marca && marcas ? p.marca : null; if (pr) drawImp(bm ? marcas.filter((r) => r.marca === bm) : pr, a, b, pa, pb, wl, pl, bm); else if (dash.data('procedencia').status === 'error') ['ch-imp', 'ch-bfly', 'ch-slope'].forEach((id) => fail(document.getElementById(id))); }
+    if (tab === 'caminhoes') { const c = rowsOf('caminhoes'); if (c) drawCam(c, a, b, pa, pb, wl, pl); else if (dash.data('caminhoes').status === 'error') fail(document.getElementById('ch-cam')); }
+    if (tab !== 'marcas') raceStop();
+    const LENS = {
+      mercado: { cat: p.categoria, note: 'A ANFAVEA só publica o emplacamento por marca. Produção e exportação, abaixo, seguem o mercado todo.' },
+      marcas: { cat: p.categoria, note: 'Abaixo, a marca fica em destaque em todos os gráficos: no mapa, na disputa mês a mês, nas posições, em ganhos e perdas e no ranking.' },
+      eletrificacao: { cat: 'Leves', note: 'A ANFAVEA não publica combustível por marca. A lente mostra os leves da marca; os gráficos abaixo seguem o mercado todo.' },
+      importados: { cat: p.categoria, note: 'Toda a aba abaixo está filtrada pela marca. Os dados por marca começam em jan/2026, por isso não há comparação com o ano anterior.' },
+      caminhoes: { cat: 'Caminhões', note: 'Os subsegmentos (semileves a pesados) não são publicados por marca. A lente mostra os caminhões da marca; os gráficos abaixo seguem o mercado todo.' },
+    };
+    lens(tab, marcas, a, b, LENS[tab]);
+
+    // resumo do topo: chip curto + texto completo no ⓘ
+    setTxt('takeaway-h', `${wl} · ${big(m.e)} emplacamentos${m.ep ? ` (${sgn(m.e / m.ep - 1)}%)` : ''}`);
+    let t = `${wl}: ${big(m.e)} emplacamentos${m.ep ? ` (${sgn(m.e / m.ep - 1)}% sobre ${pl})` : ''}, ${big(m.pr)} produzidos${m.pp ? ` (${sgn(m.pr / m.pp - 1)}%)` : ''} e ${big(m.ex)} exportados${m.exp ? ` (${sgn(m.ex / m.exp - 1)}%)` : ''}`;
+    if (comb) {
+      const base = comb.filter((r) => LEVES.includes(r.categoria) && inWin(r.periodo, a, b));
+      const ev = sum(base, (r) => ['Elétrico', 'Híbrido Plug-In', 'Híbrido'].includes(r.combustivel)) / (sum(base, () => true) || 1);
+      t += `. Eletrificados (elétrico, plug-in e híbrido) já são ${pc(ev)} dos leves`;
+    }
+    t += p.categoria !== 'Todas' ? ` (recorte: ${p.categoria.toLowerCase()}).` : '.';
+    t += ' Fonte: ANFAVEA, Central de Dados; emplacamento via Renavam/Senatran.';
+    setTxt('takeaway', t);
+    setTxt('ed', `Dados até ${MES[+last.slice(5) - 1]}/${last.slice(0, 4)}`);
+
+    // letreiro: os números do período rodando no topo
+    const items = [];
+    const chg = (cur, prev) => (prev ? [(cur >= prev ? '▲ ' : '▼ ') + sgn(cur / prev - 1).replace(/^[+−]/, '') + '%', cur >= prev] : null);
+    const chgPP = (d) => (d == null ? null : [(d >= 0 ? '▲ ' : '▼ ') + sgn(d).replace(/^[+−]/, '') + ' p.p.', d >= 0]);
+    items.push(['Emplacamento', big(m.e), chg(m.e, m.ep)], ['Produção', big(m.pr), chg(m.pr, m.pp)], ['Exportação', big(m.ex), chg(m.ex, m.exp)]);
+    if (comb) {
+      const sh = (a1, b1) => { const bs = comb.filter((r) => LEVES.includes(r.categoria) && inWin(r.periodo, a1, b1)); return sum(bs, (r) => ['Elétrico', 'Híbrido Plug-In', 'Híbrido'].includes(r.combustivel)) / (sum(bs, () => true) || 1); };
+      const e1 = sh(a, b);
+      items.push(['Eletrificados (leves)', pc(e1), chgPP(pa >= MESES[0] ? e1 - sh(pa, pb) : null)]);
+    }
+    const proc = rowsOf('procedencia');
+    if (proc) {
+      const sh = (a1, b1) => sum(proc, (r) => r.procedencia === 'Importado' && inWin(r.periodo, a1, b1)) / (sum(proc, (r) => inWin(r.periodo, a1, b1)) || 1);
+      const i1 = sh(a, b);
+      items.push(['Importados', pc(i1), chgPP(pa >= MESES[0] ? i1 - sh(pa, pb) : null)]);
+    }
+    if (marcas) {
+      const bs = marcas.filter((r) => inWin(r.periodo, a, b) && r.marca !== 'OUTRAS MARCAS');
+      const tot = d3.sum(bs, (r) => r.valor);
+      const top = d3.rollups(bs, (v) => d3.sum(v, (r) => r.valor), (r) => r.marca).sort((x, y) => y[1] - x[1]).slice(0, 3);
+      top.forEach(([mk, v], k) => items.push([`${k + 1}º ${nice(mk)}`, pc(tot ? v / tot : 0), null]));
+    }
+    const key = items.map((x) => x.flat().join()).join('|');
+    const tk = document.getElementById('ticker');
+    if (tk._key !== key) {
+      tk._key = key;
+      const one = () => items.map(([l, v, c]) => {
+        const sp = document.createElement('span');
+        const b1 = document.createElement('b'); b1.textContent = l;
+        sp.append(b1, document.createTextNode(v));
+        if (c) { const i = document.createElement('i'); i.textContent = c[0]; i.className = c[1] ? 'av-up' : 'av-down'; sp.append(i); }
+        return sp;
+      });
+      tk.replaceChildren(...one(), ...one());
+      tk.style.animationDuration = Math.max(40, items.length * 9) + 's';
+    }
+  }
+
+  // troca de tema da página: redesenha com as cores do novo tema, sem animar
+  const reTheme = () => requestAnimationFrame(() => draw());
+  if (window.matchMedia) matchMedia('(prefers-color-scheme: dark)').addEventListener('change', reTheme);
+  new MutationObserver(reTheme).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme', 'class'] });
+
+  document.getElementById('busca-marca').addEventListener('input', () => draw());
+  showTab(tab, false);
+  dash.onData(draw);
+})();
+</script>

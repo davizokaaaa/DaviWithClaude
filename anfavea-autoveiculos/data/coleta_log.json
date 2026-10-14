@@ -1,0 +1,348 @@
+{
+ "inicio": "2023-01",
+ "fim": "2026-10",
+ "coletado_em": "2026-10-14T14:45:43.768550+00:00",
+ "consultas": [
+  {
+   "consulta": "producao__categorias",
+   "ok": true,
+   "linhas": 46,
+   "colunas": [
+    "PERÍODO",
+    "AUTOMÓVEIS",
+    "COMERCIAIS LEVES",
+    "CAMINHÕES",
+    "ÔNIBUS",
+    "TOTAL LEVES",
+    "TOTAL PESADOS",
+    "TOTAL"
+   ]
+  },
+  {
+   "consulta": "producao__caminhoes_subsegmento",
+   "ok": true,
+   "linhas": 46,
+   "colunas": [
+    "PERÍODO",
+    "CAMINHÕES SEMILEVES",
+    "CAMINHÕES LEVES",
+    "CAMINHÕES MÉDIOS",
+    "CAMINHÕES SEMIPESADOS",
+    "CAMINHÕES PESADOS",
+    "TOTAL"
+   ]
+  },
+  {
+   "consulta": "emplacamento__categorias",
+   "ok": true,
+   "linhas": 46,
+   "colunas": [
+    "PERÍODO",
+    "AUTOMÓVEIS",
+    "COMERCIAIS LEVES",
+    "CAMINHÕES",
+    "ÔNIBUS",
+    "TOTAL LEVES",
+    "TOTAL PESADOS",
+    "TOTAL"
+   ]
+  },
+  {
+   "consulta": "emplacamento__caminhoes_subsegmento",
+   "ok": true,
+   "linhas": 46,
+   "colunas": [
+    "PERÍODO",
+    "CAMINHÕES SEMILEVES",
+    "CAMINHÕES LEVES",
+    "CAMINHÕES MÉDIOS",
+    "CAMINHÕES SEMIPESADOS",
+    "CAMINHÕES PESADOS",
+    "TOTAL"
+   ]
+  },
+  {
+   "consulta": "exportacao__categorias",
+   "ok": true,
+   "linhas": 46,
+   "colunas": [
+    "PERÍODO",
+    "AUTOMÓVEIS",
+    "COMERCIAIS LEVES",
+    "CAMINHÕES",
+    "ÔNIBUS",
+    "TOTAL LEVES",
+    "TOTAL PESADOS",
+    "TOTAL"
+   ]
+  },
+  {
+   "consulta": "exportacao__caminhoes_subsegmento",
+   "ok": true,
+   "linhas": 46,
+   "colunas": [
+    "PERÍODO",
+    "CAMINHÕES SEMILEVES",
+    "CAMINHÕES LEVES",
+    "CAMINHÕES MÉDIOS",
+    "CAMINHÕES SEMIPESADOS",
+    "CAMINHÕES PESADOS",
+    "TOTAL"
+   ]
+  },
+  {
+   "consulta": "emplacamento__automoveis__procedencia_empresa_marca",
+   "ok": true,
+   "linhas": 10,
+   "colunas": [
+    "PERÍODO",
+    "AUTOMÓVEIS - AUDI - AUDI - IMPORTADO",
+    "AUTOMÓVEIS - AUDI - AUDI - NACIONAL",
+    "AUTOMÓVEIS - AUDI - AUDI - TOTAL",
+    "AUTOMÓVEIS - BMW - BMW - IMPORTADO",
+    "AUTOMÓVEIS - BMW - BMW - NACIONAL",
+    "AUTOMÓVEIS - BMW - BMW - TOTAL",
+    "AUTOMÓVEIS - BMW - MINI - IMPORTADO",
+    "AUTOMÓVEIS - CAOA - CAOA CHANGAN - IMPORTADO",
+    "AUTOMÓVEIS - CAOA - CAOA CHANGAN - NACIONAL",
+    "AUTOMÓVEIS - CAOA - CAOA CHANGAN - TOTAL",
+    "AUTOMÓVEIS - CAOA - CAOA - IMPORTADO"
+   ]
+  },
+  {
+   "consulta": "emplacamento__automoveis__procedencia",
+   "ok": true,
+   "linhas": 45,
+   "colunas": [
+    "PERÍODO",
+    "AUTOMÓVEIS - IMPORTADO",
+    "AUTOMÓVEIS - NACIONAL",
+    "AUTOMÓVEIS - TOTAL"
+   ]
+  },
+  {
+   "consulta": "emplacamento__automoveis__procedencia_empresa",
+   "ok": true,
+   "linhas": 10,
+   "colunas": [
+    "PERÍODO",
+    "AUTOMÓVEIS - AUDI - IMPORTADO",
+    "AUTOMÓVEIS - AUDI - NACIONAL",
+    "AUTOMÓVEIS - AUDI - TOTAL",
+    "AUTOMÓVEIS - BMW - IMPORTADO",
+    "AUTOMÓVEIS - BMW - NACIONAL",
+    "AUTOMÓVEIS - BMW - TOTAL",
+    "AUTOMÓVEIS - CAOA - IMPORTADO",
+    "AUTOMÓVEIS - CAOA - NACIONAL",
+    "AUTOMÓVEIS - CAOA - TOTAL",
+    "AUTOMÓVEIS - FCA FIAT CHRYSLER - IMPORTADO",
+    "AUTOMÓVEIS - FCA FIAT CHRYSLER - NACIONAL"
+   ]
+  },
+  {
+   "consulta": "emplacamento__automoveis__combustivel",
+   "ok": true,
+   "linhas": 46,
+   "colunas": [
+    "PERÍODO",
+    "AUTOMÓVEIS - DIESEL",
+    "AUTOMÓVEIS - ELÉTRICO",
+    "AUTOMÓVEIS - ETANOL",
+    "AUTOMÓVEIS - FLEX FUEL",
+    "AUTOMÓVEIS - GASOLINA",
+    "AUTOMÓVEIS - HÍBRIDO",
+    "AUTOMÓVEIS - HÍBRIDO PLUG-IN",
+    "TOTAL"
+   ]
+  },
+  {
+   "consulta": "emplacamento__comerciais_leves__procedencia_empresa_marca",
+   "ok": true,
+   "linhas": 10,
+   "colunas": [
+    "PERÍODO",
+    "COMERCIAIS LEVES - AGRALE - AGRALE - NACIONAL",
+    "COMERCIAIS LEVES - CAOA - CAOA - IMPORTADO",
+    "COMERCIAIS LEVES - CAOA - CAOA - NACIONAL",
+    "COMERCIAIS LEVES - CAOA - CAOA - TOTAL",
+    "COMERCIAIS LEVES - FCA FIAT CHRYSLER - FIAT - IMPORTADO",
+    "COMERCIAIS LEVES - FCA FIAT CHRYSLER - FIAT - NACIONAL",
+    "COMERCIAIS LEVES - FCA FIAT CHRYSLER - FIAT - TOTAL",
+    "COMERCIAIS LEVES - FCA FIAT CHRYSLER - JEEP - IMPORTADO",
+    "COMERCIAIS LEVES - FCA FIAT CHRYSLER - RAM - IMPORTADO",
+    "COMERCIAIS LEVES - FCA FIAT CHRYSLER - RAM - NACIONAL",
+    "COMERCIAIS LEVES - FCA FIAT CHRYSLER - RAM - TOTAL"
+   ]
+  },
+  {
+   "consulta": "emplacamento__comerciais_leves__procedencia",
+   "ok": true,
+   "linhas": 45,
+   "colunas": [
+    "PERÍODO",
+    "COMERCIAIS LEVES - IMPORTADO",
+    "COMERCIAIS LEVES - NACIONAL",
+    "COMERCIAIS LEVES - TOTAL"
+   ]
+  },
+  {
+   "consulta": "emplacamento__comerciais_leves__procedencia_empresa",
+   "ok": true,
+   "linhas": 10,
+   "colunas": [
+    "PERÍODO",
+    "COMERCIAIS LEVES - AGRALE - NACIONAL",
+    "COMERCIAIS LEVES - CAOA - IMPORTADO",
+    "COMERCIAIS LEVES - CAOA - NACIONAL",
+    "COMERCIAIS LEVES - CAOA - TOTAL",
+    "COMERCIAIS LEVES - FCA FIAT CHRYSLER - IMPORTADO",
+    "COMERCIAIS LEVES - FCA FIAT CHRYSLER - NACIONAL",
+    "COMERCIAIS LEVES - FCA FIAT CHRYSLER - TOTAL",
+    "COMERCIAIS LEVES - FORD - IMPORTADO",
+    "COMERCIAIS LEVES - FORD - NACIONAL",
+    "COMERCIAIS LEVES - FORD - TOTAL",
+    "COMERCIAIS LEVES - GENERAL MOTORS - IMPORTADO"
+   ]
+  },
+  {
+   "consulta": "emplacamento__comerciais_leves__combustivel",
+   "ok": true,
+   "linhas": 46,
+   "colunas": [
+    "PERÍODO",
+    "COMERCIAIS LEVES - DIESEL",
+    "COMERCIAIS LEVES - ELÉTRICO",
+    "COMERCIAIS LEVES - ETANOL",
+    "COMERCIAIS LEVES - FLEX FUEL",
+    "COMERCIAIS LEVES - GASOLINA",
+    "COMERCIAIS LEVES - HÍBRIDO",
+    "COMERCIAIS LEVES - HÍBRIDO PLUG-IN",
+    "TOTAL"
+   ]
+  },
+  {
+   "consulta": "emplacamento__caminhoes__procedencia_empresa_marca",
+   "ok": true,
+   "linhas": 10,
+   "colunas": [
+    "PERÍODO",
+    "CAMINHÕES - AGRALE - AGRALE - NACIONAL",
+    "CAMINHÕES - AGRALE - FORD - NACIONAL",
+    "CAMINHÕES - CAOA - CAOA - NACIONAL",
+    "CAMINHÕES - DAF - DAF - IMPORTADO",
+    "CAMINHÕES - DAF - DAF - NACIONAL",
+    "CAMINHÕES - DAF - DAF - TOTAL",
+    "CAMINHÕES - DAF - OUTRAS MARCAS - NACIONAL",
+    "CAMINHÕES - FCA FIAT CHRYSLER - FIAT - IMPORTADO",
+    "CAMINHÕES - FCA FIAT CHRYSLER - RAM - IMPORTADO",
+    "CAMINHÕES - FORD - FORD - IMPORTADO",
+    "CAMINHÕES - FORD - FORD - NACIONAL"
+   ]
+  },
+  {
+   "consulta": "emplacamento__caminhoes__procedencia",
+   "ok": true,
+   "linhas": 45,
+   "colunas": [
+    "PERÍODO",
+    "CAMINHÕES - IMPORTADO",
+    "CAMINHÕES - NACIONAL",
+    "CAMINHÕES - TOTAL"
+   ]
+  },
+  {
+   "consulta": "emplacamento__caminhoes__procedencia_empresa",
+   "ok": true,
+   "linhas": 10,
+   "colunas": [
+    "PERÍODO",
+    "CAMINHÕES - AGRALE - NACIONAL",
+    "CAMINHÕES - CAOA - NACIONAL",
+    "CAMINHÕES - DAF - IMPORTADO",
+    "CAMINHÕES - DAF - NACIONAL",
+    "CAMINHÕES - DAF - TOTAL",
+    "CAMINHÕES - FCA FIAT CHRYSLER - IMPORTADO",
+    "CAMINHÕES - FORD - IMPORTADO",
+    "CAMINHÕES - FORD - NACIONAL",
+    "CAMINHÕES - FORD - TOTAL",
+    "CAMINHÕES - IVG - IMPORTADO",
+    "CAMINHÕES - IVG - NACIONAL"
+   ]
+  },
+  {
+   "consulta": "emplacamento__caminhoes__combustivel",
+   "ok": true,
+   "linhas": 46,
+   "colunas": [
+    "PERÍODO",
+    "CAMINHÕES - DIESEL",
+    "CAMINHÕES - ELÉTRICO",
+    "CAMINHÕES - GASOLINA",
+    "CAMINHÕES - GÁS",
+    "TOTAL"
+   ]
+  },
+  {
+   "consulta": "emplacamento__onibus__procedencia_empresa_marca",
+   "ok": true,
+   "linhas": 10,
+   "colunas": [
+    "PERÍODO",
+    "ÔNIBUS - AGRALE - AGRALE - NACIONAL",
+    "ÔNIBUS - IVG - IVECO - NACIONAL",
+    "ÔNIBUS - MERCEDES-BENZ - MERCEDES-BENZ - NACIONAL",
+    "ÔNIBUS - OUTRAS EMPRESAS - BYD - NACIONAL",
+    "ÔNIBUS - OUTRAS EMPRESAS - CRRC ELETRIC - IMPORTADO",
+    "ÔNIBUS - OUTRAS EMPRESAS - HIGER - IMPORTADO",
+    "ÔNIBUS - OUTRAS EMPRESAS - MARCOPOLO - NACIONAL",
+    "ÔNIBUS - SCANIA - SCANIA - NACIONAL",
+    "ÔNIBUS - VOLKSWAGEN TRUCK & BUS - VOLKS CAMINHOES - NACIONAL",
+    "ÔNIBUS - VOLVO - VOLVO - IMPORTADO",
+    "ÔNIBUS - VOLVO - VOLVO - NACIONAL"
+   ]
+  },
+  {
+   "consulta": "emplacamento__onibus__procedencia",
+   "ok": true,
+   "linhas": 45,
+   "colunas": [
+    "PERÍODO",
+    "ÔNIBUS - IMPORTADO",
+    "ÔNIBUS - NACIONAL",
+    "ÔNIBUS - TOTAL"
+   ]
+  },
+  {
+   "consulta": "emplacamento__onibus__procedencia_empresa",
+   "ok": true,
+   "linhas": 10,
+   "colunas": [
+    "PERÍODO",
+    "ÔNIBUS - AGRALE - NACIONAL",
+    "ÔNIBUS - IVG - NACIONAL",
+    "ÔNIBUS - MERCEDES-BENZ - NACIONAL",
+    "ÔNIBUS - OUTRAS EMPRESAS - IMPORTADO",
+    "ÔNIBUS - OUTRAS EMPRESAS - NACIONAL",
+    "ÔNIBUS - OUTRAS EMPRESAS - TOTAL",
+    "ÔNIBUS - SCANIA - NACIONAL",
+    "ÔNIBUS - VOLKSWAGEN TRUCK & BUS - NACIONAL",
+    "ÔNIBUS - VOLVO - IMPORTADO",
+    "ÔNIBUS - VOLVO - NACIONAL",
+    "ÔNIBUS - VOLVO - TOTAL"
+   ]
+  },
+  {
+   "consulta": "emplacamento__onibus__combustivel",
+   "ok": true,
+   "linhas": 46,
+   "colunas": [
+    "PERÍODO",
+    "ÔNIBUS - DIESEL",
+    "ÔNIBUS - ELÉTRICO",
+    "ÔNIBUS - GASOLINA",
+    "ÔNIBUS - GÁS",
+    "TOTAL"
+   ]
+  }
+ ]
+}

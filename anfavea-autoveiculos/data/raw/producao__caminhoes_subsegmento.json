@@ -1,0 +1,118 @@
+{
+ "request": [
+  [
+   "dashboard",
+   "dashboard1"
+  ],
+  [
+   "procedencia",
+   "total"
+  ],
+  [
+   "por_empresa",
+   "0"
+  ],
+  [
+   "por_marca",
+   "0"
+  ],
+  [
+   "empresa",
+   ""
+  ],
+  [
+   "marca",
+   ""
+  ],
+  [
+   "combustivel_filter",
+   ""
+  ],
+  [
+   "agregacao",
+   "mensal"
+  ],
+  [
+   "inicio",
+   "2023-01"
+  ],
+  [
+   "fim",
+   "2026-10"
+  ],
+  [
+   "tipo_dado",
+   "producao"
+  ],
+  [
+   "categorias[]",
+   "caminhoes"
+  ],
+  [
+   "subsegmento_caminhao[]",
+   "SEMILEVES"
+  ],
+  [
+   "subsegmento_caminhao[]",
+   "LEVES"
+  ],
+  [
+   "subsegmento_caminhao[]",
+   "MÉDIOS"
+  ],
+  [
+   "subsegmento_caminhao[]",
+   "SEMIPESADOS"
+  ],
+  [
+   "subsegmento_caminhao[]",
+   "PESADOS"
+  ],
+  [
+   "dimensao_emplacamento",
+   ""
+  ]
+ ],
+ "response": {
+  "success": true,
+  "data": {
+   "table_html": "<div style=\"overflow-x:auto;overflow-y: scroll;max-height: 485px;\"><table class=\"table table-striped anfavea-table\" data-formato=\"numero\"><caption style=\"caption-side:top;font-weight:700;color:var(--text,#212529);font-size:1rem;padding:.25rem 0 .5rem;text-align:left;\">Produção de Caminhões Semileves, Caminhões Leves, Caminhões MÉDIOS, Caminhões Semipesados, Caminhões Pesados</caption><thead><tr><th>PERÍODO</th><th>CAMINHÕES SEMILEVES</th><th>CAMINHÕES LEVES</th><th>CAMINHÕES MÉDIOS</th><th>CAMINHÕES SEMIPESADOS</th><th>CAMINHÕES PESADOS</th><th style=\"border-left:2px solid #dee2e6\">TOTAL</th></tr></thead><tbody><tr><td><strong>2023 - JAN</strong></td><td data-valor-export=\"218\">218</td><td data-valor-export=\"1019\">1.019</td><td data-valor-export=\"216\">216</td><td data-valor-export=\"1116\">1.116</td><td data-valor-export=\"1480\">1.480</td><td style=\"border-left:2px solid #dee2e6\"><strong data-valor-export=\"4049\">4.049</strong></td></tr><tr><td><strong>2023 - FEV</strong></td><td data-valor-export=\"194\">194</td><td data-valor-export=\"1366\">1.366</td><td data-valor-export=\"358\">358</td><td data-valor-export=\"1920\">1.920</td><td data-valor-export=\"4285\">4.285</td><td style=\"border-left:2px solid #dee2e6\"><strong data-valor-export=\"8123\">8.123</strong></td></tr><tr><td><strong>2023 - MAR</strong></td><td data-valor-export=\"153\">153</td><td data-valor-export=\"1689\">1.689</td><td data-valor-export=\"420\">420</td><td data-valor-export=\"3574\">3.574</td><td data-valor-export=\"6489\">6.489</td><td style=\"border-left:2px solid #dee2e6\"><strong data-valor-export=\"12325\">12.325</strong></td></tr><tr><td><strong>2023 - ABR</strong></td><td data-valor-export=\"61\">61</td><td data-valor-export=\"1202\">1.202</td><td data-valor-export=\"195\">195</td><td data-valor-export=\"2121\">2.121</td><td data-valor-export=\"3676\">3.676</td><td style=\"border-left:2px solid #dee2e6\"><strong data-valor-export=\"7255\">7.255</strong></td></tr><tr><td><strong>2023 - MAI</strong></td><td data-valor-export=\"73\">73</td><td data-valor-export=\"1202\">1.202</td><td data-valor-export=\"169\">169</td><td data-valor-export=\"2451\">2.451</td><td data-valor-export=\"4497\">4.497</td><td style=\"border-left:2px solid #dee2e6\"><strong data-valor-export=\"8392\">8.392</strong></td></tr><tr><td><strong>2023 - JUN</strong></td><td data-valor-export=\"35\">35</td><td data-valor-export=\"758\">758</td><td data-valor-export=\"117\">117</td><td data-valor-export=\"2083\">2.083</td><td data-valor-export=\"4036\">4.036</td><td style=\"border-left:2px solid #dee2e6\"><strong data-valor-export=\"7029\">7.029</strong></td></tr><tr><td><strong>2023 - JUL</strong></td><td data-valor-export=\"46\">46</td><td data-valor-export=\"820\">820</td><td data-valor-export=\"375\">375</td><td data-valor-export=\"1609\">1.609</td><td data-valor-export=\"3899\">3.899</td><td style=\"border-left:2px solid #dee2e6\"><strong data-valor-export=\"6749\">6.749</strong></td></tr><tr><td><strong>2023 - AGO</strong></td><td data-valor-export=\"130\">130</td><td data-valor-export=\"1084\">1.084</td><td data-valor-export=\"302\">302</td><td data-valor-export=\"2165\">2.165</td><td data-valor-export=\"5942\">5.942</td><td style=\"border-left:2px solid #dee2e6\"><strong data-valor-export=\"9623\">9.623</strong></td></tr><tr><td><strong>2023 - SET</strong></td><td data-valor-export=\"36\">36</td><td data-valor-export=\"971\">971</td><td data-valor-export=\"129\">129</td><td data-valor-export=\"1891\">1.891</td><td data-valor-export=\"5193\">5.193</td><td style=\"border-left:2px solid #dee2e6\"><strong data-valor-export=\"8220\">8.220</strong></td></tr><tr><td><strong>2023 - OUT</strong></td><td data-valor-export=\"107\">107</td><td data-valor-export=\"1947\">1.947</td><td data-valor-export=\"284\">284</td><td data-valor-export=\"2806\">2.806</td><td data-valor-export=\"5334\">5.334</td><td style=\"border-left:2px solid #dee2e6\"><strong data-valor-export=\"10478\">10.478</strong></td></tr><tr><td><strong>2023 - NOV</strong></td><td data-valor-export=\"0\">0</td><td data-valor-export=\"1805\">1.805</td><td data-valor-export=\"215\">215</td><td data-valor-export=\"2258\">2.258</td><td data-valor-export=\"5752\">5.752</td><td style=\"border-left:2px solid #dee2e6\"><strong data-valor-export=\"10030\">10.030</strong></td></tr><tr><td><strong>2023 - DEZ</strong></td><td data-valor-export=\"0\">0</td><td data-valor-export=\"1057\">1.057</td><td data-valor-export=\"125\">125</td><td data-valor-export=\"1926\">1.926</td><td data-valor-export=\"5154\">5.154</td><td style=\"border-left:2px solid #dee2e6\"><strong data-valor-export=\"8262\">8.262</strong></td></tr><tr><td><strong>2024 - JAN</strong></td><td data-valor-export=\"47\">47</td><td data-valor-export=\"1637\">1.637</td><td data-valor-export=\"162\">162</td><td data-valor-export=\"2124\">2.124</td><td data-valor-export=\"3971\">3.971</td><td style=\"border-left:2px solid #dee2e6\"><strong data-valor-export=\"7941\">7.941</strong></td></tr><tr><td><strong>2024 - FEV</strong></td><td data-valor-export=\"27\">27</td><td data-valor-export=\"1179\">1.179</td><td data-valor-export=\"196\">196</td><td data-valor-export=\"2000\">2.000</td><td data-valor-export=\"6760\">6.760</td><td style=\"border-left:2px solid #dee2e6\"><strong data-valor-export=\"10162\">10.162</strong></td></tr><tr><td><strong>2024 - MAR</strong></td><td data-valor-export=\"62\">62</td><td data-valor-export=\"1329\">1.329</td><td data-valor-export=\"324\">324</td><td data-valor-export=\"2835\">2.835</td><td data-valor-export=\"6674\">6.674</td><td style=\"border-left:2px solid #dee2e6\"><strong data-valor-export=\"11224\">11.224</strong></td></tr><tr><td><strong>2024 - ABR</strong></td><td data-valor-export=\"107\">107</td><td data-valor-export=\"1410\">1.410</td><td data-valor-export=\"153\">153</td><td data-valor-export=\"2434\">2.434</td><td data-valor-export=\"7552\">7.552</td><td style=\"border-left:2px solid #dee2e6\"><strong data-valor-export=\"11656\">11.656</strong></td></tr><tr><td><strong>2024 - MAI</strong></td><td data-valor-export=\"83\">83</td><td data-valor-export=\"1392\">1.392</td><td data-valor-export=\"152\">152</td><td data-valor-export=\"2824\">2.824</td><td data-valor-export=\"6721\">6.721</td><td style=\"border-left:2px solid #dee2e6\"><strong data-valor-export=\"11172\">11.172</strong></td></tr><tr><td><strong>2024 - JUN</strong></td><td data-valor-export=\"116\">116</td><td data-valor-export=\"1572\">1.572</td><td data-valor-export=\"346\">346</td><td data-valor-export=\"3095\">3.095</td><td data-valor-export=\"7107\">7.107</td><td style=\"border-left:2px solid #dee2e6\"><strong data-valor-export=\"12236\">12.236</strong></td></tr><tr><td><strong>2024 - JUL</strong></td><td data-valor-export=\"51\">51</td><td data-valor-export=\"1271\">1.271</td><td data-valor-export=\"270\">270</td><td data-valor-export=\"3657\">3.657</td><td data-valor-export=\"6660\">6.660</td><td style=\"border-left:2px solid #dee2e6\"><strong data-valor-export=\"11909\">11.909</strong></td></tr><tr><td><strong>2024 - AGO</strong></td><td data-valor-export=\"23\">23</td><td data-valor-export=\"1583\">1.583</td><td data-valor-export=\"468\">468</td><td data-valor-export=\"3960\">3.960</td><td data-valor-export=\"7067\">7.067</td><td style=\"border-left:2px solid #dee2e6\"><strong data-valor-export=\"13101\">13.101</strong></td></tr><tr><td><strong>2024 - SET</strong></td><td data-valor-export=\"101\">101</td><td data-valor-export=\"1506\">1.506</td><td data-valor-export=\"457\">457</td><td data-valor-export=\"4103\">4.103</td><td data-valor-export=\"7043\">7.043</td><td style=\"border-left:2px solid #dee2e6\"><strong data-valor-export=\"13210\">13.210</strong></td></tr><tr><td><strong>2024 - OUT</strong></td><td data-valor-export=\"28\">28</td><td data-valor-export=\"2120\">2.120</td><td data-valor-export=\"484\">484</td><td data-valor-export=\"4156\">4.156</td><td data-valor-export=\"8004\">8.004</td><td style=\"border-left:2px solid #dee2e6\"><strong data-valor-export=\"14792\">14.792</strong></td></tr><tr><td><strong>2024 - NOV</strong></td><td data-valor-export=\"34\">34</td><td data-valor-export=\"1773\">1.773</td><td data-valor-export=\"414\">414</td><td data-valor-export=\"3889\">3.889</td><td data-valor-export=\"7060\">7.060</td><td style=\"border-left:2px solid #dee2e6\"><strong data-valor-export=\"13170\">13.170</strong></td></tr><tr><td><strong>2024 - DEZ</strong></td><td data-valor-export=\"26\">26</td><td data-valor-export=\"1413\">1.413</td><td data-valor-export=\"328\">328</td><td data-valor-export=\"2955\">2.955</td><td data-valor-export=\"5957\">5.957</td><td style=\"border-left:2px solid #dee2e6\"><strong data-valor-export=\"10679\">10.679</strong></td></tr><tr><td><strong>2025 - JAN</strong></td><td data-valor-export=\"56\">56</td><td data-valor-export=\"1152\">1.152</td><td data-valor-export=\"320\">320</td><td data-valor-export=\"2426\">2.426</td><td data-valor-export=\"4087\">4.087</td><td style=\"border-left:2px solid #dee2e6\"><strong data-valor-export=\"8041\">8.041</strong></td></tr><tr><td><strong>2025 - FEV</strong></td><td data-valor-export=\"51\">51</td><td data-valor-export=\"1561\">1.561</td><td data-valor-export=\"462\">462</td><td data-valor-export=\"3213\">3.213</td><td data-valor-export=\"6683\">6.683</td><td style=\"border-left:2px solid #dee2e6\"><strong data-valor-export=\"11970\">11.970</strong></td></tr><tr><td><strong>2025 - MAR</strong></td><td data-valor-export=\"77\">77</td><td data-valor-export=\"1837\">1.837</td><td data-valor-export=\"523\">523</td><td data-valor-export=\"3294\">3.294</td><td data-valor-export=\"5989\">5.989</td><td style=\"border-left:2px solid #dee2e6\"><strong data-valor-export=\"11720\">11.720</strong></td></tr><tr><td><strong>2025 - ABR</strong></td><td data-valor-export=\"41\">41</td><td data-valor-export=\"1359\">1.359</td><td data-valor-export=\"743\">743</td><td data-valor-export=\"3320\">3.320</td><td data-valor-export=\"5557\">5.557</td><td style=\"border-left:2px solid #dee2e6\"><strong data-valor-export=\"11020\">11.020</strong></td></tr><tr><td><strong>2025 - MAI</strong></td><td data-valor-export=\"100\">100</td><td data-valor-export=\"1502\">1.502</td><td data-valor-export=\"788\">788</td><td data-valor-export=\"3930\">3.930</td><td data-valor-export=\"6007\">6.007</td><td style=\"border-left:2px solid #dee2e6\"><strong data-valor-export=\"12327\">12.327</strong></td></tr><tr><td><strong>2025 - JUN</strong></td><td data-valor-export=\"124\">124</td><td data-valor-export=\"1322\">1.322</td><td data-valor-export=\"604\">604</td><td data-valor-export=\"3808\">3.808</td><td data-valor-export=\"5435\">5.435</td><td style=\"border-left:2px solid #dee2e6\"><strong data-valor-export=\"11293\">11.293</strong></td></tr><tr><td><strong>2025 - JUL</strong></td><td data-valor-export=\"125\">125</td><td data-valor-export=\"1134\">1.134</td><td data-valor-export=\"766\">766</td><td data-valor-export=\"4118\">4.118</td><td data-valor-export=\"5915\">5.915</td><td style=\"border-left:2px solid #dee2e6\"><strong data-valor-export=\"12058\">12.058</strong></td></tr><tr><td><strong>2025 - AGO</strong></td><td data-valor-export=\"109\">109</td><td data-valor-export=\"1184\">1.184</td><td data-valor-export=\"479\">479</td><td data-valor-export=\"3517\">3.517</td><td data-valor-export=\"4807\">4.807</td><td style=\"border-left:2px solid #dee2e6\"><strong data-valor-export=\"10096\">10.096</strong></td></tr><tr><td><strong>2025 - SET</strong></td><td data-valor-export=\"100\">100</td><td data-valor-export=\"1158\">1.158</td><td data-valor-export=\"395\">395</td><td data-valor-export=\"3318\">3.318</td><td data-valor-export=\"5136\">5.136</td><td style=\"border-left:2px solid #dee2e6\"><strong data-valor-export=\"10107\">10.107</strong></td></tr><tr><td><strong>2025 - OUT</strong></td><td data-valor-export=\"89\">89</td><td data-valor-export=\"1201\">1.201</td><td data-valor-export=\"762\">762</td><td data-valor-export=\"3326\">3.326</td><td data-valor-export=\"4782\">4.782</td><td style=\"border-left:2px solid #dee2e6\"><strong data-valor-export=\"10160\">10.160</strong></td></tr><tr><td><strong>2025 - NOV</strong></td><td data-valor-export=\"153\">153</td><td data-valor-export=\"1464\">1.464</td><td data-valor-export=\"724\">724</td><td data-valor-export=\"3066\">3.066</td><td data-valor-export=\"4194\">4.194</td><td style=\"border-left:2px solid #dee2e6\"><strong data-valor-export=\"9601\">9.601</strong></td></tr><tr><td><strong>2025 - DEZ</strong></td><td data-valor-export=\"78\">78</td><td data-valor-export=\"863\">863</td><td data-valor-export=\"471\">471</td><td data-valor-export=\"1751\">1.751</td><td data-valor-export=\"2560\">2.560</td><td style=\"border-left:2px solid #dee2e6\"><strong data-valor-export=\"5723\">5.723</strong></td></tr><tr><td><strong>2026 - JAN</strong></td><td data-valor-export=\"73\">73</td><td data-valor-export=\"1396\">1.396</td><td data-valor-export=\"515\">515</td><td data-valor-export=\"2426\">2.426</td><td data-valor-export=\"2403\">2.403</td><td style=\"border-left:2px solid #dee2e6\"><strong data-valor-export=\"6813\">6.813</strong></td></tr><tr><td><strong>2026 - FEV</strong></td><td data-valor-export=\"88\">88</td><td data-valor-export=\"1057\">1.057</td><td data-valor-export=\"619\">619</td><td data-valor-export=\"2632\">2.632</td><td data-valor-export=\"3401\">3.401</td><td style=\"border-left:2px solid #dee2e6\"><strong data-valor-export=\"7797\">7.797</strong></td></tr><tr><td><strong>2026 - MAR</strong></td><td data-valor-export=\"86\">86</td><td data-valor-export=\"1271\">1.271</td><td data-valor-export=\"745\">745</td><td data-valor-export=\"3926\">3.926</td><td data-valor-export=\"5105\">5.105</td><td style=\"border-left:2px solid #dee2e6\"><strong data-valor-export=\"11133\">11.133</strong></td></tr><tr><td><strong>2026 - ABR</strong></td><td data-valor-export=\"54\">54</td><td data-valor-export=\"965\">965</td><td data-valor-export=\"636\">636</td><td data-valor-export=\"3261\">3.261</td><td data-valor-export=\"4757\">4.757</td><td style=\"border-left:2px solid #dee2e6\"><strong data-valor-export=\"9673\">9.673</strong></td></tr><tr><td><strong>2026 - MAI</strong></td><td data-valor-export=\"41\">41</td><td data-valor-export=\"1181\">1.181</td><td data-valor-export=\"736\">736</td><td data-valor-export=\"4157\">4.157</td><td data-valor-export=\"4373\">4.373</td><td style=\"border-left:2px solid #dee2e6\"><strong data-valor-export=\"10488\">10.488</strong></td></tr><tr><td><strong>2026 - JUN</strong></td><td data-valor-export=\"53\">53</td><td data-valor-export=\"1100\">1.100</td><td data-valor-export=\"764\">764</td><td data-valor-export=\"3438\">3.438</td><td data-valor-export=\"5539\">5.539</td><td style=\"border-left:2px solid #dee2e6\"><strong data-valor-export=\"10894\">10.894</strong></td></tr><tr><td><strong>2026 - JUL</strong></td><td data-valor-export=\"99\">99</td><td data-valor-export=\"1272\">1.272</td><td data-valor-export=\"844\">844</td><td data-valor-export=\"4043\">4.043</td><td data-valor-export=\"5851\">5.851</td><td style=\"border-left:2px solid #dee2e6\"><strong data-valor-export=\"12109\">12.109</strong></td></tr><tr><td><strong>2026 - AGO</strong></td><td data-valor-export=\"72\">72</td><td data-valor-export=\"1251\">1.251</td><td data-valor-export=\"780\">780</td><td data-valor-export=\"3600\">3.600</td><td data-valor-export=\"6070\">6.070</td><td style=\"border-left:2px solid #dee2e6\"><strong data-valor-export=\"11773\">11.773</strong></td></tr><tr><td><strong>2026 - SET</strong></td><td data-valor-export=\"91\">91</td><td data-valor-export=\"1431\">1.431</td><td data-valor-export=\"576\">576</td><td data-valor-export=\"3562\">3.562</td><td data-valor-export=\"5965\">5.965</td><td style=\"border-left:2px solid #dee2e6\"><strong data-valor-export=\"11625\">11.625</strong></td></tr><tr style=\"border-top:2px solid #dee2e6;background:var(--bg-section)\"><td><strong>TOTAL</strong></td><td><strong data-valor-export=\"3518\">3.518</strong></td><td><strong data-valor-export=\"59766\">59.766</strong></td><td><strong data-valor-export=\"19911\">19.911</strong></td><td><strong data-valor-export=\"134084\">134.084</strong></td><td><strong data-valor-export=\"240929\">240.929</strong></td><td style=\"border-left:2px solid #dee2e6\"><strong data-valor-export=\"458208\">458.208</strong></td></tr></tbody></table></div><div class=\"anfavea-notas-metodologicas\" style=\"margin-top:1rem;font-size:0.8rem;color:var(--text-muted,#6c757d);border-top:1px solid #dee2e6;padding-top:.75rem;\"><strong>Notas metodológicas</strong><ul style=\"margin:.4rem 0 0;padding-left:1.1rem;\"><li style=\"margin-bottom:.25rem;\">Informações sujeitas a revisão.</li><li style=\"margin-bottom:.25rem;\">Produção de autoveículos: fonte Anfavea.</li></ul></div>",
+   "debug": {
+    "sql": "SELECT CONCAT(YEAR(data), ' - ', ELT(MONTH(data),'JAN','FEV','MAR','ABR','MAI','JUN','JUL','AGO','SET','OUT','NOV','DEZ')) AS periodo, SUM(valor) AS total FROM Caminhoes WHERE  data BETWEEN '2023-01-01' AND '2026-10-01' AND serie = 'PRODUCAO' AND subcategoria = 'SEMILEVES' GROUP BY CONCAT(YEAR(data), ' - ', ELT(MONTH(data),'JAN','FEV','MAR','ABR','MAI','JUN','JUL','AGO','SET','OUT','NOV','DEZ')) HAVING 1=1;\nSELECT CONCAT(YEAR(data), ' - ', ELT(MONTH(data),'JAN','FEV','MAR','ABR','MAI','JUN','JUL','AGO','SET','OUT','NOV','DEZ')) AS periodo, SUM(valor) AS total FROM Caminhoes WHERE  data BETWEEN '2023-01-01' AND '2026-10-01' AND serie = 'PRODUCAO' AND subcategoria = 'LEVES' GROUP BY CONCAT(YEAR(data), ' - ', ELT(MONTH(data),'JAN','FEV','MAR','ABR','MAI','JUN','JUL','AGO','SET','OUT','NOV','DEZ')) HAVING 1=1;\nSELECT CONCAT(YEAR(data), ' - ', ELT(MONTH(data),'JAN','FEV','MAR','ABR','MAI','JUN','JUL','AGO','SET','OUT','NOV','DEZ')) AS periodo, SUM(valor) AS total FROM Caminhoes WHERE  data BETWEEN '2023-01-01' AND '2026-10-01' AND serie = 'PRODUCAO' AND subcategoria = 'MÉDIOS' GROUP BY CONCAT(YEAR(data), ' - ', ELT(MONTH(data),'JAN','FEV','MAR','ABR','MAI','JUN','JUL','AGO','SET','OUT','NOV','DEZ')) HAVING 1=1;\nSELECT CONCAT(YEAR(data), ' - ', ELT(MONTH(data),'JAN','FEV','MAR','ABR','MAI','JUN','JUL','AGO','SET','OUT','NOV','DEZ')) AS periodo, SUM(valor) AS total FROM Caminhoes WHERE  data BETWEEN '2023-01-01' AND '2026-10-01' AND serie = 'PRODUCAO' AND subcategoria = 'SEMIPESADOS' GROUP BY CONCAT(YEAR(data), ' - ', ELT(MONTH(data),'JAN','FEV','MAR','ABR','MAI','JUN','JUL','AGO','SET','OUT','NOV','DEZ')) HAVING 1=1;\nSELECT CONCAT(YEAR(data), ' - ', ELT(MONTH(data),'JAN','FEV','MAR','ABR','MAI','JUN','JUL','AGO','SET','OUT','NOV','DEZ')) AS periodo, SUM(valor) AS total FROM Caminhoes WHERE  data BETWEEN '2023-01-01' AND '2026-10-01' AND serie = 'PRODUCAO' AND subcategoria = 'PESADOS' GROUP BY CONCAT(YEAR(data), ' - ', ELT(MONTH(data),'JAN','FEV','MAR','ABR','MAI','JUN','JUL','AGO','SET','OUT','NOV','DEZ')) HAVING 1=1",
+    "sqls": [
+     "SELECT CONCAT(YEAR(data), ' - ', ELT(MONTH(data),'JAN','FEV','MAR','ABR','MAI','JUN','JUL','AGO','SET','OUT','NOV','DEZ')) AS periodo, SUM(valor) AS total FROM Caminhoes WHERE  data BETWEEN '2023-01-01' AND '2026-10-01' AND serie = 'PRODUCAO' AND subcategoria = 'SEMILEVES' GROUP BY CONCAT(YEAR(data), ' - ', ELT(MONTH(data),'JAN','FEV','MAR','ABR','MAI','JUN','JUL','AGO','SET','OUT','NOV','DEZ')) HAVING 1=1",
+     "SELECT CONCAT(YEAR(data), ' - ', ELT(MONTH(data),'JAN','FEV','MAR','ABR','MAI','JUN','JUL','AGO','SET','OUT','NOV','DEZ')) AS periodo, SUM(valor) AS total FROM Caminhoes WHERE  data BETWEEN '2023-01-01' AND '2026-10-01' AND serie = 'PRODUCAO' AND subcategoria = 'LEVES' GROUP BY CONCAT(YEAR(data), ' - ', ELT(MONTH(data),'JAN','FEV','MAR','ABR','MAI','JUN','JUL','AGO','SET','OUT','NOV','DEZ')) HAVING 1=1",
+     "SELECT CONCAT(YEAR(data), ' - ', ELT(MONTH(data),'JAN','FEV','MAR','ABR','MAI','JUN','JUL','AGO','SET','OUT','NOV','DEZ')) AS periodo, SUM(valor) AS total FROM Caminhoes WHERE  data BETWEEN '2023-01-01' AND '2026-10-01' AND serie = 'PRODUCAO' AND subcategoria = 'MÉDIOS' GROUP BY CONCAT(YEAR(data), ' - ', ELT(MONTH(data),'JAN','FEV','MAR','ABR','MAI','JUN','JUL','AGO','SET','OUT','NOV','DEZ')) HAVING 1=1",
+     "SELECT CONCAT(YEAR(data), ' - ', ELT(MONTH(data),'JAN','FEV','MAR','ABR','MAI','JUN','JUL','AGO','SET','OUT','NOV','DEZ')) AS periodo, SUM(valor) AS total FROM Caminhoes WHERE  data BETWEEN '2023-01-01' AND '2026-10-01' AND serie = 'PRODUCAO' AND subcategoria = 'SEMIPESADOS' GROUP BY CONCAT(YEAR(data), ' - ', ELT(MONTH(data),'JAN','FEV','MAR','ABR','MAI','JUN','JUL','AGO','SET','OUT','NOV','DEZ')) HAVING 1=1",
+     "SELECT CONCAT(YEAR(data), ' - ', ELT(MONTH(data),'JAN','FEV','MAR','ABR','MAI','JUN','JUL','AGO','SET','OUT','NOV','DEZ')) AS periodo, SUM(valor) AS total FROM Caminhoes WHERE  data BETWEEN '2023-01-01' AND '2026-10-01' AND serie = 'PRODUCAO' AND subcategoria = 'PESADOS' GROUP BY CONCAT(YEAR(data), ' - ', ELT(MONTH(data),'JAN','FEV','MAR','ABR','MAI','JUN','JUL','AGO','SET','OUT','NOV','DEZ')) HAVING 1=1"
+    ],
+    "dims": [
+     "categoria"
+    ],
+    "filtros": {
+     "tipo_dado": "producao",
+     "dimensao": "",
+     "categorias": [
+      "caminhoes"
+     ],
+     "procedencia": "total",
+     "por_empresa": false,
+     "por_marca": false,
+     "empresa": "",
+     "marca": "",
+     "subcats": [
+      "SEMILEVES",
+      "LEVES",
+      "MÉDIOS",
+      "SEMIPESADOS",
+      "PESADOS"
+     ],
+     "combustiveis": [],
+     "inicio": "2023-01-01",
+     "fim": "2026-10-01",
+     "agregacao": "mensal"
+    }
+   }
+  }
+ }
+}

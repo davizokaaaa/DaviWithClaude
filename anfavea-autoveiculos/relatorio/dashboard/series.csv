@@ -1,0 +1,541 @@
+periodo,tipo_dado,categoria,valor
+2023-01,Emplacamento,Automóveis,103886
+2023-01,Emplacamento,Caminhões,10457
+2023-01,Emplacamento,Comerciais leves,26795
+2023-01,Emplacamento,Ônibus,1714
+2023-01,Exportação,Automóveis,26972
+2023-01,Exportação,Caminhões,1026
+2023-01,Exportação,Comerciais leves,4760
+2023-01,Exportação,Ônibus,290
+2023-01,Produção,Automóveis,125060
+2023-01,Produção,Caminhões,4049
+2023-01,Produção,Comerciais leves,22775
+2023-01,Produção,Ônibus,782
+2023-02,Emplacamento,Automóveis,95863
+2023-02,Emplacamento,Caminhões,8108
+2023-02,Emplacamento,Comerciais leves,24043
+2023-02,Emplacamento,Ônibus,1935
+2023-02,Exportação,Automóveis,28391
+2023-02,Exportação,Caminhões,1650
+2023-02,Exportação,Comerciais leves,5352
+2023-02,Exportação,Ônibus,303
+2023-02,Produção,Automóveis,123694
+2023-02,Produção,Caminhões,8123
+2023-02,Produção,Comerciais leves,28426
+2023-02,Produção,Ônibus,1275
+2023-03,Emplacamento,Automóveis,146244
+2023-03,Emplacamento,Caminhões,10051
+2023-03,Emplacamento,Comerciais leves,40109
+2023-03,Emplacamento,Ônibus,2570
+2023-03,Exportação,Automóveis,36538
+2023-03,Exportação,Caminhões,1792
+2023-03,Exportação,Comerciais leves,6874
+2023-03,Exportação,Ônibus,215
+2023-03,Produção,Automóveis,167662
+2023-03,Produção,Caminhões,12325
+2023-03,Produção,Comerciais leves,39890
+2023-03,Produção,Ônibus,1958
+2023-04,Emplacamento,Automóveis,118177
+2023-04,Emplacamento,Caminhões,7824
+2023-04,Emplacamento,Comerciais leves,33320
+2023-04,Emplacamento,Ônibus,1409
+2023-04,Exportação,Automóveis,27756
+2023-04,Exportação,Caminhões,1001
+2023-04,Exportação,Comerciais leves,4916
+2023-04,Exportação,Ônibus,334
+2023-04,Produção,Automóveis,137549
+2023-04,Produção,Caminhões,7255
+2023-04,Produção,Comerciais leves,32421
+2023-04,Produção,Ônibus,1628
+2023-05,Emplacamento,Automóveis,127508
+2023-05,Emplacamento,Caminhões,8223
+2023-05,Emplacamento,Comerciais leves,38873
+2023-05,Emplacamento,Ônibus,1920
+2023-05,Exportação,Automóveis,36606
+2023-05,Exportação,Caminhões,1304
+2023-05,Exportação,Comerciais leves,7326
+2023-05,Exportação,Ônibus,424
+2023-05,Produção,Automóveis,175051
+2023-05,Produção,Caminhões,8392
+2023-05,Produção,Comerciais leves,42524
+2023-05,Produção,Ônibus,1947
+2023-06,Emplacamento,Automóveis,142037
+2023-06,Emplacamento,Caminhões,7886
+2023-06,Emplacamento,Comerciais leves,37831
+2023-06,Emplacamento,Ônibus,1774
+2023-06,Exportação,Automóveis,27583
+2023-06,Exportação,Caminhões,1389
+2023-06,Exportação,Comerciais leves,6967
+2023-06,Exportação,Ônibus,683
+2023-06,Produção,Automóveis,142727
+2023-06,Produção,Caminhões,7029
+2023-06,Produção,Comerciais leves,37477
+2023-06,Produção,Ônibus,1949
+2023-07,Emplacamento,Automóveis,176769
+2023-07,Emplacamento,Caminhões,8369
+2023-07,Emplacamento,Comerciais leves,38954
+2023-07,Emplacamento,Ônibus,1502
+2023-07,Exportação,Automóveis,22412
+2023-07,Exportação,Caminhões,1352
+2023-07,Exportação,Comerciais leves,6166
+2023-07,Exportação,Ônibus,527
+2023-07,Produção,Automóveis,141859
+2023-07,Produção,Caminhões,6749
+2023-07,Produção,Comerciais leves,32505
+2023-07,Produção,Ônibus,1903
+2023-08,Emplacamento,Automóveis,153509
+2023-08,Emplacamento,Caminhões,9312
+2023-08,Emplacamento,Comerciais leves,43461
+2023-08,Emplacamento,Ônibus,1461
+2023-08,Exportação,Automóveis,25365
+2023-08,Exportação,Caminhões,1434
+2023-08,Exportação,Comerciais leves,7250
+2023-08,Exportação,Ônibus,499
+2023-08,Produção,Automóveis,173693
+2023-08,Produção,Caminhões,9623
+2023-08,Produção,Comerciais leves,41590
+2023-08,Produção,Ônibus,2048
+2023-09,Emplacamento,Automóveis,145722
+2023-09,Emplacamento,Caminhões,8771
+2023-09,Emplacamento,Comerciais leves,41743
+2023-09,Emplacamento,Ônibus,1503
+2023-09,Exportação,Automóveis,18823
+2023-09,Exportação,Caminhões,1519
+2023-09,Exportação,Comerciais leves,6637
+2023-09,Exportação,Ônibus,461
+2023-09,Produção,Automóveis,159503
+2023-09,Produção,Caminhões,8220
+2023-09,Produção,Comerciais leves,39301
+2023-09,Produção,Ônibus,1865
+2023-10,Emplacamento,Automóveis,163198
+2023-10,Emplacamento,Caminhões,9413
+2023-10,Emplacamento,Comerciais leves,43655
+2023-10,Emplacamento,Ônibus,1582
+2023-10,Exportação,Automóveis,23898
+2023-10,Exportação,Caminhões,1839
+2023-10,Exportação,Comerciais leves,5130
+2023-10,Exportação,Ônibus,409
+2023-10,Produção,Automóveis,149725
+2023-10,Produção,Caminhões,10478
+2023-10,Produção,Comerciais leves,37457
+2023-10,Produção,Ônibus,2098
+2023-11,Emplacamento,Automóveis,160718
+2023-11,Emplacamento,Caminhões,9220
+2023-11,Emplacamento,Comerciais leves,41125
+2023-11,Emplacamento,Ônibus,1586
+2023-11,Exportação,Automóveis,16501
+2023-11,Exportação,Caminhões,1555
+2023-11,Exportação,Comerciais leves,5598
+2023-11,Exportação,Ônibus,414
+2023-11,Produção,Automóveis,155517
+2023-11,Produção,Caminhões,10030
+2023-11,Produção,Comerciais leves,35241
+2023-11,Produção,Ônibus,1887
+2023-12,Emplacamento,Automóveis,187784
+2023-12,Emplacamento,Caminhões,10326
+2023-12,Emplacamento,Comerciais leves,48970
+2023-12,Emplacamento,Ônibus,1479
+2023-12,Exportação,Automóveis,17383
+2023-12,Exportação,Caminhões,1085
+2023-12,Exportação,Comerciais leves,6795
+2023-12,Exportação,Ônibus,415
+2023-12,Produção,Automóveis,130039
+2023-12,Produção,Caminhões,8262
+2023-12,Produção,Comerciais leves,32019
+2023-12,Produção,Ônibus,1258
+2024-01,Emplacamento,Automóveis,118523
+2024-01,Emplacamento,Caminhões,8207
+2024-01,Emplacamento,Comerciais leves,33734
+2024-01,Emplacamento,Ônibus,1151
+2024-01,Exportação,Automóveis,15161
+2024-01,Exportação,Caminhões,625
+2024-01,Exportação,Comerciais leves,4408
+2024-01,Exportação,Ônibus,113
+2024-01,Produção,Automóveis,117025
+2024-01,Produção,Caminhões,7941
+2024-01,Produção,Comerciais leves,26002
+2024-01,Produção,Ônibus,1596
+2024-02,Emplacamento,Automóveis,120337
+2024-02,Emplacamento,Caminhões,8330
+2024-02,Emplacamento,Comerciais leves,35220
+2024-02,Emplacamento,Ônibus,1338
+2024-02,Exportação,Automóveis,21659
+2024-02,Exportação,Caminhões,1329
+2024-02,Exportação,Comerciais leves,7556
+2024-02,Exportação,Ônibus,357
+2024-02,Produção,Automóveis,140688
+2024-02,Produção,Caminhões,10162
+2024-02,Produção,Comerciais leves,36566
+2024-02,Produção,Ônibus,2268
+2024-03,Emplacamento,Automóveis,137919
+2024-03,Emplacamento,Caminhões,9880
+2024-03,Emplacamento,Comerciais leves,38318
+2024-03,Emplacamento,Ônibus,1614
+2024-03,Exportação,Automóveis,22214
+2024-03,Exportação,Caminhões,1368
+2024-03,Exportação,Comerciais leves,6505
+2024-03,Exportação,Ônibus,404
+2024-03,Produção,Automóveis,143419
+2024-03,Produção,Caminhões,11224
+2024-03,Produção,Comerciais leves,38482
+2024-03,Produção,Ônibus,2626
+2024-04,Emplacamento,Automóveis,164385
+2024-04,Emplacamento,Caminhões,10754
+2024-04,Emplacamento,Comerciais leves,43967
+2024-04,Emplacamento,Ônibus,1736
+2024-04,Exportação,Automóveis,20383
+2024-04,Exportação,Caminhões,1188
+2024-04,Exportação,Comerciais leves,3070
+2024-04,Exportação,Ônibus,448
+2024-04,Produção,Automóveis,167402
+2024-04,Produção,Caminhões,11656
+2024-04,Produção,Comerciais leves,40249
+2024-04,Produção,Ônibus,2808
+2024-05,Emplacamento,Automóveis,144052
+2024-05,Emplacamento,Caminhões,9538
+2024-05,Emplacamento,Comerciais leves,39383
+2024-05,Emplacamento,Ônibus,1283
+2024-05,Exportação,Automóveis,20724
+2024-05,Exportação,Caminhões,1288
+2024-05,Exportação,Comerciais leves,5534
+2024-05,Exportação,Ônibus,311
+2024-05,Produção,Automóveis,127047
+2024-05,Produção,Caminhões,11172
+2024-05,Produção,Comerciais leves,25782
+2024-05,Produção,Ônibus,2731
+2024-06,Emplacamento,Automóveis,163827
+2024-06,Emplacamento,Caminhões,9978
+2024-06,Emplacamento,Comerciais leves,38761
+2024-06,Emplacamento,Ônibus,1738
+2024-06,Exportação,Automóveis,21568
+2024-06,Exportação,Caminhões,1242
+2024-06,Exportação,Comerciais leves,5652
+2024-06,Exportação,Ônibus,509
+2024-06,Produção,Automóveis,158981
+2024-06,Produção,Caminhões,12236
+2024-06,Produção,Comerciais leves,37179
+2024-06,Produção,Ônibus,2639
+2024-07,Emplacamento,Automóveis,178068
+2024-07,Emplacamento,Caminhões,11346
+2024-07,Emplacamento,Comerciais leves,49432
+2024-07,Emplacamento,Ônibus,2490
+2024-07,Exportação,Automóveis,28463
+2024-07,Exportação,Caminhões,1496
+2024-07,Exportação,Comerciais leves,9733
+2024-07,Exportação,Ônibus,393
+2024-07,Produção,Automóveis,180671
+2024-07,Produção,Caminhões,11909
+2024-07,Produção,Comerciais leves,51945
+2024-07,Produção,Ônibus,2196
+2024-08,Emplacamento,Automóveis,171021
+2024-08,Emplacamento,Caminhões,11526
+2024-08,Emplacamento,Comerciais leves,52429
+2024-08,Emplacamento,Ônibus,2406
+2024-08,Exportação,Automóveis,27774
+2024-08,Exportação,Caminhões,1471
+2024-08,Exportação,Comerciais leves,9780
+2024-08,Exportação,Ônibus,358
+2024-08,Produção,Automóveis,193467
+2024-08,Produção,Caminhões,13101
+2024-08,Produção,Comerciais leves,50889
+2024-08,Produção,Ônibus,2156
+2024-09,Emplacamento,Automóveis,171686
+2024-09,Emplacamento,Caminhões,11456
+2024-09,Emplacamento,Comerciais leves,51188
+2024-09,Emplacamento,Ônibus,2004
+2024-09,Exportação,Automóveis,31602
+2024-09,Exportação,Caminhões,1709
+2024-09,Exportação,Comerciais leves,7107
+2024-09,Exportação,Ônibus,365
+2024-09,Produção,Automóveis,169107
+2024-09,Produção,Caminhões,13210
+2024-09,Produção,Comerciais leves,45495
+2024-09,Produção,Ônibus,2177
+2024-10,Emplacamento,Automóveis,195235
+2024-10,Emplacamento,Caminhões,12217
+2024-10,Emplacamento,Comerciais leves,54921
+2024-10,Emplacamento,Ônibus,2576
+2024-10,Exportação,Automóveis,32685
+2024-10,Exportação,Caminhões,2148
+2024-10,Exportação,Comerciais leves,9372
+2024-10,Exportação,Ônibus,540
+2024-10,Produção,Automóveis,183253
+2024-10,Produção,Caminhões,14792
+2024-10,Produção,Comerciais leves,48655
+2024-10,Produção,Ônibus,2414
+2024-11,Emplacamento,Automóveis,193747
+2024-11,Emplacamento,Caminhões,10169
+2024-11,Emplacamento,Comerciais leves,47716
+2024-11,Emplacamento,Ônibus,1867
+2024-11,Exportação,Automóveis,32620
+2024-11,Exportação,Caminhões,1960
+2024-11,Exportação,Comerciais leves,6226
+2024-11,Exportação,Ônibus,630
+2024-11,Produção,Automóveis,177114
+2024-11,Produção,Caminhões,13170
+2024-11,Produção,Comerciais leves,45926
+2024-11,Produção,Ônibus,2444
+2024-12,Emplacamento,Automóveis,189881
+2024-12,Emplacamento,Caminhões,11447
+2024-12,Emplacamento,Comerciais leves,53871
+2024-12,Emplacamento,Ônibus,2232
+2024-12,Exportação,Automóveis,22203
+2024-12,Exportação,Caminhões,2066
+2024-12,Exportação,Comerciais leves,5527
+2024-12,Exportação,Ônibus,394
+2024-12,Produção,Automóveis,140841
+2024-12,Produção,Caminhões,10679
+2024-12,Produção,Comerciais leves,38683
+2024-12,Produção,Ônibus,1694
+2025-01,Emplacamento,Automóveis,123407
+2025-01,Emplacamento,Caminhões,9410
+2025-01,Emplacamento,Comerciais leves,36647
+2025-01,Emplacamento,Ônibus,1784
+2025-01,Exportação,Automóveis,22938
+2025-01,Exportação,Caminhões,1019
+2025-01,Exportação,Comerciais leves,7397
+2025-01,Exportação,Ônibus,298
+2025-01,Produção,Automóveis,140804
+2025-01,Produção,Caminhões,8041
+2025-01,Produção,Comerciais leves,30754
+2025-01,Produção,Ônibus,1806
+2025-02,Emplacamento,Automóveis,134828
+2025-02,Emplacamento,Caminhões,8967
+2025-02,Emplacamento,Comerciais leves,39214
+2025-02,Emplacamento,Ônibus,1951
+2025-02,Exportação,Automóveis,38071
+2025-02,Exportação,Caminhões,2308
+2025-02,Exportação,Comerciais leves,9892
+2025-02,Exportação,Ônibus,488
+2025-02,Produção,Automóveis,165802
+2025-02,Produção,Caminhões,11970
+2025-02,Produção,Comerciais leves,42384
+2025-02,Produção,Ônibus,2485
+2025-03,Emplacamento,Automóveis,141591
+2025-03,Emplacamento,Caminhões,9372
+2025-03,Emplacamento,Comerciais leves,42780
+2025-03,Emplacamento,Ônibus,1793
+2025-03,Exportação,Automóveis,29508
+2025-03,Exportação,Caminhões,2620
+2025-03,Exportação,Comerciais leves,7223
+2025-03,Exportação,Ônibus,642
+2025-03,Produção,Automóveis,143957
+2025-03,Produção,Caminhões,11720
+2025-03,Produção,Comerciais leves,36217
+2025-03,Produção,Ônibus,2881
+2025-04,Emplacamento,Automóveis,152342
+2025-04,Emplacamento,Caminhões,9343
+2025-04,Emplacamento,Comerciais leves,44818
+2025-04,Emplacamento,Ônibus,2201
+2025-04,Exportação,Automóveis,37481
+2025-04,Exportação,Caminhões,2141
+2025-04,Exportação,Comerciais leves,8753
+2025-04,Exportação,Ônibus,577
+2025-04,Produção,Automóveis,173594
+2025-04,Produção,Caminhões,11020
+2025-04,Produção,Comerciais leves,45326
+2025-04,Produção,Ônibus,2874
+2025-05,Emplacamento,Automóveis,167598
+2025-05,Emplacamento,Caminhões,9147
+2025-05,Emplacamento,Comerciais leves,47021
+2025-05,Emplacamento,Ônibus,1943
+2025-05,Exportação,Automóveis,42048
+2025-05,Exportação,Caminhões,2831
+2025-05,Exportação,Comerciais leves,7940
+2025-05,Exportação,Ônibus,628
+2025-05,Produção,Automóveis,160354
+2025-05,Produção,Caminhões,12327
+2025-05,Produção,Comerciais leves,44477
+2025-05,Produção,Ônibus,2920
+2025-06,Emplacamento,Automóveis,159161
+2025-06,Emplacamento,Caminhões,8507
+2025-06,Emplacamento,Comerciais leves,43301
+2025-06,Emplacamento,Ônibus,1963
+2025-06,Exportação,Automóveis,38208
+2025-06,Exportação,Caminhões,2525
+2025-06,Exportação,Comerciais leves,8769
+2025-06,Exportação,Ônibus,629
+2025-06,Produção,Automóveis,153364
+2025-06,Produção,Caminhões,11293
+2025-06,Produção,Comerciais leves,42494
+2025-06,Produção,Ônibus,2776
+2025-07,Emplacamento,Automóveis,181810
+2025-07,Emplacamento,Caminhões,10591
+2025-07,Emplacamento,Comerciais leves,48456
+2025-07,Emplacamento,Ônibus,2381
+2025-07,Exportação,Automóveis,36831
+2025-07,Exportação,Caminhões,2759
+2025-07,Exportação,Comerciais leves,7916
+2025-07,Exportação,Ônibus,599
+2025-07,Produção,Automóveis,184212
+2025-07,Produção,Caminhões,12058
+2025-07,Produção,Comerciais leves,40637
+2025-07,Produção,Ônibus,2894
+2025-08,Emplacamento,Automóveis,172320
+2025-08,Emplacamento,Caminhões,8915
+2025-08,Emplacamento,Comerciais leves,42425
+2025-08,Emplacamento,Ônibus,1720
+2025-08,Exportação,Automóveis,46172
+2025-08,Exportação,Caminhões,2767
+2025-08,Exportação,Comerciais leves,8584
+2025-08,Exportação,Ônibus,695
+2025-08,Produção,Automóveis,195126
+2025-08,Produção,Caminhões,10096
+2025-08,Produção,Comerciais leves,40089
+2025-08,Produção,Ônibus,2607
+2025-09,Emplacamento,Automóveis,178572
+2025-09,Emplacamento,Caminhões,9797
+2025-09,Emplacamento,Comerciais leves,52907
+2025-09,Emplacamento,Ônibus,1954
+2025-09,Exportação,Automóveis,41777
+2025-09,Exportação,Caminhões,2669
+2025-09,Exportação,Comerciais leves,7421
+2025-09,Exportação,Ônibus,677
+2025-09,Produção,Automóveis,183162
+2025-09,Produção,Caminhões,10107
+2025-09,Produção,Comerciais leves,47337
+2025-09,Produção,Ônibus,2787
+2025-10,Emplacamento,Automóveis,192787
+2025-10,Emplacamento,Caminhões,10665
+2025-10,Emplacamento,Comerciais leves,55295
+2025-10,Emplacamento,Ônibus,1970
+2025-10,Exportação,Automóveis,29915
+2025-10,Exportação,Caminhões,2345
+2025-10,Exportação,Comerciais leves,7906
+2025-10,Exportação,Ônibus,434
+2025-10,Produção,Automóveis,184841
+2025-10,Produção,Caminhões,10160
+2025-10,Produção,Comerciais leves,50635
+2025-10,Produção,Ônibus,2134
+2025-11,Emplacamento,Automóveis,182084
+2025-11,Emplacamento,Caminhões,8916
+2025-11,Emplacamento,Comerciais leves,45361
+2025-11,Emplacamento,Ônibus,2203
+2025-11,Exportação,Automóveis,24424
+2025-11,Exportação,Caminhões,2132
+2025-11,Exportação,Comerciais leves,8775
+2025-11,Exportação,Ônibus,398
+2025-11,Produção,Automóveis,164868
+2025-11,Produção,Caminhões,9601
+2025-11,Produção,Comerciais leves,43263
+2025-11,Produção,Ônibus,1326
+2025-12,Emplacamento,Automóveis,210764
+2025-12,Emplacamento,Caminhões,9849
+2025-12,Emplacamento,Comerciais leves,56712
+2025-12,Emplacamento,Ônibus,2091
+2025-12,Exportação,Automóveis,13046
+2025-12,Exportação,Caminhões,868
+2025-12,Exportação,Comerciais leves,4396
+2025-12,Exportação,Ônibus,387
+2025-12,Produção,Automóveis,139947
+2025-12,Produção,Caminhões,5723
+2025-12,Produção,Comerciais leves,38103
+2025-12,Produção,Ônibus,701
+2026-01,Emplacamento,Automóveis,125164
+2026-01,Emplacamento,Caminhões,6484
+2026-01,Emplacamento,Comerciais leves,37708
+2026-01,Emplacamento,Ônibus,1180
+2026-01,Exportação,Automóveis,19814
+2026-01,Exportação,Caminhões,1106
+2026-01,Exportação,Comerciais leves,4626
+2026-01,Exportação,Ônibus,309
+2026-01,Produção,Automóveis,124193
+2026-01,Produção,Caminhões,6813
+2026-01,Produção,Comerciais leves,30782
+2026-01,Produção,Ônibus,1833
+2026-02,Emplacamento,Automóveis,140586
+2026-02,Emplacamento,Caminhões,6687
+2026-02,Emplacamento,Comerciais leves,36584
+2026-02,Emplacamento,Ônibus,1306
+2026-02,Exportação,Automóveis,23811
+2026-02,Exportação,Caminhões,1169
+2026-02,Exportação,Comerciais leves,8084
+2026-02,Exportação,Ônibus,342
+2026-02,Produção,Automóveis,154946
+2026-02,Produção,Caminhões,7797
+2026-02,Produção,Comerciais leves,41499
+2026-02,Produção,Ônibus,2727
+2026-03,Emplacamento,Automóveis,206434
+2026-03,Emplacamento,Caminhões,8825
+2026-03,Emplacamento,Comerciais leves,52265
+2026-03,Emplacamento,Ônibus,1959
+2026-03,Exportação,Automóveis,29820
+2026-03,Exportação,Caminhões,2290
+2026-03,Exportação,Comerciais leves,7225
+2026-03,Exportação,Ônibus,299
+2026-03,Produção,Automóveis,199116
+2026-03,Produção,Caminhões,11133
+2026-03,Produção,Comerciais leves,50214
+2026-03,Produção,Ônibus,3102
+2026-04,Emplacamento,Automóveis,187317
+2026-04,Emplacamento,Caminhões,8826
+2026-04,Emplacamento,Comerciais leves,50145
+2026-04,Emplacamento,Ônibus,2049
+2026-04,Exportação,Automóveis,33169
+2026-04,Exportação,Caminhões,2088
+2026-04,Exportação,Comerciais leves,7231
+2026-04,Exportação,Ônibus,431
+2026-04,Produção,Automóveis,182963
+2026-04,Produção,Caminhões,9673
+2026-04,Produção,Comerciais leves,42819
+2026-04,Produção,Ônibus,3059
+2026-05,Emplacamento,Automóveis,214633
+2026-05,Emplacamento,Caminhões,8420
+2026-05,Emplacamento,Comerciais leves,50026
+2026-05,Emplacamento,Ônibus,1603
+2026-05,Exportação,Automóveis,28838
+2026-05,Exportação,Caminhões,2081
+2026-05,Exportação,Comerciais leves,5816
+2026-05,Exportação,Ônibus,402
+2026-05,Produção,Automóveis,201146
+2026-05,Produção,Caminhões,10488
+2026-05,Produção,Comerciais leves,38910
+2026-05,Produção,Ônibus,2877
+2026-06,Emplacamento,Automóveis,212971
+2026-06,Emplacamento,Caminhões,9755
+2026-06,Emplacamento,Comerciais leves,47557
+2026-06,Emplacamento,Ônibus,2191
+2026-06,Exportação,Automóveis,26578
+2026-06,Exportação,Caminhões,1932
+2026-06,Exportação,Comerciais leves,7460
+2026-06,Exportação,Ônibus,458
+2026-06,Produção,Automóveis,188290
+2026-06,Produção,Caminhões,10894
+2026-06,Produção,Comerciais leves,44757
+2026-06,Produção,Ônibus,2325
+2026-07,Emplacamento,Automóveis,212753
+2026-07,Emplacamento,Caminhões,11645
+2026-07,Emplacamento,Comerciais leves,52913
+2026-07,Emplacamento,Ônibus,2233
+2026-07,Exportação,Automóveis,29657
+2026-07,Exportação,Caminhões,2114
+2026-07,Exportação,Comerciais leves,6730
+2026-07,Exportação,Ônibus,439
+2026-07,Produção,Automóveis,196315
+2026-07,Produção,Caminhões,12109
+2026-07,Produção,Comerciais leves,43440
+2026-07,Produção,Ônibus,2138
+2026-08,Emplacamento,Automóveis,213105
+2026-08,Emplacamento,Caminhões,10008
+2026-08,Emplacamento,Comerciais leves,49986
+2026-08,Emplacamento,Ônibus,2023
+2026-08,Exportação,Automóveis,29132
+2026-08,Exportação,Caminhões,2197
+2026-08,Exportação,Comerciais leves,7968
+2026-08,Exportação,Ônibus,494
+2026-08,Produção,Automóveis,214951
+2026-08,Produção,Caminhões,11773
+2026-08,Produção,Comerciais leves,42579
+2026-08,Produção,Ônibus,1857
+2026-09,Emplacamento,Automóveis,216579
+2026-09,Emplacamento,Caminhões,10232
+2026-09,Emplacamento,Comerciais leves,52181
+2026-09,Emplacamento,Ônibus,2369
+2026-09,Exportação,Automóveis,30768
+2026-09,Exportação,Caminhões,2059
+2026-09,Exportação,Comerciais leves,6662
+2026-09,Exportação,Ônibus,354
+2026-09,Produção,Automóveis,208995
+2026-09,Produção,Caminhões,11625
+2026-09,Produção,Comerciais leves,46224
+2026-09,Produção,Ônibus,1425

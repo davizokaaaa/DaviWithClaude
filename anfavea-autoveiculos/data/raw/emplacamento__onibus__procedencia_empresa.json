@@ -1,0 +1,96 @@
+{
+ "request": [
+  [
+   "dashboard",
+   "dashboard1"
+  ],
+  [
+   "procedencia[]",
+   "nacionais"
+  ],
+  [
+   "procedencia[]",
+   "importados"
+  ],
+  [
+   "por_empresa",
+   "1"
+  ],
+  [
+   "por_marca",
+   "0"
+  ],
+  [
+   "empresa",
+   ""
+  ],
+  [
+   "marca",
+   ""
+  ],
+  [
+   "combustivel_filter",
+   ""
+  ],
+  [
+   "agregacao",
+   "mensal"
+  ],
+  [
+   "inicio",
+   "2023-01"
+  ],
+  [
+   "fim",
+   "2026-10"
+  ],
+  [
+   "tipo_dado",
+   "emplacamento"
+  ],
+  [
+   "categorias[]",
+   "onibus"
+  ],
+  [
+   "dimensao_emplacamento",
+   "procedencia"
+  ]
+ ],
+ "response": {
+  "success": true,
+  "data": {
+   "table_html": "<div style=\"overflow-x:auto;overflow-y: scroll;max-height: 485px;\"><table class=\"table table-striped anfavea-table\" data-formato=\"numero\"><caption style=\"caption-side:top;font-weight:700;color:var(--text,#212529);font-size:1rem;padding:.25rem 0 .5rem;text-align:left;\">Emplacamento de ônibus (Nacionais e Importados)</caption><thead><tr><th>PERÍODO</th><th>ÔNIBUS - AGRALE - NACIONAL</th><th>ÔNIBUS - IVG - NACIONAL</th><th>ÔNIBUS - MERCEDES-BENZ - NACIONAL</th><th>ÔNIBUS - OUTRAS EMPRESAS - IMPORTADO</th><th>ÔNIBUS - OUTRAS EMPRESAS - NACIONAL</th><th style=\"background:var(--bg-section)\">ÔNIBUS - OUTRAS EMPRESAS - TOTAL</th><th>ÔNIBUS - SCANIA - NACIONAL</th><th>ÔNIBUS - VOLKSWAGEN TRUCK &amp; BUS - NACIONAL</th><th>ÔNIBUS - VOLVO - IMPORTADO</th><th>ÔNIBUS - VOLVO - NACIONAL</th><th style=\"background:var(--bg-section)\">ÔNIBUS - VOLVO - TOTAL</th><th style=\"border-left:2px solid #dee2e6\">TOTAL</th></tr></thead><tbody><tr><td><strong>2026 - JAN</strong></td><td data-valor-export=\"216\">216</td><td data-valor-export=\"100\">100</td><td data-valor-export=\"465\">465</td><td data-valor-export=\"1\">1</td><td data-valor-export=\"13\">13</td><td style=\"background:var(--bg-section)\" data-valor-export=\"14\">14</td><td data-valor-export=\"15\">15</td><td data-valor-export=\"339\">339</td><td data-valor-export=\"0\">0</td><td data-valor-export=\"31\">31</td><td style=\"background:var(--bg-section)\" data-valor-export=\"31\">31</td><td style=\"border-left:2px solid #dee2e6\"><strong data-valor-export=\"1180\">1.180</strong></td></tr><tr><td><strong>2026 - FEV</strong></td><td data-valor-export=\"247\">247</td><td data-valor-export=\"64\">64</td><td data-valor-export=\"548\">548</td><td data-valor-export=\"0\">0</td><td data-valor-export=\"24\">24</td><td style=\"background:var(--bg-section)\" data-valor-export=\"24\">24</td><td data-valor-export=\"15\">15</td><td data-valor-export=\"373\">373</td><td data-valor-export=\"0\">0</td><td data-valor-export=\"35\">35</td><td style=\"background:var(--bg-section)\" data-valor-export=\"35\">35</td><td style=\"border-left:2px solid #dee2e6\"><strong data-valor-export=\"1306\">1.306</strong></td></tr><tr><td><strong>2026 - MAR</strong></td><td data-valor-export=\"213\">213</td><td data-valor-export=\"232\">232</td><td data-valor-export=\"833\">833</td><td data-valor-export=\"0\">0</td><td data-valor-export=\"28\">28</td><td style=\"background:var(--bg-section)\" data-valor-export=\"28\">28</td><td data-valor-export=\"37\">37</td><td data-valor-export=\"591\">591</td><td data-valor-export=\"0\">0</td><td data-valor-export=\"25\">25</td><td style=\"background:var(--bg-section)\" data-valor-export=\"25\">25</td><td style=\"border-left:2px solid #dee2e6\"><strong data-valor-export=\"1959\">1.959</strong></td></tr><tr><td><strong>2026 - ABR</strong></td><td data-valor-export=\"247\">247</td><td data-valor-export=\"306\">306</td><td data-valor-export=\"875\">875</td><td data-valor-export=\"0\">0</td><td data-valor-export=\"15\">15</td><td style=\"background:var(--bg-section)\" data-valor-export=\"15\">15</td><td data-valor-export=\"71\">71</td><td data-valor-export=\"484\">484</td><td data-valor-export=\"0\">0</td><td data-valor-export=\"51\">51</td><td style=\"background:var(--bg-section)\" data-valor-export=\"51\">51</td><td style=\"border-left:2px solid #dee2e6\"><strong data-valor-export=\"2049\">2.049</strong></td></tr><tr><td><strong>2026 - MAI</strong></td><td data-valor-export=\"237\">237</td><td data-valor-export=\"201\">201</td><td data-valor-export=\"654\">654</td><td data-valor-export=\"0\">0</td><td data-valor-export=\"71\">71</td><td style=\"background:var(--bg-section)\" data-valor-export=\"71\">71</td><td data-valor-export=\"19\">19</td><td data-valor-export=\"393\">393</td><td data-valor-export=\"0\">0</td><td data-valor-export=\"28\">28</td><td style=\"background:var(--bg-section)\" data-valor-export=\"28\">28</td><td style=\"border-left:2px solid #dee2e6\"><strong data-valor-export=\"1603\">1.603</strong></td></tr><tr><td><strong>2026 - JUN</strong></td><td data-valor-export=\"278\">278</td><td data-valor-export=\"335\">335</td><td data-valor-export=\"797\">797</td><td data-valor-export=\"105\">105</td><td data-valor-export=\"31\">31</td><td style=\"background:var(--bg-section)\" data-valor-export=\"136\">136</td><td data-valor-export=\"58\">58</td><td data-valor-export=\"569\">569</td><td data-valor-export=\"1\">1</td><td data-valor-export=\"17\">17</td><td style=\"background:var(--bg-section)\" data-valor-export=\"18\">18</td><td style=\"border-left:2px solid #dee2e6\"><strong data-valor-export=\"2191\">2.191</strong></td></tr><tr><td><strong>2026 - JUL</strong></td><td data-valor-export=\"311\">311</td><td data-valor-export=\"344\">344</td><td data-valor-export=\"857\">857</td><td data-valor-export=\"0\">0</td><td data-valor-export=\"87\">87</td><td style=\"background:var(--bg-section)\" data-valor-export=\"87\">87</td><td data-valor-export=\"30\">30</td><td data-valor-export=\"587\">587</td><td data-valor-export=\"0\">0</td><td data-valor-export=\"17\">17</td><td style=\"background:var(--bg-section)\" data-valor-export=\"17\">17</td><td style=\"border-left:2px solid #dee2e6\"><strong data-valor-export=\"2233\">2.233</strong></td></tr><tr><td><strong>2026 - AGO</strong></td><td data-valor-export=\"254\">254</td><td data-valor-export=\"202\">202</td><td data-valor-export=\"688\">688</td><td data-valor-export=\"0\">0</td><td data-valor-export=\"142\">142</td><td style=\"background:var(--bg-section)\" data-valor-export=\"142\">142</td><td data-valor-export=\"55\">55</td><td data-valor-export=\"619\">619</td><td data-valor-export=\"0\">0</td><td data-valor-export=\"63\">63</td><td style=\"background:var(--bg-section)\" data-valor-export=\"63\">63</td><td style=\"border-left:2px solid #dee2e6\"><strong data-valor-export=\"2023\">2.023</strong></td></tr><tr><td><strong>2026 - SET</strong></td><td data-valor-export=\"279\">279</td><td data-valor-export=\"299\">299</td><td data-valor-export=\"990\">990</td><td data-valor-export=\"0\">0</td><td data-valor-export=\"36\">36</td><td style=\"background:var(--bg-section)\" data-valor-export=\"36\">36</td><td data-valor-export=\"44\">44</td><td data-valor-export=\"656\">656</td><td data-valor-export=\"0\">0</td><td data-valor-export=\"65\">65</td><td style=\"background:var(--bg-section)\" data-valor-export=\"65\">65</td><td style=\"border-left:2px solid #dee2e6\"><strong data-valor-export=\"2369\">2.369</strong></td></tr><tr style=\"border-top:2px solid #dee2e6;background:var(--bg-section)\"><td><strong>TOTAL</strong></td><td><strong data-valor-export=\"2282\">2.282</strong></td><td><strong data-valor-export=\"2083\">2.083</strong></td><td><strong data-valor-export=\"6707\">6.707</strong></td><td><strong data-valor-export=\"106\">106</strong></td><td><strong data-valor-export=\"447\">447</strong></td><td><strong data-valor-export=\"553\">553</strong></td><td><strong data-valor-export=\"344\">344</strong></td><td><strong data-valor-export=\"4611\">4.611</strong></td><td><strong data-valor-export=\"1\">1</strong></td><td><strong data-valor-export=\"332\">332</strong></td><td><strong data-valor-export=\"333\">333</strong></td><td style=\"border-left:2px solid #dee2e6\"><strong data-valor-export=\"16913\">16.913</strong></td></tr></tbody></table></div><div class=\"anfavea-notas-metodologicas\" style=\"margin-top:1rem;font-size:0.8rem;color:var(--text-muted,#6c757d);border-top:1px solid #dee2e6;padding-top:.75rem;\"><strong>Notas metodológicas</strong><ul style=\"margin:.4rem 0 0;padding-left:1.1rem;\"><li style=\"margin-bottom:.25rem;\">Informações sujeitas a revisão.</li><li style=\"margin-bottom:.25rem;\">Os dados de emplacamento até 2001 (inclusive) referem-se às vendas no atacado.</li><li style=\"margin-bottom:.25rem;\">Emplacamento de autoveículos: fonte Renavam/Senatran.</li></ul></div>",
+   "debug": {
+    "sql": "SELECT CONCAT(YEAR(data), ' - ', ELT(MONTH(data),'JAN','FEV','MAR','ABR','MAI','JUN','JUL','AGO','SET','OUT','NOV','DEZ')) AS periodo, empresa, procedencia, SUM(valor) AS total FROM Empresa2 WHERE  data BETWEEN '2023-01-01' AND '2026-10-01' AND segmento = 'VEICULOS PESADOS' AND categoria = 'ONIBUS' AND procedencia IN ('NACIONAL','IMPORTADO') GROUP BY CONCAT(YEAR(data), ' - ', ELT(MONTH(data),'JAN','FEV','MAR','ABR','MAI','JUN','JUL','AGO','SET','OUT','NOV','DEZ')), empresa, procedencia HAVING 1=1",
+    "sqls": [
+     "SELECT CONCAT(YEAR(data), ' - ', ELT(MONTH(data),'JAN','FEV','MAR','ABR','MAI','JUN','JUL','AGO','SET','OUT','NOV','DEZ')) AS periodo, empresa, procedencia, SUM(valor) AS total FROM Empresa2 WHERE  data BETWEEN '2023-01-01' AND '2026-10-01' AND segmento = 'VEICULOS PESADOS' AND categoria = 'ONIBUS' AND procedencia IN ('NACIONAL','IMPORTADO') GROUP BY CONCAT(YEAR(data), ' - ', ELT(MONTH(data),'JAN','FEV','MAR','ABR','MAI','JUN','JUL','AGO','SET','OUT','NOV','DEZ')), empresa, procedencia HAVING 1=1"
+    ],
+    "dims": [
+     "categoria",
+     "empresa",
+     "procedencia"
+    ],
+    "filtros": {
+     "tipo_dado": "emplacamento",
+     "dimensao": "procedencia",
+     "categorias": [
+      "onibus"
+     ],
+     "procedencia": "nacionais",
+     "por_empresa": true,
+     "por_marca": false,
+     "empresa": "",
+     "marca": "",
+     "subcats": [
+      "TOTAL"
+     ],
+     "combustiveis": [],
+     "inicio": "2023-01-01",
+     "fim": "2026-10-01",
+     "agregacao": "mensal"
+    }
+   }
+  }
+ }
+}

@@ -123,6 +123,20 @@ def main() -> int:
     emp = q("__procedencia_empresa")
     marca = q("__procedencia_empresa_marca")
 
+    # ---------- Arquivos do painel (um CSV enxuto por abertura) ----------
+    dash = OUT / "dashboard"
+    dash.mkdir(exist_ok=True)
+    painel = {
+        "series": (cat, ["tipo_dado", "categoria"]),
+        "caminhoes": (sub, ["tipo_dado", "subsegmento"]),
+        "combustivel": (comb, ["categoria", "combustivel"]),
+        "procedencia": (proc, ["categoria", "procedencia"]),
+        "marcas": (marca, ["categoria", "empresa", "marca", "procedencia"]),
+    }
+    for nome, (df, dims) in painel.items():
+        df.assign(periodo=df["periodo"].dt.strftime("%Y-%m"))[["periodo", *dims, "valor"]].sort_values(
+            ["periodo", *dims]).to_csv(dash / f"{nome}.csv", index=False)
+
     ultimo = cat["periodo"].max()
     ano_atual, mes_atual = ultimo.year, ultimo.month
     cat = cat.assign(ano=cat["periodo"].dt.year)

@@ -8,6 +8,12 @@ agregação mensal desde jan/2023, e relatório consolidado.
 **Planilha:** [`relatorio/relatorio_anfavea_autoveiculos.xlsx`](relatorio/relatorio_anfavea_autoveiculos.xlsx) ·
 **Base longa:** [`relatorio/base_autoveiculos.csv`](relatorio/base_autoveiculos.csv)
 
+## Painel
+
+`dashboard/index.html` é o código da página do painel interativo (filtros de período, indicador,
+categoria, marca e procedência; abas Mercado, Marcas, Eletrificação, Importados e Caminhões).
+Ele lê os CSVs de `relatorio/dashboard/`, gerados por `build_report.py`.
+
 ## O que é coletado
 
 | Série | Aberturas | Desde |

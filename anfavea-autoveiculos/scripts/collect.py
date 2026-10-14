@@ -63,6 +63,14 @@ def consultas() -> list[tuple[str, dict]]:
             "por_empresa": 1, "por_marca": 1, "empresa": "", "marca": "",
             "combustivel_filter": "",
         }))
+        # Emplacamento: procedência (nacional x importado), sem empresa
+        out.append((f"emplacamento__{cat}__procedencia", {
+            "tipo_dado": "emplacamento", "categorias": [cat],
+            "dimensao_emplacamento": "procedencia",
+            "procedencia": ["nacionais", "importados"],
+            "por_empresa": 0, "por_marca": 0, "empresa": "", "marca": "",
+            "combustivel_filter": "",
+        }))
         # Emplacamento: procedência x empresa
         out.append((f"emplacamento__{cat}__procedencia_empresa", {
             "tipo_dado": "emplacamento", "categorias": [cat],

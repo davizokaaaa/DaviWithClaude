@@ -14,13 +14,13 @@ agregação mensal desde jan/2023, e relatório consolidado.
 categoria, marca e procedência; abas Mercado, Marcas, Eletrificação, Importados e Caminhões).
 Ele lê os CSVs de `relatorio/dashboard/`, gerados por `build_report.py`.
 
-O visual segue o design system **Grafite** (escuro, vidro líquido na navegação, um destaque azul aço):
-filtros e abas em controles de vidro, insights em chips com detalhe no ⓘ, KPIs com contagem, gráficos
-animados e um ranking de marcas que reordena mês a mês. Cada aba usa a forma que conta melhor a sua história:
-linha do tempo arrastável para escolher o período, minigráficos nos KPIs, faixa de diferença entre produção e
-mercado, mapa de calor de sazonalidade, mapa do mercado (treemap) com logos, gráfico de posições (bump chart),
-waffle de eletrificados, área empilhada, gráfico espelhado nacional × importado, slope "antes e agora" e pequenos
-múltiplos sincronizados para os caminhões. `dashboard/logos.js` traz as logos vetoriais
+O visual é editorial, de jornal financeiro: fundo papel (com modo escuro próprio), títulos e números em serifa,
+filetes finos no lugar de caixas e um único vermelhão de destaque. No topo, um letreiro roda os indicadores do
+período; cada aba abre com uma manchete gerada dos dados e detalhes no ⓘ. Cada aba usa a forma que conta melhor a
+sua história: linha do tempo arrastável para escolher o período, minigráficos nos KPIs, faixa de diferença entre
+produção e mercado, mapa de calor de sazonalidade, mapa do mercado (treemap) com logos, ranking que reordena mês a
+mês, gráfico de posições (bump chart), waffle de eletrificados, área empilhada, gráfico espelhado nacional ×
+importado, slope "antes e agora" e pequenos múltiplos sincronizados para os caminhões. `dashboard/logos.js` traz as logos vetoriais
 das marcas (Simple Icons, CC0); marcas sem logo livre aparecem como monograma.
 
 ## O que é coletado

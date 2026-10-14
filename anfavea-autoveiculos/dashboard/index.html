@@ -1,180 +1,201 @@
 <style>
-  @import url("https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,300..800&family=IBM+Plex+Mono:wght@400;500&display=swap");
-  /* Grafite (Design System): tela escura de painel, vidro só na navegação, um destaque azul aço */
+  @import url("https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300..700&family=Inter+Tight:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap");
+  /* Editorial: papel, tinta, filetes finos e um único vermelhão de destaque. Modo escuro com passos próprios. */
   .av {
-    --bg: #15181b; --surface-1: #1b1f23; --surface-2: #23282d; --line: rgba(255,255,255,.08); --grid: rgba(255,255,255,.07);
-    --fg: #e9e7e2; --muted: #8f969d; --accent: #8fb3d9; --accent-2: #c9b48a; --on-accent: #0f1418; --up: #8fc9a5; --down: #e0968a;
-    --glass-tint: rgba(40,45,52,.42); --glass-edge: rgba(255,255,255,.14); --glass-specular: rgba(255,255,255,.16); --glass-pill: rgba(255,255,255,.12);
-    --shadow-glass: inset 0 1px 0 rgba(255,255,255,.22), inset 0 -1px 1px rgba(0,0,0,.40), 0 10px 30px -8px rgba(0,0,0,.35);
-    --shadow-pill: inset 0 1px 0 rgba(255,255,255,.22), 0 2px 8px rgba(0,0,0,.18);
-    --font-display: "Archivo", system-ui, sans-serif; --font-mono: "IBM Plex Mono", ui-monospace, monospace;
-    --spring: cubic-bezier(.2,.9,.25,1.05); --ease: cubic-bezier(.3,.8,.25,1);
-    color-scheme: dark;
-    position: relative; display: grid; gap: 20px; padding: 24px clamp(14px, 3vw, 28px) 0;
-    border-radius: 22px; border: 1px solid var(--line);
-    background-color: var(--bg);
-    background-image: radial-gradient(700px 320px at 90% -8%, rgba(143,179,217,.14), transparent 60%), radial-gradient(600px 300px at -10% 105%, rgba(201,180,138,.08), transparent 60%);
-    color: var(--fg); font-family: var(--font-display); font-size: 14px; line-height: 1.5; -webkit-font-smoothing: antialiased;
+    --mode: light;
+    --bg: #f7f4ee; --surface: #efebe3; --fg: #1b1a18; --muted: #6e6a62; --rule: #1b1a18;
+    --line: rgba(27,26,24,.14); --grid: rgba(27,26,24,.09); --accent: #c8452c; --on-accent: #fff;
+    --up: #2f7d55; --down: #b8432f; --heat-lo: #ebe5d9; --heat-hi: #1f3f66; --tile-mid: #e4ded2; --empty: rgba(27,26,24,.07);
+    --pop: rgba(251,249,245,.9); --shadow: 0 1px 0 rgba(27,26,24,.06), 0 12px 32px -12px rgba(27,26,24,.28);
+    --serif: "Fraunces", Georgia, "Times New Roman", serif; --sans: "Inter Tight", system-ui, sans-serif; --mono: "IBM Plex Mono", ui-monospace, monospace;
+    --ease: cubic-bezier(.3,.8,.25,1); --spring: cubic-bezier(.2,.9,.25,1.05);
+    color-scheme: light;
+    position: relative; display: grid; gap: 28px; padding: 28px clamp(16px, 4vw, 44px) 40px;
+    background: var(--bg); color: var(--fg); font-family: var(--sans); font-size: 14px; line-height: 1.5; -webkit-font-smoothing: antialiased;
   }
-  @supports (transition-timing-function: linear(0, 1)) { .av { --spring: linear(0,.009,.035 2.1%,.141 4.4%,.723 12.9%,.938 16.7%,1.017 19.4%,1.067,1.099 24.3%,1.104 26.9%,1.077 30.8%,1.017 38.5%,.994 43.5%,.991 50.5%,1.001 70%,1); } }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .av {
+    --mode: dark; --bg: #161514; --surface: #1f1d1b; --fg: #ece8e1; --muted: #9a958c; --rule: #ece8e1;
+    --line: rgba(236,232,225,.14); --grid: rgba(236,232,225,.08); --accent: #e0603f; --on-accent: #161514;
+    --up: #6cbf8f; --down: #e5785f; --heat-lo: #25231f; --heat-hi: #a6c6ec; --tile-mid: #2b2926; --empty: rgba(236,232,225,.08);
+    --pop: rgba(32,30,28,.9); --shadow: 0 12px 32px -12px rgba(0,0,0,.6); color-scheme: dark; } }
+  :root[data-theme="dark"] .av {
+    --mode: dark; --bg: #161514; --surface: #1f1d1b; --fg: #ece8e1; --muted: #9a958c; --rule: #ece8e1;
+    --line: rgba(236,232,225,.14); --grid: rgba(236,232,225,.08); --accent: #e0603f; --on-accent: #161514;
+    --up: #6cbf8f; --down: #e5785f; --heat-lo: #25231f; --heat-hi: #a6c6ec; --tile-mid: #2b2926; --empty: rgba(236,232,225,.08);
+    --pop: rgba(32,30,28,.9); --shadow: 0 12px 32px -12px rgba(0,0,0,.6); color-scheme: dark; }
   .av :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-  .av-head { display: grid; gap: 8px; }
-  .av-eyebrow { font: 500 11.5px/1.3 var(--font-display); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
-  .av-title { margin: 0; font: 600 clamp(26px, 4vw, 38px)/1.05 var(--font-display); font-stretch: 112%; letter-spacing: -.015em; text-wrap: balance; }
 
-  /* vidro líquido */
-  .av-glass { position: relative; isolation: isolate; background: var(--glass-tint); -webkit-backdrop-filter: blur(16px) saturate(180%); backdrop-filter: blur(16px) saturate(180%); border: 1px solid var(--glass-edge); box-shadow: var(--shadow-glass); }
-  .av-glass::before { content: ""; position: absolute; inset: 0; border-radius: inherit; z-index: -1; pointer-events: none; background: radial-gradient(120px 60px at var(--mx, 30%) var(--my, 0%), var(--glass-specular), transparent 70%); }
+  /* cabeçalho de jornal */
+  .av-mast { display: grid; gap: 14px; border-bottom: 3px double var(--rule); padding-bottom: 18px; }
+  .av-mast-bar { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; font: 600 11px/1.2 var(--sans); letter-spacing: .14em; text-transform: uppercase; border-bottom: 1px solid var(--rule); padding-bottom: 8px; }
+  .av-mast-bar span:last-child { color: var(--muted); }
+  .av-title { margin: 0; font: 400 clamp(40px, 7.5vw, 92px)/.92 var(--serif); font-variation-settings: "opsz" 144; letter-spacing: -.035em; text-wrap: balance; }
+  .av-title em { font-style: italic; font-weight: 300; color: var(--accent); }
+  .av-dek { display: flex; align-items: flex-start; gap: 10px; max-width: 46rem; font: 400 clamp(17px, 2vw, 21px)/1.35 var(--serif); font-variation-settings: "opsz" 24; color: var(--fg); }
+  .av-title, .av-dek { animation: av-rise .9s var(--ease) both; }
+  .av-dek { animation-delay: .15s; }
+  @keyframes av-rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+
+  /* letreiro de indicadores */
+  .av-ticker { overflow: hidden; border-block: 1px solid var(--rule); padding: 9px 0; mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent); margin-top: -12px; }
+  .av-ticker-in { display: inline-flex; gap: 40px; white-space: nowrap; animation: av-tick 70s linear infinite; padding-left: 40px; }
+  .av-ticker:hover .av-ticker-in { animation-play-state: paused; }
+  .av-ticker-in > span { font: 500 12.5px var(--mono); font-variant-numeric: tabular-nums; }
+  .av-ticker-in b { font: 600 11px var(--sans); letter-spacing: .12em; text-transform: uppercase; margin-right: 8px; }
+  .av-ticker-in i { font-style: normal; margin-left: 8px; }
+  @keyframes av-tick { to { transform: translateX(-50%); } }
+
+  /* navegação de seções (fixa no topo) */
+  .av-dock { position: sticky; top: 0; z-index: 10; display: flex; gap: 4px; overflow-x: auto; scrollbar-width: none; margin: -8px calc(-1 * clamp(16px, 4vw, 44px)) 0; padding: 0 clamp(16px, 4vw, 44px); background: color-mix(in srgb, var(--bg) 84%, transparent); -webkit-backdrop-filter: blur(14px) saturate(160%); backdrop-filter: blur(14px) saturate(160%); border-bottom: 1px solid var(--line); }
+  .av-dock::-webkit-scrollbar { display: none; }
+  .av-dock button { padding: 14px 14px 13px; font: 600 13px var(--sans); letter-spacing: .02em; }
+  .av-dock button::before { content: attr(data-n); font: 500 10.5px var(--mono); color: var(--muted); margin-right: 7px; }
+
+  /* controles segmentados: texto com sublinhado deslizante */
+  .av-seg { position: relative; display: inline-flex; gap: 2px; max-width: 100%; overflow-x: auto; scrollbar-width: none; }
+  .av-seg::-webkit-scrollbar { display: none; }
+  .av-seg button { position: relative; z-index: 1; flex: none; font: 500 13px/1.2 var(--sans); padding: 7px 10px; border: 0; background: none; color: var(--muted); cursor: pointer; white-space: nowrap; transition: color .25s; }
+  .av-seg button:hover { color: var(--fg); }
+  .av-seg button[aria-pressed="true"], .av-seg button[aria-selected="true"] { color: var(--fg); }
+  .av-pill { position: absolute; z-index: 0; left: 0; width: 0; top: auto !important; bottom: 0; height: 2px !important; background: var(--accent); opacity: 0; transition: left .55s var(--spring), width .55s var(--spring), opacity .2s; pointer-events: none; }
 
   /* filtros */
-  .av-filters { display: flex; flex-wrap: wrap; gap: 14px 18px; align-items: flex-end; padding: 14px 16px; border-radius: 18px; }
-  .av-field { display: grid; gap: 6px; min-width: 0; max-width: 100%; }
-  .av-field > span:first-child { font: 500 11px/1.2 var(--font-display); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
-  .av select { font: 500 13px var(--font-display); padding: 7px 10px; border: 1px solid var(--line); border-radius: 999px; background: rgba(255,255,255,.04); color: var(--fg); max-width: 100%; }
-  .av select option { background: var(--surface-1); color: var(--fg); }
-  .av-range { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; color: var(--muted); }
-  .av-seg { position: relative; display: inline-flex; gap: 2px; padding: 4px; border-radius: 999px; background: rgba(255,255,255,.04); border: 1px solid var(--line); max-width: 100%; overflow-x: auto; scrollbar-width: none; }
-  .av-seg::-webkit-scrollbar { display: none; }
-  .av-seg button { position: relative; z-index: 1; flex: none; font: 500 12.5px/1.2 var(--font-display); padding: 7px 12px; border: 0; border-radius: 999px; background: none; color: var(--muted); cursor: pointer; white-space: nowrap; transition: color .3s; }
-  .av-seg button[aria-pressed="true"], .av-seg button[aria-selected="true"] { color: var(--fg); }
-  .av-pill { position: absolute; z-index: 0; top: 4px; left: 0; width: 0; height: 0; border-radius: 999px; background: var(--glass-pill); box-shadow: var(--shadow-pill); opacity: 0; transition: left .6s var(--spring), width .6s var(--spring), opacity .2s; pointer-events: none; }
-  .av-reset { font: 500 12.5px var(--font-display); background: none; border: 0; color: var(--muted); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; padding: 8px 0; }
-
-  /* chips de insight e ⓘ */
-  .av-chips { display: flex; flex-wrap: wrap; gap: 8px; }
-  .av-chip-i { position: relative; display: inline-flex; align-items: center; gap: 8px; max-width: 100%; padding: 6px 6px 6px 12px; border-radius: 999px; background: var(--surface-1); border: 1px solid var(--line); font: 500 12.5px/1.35 var(--font-display); }
-  .av-chip-h { min-width: 0; }
-  .av-info { position: relative; display: inline-flex; flex: none; }
-  .av-ib { width: 22px; height: 22px; border-radius: 50%; border: 1px solid var(--line); background: transparent; color: var(--muted); font: 600 12px var(--font-display); cursor: pointer; padding: 0; }
-  .av-ib:hover, .av-info.is-open .av-ib { color: var(--fg); border-color: var(--glass-edge); }
-  .av-pop { position: absolute; left: 0; top: calc(100% + 8px); z-index: 20; width: min(320px, 80vw); padding: 12px 14px; border-radius: 16px; font: 400 12.5px/1.5 var(--font-display); color: var(--fg); background: rgba(30,34,39,.78); -webkit-backdrop-filter: blur(18px) saturate(180%); backdrop-filter: blur(18px) saturate(180%); border: 1px solid var(--glass-edge); box-shadow: var(--shadow-glass); opacity: 0; transform: translateY(-4px) scale(.98); transform-origin: top left; pointer-events: none; transition: opacity .2s, transform .35s var(--spring); text-transform: none; letter-spacing: 0; white-space: normal; }
-  .av-info.av-r .av-pop { left: auto; right: 0; transform-origin: top right; }
-  .av-info.is-open .av-pop { opacity: 1; transform: none; pointer-events: auto; }
-  .av-marca-chip { font: 500 12.5px var(--font-display); border: 1px solid var(--accent); background: rgba(143,179,217,.12); color: var(--fg); border-radius: 999px; padding: 6px 12px; cursor: pointer; }
-
-  /* páginas */
-  .av-page { display: grid; gap: 16px; }
-  .av-page.av-in { animation: av-view .55s cubic-bezier(.2,.7,.2,1) both; }
-  @keyframes av-view { from { opacity: 0; transform: translateY(10px); filter: blur(6px); } to { opacity: 1; transform: none; filter: none; } }
-  .av-kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr)); gap: 12px; }
-  .av-kpi { display: grid; gap: 4px; align-content: start; min-width: 0; padding: 14px 16px; border-radius: 16px; background: var(--surface-1); border: 1px solid var(--line); }
-  .av-kpi-l { font: 500 11.5px/1.3 var(--font-display); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
-  .av-kpi-v { font: 600 30px/1.15 var(--font-display); font-stretch: 112%; letter-spacing: -.01em; font-variant-numeric: tabular-nums; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .av-kpi-d { font: 500 12px/1.4 var(--font-mono); font-variant-numeric: tabular-nums; color: var(--muted); }
-  .av-up { color: var(--up) !important; } .av-down { color: var(--down) !important; }
-  .av-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 24rem), 1fr)); gap: 16px; }
-  .av-card { display: grid; gap: 10px; align-content: start; min-width: 0; padding: 16px; border-radius: 16px; background: var(--surface-1); border: 1px solid var(--line); }
-  .av-card-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 12px; }
-  .av-card-head > div { display: flex; align-items: center; gap: 8px; min-width: 0; }
-  .av-card h3 { margin: 0; font: 600 14px/1.3 var(--font-display); letter-spacing: .02em; }
-  .av-chart { position: relative; min-height: 260px; }
-  .av-chart.av-tall { min-height: 320px; }
-  .av-chart text { font-family: var(--font-mono); }
-  .av-legend { display: flex; flex-wrap: wrap; gap: 6px 14px; font: 500 11.5px var(--font-display); color: var(--muted); }
-  .av-legend i { display: inline-block; width: 9px; height: 9px; border-radius: 3px; margin-right: 6px; vertical-align: -1px; }
-  .av-legend i.av-ln { height: 2px; width: 12px; vertical-align: 3px; }
-  .av-tt { position: absolute; z-index: 6; pointer-events: none; padding: 8px 10px; border-radius: 12px; font: 500 12px/1.45 var(--font-mono); font-variant-numeric: tabular-nums; white-space: nowrap; color: var(--fg); background: rgba(30,34,39,.78); -webkit-backdrop-filter: blur(18px) saturate(180%); backdrop-filter: blur(18px) saturate(180%); border: 1px solid var(--glass-edge); box-shadow: var(--shadow-glass); }
-  .av-tt b { display: block; color: var(--muted); font-weight: 400; margin-bottom: 2px; }
-  .av-tt i { display: inline-block; width: 8px; height: 8px; border-radius: 2px; margin-right: 6px; }
-
-  /* tabelas */
-  .av-tablebox { max-height: 30rem; overflow: auto; border-top: 1px solid var(--line); }
-  .av-table { width: 100%; border-collapse: collapse; font-size: 13px; font-variant-numeric: tabular-nums; }
-  .av-table th { position: sticky; top: 0; z-index: 1; background: var(--surface-1); text-align: right; font: 500 11px var(--font-display); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); padding: 8px 10px; border-bottom: 1px solid var(--line); white-space: nowrap; }
-  .av-table th button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; letter-spacing: inherit; text-transform: inherit; }
-  .av-table th:first-child, .av-table td:first-child, .av-table th.av-l, .av-table td.av-l { text-align: left; }
-  .av-table td { text-align: right; padding: 7px 10px; border-bottom: 1px solid var(--line); white-space: nowrap; }
-  .av-table td.av-num { font-family: var(--font-mono); font-size: 12.5px; }
-  .av-table tbody tr { transition: background .2s; }
-  .av-table tbody tr.av-click { cursor: pointer; }
-  .av-table tbody tr.av-click:hover, .av-table tbody tr.av-sel { background: var(--surface-2); }
-  .av-table tbody tr.av-sel { box-shadow: inset 2px 0 0 var(--accent); }
-  .av-table tbody tr:hover .av-logo { color: var(--brand, var(--fg)); }
-  .av-bar { display: inline-block; height: 6px; border-radius: 3px; background: linear-gradient(90deg, rgba(143,179,217,.5), var(--accent)); vertical-align: middle; margin-right: 8px; }
-  .av-search { font: 500 13px var(--font-display); padding: 7px 12px; border: 1px solid var(--line); border-radius: 999px; background: rgba(255,255,255,.04); color: var(--fg); max-width: 16rem; width: 100%; }
-  .av-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: space-between; }
-
-  /* logos */
-  .av-logo { display: inline-grid; place-items: center; width: 26px; height: 26px; border-radius: 8px; background: var(--surface-2); border: 1px solid var(--line); color: var(--fg); vertical-align: middle; margin-right: 8px; transition: color .3s; flex: none; }
-  .av-logo svg { width: 15px; height: 15px; fill: currentColor; }
-  .av-logo b { font: 700 7.5px/1 var(--font-display); letter-spacing: .02em; text-align: center; overflow: hidden; max-width: 24px; }
-
-  /* disputa de share */
-  .av-race { position: relative; }
-  .av-race-row { position: absolute; left: 0; right: 0; height: 32px; display: grid; grid-template-columns: 20px 28px minmax(0, 1fr) 58px 54px; align-items: center; gap: 10px; transition: transform .75s var(--ease), opacity .5s; }
-  .av-race-row:hover .av-logo { color: var(--brand, var(--fg)); }
-  .av-race-row .av-logo { margin: 0; }
-  .av-race-pos { font: 500 11px var(--font-mono); color: var(--muted); text-align: right; font-variant-numeric: tabular-nums; }
-  .av-race-bar { position: relative; height: 20px; min-width: 0; }
-  .av-race-bar i { position: absolute; left: 0; top: 0; bottom: 0; width: 0; border-radius: 6px; background: linear-gradient(90deg, rgba(143,179,217,.55), var(--accent)); transition: width .75s var(--ease); }
-  .av-race-bar span { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); font: 500 12px var(--font-display); color: var(--on-accent); white-space: nowrap; letter-spacing: .02em; text-shadow: 0 0 6px rgba(143,179,217,.6); }
-  .av-race-sh { font: 500 13px var(--font-mono); text-align: right; font-variant-numeric: tabular-nums; }
-  .av-race-d { font: 500 11.5px var(--font-mono); text-align: right; font-variant-numeric: tabular-nums; color: var(--muted); }
-  .av-scrub { display: flex; align-items: center; gap: 10px; }
-  .av-scrub input { flex: 1; min-width: 0; accent-color: var(--accent); }
-  .av-play { width: 34px; height: 34px; flex: none; border-radius: 50%; display: grid; place-items: center; cursor: pointer; color: var(--fg); padding: 0; }
-  .av-play svg { width: 12px; height: 12px; fill: currentColor; }
-  .av-mlabel { font: 500 12.5px var(--font-mono); min-width: 56px; text-align: right; }
-
-  /* dock */
-  .av-dock { position: sticky; bottom: 16px; z-index: 10; justify-self: center; margin: 4px 0 18px; padding: 6px; border-radius: 999px; max-width: calc(100% - 8px); }
-  .av-dock.av-seg { background: var(--glass-tint); border-color: var(--glass-edge); }
-  .av-dock button { padding: 10px 16px; font-size: 13px; }
-  @media (max-width: 560px) { .av-dock button { padding: 9px 10px; font-size: 12px; } }
-
-  /* card: brilho que segue o cursor e entrada ao rolar */
-  .av-card, .av-kpi { position: relative; }
-  .av-card::after, .av-kpi::after { content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; opacity: 0; transition: opacity .4s; background: radial-gradient(420px 220px at var(--mx, 50%) var(--my, 0%), rgba(255,255,255,.035), transparent 65%); }
-  .av-card:hover::after, .av-kpi:hover::after { opacity: 1; }
-  .av-rv { opacity: 0; transform: translateY(14px); }
-  .av-rv.av-rv-in { opacity: 1; transform: none; transition: opacity .7s ease, transform .9s var(--spring); transition-delay: var(--d, 0ms); }
-  .av-sub { font: 500 11.5px/1.3 var(--font-display); color: var(--muted); letter-spacing: .02em; }
-
-  /* KPI com minigráfico */
-  .av-spark { height: 30px; margin-top: 6px; }
-  .av-spark svg { display: block; overflow: visible; }
+  .av-filters { display: flex; flex-wrap: wrap; gap: 14px 28px; align-items: flex-end; padding-bottom: 14px; border-bottom: 1px solid var(--line); }
+  .av-field { display: grid; gap: 4px; min-width: 0; max-width: 100%; }
+  .av-field > span:first-child { font: 600 10.5px/1.2 var(--sans); letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+  .av select { font: 500 13px var(--sans); padding: 6px 2px; border: 0; border-bottom: 1px solid var(--rule); background: transparent; color: var(--fg); max-width: 100%; }
+  .av select option { background: var(--bg); color: var(--fg); }
+  .av-range { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; color: var(--muted); }
+  .av-reset { font: 500 12.5px var(--sans); background: none; border: 0; color: var(--accent); text-decoration: underline; text-underline-offset: 4px; cursor: pointer; padding: 8px 0; }
+  .av-marca-chip { font: 600 12.5px var(--sans); border: 0; background: var(--accent); color: var(--on-accent); padding: 6px 12px; cursor: pointer; }
 
   /* linha do tempo */
-  .av-tl { padding: 10px 14px 6px; border-radius: 18px; }
-  .av-tl-head { display: flex; justify-content: space-between; gap: 12px; font: 500 11px/1.2 var(--font-display); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
-  .av-tl-head b { font: 500 12px var(--font-mono); letter-spacing: 0; text-transform: none; color: var(--fg); }
-  #tl { position: relative; height: 70px; margin-top: 4px; }
+  .av-tl { display: grid; gap: 4px; margin-top: -10px; }
+  .av-tl-head { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; font: 600 10.5px/1.2 var(--sans); letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+  .av-tl-head b { font: 500 12px var(--mono); letter-spacing: 0; text-transform: none; color: var(--fg); }
+  #tl { position: relative; height: 70px; }
   #tl svg { display: block; overflow: visible; }
-  #tl text { font: 10.5px var(--font-mono); fill: var(--muted); }
-  #tl .selection { fill: rgba(255,255,255,.05); stroke: rgba(255,255,255,.28); shape-rendering: geometricPrecision; }
+  #tl text { font: 10.5px var(--mono); fill: var(--muted); }
+  #tl .selection { fill: var(--accent); fill-opacity: .06; stroke: var(--accent); stroke-opacity: .7; shape-rendering: crispEdges; }
   #tl .handle { fill: var(--accent); }
   #tl .overlay { cursor: crosshair; }
 
-  /* mapa de calor */
-  .av-heat text { font-family: var(--font-mono); }
-  .av-ramp { display: flex; align-items: center; gap: 8px; font: 500 11px var(--font-mono); color: var(--muted); }
-  .av-ramp i { display: block; width: 96px; height: 6px; border-radius: 3px; }
+  /* lede de cada seção */
+  .av-page { display: grid; gap: 28px; }
+  .av-page.av-in { animation: av-view .6s var(--ease) both; }
+  @keyframes av-view { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+  .av-lede { display: grid; gap: 8px; max-width: 52rem; }
+  .av-kicker { font: 600 11px/1.2 var(--sans); letter-spacing: .16em; text-transform: uppercase; color: var(--accent); }
+  .av-h { display: flex; gap: 10px; align-items: flex-start; margin: 0; font: 400 clamp(24px, 3.4vw, 38px)/1.12 var(--serif); font-variation-settings: "opsz" 72; letter-spacing: -.02em; text-wrap: balance; }
+  .av-row { display: flex; flex-wrap: wrap; gap: 12px 20px; align-items: flex-end; justify-content: space-between; }
 
-  /* treemap */
+  /* ⓘ e popovers */
+  .av-info { position: relative; display: inline-flex; flex: none; align-self: center; }
+  .av-ib { width: 20px; height: 20px; border-radius: 50%; border: 1px solid var(--line); background: transparent; color: var(--muted); font: italic 600 12px var(--serif); cursor: pointer; padding: 0; transition: color .2s, border-color .2s, background .2s; }
+  .av-ib:hover, .av-info.is-open .av-ib { color: var(--bg); background: var(--fg); border-color: var(--fg); }
+  .av-pop { position: absolute; left: 0; top: calc(100% + 8px); z-index: 20; width: min(330px, 80vw); padding: 12px 14px; font: 400 13px/1.5 var(--sans); color: var(--fg); background: var(--pop); -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px); border: 1px solid var(--line); border-top: 2px solid var(--accent); box-shadow: var(--shadow); opacity: 0; transform: translateY(-4px); pointer-events: none; transition: opacity .2s, transform .35s var(--spring); text-transform: none; letter-spacing: 0; white-space: normal; font-variation-settings: normal; }
+  .av-info.av-r .av-pop { left: auto; right: 0; }
+  .av-info.is-open .av-pop { opacity: 1; transform: none; pointer-events: auto; }
+
+  /* KPIs: números grandes em serifa separados por filetes */
+  .av-kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr)); border-top: 2px solid var(--rule); }
+  .av-kpi { display: grid; gap: 4px; align-content: start; min-width: 0; padding: 14px 18px 12px; border-right: 1px solid var(--line); }
+  .av-kpi:first-child { padding-left: 0; }
+  .av-kpi:last-child { border-right: 0; }
+  .av-kpi-l { font: 600 10.5px/1.3 var(--sans); letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+  .av-kpi-v { font: 400 44px/1.05 var(--serif); font-variation-settings: "opsz" 144; letter-spacing: -.03em; font-variant-numeric: lining-nums tabular-nums; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .av-kpi-d { font: 500 12px/1.4 var(--mono); font-variant-numeric: tabular-nums; color: var(--muted); }
+  .av-up { color: var(--up) !important; } .av-down { color: var(--down) !important; }
+  .av-spark { height: 30px; margin-top: 8px; }
+  .av-spark svg { display: block; overflow: visible; }
+
+  /* cards: sem caixa, só o filete grosso no topo */
+  .av-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 24rem), 1fr)); gap: 28px 36px; }
+  .av-card { position: relative; display: grid; gap: 12px; align-content: start; min-width: 0; padding-top: 12px; border-top: 2px solid var(--rule); }
+  .av-card-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 12px; }
+  .av-card-head > div { display: flex; align-items: center; gap: 8px; min-width: 0; }
+  .av-card h3 { margin: 0; font: 600 12px/1.3 var(--sans); letter-spacing: .12em; text-transform: uppercase; }
+  .av-rv { opacity: 0; transform: translateY(16px); }
+  .av-rv.av-rv-in { opacity: 1; transform: none; transition: opacity .7s ease, transform .9s var(--ease); transition-delay: var(--d, 0ms); }
+  .av-rv.av-rv-in.av-card::before { transform: scaleX(1); }
+  .av-card::before { content: ""; position: absolute; left: 0; top: -2px; width: 56px; height: 2px; background: var(--accent); transform: scaleX(0); transform-origin: left; transition: transform .9s var(--ease) .25s; }
+  .av-card:not(.av-rv)::before { transform: scaleX(1); }
+  .av-sub { font: 600 10.5px/1.3 var(--sans); color: var(--muted); letter-spacing: .12em; text-transform: uppercase; }
+
+  .av-chart { position: relative; min-height: 260px; }
+  .av-chart.av-tall { min-height: 320px; }
+  .av-chart text { font-family: var(--mono); }
+  .av-legend { display: flex; flex-wrap: wrap; gap: 6px 16px; font: 500 12px var(--sans); color: var(--muted); }
+  .av-legend i { display: inline-block; width: 10px; height: 10px; margin-right: 6px; vertical-align: -1px; }
+  .av-legend i.av-ln { height: 2px; width: 14px; vertical-align: 3px; }
+  .av-tt { position: absolute; z-index: 6; pointer-events: none; padding: 8px 11px; font: 500 12px/1.5 var(--mono); font-variant-numeric: tabular-nums; white-space: nowrap; color: var(--fg); background: var(--pop); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); border: 1px solid var(--line); box-shadow: var(--shadow); }
+  .av-tt b { display: block; font: 600 10.5px var(--sans); letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin-bottom: 3px; }
+  .av-tt i { display: inline-block; width: 8px; height: 8px; margin-right: 6px; }
+
+  /* tabelas */
+  .av-tablebox { max-height: 30rem; overflow: auto; }
+  .av-table { width: 100%; border-collapse: collapse; font-size: 13px; font-variant-numeric: tabular-nums; }
+  .av-table th { position: sticky; top: 0; z-index: 1; background: var(--bg); text-align: right; font: 600 10.5px var(--sans); letter-spacing: .12em; text-transform: uppercase; color: var(--muted); padding: 8px 10px; border-bottom: 1px solid var(--rule); white-space: nowrap; }
+  .av-table th button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; letter-spacing: inherit; text-transform: inherit; }
+  .av-table th:first-child, .av-table td:first-child, .av-table th.av-l, .av-table td.av-l { text-align: left; }
+  .av-table th:first-child, .av-table td:first-child { padding-left: 0; }
+  .av-table td { text-align: right; padding: 8px 10px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+  .av-table td.av-num { font-family: var(--mono); font-size: 12.5px; }
+  .av-table tbody tr { transition: background .2s; }
+  .av-table tbody tr.av-click { cursor: pointer; }
+  .av-table tbody tr.av-click:hover, .av-table tbody tr.av-sel { background: var(--surface); }
+  .av-table tbody tr.av-sel td:first-child { box-shadow: inset 3px 0 0 var(--accent); padding-left: 8px; }
+  .av-table tbody tr:hover .av-logo { color: var(--brand, var(--fg)); }
+  .av-bar { display: inline-block; height: 6px; background: var(--fg); opacity: .75; vertical-align: middle; margin-right: 8px; }
+  .av-search { font: 500 13px var(--sans); padding: 6px 2px; border: 0; border-bottom: 1px solid var(--rule); background: transparent; color: var(--fg); max-width: 16rem; width: 100%; }
+
+  /* logos */
+  .av-logo { display: inline-grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; background: var(--surface); border: 1px solid var(--line); color: var(--fg); vertical-align: middle; margin-right: 8px; transition: color .3s; flex: none; }
+  .av-logo svg { width: 14px; height: 14px; fill: currentColor; }
+  .av-logo b { font: 700 7px/1 var(--sans); letter-spacing: .02em; text-align: center; overflow: hidden; max-width: 22px; }
+
+  /* disputa de share */
+  .av-race { position: relative; }
+  .av-race-row { position: absolute; left: 0; right: 0; height: 32px; display: grid; grid-template-columns: 22px 28px minmax(0, 1fr) 58px 54px; align-items: center; gap: 10px; transition: transform .75s var(--ease), opacity .5s; }
+  .av-race-row:hover .av-logo { color: var(--brand, var(--fg)); }
+  .av-race-row .av-logo { margin: 0; }
+  .av-race-pos { font: 400 15px var(--serif); color: var(--muted); text-align: right; font-variant-numeric: tabular-nums; }
+  .av-race-bar { position: relative; height: 22px; min-width: 0; }
+  .av-race-bar i { position: absolute; left: 0; top: 0; bottom: 0; width: 0; background: var(--fg); transition: width .75s var(--ease); }
+  .av-race-row.av-lead .av-race-bar i { background: var(--accent); }
+  .av-race-bar span { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); font: 600 11.5px var(--sans); letter-spacing: .06em; text-transform: uppercase; color: var(--bg); white-space: nowrap; mix-blend-mode: normal; }
+  .av-race-sh { font: 500 13px var(--mono); text-align: right; font-variant-numeric: tabular-nums; }
+  .av-race-d { font: 500 11.5px var(--mono); text-align: right; font-variant-numeric: tabular-nums; color: var(--muted); }
+  .av-scrub { display: flex; align-items: center; gap: 12px; }
+  .av-scrub input { flex: 1; min-width: 0; accent-color: var(--accent); }
+  .av-play { width: 34px; height: 34px; flex: none; border-radius: 50%; display: grid; place-items: center; cursor: pointer; color: var(--bg); background: var(--fg); border: 0; padding: 0; transition: background .2s; }
+  .av-play:hover { background: var(--accent); }
+  .av-play svg { width: 12px; height: 12px; fill: currentColor; }
+  .av-mlabel { font: 500 12.5px var(--mono); min-width: 56px; text-align: right; }
+
+  /* mapa de calor, treemap, waffle, múltiplos */
+  .av-heat text { font-family: var(--mono); }
+  .av-ramp { display: flex; align-items: center; gap: 8px; font: 500 11px var(--mono); color: var(--muted); }
+  .av-ramp i { display: block; width: 96px; height: 6px; }
   .av-tree g.av-tile { cursor: pointer; }
-  .av-tree g.av-tile rect { transition: filter .25s, stroke-opacity .25s; }
-  .av-tree g.av-tile:hover rect { filter: brightness(1.18); }
-  .av-tree text { font-family: var(--font-display); pointer-events: none; }
-
-  /* waffle */
-  .av-waf { display: grid; grid-template-columns: minmax(0, 220px) minmax(0, 1fr); gap: 20px; align-items: center; }
+  .av-tree g.av-tile rect { transition: filter .25s; }
+  .av-tree g.av-tile:hover rect { filter: brightness(.94) contrast(1.05); }
+  .av-tree text { font-family: var(--sans); pointer-events: none; }
+  .av-waf { display: grid; grid-template-columns: minmax(0, 220px) minmax(0, 1fr); gap: 24px; align-items: center; }
   @container (max-width: 420px) { .av-waf { grid-template-columns: 1fr; } }
   .av-waf-list { display: grid; gap: 12px; }
-  .av-waf-item { display: grid; grid-template-columns: 10px 1fr auto; gap: 10px; align-items: center; font: 500 12.5px var(--font-display); }
-  .av-waf-item i { width: 10px; height: 10px; border-radius: 3px; }
-  .av-waf-item b { font: 600 18px var(--font-display); font-stretch: 112%; font-variant-numeric: tabular-nums; }
-  .av-waf-item.av-tot { border-top: 1px solid var(--line); padding-top: 12px; }
-  .av-waf-item.av-tot b { font-size: 26px; }
-
-  /* pequenos múltiplos */
-  .av-sm { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 11rem), 1fr)); gap: 12px; }
-  .av-sm-c { display: grid; gap: 2px; padding: 10px 12px 6px; border-radius: 12px; background: var(--surface-2); border: 1px solid var(--line); min-width: 0; }
+  .av-waf-item { display: grid; grid-template-columns: 10px 1fr auto; gap: 10px; align-items: baseline; font: 500 13px var(--sans); border-bottom: 1px solid var(--line); padding-bottom: 8px; }
+  .av-waf-item i { width: 10px; height: 10px; }
+  .av-waf-item b { font: 400 24px var(--serif); font-variation-settings: "opsz" 72; font-variant-numeric: lining-nums tabular-nums; }
+  .av-waf-item.av-tot { border-bottom: 0; border-top: 2px solid var(--rule); padding-top: 10px; }
+  .av-waf-item.av-tot b { font-size: 40px; color: var(--accent); }
+  .av-sm { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 11rem), 1fr)); gap: 0; border-left: 1px solid var(--line); }
+  .av-sm-c { display: grid; gap: 2px; padding: 4px 14px 6px; border-right: 1px solid var(--line); min-width: 0; }
   .av-sm-h { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
-  .av-sm-v { font: 600 20px/1.2 var(--font-display); font-stretch: 112%; font-variant-numeric: tabular-nums; white-space: nowrap; }
-  .av-sm-m { font: 500 11px var(--font-mono); color: var(--muted); }
+  .av-sm-v { font: 400 28px/1.15 var(--serif); font-variation-settings: "opsz" 72; font-variant-numeric: lining-nums tabular-nums; white-space: nowrap; }
+  .av-sm-m { font: 500 11px var(--mono); color: var(--muted); }
   .av-sm-c svg { display: block; overflow: visible; cursor: crosshair; }
-
-  .av-seg.av-mini button { padding: 5px 10px; font-size: 12px; }
+  .av-seg.av-mini button { padding: 4px 8px; font-size: 12px; }
 
   .av-hide-narrow { }
   @container (max-width: 560px) { .av-hide-narrow { display: none; } }
@@ -183,19 +204,26 @@
   .av-fail::before { content: ""; width: .375rem; height: .375rem; border-radius: 50%; background: var(--down); }
   .av [data-dash-source-state=refreshing] { opacity: .5; transition: opacity .4s; }
   .av [data-dash-source-state=empty] { color: transparent; }
-  @media (prefers-reduced-motion: reduce) { .av *, .av *::before { animation-duration: .01ms !important; transition-duration: .01ms !important; } }
+  @media (prefers-reduced-motion: reduce) { .av *, .av *::before { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; } .av-ticker-in { animation: none; } }
 </style>
 
-<div class="av" id="av">
-  <header class="av-head" id="topo">
-    <div class="av-eyebrow">ANFAVEA · Central de Dados · unidades por mês</div>
-    <h1 class="av-title">Autoveículos no Brasil</h1>
-    <div class="av-chips">
-      <div class="av-chip-i" data-source="series"><span class="av-chip-h" id="takeaway-h">—</span><span class="av-info"><button type="button" class="av-ib" aria-label="Resumo completo" aria-expanded="false">i</button><span class="av-pop" id="takeaway">—</span></span></div>
-    </div>
-  </header>
 
-  <section class="av-filters av-glass" id="filtros" aria-label="Filtros">
+<div class="av" id="av">
+  <header class="av-mast" id="topo">
+    <div class="av-mast-bar"><span>ANFAVEA · Central de Dados · Autoveículos</span><span id="ed" data-source="series">—</span></div>
+    <h1 class="av-title">Autoveículos <em>no Brasil</em></h1>
+    <div class="av-dek" data-source="series"><span id="takeaway-h">—</span><span class="av-info"><button type="button" class="av-ib" aria-label="Resumo completo" aria-expanded="false">i</button><span class="av-pop" id="takeaway">—</span></span></div>
+  </header>
+  <div class="av-ticker" data-source="series combustivel procedencia marcas" aria-label="Indicadores do período"><div class="av-ticker-in" id="ticker"></div></div>
+  <nav class="av-dock av-seg" role="tablist" aria-label="Seções">
+    <button type="button" role="tab" data-tab="mercado" id="tab-mercado" data-n="01">Mercado</button>
+    <button type="button" role="tab" data-tab="marcas" id="tab-marcas" data-n="02">Marcas</button>
+    <button type="button" role="tab" data-tab="eletrificacao" id="tab-eletrificacao" data-n="03">Eletrificação</button>
+    <button type="button" role="tab" data-tab="importados" id="tab-importados" data-n="04">Importados</button>
+    <button type="button" role="tab" data-tab="caminhoes" id="tab-caminhoes" data-n="05">Caminhões</button>
+  </nav>
+
+  <section class="av-filters" id="filtros" aria-label="Filtros">
     <label class="av-field"><span>Período</span>
       <span class="av-range">
         <select id="f-inicio" aria-label="Mês inicial" data-source="series"></select>
@@ -233,14 +261,14 @@
     <button type="button" class="av-reset" id="f-reset">Limpar filtros</button>
   </section>
 
-  <section class="av-tl av-glass" aria-label="Linha do tempo">
+  <section class="av-tl" aria-label="Linha do tempo">
     <div class="av-tl-head"><span id="tl-t">Linha do tempo · arraste para escolher o período</span><b id="tl-lbl"></b></div>
     <div id="tl" class="dash-skeleton" data-source="series"></div>
   </section>
 
   <!-- MERCADO -->
   <section class="av-page" id="mercado" role="tabpanel" aria-labelledby="tab-mercado">
-    <div class="av-chips"><div class="av-chip-i" data-source="series"><span class="av-chip-h" id="h-mercado">—</span><span class="av-info"><button type="button" class="av-ib" aria-label="Detalhes" aria-expanded="false">i</button><span class="av-pop" id="ins-mercado">—</span></span></div></div>
+    <div class="av-lede"><span class="av-kicker">01 · Mercado</span><h2 class="av-h" data-source="series"><span id="h-mercado">—</span><span class="av-info"><button type="button" class="av-ib" aria-label="Detalhes" aria-expanded="false">i</button><span class="av-pop" id="ins-mercado">—</span></span></h2></div>
     <div class="av-kpis" id="kpi-mercado">
       <div class="av-kpi" data-source="series"><span class="av-kpi-l" id="k1l">Emplacamento</span><span class="av-kpi-v dash-skeleton" id="k1v">—</span><span class="av-kpi-d" id="k1d"></span><div class="av-spark" id="k1s" data-source="series"></div></div>
       <div class="av-kpi" data-source="series"><span class="av-kpi-l" id="k2l">Produção</span><span class="av-kpi-v dash-skeleton" id="k2v">—</span><span class="av-kpi-d" id="k2d"></span><div class="av-spark" id="k2s" data-source="series"></div></div>
@@ -273,9 +301,9 @@
   <!-- MARCAS -->
   <section class="av-page" id="marcas" role="tabpanel" aria-labelledby="tab-marcas" hidden>
     <div class="av-row">
-      <div class="av-chips">
-        <div class="av-chip-i" data-source="marcas"><span class="av-chip-h" id="h-marcas">—</span><span class="av-info"><button type="button" class="av-ib" aria-label="Detalhes" aria-expanded="false">i</button><span class="av-pop"><span id="ins-marcas">—</span><br><br><span id="nota-marcas">Emplacamento por marca existe na ANFAVEA só a partir de jan/2026.</span></span></span></div>
-        <button type="button" class="av-marca-chip" id="marca-chip" hidden></button>
+      <div class="av-lede"><span class="av-kicker">02 · Marcas</span>
+        <h2 class="av-h" data-source="marcas"><span id="h-marcas">—</span><span class="av-info"><button type="button" class="av-ib" aria-label="Detalhes" aria-expanded="false">i</button><span class="av-pop"><span id="ins-marcas">—</span><br><br><span id="nota-marcas">Emplacamento por marca existe na ANFAVEA só a partir de jan/2026.</span></span></span></h2>
+        <div><button type="button" class="av-marca-chip" id="marca-chip" hidden></button></div>
       </div>
       <div class="av-seg" id="f-proc" role="group" aria-label="Procedência">
         <button type="button" data-v="Todas">Nacional e importado</button>
@@ -296,7 +324,7 @@
     <article class="av-card" id="card-race">
       <div class="av-card-head"><div><h3>Disputa de participação, mês a mês</h3><span class="av-info"><button type="button" class="av-ib" aria-label="Sobre o gráfico" aria-expanded="false">i</button><span class="av-pop">As 10 maiores marcas de cada mês no recorte escolhido. Aperte o play ou arraste a barra para ver quem ultrapassou quem. À direita, a variação em p.p. desde o primeiro mês do recorte.</span></span></div><span class="av-mlabel" id="race-m"></span></div>
       <div class="av-race" id="race" data-source="marcas"></div>
-      <div class="av-scrub"><button type="button" class="av-play av-glass" id="race-play" aria-label="Reproduzir meses"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2 1l9 5-9 5z"/></svg></button><input type="range" id="race-r" min="0" max="0" value="0" aria-label="Mês"></div>
+      <div class="av-scrub"><button type="button" class="av-play" id="race-play" aria-label="Reproduzir meses"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2 1l9 5-9 5z"/></svg></button><input type="range" id="race-r" min="0" max="0" value="0" aria-label="Mês"></div>
     </article>
     <div class="av-grid">
       <article class="av-card" id="card-share">
@@ -318,7 +346,7 @@
 
   <!-- ELETRIFICAÇÃO -->
   <section class="av-page" id="eletrificacao" role="tabpanel" aria-labelledby="tab-eletrificacao" hidden>
-    <div class="av-chips"><div class="av-chip-i" data-source="combustivel"><span class="av-chip-h" id="h-ele">—</span><span class="av-info"><button type="button" class="av-ib" aria-label="Detalhes" aria-expanded="false">i</button><span class="av-pop"><span id="ins-ele">—</span><br><br>Eletrificados = elétrico a bateria + híbrido plug-in + híbrido, na classificação da ANFAVEA.</span></span></div></div>
+    <div class="av-lede"><span class="av-kicker">03 · Eletrificação</span><h2 class="av-h" data-source="combustivel"><span id="h-ele">—</span><span class="av-info"><button type="button" class="av-ib" aria-label="Detalhes" aria-expanded="false">i</button><span class="av-pop"><span id="ins-ele">—</span><br><br>Eletrificados = elétrico a bateria + híbrido plug-in + híbrido, na classificação da ANFAVEA.</span></span></h2></div>
     <div class="av-kpis">
       <div class="av-kpi" data-source="combustivel"><span class="av-kpi-l" id="e1l">Eletrificados</span><span class="av-kpi-v dash-skeleton" id="e1v">—</span><span class="av-kpi-d" id="e1d"></span></div>
       <div class="av-kpi" data-source="combustivel"><span class="av-kpi-l">Elétricos (BEV)</span><span class="av-kpi-v dash-skeleton" id="e2v">—</span><span class="av-kpi-d" id="e2d"></span></div>
@@ -344,7 +372,7 @@
 
   <!-- IMPORTADOS -->
   <section class="av-page" id="importados" role="tabpanel" aria-labelledby="tab-importados" hidden>
-    <div class="av-chips"><div class="av-chip-i" data-source="procedencia"><span class="av-chip-h" id="h-imp">—</span><span class="av-info"><button type="button" class="av-ib" aria-label="Detalhes" aria-expanded="false">i</button><span class="av-pop" id="ins-imp">—</span></span></div></div>
+    <div class="av-lede"><span class="av-kicker">04 · Importados</span><h2 class="av-h" data-source="procedencia"><span id="h-imp">—</span><span class="av-info"><button type="button" class="av-ib" aria-label="Detalhes" aria-expanded="false">i</button><span class="av-pop" id="ins-imp">—</span></span></h2></div>
     <div class="av-kpis">
       <div class="av-kpi" data-source="procedencia"><span class="av-kpi-l">Importados no emplacamento</span><span class="av-kpi-v dash-skeleton" id="i1v">—</span><span class="av-kpi-d" id="i1d"></span></div>
       <div class="av-kpi" data-source="procedencia"><span class="av-kpi-l">Unidades importadas</span><span class="av-kpi-v dash-skeleton" id="i2v">—</span><span class="av-kpi-d" id="i2d"></span></div>
@@ -369,7 +397,7 @@
 
   <!-- CAMINHÕES -->
   <section class="av-page" id="caminhoes" role="tabpanel" aria-labelledby="tab-caminhoes" hidden>
-    <div class="av-chips"><div class="av-chip-i" data-source="caminhoes"><span class="av-chip-h" id="h-cam">—</span><span class="av-info"><button type="button" class="av-ib" aria-label="Detalhes" aria-expanded="false">i</button><span class="av-pop" id="ins-cam">—</span></span></div></div>
+    <div class="av-lede"><span class="av-kicker">05 · Caminhões</span><h2 class="av-h" data-source="caminhoes"><span id="h-cam">—</span><span class="av-info"><button type="button" class="av-ib" aria-label="Detalhes" aria-expanded="false">i</button><span class="av-pop" id="ins-cam">—</span></span></h2></div>
     <article class="av-card" id="card-cam">
       <div class="av-card-head"><div><h3 id="t-cam">Caminhões por subsegmento</h3><span class="av-info"><button type="button" class="av-ib" aria-label="Sobre o gráfico" aria-expanded="false">i</button><span class="av-pop">Volume mensal do indicador escolhido, um gráfico por subsegmento. Cada um tem sua própria escala, para mostrar a forma da curva; compare volumes pelos números. Passe o mouse para ler o mesmo mês em todos.</span></span></div><span class="av-mlabel" id="cam-m"></span></div>
       <div class="av-sm" id="ch-cam" data-source="caminhoes"></div>
@@ -380,13 +408,6 @@
     </article>
   </section>
 
-  <nav class="av-dock av-seg av-glass" role="tablist" aria-label="Seções">
-    <button type="button" role="tab" data-tab="mercado" id="tab-mercado">Mercado</button>
-    <button type="button" role="tab" data-tab="marcas" id="tab-marcas">Marcas</button>
-    <button type="button" role="tab" data-tab="eletrificacao" id="tab-eletrificacao">Eletrificação</button>
-    <button type="button" role="tab" data-tab="importados" id="tab-importados">Importados</button>
-    <button type="button" role="tab" data-tab="caminhoes" id="tab-caminhoes">Caminhões</button>
-  </nav>
 </div>
 
 <script src="logos.js"></script>
@@ -407,12 +428,24 @@
     : mesLbl(a) + '–' + mesLbl(b));
   const LEVES = ['Automóveis', 'Comerciais leves'];
   const CHINESAS = ["BYD", "CAOA CHANGAN", "CHERY", "CRRC ELETRIC", "FOTON", "GAC", "GEELY", "GREAT WALL", "HIGER", "JAC", "JETOUR", "LEAPMOTOR", "MG", "OMODA", "SANY", "SHINERAY", "ZEEKR"];
-  // Séries: tons Grafite (aço, areia, petróleo...) ajustados para separar bem no fundo escuro e para daltonismo,
-  // sempre na mesma ordem; a cor segue a entidade, nunca a posição.
-  const CAT = ['#5b93d3', '#b6813a', '#3aa58a', '#d9705f', '#9283e0', '#a8923a', '#cf6f9c', '#6f9f3c'];
-  const C = { fg: '#e9e7e2', muted: '#8f969d', grid: 'rgba(255,255,255,.07)', accent: '#8fb3d9', sand: '#c9b48a', up: '#8fc9a5', down: '#e0968a', bg: '#15181b', s1: '#1b1f23', s2: '#23282d' };
+  // Séries: oito tons editoriais validados para daltonismo, um conjunto para papel e outro para o modo escuro.
+  // A cor segue a entidade, nunca a posição; o vermelhão (2º) é também o destaque do painel.
+  const CATS = {
+    light: ['#2a62a0', '#c8452c', '#1f8a70', '#b07a1f', '#8a4f8f', '#6b7d2a', '#c0577a', '#5b5fc7'],
+    dark: ['#5a8fd0', '#e0603f', '#2fa385', '#b8842a', '#a874b2', '#8a9c3f', '#d06f94', '#8a86e8'],
+  };
+  let C = {}, CAT = CATS.light;
   const RM = () => window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
   const root = document.getElementById('av');
+  // cores lidas dos tokens CSS a cada desenho, para seguir o tema claro/escuro da página
+  const readTok = () => {
+    const cs = getComputedStyle(root), g = (n) => cs.getPropertyValue(n).trim();
+    const dark = g('--mode') === 'dark';
+    CAT = dark ? CATS.dark : CATS.light;
+    C = { fg: g('--fg'), muted: g('--muted'), grid: g('--grid'), line: g('--line'), accent: g('--accent'), up: g('--up'), down: g('--down'),
+      bg: g('--bg'), s1: g('--bg'), s2: g('--surface'), heatLo: g('--heat-lo'), heatHi: g('--heat-hi'), mid: g('--tile-mid'), empty: g('--empty'), dark };
+  };
+  readTok();
   let UID = 0;
   const uid = (p) => `av-${p}-${++UID}`;
 
@@ -628,8 +661,8 @@
     if (bars) {
       const r = svg.append('g').selectAll('rect').data(months).join('rect')
         .attr('x', (m) => x(m)).attr('width', x.bandwidth())
-        .attr('rx', Math.min(3, x.bandwidth() / 2))
-        .attr('fill', (m, i) => (i === lastIdx ? bars.color : d3.color(bars.color).copy({ opacity: 0.55 })));
+        .attr('rx', Math.min(1.5, x.bandwidth() / 2))
+        .attr('fill', (m, i) => (i === lastIdx ? (bars.last || bars.color) : d3.color(bars.color).copy({ opacity: bars.last ? 0.32 : 0.55 })));
       if (animate) {
         r.attr('y', y(0)).attr('height', 0).transition().duration(700).delay((m, i) => i * Math.min(18, 600 / months.length)).ease(d3.easeCubicOut)
           .attr('y', (m) => y(bars.values[m] || 0)).attr('height', (m) => y(0) - y(bars.values[m] || 0));
@@ -789,7 +822,8 @@
   const ppDelta = (id, v, label, extra = '') => setTxt(id, v == null ? 'sem base de comparação' + extra : (v >= 0 ? '▲ ' : '▼ ') + sgn(v).replace(/^[+−]/, '') + ' p.p. vs ' + label + extra, upDown(v));
 
   // ---------- minigráfico dos KPIs ----------
-  function spark(el, vals, color = C.accent) {
+  function spark(el, vals, color) {
+    color = color || C.fg;
     prep(el);
     if (vals.length < 2) return;
     const W = Math.max(el.clientWidth, 100), H = 30;
@@ -800,12 +834,12 @@
     const svg = d3.select(el).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`).attr('aria-hidden', 'true');
     const gid = uid('sg');
     const gr = svg.append('defs').append('linearGradient').attr('id', gid).attr('x1', 0).attr('x2', 0).attr('y1', 0).attr('y2', 1);
-    gr.append('stop').attr('offset', 0).attr('stop-color', color).attr('stop-opacity', 0.28);
+    gr.append('stop').attr('offset', 0).attr('stop-color', color).attr('stop-opacity', 0.14);
     gr.append('stop').attr('offset', 1).attr('stop-color', color).attr('stop-opacity', 0);
     const g = svg.append('g');
     g.append('path').attr('d', d3.area().x((d, i) => x(i)).y0(H).y1((d) => y(d)).curve(d3.curveMonotoneX)(vals)).attr('fill', `url(#${gid})`);
     g.append('path').attr('d', d3.line().x((d, i) => x(i)).y((d) => y(d)).curve(d3.curveMonotoneX)(vals)).attr('fill', 'none').attr('stroke', color).attr('stroke-width', 1.6).attr('stroke-linejoin', 'round');
-    g.append('circle').attr('cx', x(vals.length - 1)).attr('cy', y(vals[vals.length - 1])).attr('r', 2.6).attr('fill', color).attr('stroke', C.s1).attr('stroke-width', 1.5);
+    g.append('circle').attr('cx', x(vals.length - 1)).attr('cy', y(vals[vals.length - 1])).attr('r', 2.8).attr('fill', C.accent).attr('stroke', C.s1).attr('stroke-width', 1.5);
     if (animate) reveal(svg, g, W, H, 1000, 150);
   }
 
@@ -821,7 +855,7 @@
     const ia = Math.max(0, MESES.indexOf(a)), ib = Math.max(ia, MESES.indexOf(b));
     document.getElementById('tl-lbl').textContent = janela(a, b) + ' · ' + (ib - ia + 1) + (ib === ia ? ' mês' : ' meses');
     document.getElementById('tl-t').textContent = `${tipo} · ${categoria === 'Todas' ? 'todas as categorias' : categoria} · arraste para escolher o período`;
-    const sig = vals.join() + W;
+    const sig = vals.join() + W + C.bg;
     const sx = (i) => pad + i * step;
     if (el._sig !== sig) {
       const first = el._sig == null;
@@ -832,11 +866,11 @@
       const cx = (i) => sx(i) + step / 2;
       const gid = uid('tlg');
       const gr = svg.append('defs').append('linearGradient').attr('id', gid).attr('x1', 0).attr('x2', 0).attr('y1', 0).attr('y2', 1);
-      gr.append('stop').attr('offset', 0).attr('stop-color', C.accent).attr('stop-opacity', 0.35);
-      gr.append('stop').attr('offset', 1).attr('stop-color', C.accent).attr('stop-opacity', 0.02);
+      gr.append('stop').attr('offset', 0).attr('stop-color', C.fg).attr('stop-opacity', 0.16);
+      gr.append('stop').attr('offset', 1).attr('stop-color', C.fg).attr('stop-opacity', 0.01);
       const g = svg.append('g');
       g.append('path').attr('d', d3.area().x((d, i) => cx(i)).y0(base).y1((d) => y(d)).curve(d3.curveMonotoneX)(vals)).attr('fill', `url(#${gid})`);
-      g.append('path').attr('d', d3.line().x((d, i) => cx(i)).y((d) => y(d)).curve(d3.curveMonotoneX)(vals)).attr('fill', 'none').attr('stroke', C.accent).attr('stroke-width', 1.5);
+      g.append('path').attr('d', d3.line().x((d, i) => cx(i)).y((d) => y(d)).curve(d3.curveMonotoneX)(vals)).attr('fill', 'none').attr('stroke', C.fg).attr('stroke-width', 1.3);
       // anos
       const yrs = MESES.map((m, i) => [m, i]).filter(([m]) => m.endsWith('-01'));
       svg.append('g').selectAll('line').data(yrs).join('line').attr('x1', ([, i]) => sx(i)).attr('x2', ([, i]) => sx(i)).attr('y1', top).attr('y2', base + 4).attr('stroke', C.grid);
@@ -868,7 +902,7 @@
           set({ inicio: MESES[i0], fim: MESES[i1] });
         });
       const gb = svg.append('g').call(brush);
-      gb.selectAll('.handle').attr('rx', 3);
+      gb.selectAll('.handle').attr('rx', 1);
       el._tl = { gb, brush, setVeil };
       if (first && !RM()) reveal(svg, g, W, H, 1400);
     }
@@ -888,7 +922,7 @@
     const H = 18 + years.length * ch;
     const animate = anim(el, MESES.map((m) => vals[m]).join() + a + b + W);
     const ext = d3.extent(MESES, (m) => vals[m]);
-    const col = d3.scaleSequential([ext[0], ext[1] === ext[0] ? ext[0] + 1 : ext[1]], d3.interpolateRgb('#262c33', '#a9c7e6'));
+    const col = d3.scaleSequential([ext[0], ext[1] === ext[0] ? ext[0] + 1 : ext[1]], d3.interpolateRgb(C.heatLo, C.heatHi));
     document.getElementById('rp-heat').replaceChildren(...(() => {
       const lo = document.createElement('span'); lo.textContent = big(ext[0]);
       const i = document.createElement('i'); i.style.background = `linear-gradient(90deg, ${col(ext[0])}, ${col(ext[1])})`;
@@ -900,10 +934,10 @@
     svg.append('g').selectAll('text').data(years).join('text').attr('x', 0).attr('y', (d, i) => 18 + i * ch + ch / 2).attr('dy', '0.32em').attr('font-size', 11).attr('fill', C.muted).text((d) => d);
     const cells = MESES.map((m) => ({ m, r: years.indexOf(m.slice(0, 4)), c: +m.slice(5) - 1, v: vals[m], on: inWin(m, a, b) }));
     const g = svg.append('g').selectAll('g').data(cells).join('g').attr('transform', (d) => `translate(${lab + d.c * cw},${18 + d.r * ch})`);
-    const rect = g.append('rect').attr('x', gap / 2).attr('y', gap / 2).attr('width', cw - gap).attr('height', ch - gap).attr('rx', 6)
-      .attr('fill', (d) => col(d.v)).attr('stroke', (d) => (d.on ? 'rgba(255,255,255,.18)' : 'none'));
+    const rect = g.append('rect').attr('x', gap / 2).attr('y', gap / 2).attr('width', cw - gap).attr('height', ch - gap).attr('rx', 2)
+      .attr('fill', (d) => col(d.v)).attr('stroke', (d) => (d.on ? C.line : 'none'));
     const txt = cw >= 58 ? g.append('text').attr('x', cw / 2).attr('y', ch / 2).attr('dy', '0.32em').attr('text-anchor', 'middle').attr('font-size', 10.5)
-      .attr('fill', (d) => ((d.v - ext[0]) / ((ext[1] - ext[0]) || 1) > 0.6 ? '#0f1418' : C.fg)).attr('fill-opacity', 0.85).text((d) => fmt(d.v)) : null;
+      .attr('fill', (d) => ((d.v - ext[0]) / ((ext[1] - ext[0]) || 1) > 0.6 ? C.bg : C.fg)).attr('fill-opacity', 0.85).text((d) => fmt(d.v)) : null;
     const op = (d) => (d.on ? 1 : 0.32);
     if (animate) {
       g.attr('opacity', 0).transition().delay((d) => (d.c + d.r * 3) * 28).duration(500).ease(d3.easeCubicOut).attr('opacity', op);
@@ -915,8 +949,8 @@
       const [px, py] = d3.pointer(ev, el);
       const p = addM(d.m, -12), pv = vals[p];
       tipShow(el, tt, mesLbl(d.m), [[col(d.v), '', nf.format(d.v)], ...(pv ? [[null, '', `${sgn(d.v / pv - 1)}% vs ${mesLbl(p)}`]] : [])], px, py);
-      rect.attr('stroke', (x) => (x === d ? C.fg : x.on ? 'rgba(255,255,255,.18)' : 'none'));
-    }).on('mouseleave', () => { tt.hidden = true; rect.attr('stroke', (x) => (x.on ? 'rgba(255,255,255,.18)' : 'none')); });
+      rect.attr('stroke', (x) => (x === d ? C.fg : x.on ? C.line : 'none'));
+    }).on('mouseleave', () => { tt.hidden = true; rect.attr('stroke', (x) => (x.on ? C.line : 'none')); });
     if (txt) txt.attr('pointer-events', 'none');
   }
 
@@ -933,16 +967,16 @@
     const h = d3.hierarchy({ children: kids }).sum((d) => d.v || 0).sort((p, q) => q.value - p.value);
     d3.treemap().size([W, H]).paddingInner(3).round(true).tile(d3.treemapSquarify.ratio(1.15))(h);
     const m = d3.max(kids, (k) => Math.abs(k.tend || 0)) || 0.01;
-    const neg = d3.interpolateRgb(C.s2, C.down)(0.6), pos = d3.interpolateRgb(C.s2, C.up)(0.55);
-    const fill = (t) => (t == null ? '#262b31' : d3.scaleLinear([-m, 0, m], [neg, '#2b3138', pos]).clamp(true)(t));
-    legend(document.getElementById('lg-tree'), [{ name: 'perde', color: neg }, { name: 'estável', color: '#2b3138' }, { name: 'ganha', color: pos }]);
+    const neg = d3.interpolateRgb(C.mid, C.down)(0.62), pos = d3.interpolateRgb(C.mid, C.up)(0.58);
+    const fill = (t) => (t == null ? C.mid : d3.scaleLinear([-m, 0, m], [neg, C.mid, pos]).clamp(true)(t));
+    legend(document.getElementById('lg-tree'), [{ name: 'perde', color: neg }, { name: 'estável', color: C.mid }, { name: 'ganha', color: pos }]);
     const svg = d3.select(el).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`);
     const leaves = h.leaves();
     const g = svg.append('g').selectAll('g').data(leaves).join('g').attr('class', 'av-tile')
       .attr('transform', (d) => `translate(${d.x0},${d.y0})`);
-    g.append('rect').attr('width', (d) => Math.max(0, d.x1 - d.x0)).attr('height', (d) => Math.max(0, d.y1 - d.y0)).attr('rx', 8)
+    g.append('rect').attr('width', (d) => Math.max(0, d.x1 - d.x0)).attr('height', (d) => Math.max(0, d.y1 - d.y0)).attr('rx', 2)
       .attr('fill', (d) => fill(d.data.tend))
-      .attr('stroke', (d) => (sel && d.data.id === sel ? C.accent : 'rgba(255,255,255,.06)')).attr('stroke-width', (d) => (sel && d.data.id === sel ? 2 : 1));
+      .attr('stroke', (d) => (sel && d.data.id === sel ? C.accent : C.line)).attr('stroke-width', (d) => (sel && d.data.id === sel ? 2.5 : 1));
     g.each(function (d) {
       const w = d.x1 - d.x0, hh = d.y1 - d.y0, s = d3.select(this);
       const name = d.data.id === 'Outras' ? `Outras ${d.data.n}` : nice(d.data.id);
@@ -955,7 +989,7 @@
       if (w > 54 && hh > 34) {
         s.append('text').attr('x', 10).attr('y', hh - (big2 ? 28 : 12)).attr('font-size', big2 ? 12.5 : 11).attr('font-weight', 600).attr('fill', C.fg).attr('letter-spacing', '.02em')
           .text(name.length * 7 > w - 14 ? name.slice(0, Math.max(3, Math.floor((w - 14) / 7))) + '…' : name);
-        if (big2) s.append('text').attr('x', 10).attr('y', hh - 11).attr('font-size', Math.min(20, 12 + w / 40)).attr('font-weight', 600).attr('font-stretch', '112%').attr('fill', C.fg).attr('fill-opacity', 0.9).text(pc(d.data.part));
+        if (big2) s.append('text').attr('x', 10).attr('y', hh - 11).attr('font-size', Math.min(26, 14 + w / 30)).attr('font-weight', 400).style('font-family', 'var(--serif)').attr('fill', C.fg).text(pc(d.data.part));
       }
     });
     if (animate) {
@@ -1003,7 +1037,7 @@
       .attr('cx', (d) => x(d.mo)).attr('cy', (d) => yr(d.r)).attr('r', 4).attr('fill', (d) => d.b.color).attr('stroke', C.s1).attr('stroke-width', 2)
       .attr('opacity', (d) => (d.r == null || d.r > MAXR ? 0 : 1));
     const end = gs.append('g').attr('transform', (b) => `translate(${W - endW + 10},${yr(ranks[ranks.length - 1].pos.get(b.m))})`);
-    end.append('text').attr('x', 0).attr('dy', '0.32em').attr('font-size', 11.5).style('font-family', 'var(--font-display)').attr('font-weight', 600).attr('fill', C.fg).text((b) => nice(b.m));
+    end.append('text').attr('x', 0).attr('dy', '0.32em').attr('font-size', 11.5).style('font-family', 'var(--sans)').attr('font-weight', 600).attr('fill', C.fg).text((b) => nice(b.m));
     if (animate) {
       paths.each(function (b, i) {
         const len = this.getTotalLength();
@@ -1038,8 +1072,8 @@
     const svg = d3.select(box).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${S} ${S}`).style('max-width', S + 'px');
     // preenche de baixo para cima, linha a linha
     const pos = (i) => ({ x: (i % 10) * (cs + gap), y: (9 - Math.floor(i / 10)) * (cs + gap) });
-    const r = svg.selectAll('rect').data(cells).join('rect').attr('x', (d, i) => pos(i).x).attr('y', (d, i) => pos(i).y).attr('width', cs).attr('height', cs).attr('rx', 3)
-      .attr('fill', (d) => (d ? d.color : 'rgba(255,255,255,.06)'));
+    const r = svg.selectAll('rect').data(cells).join('rect').attr('x', (d, i) => pos(i).x).attr('y', (d, i) => pos(i).y).attr('width', cs).attr('height', cs).attr('rx', 1)
+      .attr('fill', (d) => (d ? d.color : C.empty));
     if (animate) {
       r.attr('opacity', 0).attr('transform', (d, i) => `translate(${pos(i).x + cs / 2},${pos(i).y + cs / 2}) scale(0) translate(${-pos(i).x - cs / 2},${-pos(i).y - cs / 2})`)
         .transition().delay((d, i) => (d ? i * 22 : 400 + i * 4)).duration(420).ease(d3.easeBackOut.overshoot(1.8))
@@ -1123,11 +1157,11 @@
     const ti = d3.ticks(0, mI, 2).filter((t) => t > 0 && t * k > 14);
     svg.append('g').selectAll('line').data([...tk.map((t) => mid - t * k), ...ti.map((t) => mid + t * k)]).join('line').attr('x1', ml).attr('x2', W - 6).attr('y1', (d) => d).attr('y2', (d) => d).attr('stroke', C.grid).attr('stroke-dasharray', '2 4');
     svg.append('g').selectAll('text').data([...tk.map((t) => [t, mid - t * k]), ...ti.map((t) => [t, mid + t * k])]).join('text').attr('x', ml - 8).attr('y', (d) => d[1]).attr('dy', '0.32em').attr('text-anchor', 'end').attr('font-size', 11).attr('fill', C.muted).text((d) => big(d[0]));
-    svg.append('text').attr('x', 0).attr('y', 12).attr('font-size', 11).attr('fill', C.accent).style('font-family', 'var(--font-display)').attr('font-weight', 600).text('Nacional ↑');
-    svg.append('text').attr('x', 0).attr('y', H - 22).attr('font-size', 11).attr('fill', C.sand).style('font-family', 'var(--font-display)').attr('font-weight', 600).text('Importado ↓');
-    const rx = Math.min(3, x.bandwidth() / 2);
-    const up = svg.append('g').selectAll('rect').data(ms).join('rect').attr('x', (m) => x(m)).attr('width', x.bandwidth()).attr('rx', rx).attr('fill', C.accent).attr('fill-opacity', 0.85);
-    const dn = svg.append('g').selectAll('rect').data(ms).join('rect').attr('x', (m) => x(m)).attr('width', x.bandwidth()).attr('rx', rx).attr('fill', C.sand).attr('fill-opacity', 0.85);
+    svg.append('text').attr('x', 0).attr('y', 12).attr('font-size', 11).attr('fill', C.fg).style('font-family', 'var(--sans)').attr('font-weight', 600).text('Nacional ↑');
+    svg.append('text').attr('x', 0).attr('y', H - 22).attr('font-size', 11).attr('fill', C.accent).style('font-family', 'var(--sans)').attr('font-weight', 600).text('Importado ↓');
+    const rx = Math.min(1.5, x.bandwidth() / 2);
+    const up = svg.append('g').selectAll('rect').data(ms).join('rect').attr('x', (m) => x(m)).attr('width', x.bandwidth()).attr('rx', rx).attr('fill', C.fg).attr('fill-opacity', 0.85);
+    const dn = svg.append('g').selectAll('rect').data(ms).join('rect').attr('x', (m) => x(m)).attr('width', x.bandwidth()).attr('rx', rx).attr('fill', C.accent).attr('fill-opacity', 0.85);
     const setUp = (s) => s.attr('y', (m) => mid - 1 - (nac[m] || 0) * k).attr('height', (m) => (nac[m] || 0) * k);
     const setDn = (s) => s.attr('y', mid + 1).attr('height', (m) => (imp[m] || 0) * k);
     if (animate) {
@@ -1138,14 +1172,14 @@
     svg.append('line').attr('x1', ml).attr('x2', W - 6).attr('y1', mid).attr('y2', mid).attr('stroke', C.bg).attr('stroke-width', 2);
     const lw = measure(svg, 'set/26') + 8, stp = Math.max(1, Math.ceil(lw / x.step()));
     svg.append('g').selectAll('text').data(ms.filter((m, i) => (ms.length - 1 - i) % stp === 0)).join('text').attr('x', (m) => x(m) + x.bandwidth() / 2).attr('y', H - 4).attr('text-anchor', 'middle').attr('font-size', 11).attr('fill', C.muted).text(mesLbl);
-    legend(document.getElementById('lg-bfly'), [{ name: 'Nacional', color: C.accent }, { name: 'Importado', color: C.sand }]);
+    legend(document.getElementById('lg-bfly'), [{ name: 'Nacional', color: C.fg }, { name: 'Importado', color: C.accent }]);
     const tt = tipBox(el);
     svg.append('g').selectAll('rect').data(ms).join('rect').attr('x', (m) => x(m) - (x.step() - x.bandwidth()) / 2).attr('width', x.step()).attr('y', 0).attr('height', H).attr('fill', 'transparent')
       .on('mousemove', (ev, m) => {
         const [px, py] = d3.pointer(ev, el);
         up.attr('fill-opacity', (o) => (o === m ? 1 : 0.5)); dn.attr('fill-opacity', (o) => (o === m ? 1 : 0.5));
         const t = (nac[m] || 0) + (imp[m] || 0);
-        tipShow(el, tt, mesLbl(m), [[C.accent, 'Nacional', nf.format(nac[m] || 0)], [C.sand, 'Importado', nf.format(imp[m] || 0)], [null, 'Importados', pc(t ? (imp[m] || 0) / t : null)]], px, py);
+        tipShow(el, tt, mesLbl(m), [[C.fg, 'Nacional', nf.format(nac[m] || 0)], [C.accent, 'Importado', nf.format(imp[m] || 0)], [null, 'Importados', pc(t ? (imp[m] || 0) / t : null)]], px, py);
       }).on('mouseleave', () => { tt.hidden = true; up.attr('fill-opacity', 0.85); dn.attr('fill-opacity', 0.85); });
   }
 
@@ -1174,8 +1208,8 @@
     const cb = g.append('circle').attr('cy', (d) => d.yb).attr('r', 4.5).attr('fill', (d) => d.color).attr('stroke', C.s1).attr('stroke-width', 2);
     g.append('text').attr('x', x0 - 10).attr('y', (d) => d.la).attr('dy', '0.32em').attr('text-anchor', 'end').attr('font-size', 11).attr('fill', C.muted).text((d) => pc(d.a));
     const lab = g.append('text').attr('x', x1 + 10).attr('y', (d) => d.lb).attr('dy', '0.32em').attr('font-size', 11.5).attr('fill', C.fg);
-    lab.append('tspan').style('font-family', 'var(--font-mono)').text((d) => pc(d.b) + '  ');
-    lab.append('tspan').style('font-family', 'var(--font-display)').attr('fill', C.muted).text((d) => d.name);
+    lab.append('tspan').style('font-family', 'var(--mono)').text((d) => pc(d.b) + '  ');
+    lab.append('tspan').style('font-family', 'var(--sans)').attr('fill', C.muted).text((d) => d.name);
     if (animate) {
       ln.attr('x2', x0).attr('y2', (d) => d.ya).transition().delay((d, i) => i * 120).duration(900).ease(d3.easeCubicInOut).attr('x2', x1).attr('y2', (d) => d.yb);
       cb.attr('cx', x0).attr('cy', (d) => d.ya).transition().delay((d, i) => i * 120).duration(900).ease(d3.easeCubicInOut).attr('cx', x1).attr('cy', (d) => d.yb);
@@ -1223,7 +1257,7 @@
       g.append('path').attr('d', d3.line().x((d, i) => x(ms[i])).y((d) => y(d)).curve(d3.curveMonotoneX)(vals)).attr('fill', 'none').attr('stroke', s.color).attr('stroke-width', 1.8);
       if (animate) reveal(svg, g, W, H, 1100, k * 110);
       const rule = svg.append('line').attr('y1', 0).attr('y2', H).attr('stroke', C.fg).attr('stroke-opacity', 0.35).attr('opacity', 0);
-      const dot = svg.append('circle').attr('r', 3.5).attr('fill', s.color).attr('stroke', C.s2).attr('stroke-width', 2).attr('opacity', 0);
+      const dot = svg.append('circle').attr('r', 3.5).attr('fill', s.color).attr('stroke', C.bg).attr('stroke-width', 2).attr('opacity', 0);
       svg.append('rect').attr('width', W).attr('height', H).attr('fill', 'transparent')
         .on('mousemove', (ev) => { const [mx] = d3.pointer(ev); syncAll(Math.max(0, Math.min(ms.length - 1, Math.round((mx - 3) / (x.step() || 1))))); })
         .on('mouseleave', () => syncAll(null));
@@ -1264,7 +1298,7 @@
         race.el.append(r); race.rows[d.m] = r; r.getBoundingClientRect();
       }
       seen.add(d.m);
-      r.style.opacity = 1; r.style.transform = `translateY(${k * RACE_GAP}px)`;
+      r.style.opacity = 1; r.style.transform = `translateY(${k * RACE_GAP}px)`; r.classList.toggle('av-lead', k === 0);
       r.children[0].textContent = k + 1;
       r.children[2].firstChild.style.width = (d.s / max * 100) + '%';
       r.children[3].textContent = pc(d.s);
@@ -1319,20 +1353,20 @@
     ms.forEach((m) => { const p = addM(m, -12); if (p >= MESES[0]) prevVals[m] = cur[p]; });
     document.getElementById('t-mensal').textContent = `${tipo} mensal · ${categoria === 'Todas' ? 'todas as categorias' : categoria}`;
     chart(document.getElementById('ch-mensal'), {
-      months: ms, bars: { name: tipo, color: C.accent, values: cur },
-      lines: Object.keys(prevVals).length ? [{ name: 'Ano anterior', color: C.sand, values: prevVals, dash: true }] : [],
+      months: ms, bars: { name: tipo, color: C.fg, last: C.accent, values: cur },
+      lines: Object.keys(prevVals).length ? [{ name: 'Ano anterior', color: C.accent, values: prevVals, dash: true }] : [],
     });
     // minigráficos dos KPIs
     const ser = Object.fromEntries(tipos.map((t) => [t, byM(t)]));
-    tipos.forEach((t, i) => spark(document.getElementById(`k${i + 1}s`), ms.map((m) => ser[t][m])));
-    spark(document.getElementById('k4s'), ms.map((m) => (ser['Produção'][m] ? ser['Exportação'][m] / ser['Produção'][m] : 0)), C.sand);
+    tipos.forEach((t, i) => spark(document.getElementById(`k${i + 1}s`), ms.map((m) => ser[t][m]), C.fg));
+    spark(document.getElementById('k4s'), ms.map((m) => (ser['Produção'][m] ? ser['Exportação'][m] / ser['Produção'][m] : 0)), C.fg);
     // produção contra mercado, com a faixa da diferença
     const fl = [
-      { name: 'Produção', color: C.accent, values: ser['Produção'] },
-      { name: 'Emplacamento', color: C.sand, values: ser['Emplacamento'] },
+      { name: 'Produção', color: C.fg, values: ser['Produção'] },
+      { name: 'Emplacamento', color: C.accent, values: ser['Emplacamento'] },
       { name: 'Exportação', color: C.muted, values: ser['Exportação'], dash: true },
     ];
-    legend(document.getElementById('lg-fluxo'), [...fl.map((s) => ({ name: s.name, color: s.color, line: true })), { name: 'produziu mais', color: 'rgba(143,201,165,.45)' }, { name: 'emplacou mais', color: 'rgba(224,150,138,.5)' }]);
+    legend(document.getElementById('lg-fluxo'), [...fl.map((s) => ({ name: s.name, color: s.color, line: true })), { name: 'produziu mais', color: `color-mix(in srgb, ${C.up} 40%, transparent)` }, { name: 'emplacou mais', color: `color-mix(in srgb, ${C.down} 40%, transparent)` }]);
     chart(document.getElementById('ch-fluxo'), {
       months: ms, lines: fl, gap: ['Produção', 'Emplacamento'],
       tipExtra: (m) => [[null, 'Produção − emplacamento', (ser['Produção'][m] || 0) - (ser['Emplacamento'][m] || 0)]],
@@ -1618,6 +1652,7 @@
   // ---------- desenho ----------
   const markSeg = (id, v) => document.querySelectorAll(`#${id} button`).forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.v === v)));
   function draw() {
+    readTok();
     const series = rowsOf('series');
     const status = dash.data('series').status;
     placeAll();
@@ -1667,7 +1702,50 @@
     t += p.categoria !== 'Todas' ? ` (recorte: ${p.categoria.toLowerCase()}).` : '.';
     t += ' Fonte: ANFAVEA, Central de Dados; emplacamento via Renavam/Senatran.';
     setTxt('takeaway', t);
+    setTxt('ed', `Dados até ${MES[+last.slice(5) - 1]}/${last.slice(0, 4)}`);
+
+    // letreiro: os números do período rodando no topo
+    const items = [];
+    const chg = (cur, prev) => (prev ? [(cur >= prev ? '▲ ' : '▼ ') + sgn(cur / prev - 1).replace(/^[+−]/, '') + '%', cur >= prev] : null);
+    const chgPP = (d) => (d == null ? null : [(d >= 0 ? '▲ ' : '▼ ') + sgn(d).replace(/^[+−]/, '') + ' p.p.', d >= 0]);
+    items.push(['Emplacamento', big(m.e), chg(m.e, m.ep)], ['Produção', big(m.pr), chg(m.pr, m.pp)], ['Exportação', big(m.ex), chg(m.ex, m.exp)]);
+    if (comb) {
+      const sh = (a1, b1) => { const bs = comb.filter((r) => LEVES.includes(r.categoria) && inWin(r.periodo, a1, b1)); return sum(bs, (r) => ['Elétrico', 'Híbrido Plug-In', 'Híbrido'].includes(r.combustivel)) / (sum(bs, () => true) || 1); };
+      const e1 = sh(a, b);
+      items.push(['Eletrificados (leves)', pc(e1), chgPP(pa >= MESES[0] ? e1 - sh(pa, pb) : null)]);
+    }
+    const proc = rowsOf('procedencia');
+    if (proc) {
+      const sh = (a1, b1) => sum(proc, (r) => r.procedencia === 'Importado' && inWin(r.periodo, a1, b1)) / (sum(proc, (r) => inWin(r.periodo, a1, b1)) || 1);
+      const i1 = sh(a, b);
+      items.push(['Importados', pc(i1), chgPP(pa >= MESES[0] ? i1 - sh(pa, pb) : null)]);
+    }
+    if (marcas) {
+      const bs = marcas.filter((r) => inWin(r.periodo, a, b) && r.marca !== 'OUTRAS MARCAS');
+      const tot = d3.sum(bs, (r) => r.valor);
+      const top = d3.rollups(bs, (v) => d3.sum(v, (r) => r.valor), (r) => r.marca).sort((x, y) => y[1] - x[1]).slice(0, 3);
+      top.forEach(([mk, v], k) => items.push([`${k + 1}º ${nice(mk)}`, pc(tot ? v / tot : 0), null]));
+    }
+    const key = items.map((x) => x.flat().join()).join('|');
+    const tk = document.getElementById('ticker');
+    if (tk._key !== key) {
+      tk._key = key;
+      const one = () => items.map(([l, v, c]) => {
+        const sp = document.createElement('span');
+        const b1 = document.createElement('b'); b1.textContent = l;
+        sp.append(b1, document.createTextNode(v));
+        if (c) { const i = document.createElement('i'); i.textContent = c[0]; i.className = c[1] ? 'av-up' : 'av-down'; sp.append(i); }
+        return sp;
+      });
+      tk.replaceChildren(...one(), ...one());
+      tk.style.animationDuration = Math.max(40, items.length * 9) + 's';
+    }
   }
+
+  // troca de tema da página: redesenha com as cores do novo tema, sem animar
+  const reTheme = () => requestAnimationFrame(() => draw());
+  if (window.matchMedia) matchMedia('(prefers-color-scheme: dark)').addEventListener('change', reTheme);
+  new MutationObserver(reTheme).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme', 'class'] });
 
   document.getElementById('busca-marca').addEventListener('input', () => draw());
   showTab(tab, false);

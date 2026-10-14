@@ -1,81 +1,147 @@
 <style>
-  .av { display: grid; gap: var(--cds-gap-lg); font-family: var(--font-anthropic-sans); color: var(--color-fg); }
-  .av-head { display: grid; gap: var(--cds-gap-xs); }
-  .av-title { font-family: var(--font-anthropic-serif); font-weight: 400; font-size: var(--cds-font-size-title); margin: 0; text-wrap: balance; }
-  .av-take { margin: 0; color: var(--color-fg-muted); font-size: var(--cds-font-size-body); max-width: 72ch; line-height: 1.5; }
-  .av-src { margin: 0; color: var(--color-fg-muted); font-size: var(--cds-font-size-caption); }
+  @import url("https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,300..800&family=IBM+Plex+Mono:wght@400;500&display=swap");
+  /* Grafite (Design System): tela escura de painel, vidro só na navegação, um destaque azul aço */
+  .av {
+    --bg: #15181b; --surface-1: #1b1f23; --surface-2: #23282d; --line: rgba(255,255,255,.08); --grid: rgba(255,255,255,.07);
+    --fg: #e9e7e2; --muted: #8f969d; --accent: #8fb3d9; --accent-2: #c9b48a; --on-accent: #0f1418; --up: #8fc9a5; --down: #e0968a;
+    --glass-tint: rgba(40,45,52,.42); --glass-edge: rgba(255,255,255,.14); --glass-specular: rgba(255,255,255,.16); --glass-pill: rgba(255,255,255,.12);
+    --shadow-glass: inset 0 1px 0 rgba(255,255,255,.22), inset 0 -1px 1px rgba(0,0,0,.40), 0 10px 30px -8px rgba(0,0,0,.35);
+    --shadow-pill: inset 0 1px 0 rgba(255,255,255,.22), 0 2px 8px rgba(0,0,0,.18);
+    --font-display: "Archivo", system-ui, sans-serif; --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+    --spring: cubic-bezier(.2,.9,.25,1.05); --ease: cubic-bezier(.3,.8,.25,1);
+    color-scheme: dark;
+    position: relative; display: grid; gap: 20px; padding: 24px clamp(14px, 3vw, 28px) 0;
+    border-radius: 22px; border: 1px solid var(--line);
+    background-color: var(--bg);
+    background-image: radial-gradient(700px 320px at 90% -8%, rgba(143,179,217,.14), transparent 60%), radial-gradient(600px 300px at -10% 105%, rgba(201,180,138,.08), transparent 60%);
+    color: var(--fg); font-family: var(--font-display); font-size: 14px; line-height: 1.5; -webkit-font-smoothing: antialiased;
+  }
+  @supports (transition-timing-function: linear(0, 1)) { .av { --spring: linear(0,.009,.035 2.1%,.141 4.4%,.723 12.9%,.938 16.7%,1.017 19.4%,1.067,1.099 24.3%,1.104 26.9%,1.077 30.8%,1.017 38.5%,.994 43.5%,.991 50.5%,1.001 70%,1); } }
+  .av :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .av-head { display: grid; gap: 8px; }
+  .av-eyebrow { font: 500 11.5px/1.3 var(--font-display); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+  .av-title { margin: 0; font: 600 clamp(26px, 4vw, 38px)/1.05 var(--font-display); font-stretch: 112%; letter-spacing: -.015em; text-wrap: balance; }
 
-  .av-filters { display: flex; flex-wrap: wrap; gap: var(--cds-gap-md); align-items: flex-end; padding: var(--cds-pad-md); background: var(--color-panel); border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); }
-  .av-field { display: grid; gap: var(--cds-gap-xs); min-width: 0; }
-  .av-field > span { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); letter-spacing: .02em; }
-  .av-field select { font: inherit; font-size: var(--cds-font-size-body); padding: var(--cds-pad-xs) var(--cds-pad-sm); border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); background: var(--color-bg); color: var(--color-fg); max-width: 100%; }
-  .av-range { display: flex; gap: var(--cds-gap-xs); align-items: center; flex-wrap: wrap; }
-  .av-seg { display: inline-flex; flex-wrap: wrap; border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); overflow: hidden; }
-  .av-seg button { font: inherit; font-size: var(--cds-font-size-body); padding: var(--cds-pad-xs) var(--cds-pad-sm); background: var(--color-bg); color: var(--color-fg-muted); border: 0; border-right: 1px solid var(--color-border-line); cursor: pointer; }
-  .av-seg button:last-child { border-right: 0; }
-  .av-seg button[aria-pressed="true"] { background: var(--color-fg); color: var(--color-bg); }
-  .av-seg button:focus-visible, .av-tabs button:focus-visible, .av-link:focus-visible { outline: 2px solid var(--color-fg); outline-offset: 2px; }
-  .av-reset { font: inherit; font-size: var(--cds-font-size-caption); background: none; border: 0; color: var(--color-fg-muted); text-decoration: underline; cursor: pointer; padding: var(--cds-pad-xs) 0; }
+  /* vidro líquido */
+  .av-glass { position: relative; isolation: isolate; background: var(--glass-tint); -webkit-backdrop-filter: blur(16px) saturate(180%); backdrop-filter: blur(16px) saturate(180%); border: 1px solid var(--glass-edge); box-shadow: var(--shadow-glass); }
+  .av-glass::before { content: ""; position: absolute; inset: 0; border-radius: inherit; z-index: -1; pointer-events: none; background: radial-gradient(120px 60px at var(--mx, 30%) var(--my, 0%), var(--glass-specular), transparent 70%); }
 
-  .av-tabs { display: flex; gap: var(--cds-gap-xs); flex-wrap: wrap; border-bottom: 1px solid var(--color-border-line); }
-  .av-tabs button { font: inherit; font-size: var(--cds-font-size-body); background: none; border: 0; border-bottom: 2px solid transparent; padding: var(--cds-pad-sm) var(--cds-pad-md); color: var(--color-fg-muted); cursor: pointer; margin-bottom: -1px; }
-  .av-tabs button[aria-selected="true"] { color: var(--color-fg); border-bottom-color: var(--color-fg); font-weight: var(--cds-font-weight-medium); }
+  /* filtros */
+  .av-filters { display: flex; flex-wrap: wrap; gap: 14px 18px; align-items: flex-end; padding: 14px 16px; border-radius: 18px; }
+  .av-field { display: grid; gap: 6px; min-width: 0; max-width: 100%; }
+  .av-field > span:first-child { font: 500 11px/1.2 var(--font-display); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+  .av select { font: 500 13px var(--font-display); padding: 7px 10px; border: 1px solid var(--line); border-radius: 999px; background: rgba(255,255,255,.04); color: var(--fg); max-width: 100%; }
+  .av select option { background: var(--surface-1); color: var(--fg); }
+  .av-range { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; color: var(--muted); }
+  .av-seg { position: relative; display: inline-flex; gap: 2px; padding: 4px; border-radius: 999px; background: rgba(255,255,255,.04); border: 1px solid var(--line); max-width: 100%; overflow-x: auto; scrollbar-width: none; }
+  .av-seg::-webkit-scrollbar { display: none; }
+  .av-seg button { position: relative; z-index: 1; flex: none; font: 500 12.5px/1.2 var(--font-display); padding: 7px 12px; border: 0; border-radius: 999px; background: none; color: var(--muted); cursor: pointer; white-space: nowrap; transition: color .3s; }
+  .av-seg button[aria-pressed="true"], .av-seg button[aria-selected="true"] { color: var(--fg); }
+  .av-pill { position: absolute; z-index: 0; top: 4px; left: 0; width: 0; height: 0; border-radius: 999px; background: var(--glass-pill); box-shadow: var(--shadow-pill); opacity: 0; transition: left .6s var(--spring), width .6s var(--spring), opacity .2s; pointer-events: none; }
+  .av-reset { font: 500 12.5px var(--font-display); background: none; border: 0; color: var(--muted); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; padding: 8px 0; }
 
-  .av-page { display: grid; gap: var(--cds-gap-lg); }
-  .av-insight { margin: 0; font-size: var(--cds-font-size-body); line-height: 1.5; max-width: 80ch; }
-  .av-note { margin: 0; font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
+  /* chips de insight e ⓘ */
+  .av-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .av-chip-i { position: relative; display: inline-flex; align-items: center; gap: 8px; max-width: 100%; padding: 6px 6px 6px 12px; border-radius: 999px; background: var(--surface-1); border: 1px solid var(--line); font: 500 12.5px/1.35 var(--font-display); }
+  .av-chip-h { min-width: 0; }
+  .av-info { position: relative; display: inline-flex; flex: none; }
+  .av-ib { width: 22px; height: 22px; border-radius: 50%; border: 1px solid var(--line); background: transparent; color: var(--muted); font: 600 12px var(--font-display); cursor: pointer; padding: 0; }
+  .av-ib:hover, .av-info.is-open .av-ib { color: var(--fg); border-color: var(--glass-edge); }
+  .av-pop { position: absolute; left: 0; top: calc(100% + 8px); z-index: 20; width: min(320px, 80vw); padding: 12px 14px; border-radius: 16px; font: 400 12.5px/1.5 var(--font-display); color: var(--fg); background: rgba(30,34,39,.78); -webkit-backdrop-filter: blur(18px) saturate(180%); backdrop-filter: blur(18px) saturate(180%); border: 1px solid var(--glass-edge); box-shadow: var(--shadow-glass); opacity: 0; transform: translateY(-4px) scale(.98); transform-origin: top left; pointer-events: none; transition: opacity .2s, transform .35s var(--spring); text-transform: none; letter-spacing: 0; white-space: normal; }
+  .av-info.av-r .av-pop { left: auto; right: 0; transform-origin: top right; }
+  .av-info.is-open .av-pop { opacity: 1; transform: none; pointer-events: auto; }
+  .av-marca-chip { font: 500 12.5px var(--font-display); border: 1px solid var(--accent); background: rgba(143,179,217,.12); color: var(--fg); border-radius: 999px; padding: 6px 12px; cursor: pointer; }
 
-  .av-kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr)); gap: var(--cds-gap-md); }
-  .av-kpi { background: var(--color-panel); border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); padding: var(--cds-pad-md) var(--cds-pad-lg); display: grid; gap: var(--cds-gap-xs); align-content: start; min-height: 6.5rem; }
-  .av-kpi-l { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
-  .av-kpi-v { font-family: var(--font-anthropic-serif); font-weight: 400; font-size: var(--cds-font-size-title); font-variant-numeric: tabular-nums; line-height: 1.1; }
-  .av-kpi-d { font-size: var(--cds-font-size-caption); font-variant-numeric: tabular-nums; color: var(--color-fg-muted); }
-  .av-up { color: var(--color-ok); } .av-down { color: var(--color-bad); }
-
-  .av-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 24rem), 1fr)); gap: var(--cds-gap-md); }
-  .av-card { background: var(--color-panel); border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); padding: var(--cds-pad-lg); display: grid; gap: var(--cds-gap-sm); align-content: start; min-width: 0; }
-  .av-card h3 { margin: 0; font-size: var(--cds-font-size-heading); font-weight: var(--cds-font-weight-medium); }
-  .av-card .av-sub { margin: 0; font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
+  /* páginas */
+  .av-page { display: grid; gap: 16px; }
+  .av-page.av-in { animation: av-view .55s cubic-bezier(.2,.7,.2,1) both; }
+  @keyframes av-view { from { opacity: 0; transform: translateY(10px); filter: blur(6px); } to { opacity: 1; transform: none; filter: none; } }
+  .av-kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr)); gap: 12px; }
+  .av-kpi { display: grid; gap: 4px; align-content: start; min-width: 0; padding: 14px 16px; border-radius: 16px; background: var(--surface-1); border: 1px solid var(--line); }
+  .av-kpi-l { font: 500 11.5px/1.3 var(--font-display); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+  .av-kpi-v { font: 600 30px/1.15 var(--font-display); font-stretch: 112%; letter-spacing: -.01em; font-variant-numeric: tabular-nums; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .av-kpi-d { font: 500 12px/1.4 var(--font-mono); font-variant-numeric: tabular-nums; color: var(--muted); }
+  .av-up { color: var(--up) !important; } .av-down { color: var(--down) !important; }
+  .av-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 24rem), 1fr)); gap: 16px; }
+  .av-card { display: grid; gap: 10px; align-content: start; min-width: 0; padding: 16px; border-radius: 16px; background: var(--surface-1); border: 1px solid var(--line); }
+  .av-card-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 12px; }
+  .av-card-head > div { display: flex; align-items: center; gap: 8px; min-width: 0; }
+  .av-card h3 { margin: 0; font: 600 14px/1.3 var(--font-display); letter-spacing: .02em; }
   .av-chart { position: relative; min-height: 260px; }
   .av-chart.av-tall { min-height: 320px; }
-  .av-legend { display: flex; flex-wrap: wrap; gap: var(--cds-gap-sm) var(--cds-gap-md); font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
-  .av-legend i { display: inline-block; width: .7rem; height: .7rem; border-radius: 2px; margin-right: .35rem; vertical-align: -1px; }
-  .av-legend i.av-ln { height: 2px; vertical-align: 3px; }
+  .av-chart text { font-family: var(--font-mono); }
+  .av-legend { display: flex; flex-wrap: wrap; gap: 6px 14px; font: 500 11.5px var(--font-display); color: var(--muted); }
+  .av-legend i { display: inline-block; width: 9px; height: 9px; border-radius: 3px; margin-right: 6px; vertical-align: -1px; }
+  .av-legend i.av-ln { height: 2px; width: 12px; vertical-align: 3px; }
+  .av-tt { position: absolute; z-index: 6; pointer-events: none; padding: 8px 10px; border-radius: 12px; font: 500 12px/1.45 var(--font-mono); font-variant-numeric: tabular-nums; white-space: nowrap; color: var(--fg); background: rgba(30,34,39,.78); -webkit-backdrop-filter: blur(18px) saturate(180%); backdrop-filter: blur(18px) saturate(180%); border: 1px solid var(--glass-edge); box-shadow: var(--shadow-glass); }
+  .av-tt b { display: block; color: var(--muted); font-weight: 400; margin-bottom: 2px; }
+  .av-tt i { display: inline-block; width: 8px; height: 8px; border-radius: 2px; margin-right: 6px; }
 
-  .av-tt { position: absolute; pointer-events: none; background: var(--cds-surface-popover); border: 1px solid var(--cds-border); border-radius: var(--cds-radius); box-shadow: var(--cds-shadow-popover); padding: var(--cds-pad-xs) var(--cds-pad-sm); font-size: var(--cds-font-size-caption); font-variant-numeric: tabular-nums; white-space: nowrap; z-index: 2; }
-  .av-tt b { display: block; color: var(--cds-text-secondary); font-weight: 400; margin-bottom: 2px; }
-  .av-tt i { display: inline-block; width: .55rem; height: .55rem; border-radius: 2px; margin-right: .3rem; }
-
-  .av-tablebox { max-height: 30rem; overflow: auto; border-top: 1px solid var(--color-border-line); }
-  .av-table { width: 100%; border-collapse: collapse; font-size: var(--cds-font-size-body); font-variant-numeric: tabular-nums; }
-  .av-table th { position: sticky; top: 0; background: var(--color-panel); text-align: right; font-weight: var(--cds-font-weight-medium); font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); padding: var(--cds-pad-xs) var(--cds-pad-sm); border-bottom: 1px solid var(--color-border-line); white-space: nowrap; z-index: 1; }
-  .av-table th button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+  /* tabelas */
+  .av-tablebox { max-height: 30rem; overflow: auto; border-top: 1px solid var(--line); }
+  .av-table { width: 100%; border-collapse: collapse; font-size: 13px; font-variant-numeric: tabular-nums; }
+  .av-table th { position: sticky; top: 0; z-index: 1; background: var(--surface-1); text-align: right; font: 500 11px var(--font-display); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); padding: 8px 10px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+  .av-table th button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; letter-spacing: inherit; text-transform: inherit; }
   .av-table th:first-child, .av-table td:first-child, .av-table th.av-l, .av-table td.av-l { text-align: left; }
-  .av-table td { text-align: right; padding: var(--cds-pad-xs) var(--cds-pad-sm); border-bottom: 1px solid var(--color-border-line); white-space: nowrap; }
+  .av-table td { text-align: right; padding: 7px 10px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+  .av-table td.av-num { font-family: var(--font-mono); font-size: 12.5px; }
+  .av-table tbody tr { transition: background .2s; }
   .av-table tbody tr.av-click { cursor: pointer; }
-  .av-table tbody tr.av-click:hover { background: var(--color-bg); }
-  .av-table tbody tr.av-sel { background: var(--color-bg); font-weight: var(--cds-font-weight-medium); }
-  .av-bar { display: inline-block; height: .55rem; border-radius: 3px; background: var(--cds-chart-muted); vertical-align: middle; margin-right: .4rem; }
-  .av-search { font: inherit; font-size: var(--cds-font-size-body); padding: var(--cds-pad-xs) var(--cds-pad-sm); border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); background: var(--color-bg); color: var(--color-fg); max-width: 16rem; width: 100%; }
-  .av-row { display: flex; flex-wrap: wrap; gap: var(--cds-gap-sm); align-items: center; justify-content: space-between; }
-  .av-chip { font: inherit; font-size: var(--cds-font-size-caption); border: 1px solid var(--color-border-line); background: var(--color-bg); color: var(--color-fg); border-radius: 999px; padding: 2px var(--cds-pad-sm); cursor: pointer; }
+  .av-table tbody tr.av-click:hover, .av-table tbody tr.av-sel { background: var(--surface-2); }
+  .av-table tbody tr.av-sel { box-shadow: inset 2px 0 0 var(--accent); }
+  .av-table tbody tr:hover .av-logo { color: var(--brand, var(--fg)); }
+  .av-bar { display: inline-block; height: 6px; border-radius: 3px; background: linear-gradient(90deg, rgba(143,179,217,.5), var(--accent)); vertical-align: middle; margin-right: 8px; }
+  .av-search { font: 500 13px var(--font-display); padding: 7px 12px; border: 1px solid var(--line); border-radius: 999px; background: rgba(255,255,255,.04); color: var(--fg); max-width: 16rem; width: 100%; }
+  .av-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: space-between; }
+
+  /* logos */
+  .av-logo { display: inline-grid; place-items: center; width: 26px; height: 26px; border-radius: 8px; background: var(--surface-2); border: 1px solid var(--line); color: var(--fg); vertical-align: middle; margin-right: 8px; transition: color .3s; flex: none; }
+  .av-logo svg { width: 15px; height: 15px; fill: currentColor; }
+  .av-logo b { font: 700 7.5px/1 var(--font-display); letter-spacing: .02em; text-align: center; overflow: hidden; max-width: 24px; }
+
+  /* disputa de share */
+  .av-race { position: relative; }
+  .av-race-row { position: absolute; left: 0; right: 0; height: 32px; display: grid; grid-template-columns: 20px 28px minmax(0, 1fr) 58px 54px; align-items: center; gap: 10px; transition: transform .75s var(--ease), opacity .5s; }
+  .av-race-row:hover .av-logo { color: var(--brand, var(--fg)); }
+  .av-race-row .av-logo { margin: 0; }
+  .av-race-pos { font: 500 11px var(--font-mono); color: var(--muted); text-align: right; font-variant-numeric: tabular-nums; }
+  .av-race-bar { position: relative; height: 20px; min-width: 0; }
+  .av-race-bar i { position: absolute; left: 0; top: 0; bottom: 0; width: 0; border-radius: 6px; background: linear-gradient(90deg, rgba(143,179,217,.55), var(--accent)); transition: width .75s var(--ease); }
+  .av-race-bar span { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); font: 500 12px var(--font-display); color: var(--on-accent); white-space: nowrap; letter-spacing: .02em; text-shadow: 0 0 6px rgba(143,179,217,.6); }
+  .av-race-sh { font: 500 13px var(--font-mono); text-align: right; font-variant-numeric: tabular-nums; }
+  .av-race-d { font: 500 11.5px var(--font-mono); text-align: right; font-variant-numeric: tabular-nums; color: var(--muted); }
+  .av-scrub { display: flex; align-items: center; gap: 10px; }
+  .av-scrub input { flex: 1; min-width: 0; accent-color: var(--accent); }
+  .av-play { width: 34px; height: 34px; flex: none; border-radius: 50%; display: grid; place-items: center; cursor: pointer; color: var(--fg); padding: 0; }
+  .av-play svg { width: 12px; height: 12px; fill: currentColor; }
+  .av-mlabel { font: 500 12.5px var(--font-mono); min-width: 56px; text-align: right; }
+
+  /* dock */
+  .av-dock { position: sticky; bottom: 16px; z-index: 10; justify-self: center; margin: 4px 0 18px; padding: 6px; border-radius: 999px; max-width: calc(100% - 8px); }
+  .av-dock.av-seg { background: var(--glass-tint); border-color: var(--glass-edge); }
+  .av-dock button { padding: 10px 16px; font-size: 13px; }
+  @media (max-width: 560px) { .av-dock button { padding: 9px 10px; font-size: 12px; } }
+
   .av-hide-narrow { }
   @container (max-width: 560px) { .av-hide-narrow { display: none; } }
   .av-cq { container-type: inline-size; }
-  .av-fail { display: flex; align-items: center; justify-content: center; gap: .5rem; min-height: inherit; color: var(--color-fg-muted); font-size: var(--cds-font-size-caption); }
-  .av-fail::before { content: ""; width: .375rem; height: .375rem; border-radius: 50%; background: var(--color-bad); }
-  [data-dash-source-state=refreshing] { opacity: .5; transition: opacity var(--cds-dur-slow); }
-  [data-dash-source-state=empty] { color: transparent; }
+  .av-fail { display: flex; align-items: center; justify-content: center; gap: .5rem; min-height: inherit; color: var(--muted); font-size: 12px; }
+  .av-fail::before { content: ""; width: .375rem; height: .375rem; border-radius: 50%; background: var(--down); }
+  .av [data-dash-source-state=refreshing] { opacity: .5; transition: opacity .4s; }
+  .av [data-dash-source-state=empty] { color: transparent; }
+  @media (prefers-reduced-motion: reduce) { .av *, .av *::before { animation-duration: .01ms !important; transition-duration: .01ms !important; } }
 </style>
 
-<div class="av">
+<div class="av" id="av">
   <header class="av-head" id="topo">
+    <div class="av-eyebrow">ANFAVEA · Central de Dados · unidades por mês</div>
     <h1 class="av-title">Autoveículos no Brasil</h1>
-    <p class="av-take dash-skeleton" id="takeaway" data-source="series">—</p>
-    <p class="av-src">ANFAVEA, Central de Dados. Unidades por mês. Emplacamento: Renavam/Senatran.</p>
+    <div class="av-chips">
+      <div class="av-chip-i" data-source="series"><span class="av-chip-h" id="takeaway-h">—</span><span class="av-info"><button type="button" class="av-ib" aria-label="Resumo completo" aria-expanded="false">i</button><span class="av-pop" id="takeaway">—</span></span></div>
+    </div>
   </header>
 
-  <section class="av-filters" id="filtros" aria-label="Filtros">
+  <section class="av-filters av-glass" id="filtros" aria-label="Filtros">
     <label class="av-field"><span>Período</span>
       <span class="av-range">
         <select id="f-inicio" aria-label="Mês inicial" data-source="series"></select>
@@ -113,17 +179,9 @@
     <button type="button" class="av-reset" id="f-reset">Limpar filtros</button>
   </section>
 
-  <nav class="av-tabs" role="tablist" aria-label="Seções">
-    <button type="button" role="tab" data-tab="mercado" id="tab-mercado">Mercado</button>
-    <button type="button" role="tab" data-tab="marcas" id="tab-marcas">Marcas</button>
-    <button type="button" role="tab" data-tab="eletrificacao" id="tab-eletrificacao">Eletrificação</button>
-    <button type="button" role="tab" data-tab="importados" id="tab-importados">Importados</button>
-    <button type="button" role="tab" data-tab="caminhoes" id="tab-caminhoes">Caminhões</button>
-  </nav>
-
   <!-- MERCADO -->
   <section class="av-page" id="mercado" role="tabpanel" aria-labelledby="tab-mercado">
-    <p class="av-insight" id="ins-mercado" data-source="series">—</p>
+    <div class="av-chips"><div class="av-chip-i" data-source="series"><span class="av-chip-h" id="h-mercado">—</span><span class="av-info"><button type="button" class="av-ib" aria-label="Detalhes" aria-expanded="false">i</button><span class="av-pop" id="ins-mercado">—</span></span></div></div>
     <div class="av-kpis" id="kpi-mercado">
       <div class="av-kpi" data-source="series"><span class="av-kpi-l" id="k1l">Emplacamento</span><span class="av-kpi-v dash-skeleton" id="k1v">—</span><span class="av-kpi-d" id="k1d"></span></div>
       <div class="av-kpi" data-source="series"><span class="av-kpi-l" id="k2l">Produção</span><span class="av-kpi-v dash-skeleton" id="k2v">—</span><span class="av-kpi-d" id="k2d"></span></div>
@@ -132,35 +190,33 @@
     </div>
     <div class="av-grid">
       <article class="av-card" id="card-mensal">
-        <h3 id="t-mensal">Volume mensal</h3>
-        <p class="av-sub" id="s-mensal">Barras: período escolhido. Linha: mesmo mês do ano anterior.</p>
+        <div class="av-card-head"><div><h3 id="t-mensal">Volume mensal</h3><span class="av-info"><button type="button" class="av-ib" aria-label="Sobre o gráfico" aria-expanded="false">i</button><span class="av-pop" id="s-mensal">Barras: período escolhido. Linha tracejada: mesmo mês do ano anterior.</span></span></div></div>
         <div class="av-chart dash-skeleton" id="ch-mensal" data-source="series"></div>
       </article>
       <article class="av-card" id="card-fluxo">
-        <h3>Produção, mercado interno e exportação</h3>
-        <p class="av-sub">Quando o emplacamento passa a produção, a diferença vem de importados e estoque.</p>
+        <div class="av-card-head"><div><h3>Produção, mercado e exportação</h3><span class="av-info"><button type="button" class="av-ib" aria-label="Sobre o gráfico" aria-expanded="false">i</button><span class="av-pop">Quando o emplacamento passa a produção, a diferença vem de importados e estoque.</span></span></div></div>
         <div class="av-legend" id="lg-fluxo"></div>
         <div class="av-chart dash-skeleton" id="ch-fluxo" data-source="series"></div>
       </article>
     </div>
     <article class="av-card av-cq" id="card-cat">
-      <h3 id="t-cat">Por categoria</h3>
-      <p class="av-sub" id="s-cat">—</p>
+      <div class="av-card-head"><div><h3 id="t-cat">Por categoria</h3><span class="av-info"><button type="button" class="av-ib" aria-label="Sobre a tabela" aria-expanded="false">i</button><span class="av-pop" id="s-cat">—</span></span></div></div>
       <div class="av-tablebox" data-source="series"><table class="av-table" id="tb-cat"></table></div>
     </article>
   </section>
 
   <!-- MARCAS -->
   <section class="av-page" id="marcas" role="tabpanel" aria-labelledby="tab-marcas" hidden>
-    <p class="av-note" id="nota-marcas">Emplacamento por marca existe na ANFAVEA só a partir de jan/2026. Antes disso, este recorte usa o período disponível.</p>
-    <p class="av-insight" id="ins-marcas" data-source="marcas">—</p>
     <div class="av-row">
+      <div class="av-chips">
+        <div class="av-chip-i" data-source="marcas"><span class="av-chip-h" id="h-marcas">—</span><span class="av-info"><button type="button" class="av-ib" aria-label="Detalhes" aria-expanded="false">i</button><span class="av-pop"><span id="ins-marcas">—</span><br><br><span id="nota-marcas">Emplacamento por marca existe na ANFAVEA só a partir de jan/2026.</span></span></span></div>
+        <button type="button" class="av-marca-chip" id="marca-chip" hidden></button>
+      </div>
       <div class="av-seg" id="f-proc" role="group" aria-label="Procedência">
         <button type="button" data-v="Todas">Nacional e importado</button>
         <button type="button" data-v="Nacional">Nacional</button>
         <button type="button" data-v="Importado">Importado</button>
       </div>
-      <button type="button" class="av-chip" id="marca-chip" hidden></button>
     </div>
     <div class="av-kpis" id="kpi-marcas">
       <div class="av-kpi" data-source="marcas"><span class="av-kpi-l" id="m1l">Mercado no recorte</span><span class="av-kpi-v dash-skeleton" id="m1v">—</span><span class="av-kpi-d" id="m1d"></span></div>
@@ -168,29 +224,31 @@
       <div class="av-kpi" data-source="marcas"><span class="av-kpi-l" id="m3l">5 maiores marcas</span><span class="av-kpi-v dash-skeleton" id="m3v">—</span><span class="av-kpi-d" id="m3d"></span></div>
       <div class="av-kpi" data-source="marcas"><span class="av-kpi-l" id="m4l">Marcas chinesas</span><span class="av-kpi-v dash-skeleton" id="m4v">—</span><span class="av-kpi-d" id="m4d"></span></div>
     </div>
+    <article class="av-card" id="card-race">
+      <div class="av-card-head"><div><h3>Disputa de participação, mês a mês</h3><span class="av-info"><button type="button" class="av-ib" aria-label="Sobre o gráfico" aria-expanded="false">i</button><span class="av-pop">As 10 maiores marcas de cada mês no recorte escolhido. Aperte o play ou arraste a barra para ver quem ultrapassou quem. À direita, a variação em p.p. desde o primeiro mês do recorte.</span></span></div><span class="av-mlabel" id="race-m"></span></div>
+      <div class="av-race" id="race" data-source="marcas"></div>
+      <div class="av-scrub"><button type="button" class="av-play av-glass" id="race-play" aria-label="Reproduzir meses"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2 1l9 5-9 5z"/></svg></button><input type="range" id="race-r" min="0" max="0" value="0" aria-label="Mês"></div>
+    </article>
     <div class="av-grid">
       <article class="av-card" id="card-share">
-        <h3 id="t-share">Participação mensal das maiores marcas</h3>
-        <p class="av-sub" id="s-share">Escolha uma marca no filtro ou na tabela para destacá-la.</p>
+        <div class="av-card-head"><div><h3 id="t-share">Participação mensal das maiores marcas</h3><span class="av-info"><button type="button" class="av-ib" aria-label="Sobre o gráfico" aria-expanded="false">i</button><span class="av-pop" id="s-share">Escolha uma marca no filtro ou na tabela para destacá-la.</span></span></div></div>
         <div class="av-legend" id="lg-share"></div>
         <div class="av-chart dash-skeleton" id="ch-share" data-source="marcas"></div>
       </article>
       <article class="av-card" id="card-ganhos">
-        <h3>Quem ganhou e quem perdeu participação</h3>
-        <p class="av-sub" id="s-ganhos">—</p>
+        <div class="av-card-head"><div><h3>Quem ganhou e quem perdeu</h3><span class="av-info"><button type="button" class="av-ib" aria-label="Sobre o gráfico" aria-expanded="false">i</button><span class="av-pop" id="s-ganhos">—</span></span></div></div>
         <div class="av-chart av-tall dash-skeleton" id="ch-ganhos" data-source="marcas"></div>
       </article>
     </div>
     <article class="av-card av-cq" id="card-ranking">
-      <div class="av-row"><h3>Ranking de marcas</h3><input class="av-search" id="busca-marca" type="search" placeholder="Buscar marca ou empresa" aria-label="Buscar marca ou empresa"></div>
-      <p class="av-sub">Clique numa linha para filtrar o painel pela marca. Part. = participação no recorte escolhido. Tendência = variação da participação entre o início e o fim do período. Marcas chinesas: BYD, CAOA CHANGAN, CHERY, CRRC ELETRIC, FOTON, GAC, GEELY, GREAT WALL, HIGER, JAC, JETOUR, LEAPMOTOR, MG, OMODA, SANY, SHINERAY, ZEEKR.</p>
+      <div class="av-card-head"><div><h3>Ranking de marcas</h3><span class="av-info"><button type="button" class="av-ib" aria-label="Sobre a tabela" aria-expanded="false">i</button><span class="av-pop">Clique numa linha para filtrar o painel pela marca. Part. = participação no recorte. Tendência = variação da participação entre o início e o fim do período. Chinesas: BYD, CAOA Changan, Chery, CRRC, Foton, GAC, Geely, GWM, Higer, JAC, Jetour, Leapmotor, MG, Omoda, Sany, Shineray, Zeekr.</span></span></div><input class="av-search" id="busca-marca" type="search" placeholder="Buscar marca ou empresa" aria-label="Buscar marca ou empresa"></div>
       <div class="av-tablebox" data-source="marcas"><table class="av-table" id="tb-marcas"></table></div>
     </article>
   </section>
 
   <!-- ELETRIFICAÇÃO -->
   <section class="av-page" id="eletrificacao" role="tabpanel" aria-labelledby="tab-eletrificacao" hidden>
-    <p class="av-insight" id="ins-ele" data-source="combustivel">—</p>
+    <div class="av-chips"><div class="av-chip-i" data-source="combustivel"><span class="av-chip-h" id="h-ele">—</span><span class="av-info"><button type="button" class="av-ib" aria-label="Detalhes" aria-expanded="false">i</button><span class="av-pop"><span id="ins-ele">—</span><br><br>Eletrificados = elétrico a bateria + híbrido plug-in + híbrido, na classificação da ANFAVEA.</span></span></div></div>
     <div class="av-kpis">
       <div class="av-kpi" data-source="combustivel"><span class="av-kpi-l" id="e1l">Eletrificados</span><span class="av-kpi-v dash-skeleton" id="e1v">—</span><span class="av-kpi-d" id="e1d"></span></div>
       <div class="av-kpi" data-source="combustivel"><span class="av-kpi-l">Elétricos (BEV)</span><span class="av-kpi-v dash-skeleton" id="e2v">—</span><span class="av-kpi-d" id="e2d"></span></div>
@@ -199,14 +257,12 @@
     </div>
     <div class="av-grid">
       <article class="av-card" id="card-ele">
-        <h3>Participação de eletrificados no emplacamento</h3>
-        <p class="av-sub" id="s-ele">Elétrico, híbrido plug-in e híbrido, em % do emplacamento mensal.</p>
+        <div class="av-card-head"><div><h3>Eletrificados no emplacamento</h3><span class="av-info"><button type="button" class="av-ib" aria-label="Sobre o gráfico" aria-expanded="false">i</button><span class="av-pop" id="s-ele">Elétrico, híbrido plug-in e híbrido, em % do emplacamento mensal.</span></span></div></div>
         <div class="av-legend" id="lg-ele"></div>
         <div class="av-chart dash-skeleton" id="ch-ele" data-source="combustivel"></div>
       </article>
       <article class="av-card av-cq" id="card-comb">
-        <h3>Combustíveis no período</h3>
-        <p class="av-sub" id="s-comb">—</p>
+        <div class="av-card-head"><div><h3>Combustíveis no período</h3><span class="av-info"><button type="button" class="av-ib" aria-label="Sobre a tabela" aria-expanded="false">i</button><span class="av-pop" id="s-comb">—</span></span></div></div>
         <div class="av-tablebox" data-source="combustivel"><table class="av-table" id="tb-comb"></table></div>
       </article>
     </div>
@@ -214,15 +270,14 @@
 
   <!-- IMPORTADOS -->
   <section class="av-page" id="importados" role="tabpanel" aria-labelledby="tab-importados" hidden>
-    <p class="av-insight" id="ins-imp" data-source="procedencia">—</p>
+    <div class="av-chips"><div class="av-chip-i" data-source="procedencia"><span class="av-chip-h" id="h-imp">—</span><span class="av-info"><button type="button" class="av-ib" aria-label="Detalhes" aria-expanded="false">i</button><span class="av-pop" id="ins-imp">—</span></span></div></div>
     <div class="av-kpis">
       <div class="av-kpi" data-source="procedencia"><span class="av-kpi-l">Importados no emplacamento</span><span class="av-kpi-v dash-skeleton" id="i1v">—</span><span class="av-kpi-d" id="i1d"></span></div>
       <div class="av-kpi" data-source="procedencia"><span class="av-kpi-l">Unidades importadas</span><span class="av-kpi-v dash-skeleton" id="i2v">—</span><span class="av-kpi-d" id="i2d"></span></div>
       <div class="av-kpi" data-source="procedencia"><span class="av-kpi-l">Unidades nacionais</span><span class="av-kpi-v dash-skeleton" id="i3v">—</span><span class="av-kpi-d" id="i3d"></span></div>
     </div>
     <article class="av-card" id="card-imp">
-      <h3>Participação de importados por categoria</h3>
-      <p class="av-sub">% do emplacamento mensal de cada categoria que é importado.</p>
+      <div class="av-card-head"><div><h3>Importados por categoria</h3><span class="av-info"><button type="button" class="av-ib" aria-label="Sobre o gráfico" aria-expanded="false">i</button><span class="av-pop">% do emplacamento mensal de cada categoria que é importado.</span></span></div></div>
       <div class="av-legend" id="lg-imp"></div>
       <div class="av-chart dash-skeleton" id="ch-imp" data-source="procedencia"></div>
     </article>
@@ -230,23 +285,30 @@
 
   <!-- CAMINHÕES -->
   <section class="av-page" id="caminhoes" role="tabpanel" aria-labelledby="tab-caminhoes" hidden>
-    <p class="av-insight" id="ins-cam" data-source="caminhoes">—</p>
+    <div class="av-chips"><div class="av-chip-i" data-source="caminhoes"><span class="av-chip-h" id="h-cam">—</span><span class="av-info"><button type="button" class="av-ib" aria-label="Detalhes" aria-expanded="false">i</button><span class="av-pop" id="ins-cam">—</span></span></div></div>
     <div class="av-grid">
       <article class="av-card" id="card-cam">
-        <h3 id="t-cam">Caminhões por subsegmento</h3>
-        <p class="av-sub">Volume mensal do indicador escolhido.</p>
+        <div class="av-card-head"><div><h3 id="t-cam">Caminhões por subsegmento</h3><span class="av-info"><button type="button" class="av-ib" aria-label="Sobre o gráfico" aria-expanded="false">i</button><span class="av-pop">Volume mensal do indicador escolhido.</span></span></div></div>
         <div class="av-legend" id="lg-cam"></div>
         <div class="av-chart dash-skeleton" id="ch-cam" data-source="caminhoes"></div>
       </article>
       <article class="av-card av-cq" id="card-camtb">
-        <h3>Subsegmentos no período</h3>
-        <p class="av-sub" id="s-camtb">—</p>
+        <div class="av-card-head"><div><h3>Subsegmentos no período</h3><span class="av-info"><button type="button" class="av-ib" aria-label="Sobre a tabela" aria-expanded="false">i</button><span class="av-pop" id="s-camtb">—</span></span></div></div>
         <div class="av-tablebox" data-source="caminhoes"><table class="av-table" id="tb-cam"></table></div>
       </article>
     </div>
   </section>
+
+  <nav class="av-dock av-seg av-glass" role="tablist" aria-label="Seções">
+    <button type="button" role="tab" data-tab="mercado" id="tab-mercado">Mercado</button>
+    <button type="button" role="tab" data-tab="marcas" id="tab-marcas">Marcas</button>
+    <button type="button" role="tab" data-tab="eletrificacao" id="tab-eletrificacao">Eletrificação</button>
+    <button type="button" role="tab" data-tab="importados" id="tab-importados">Importados</button>
+    <button type="button" role="tab" data-tab="caminhoes" id="tab-caminhoes">Caminhões</button>
+  </nav>
 </div>
 
+<script src="logos.js"></script>
 <script>
 (() => {
   const MES = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'];
@@ -263,6 +325,11 @@
     : mesLbl(a) + '–' + mesLbl(b));
   const LEVES = ['Automóveis', 'Comerciais leves'];
   const CHINESAS = ["BYD", "CAOA CHANGAN", "CHERY", "CRRC ELETRIC", "FOTON", "GAC", "GEELY", "GREAT WALL", "HIGER", "JAC", "JETOUR", "LEAPMOTOR", "MG", "OMODA", "SANY", "SHINERAY", "ZEEKR"];
+  // Paleta Grafite: destaque aço, comparação areia, depois tons sóbrios distintos em luminosidade
+  const CAT = ['#8fb3d9', '#c9b48a', '#8fc9a5', '#e0968a', '#b4a7d6', '#e9e7e2', '#7f8c99', '#d6c9a8'];
+  const C = { fg: '#e9e7e2', muted: '#8f969d', grid: 'rgba(255,255,255,.07)', accent: '#8fb3d9', sand: '#c9b48a', down: '#e0968a', bg: '#15181b' };
+  const RM = () => window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const root = document.getElementById('av');
 
   const rowsOf = (id) => {
     const d = dash.data(id);
@@ -272,6 +339,27 @@
   const catOk = (cat, c) => cat === 'Todas' || (cat === 'Leves' ? LEVES.includes(c) : c === cat);
   const sum = (rows, f) => rows.reduce((s, r) => (f(r) ? s + r.valor : s), 0);
   const inWin = (p, a, b) => p >= a && p <= b;
+
+  // ---------- logos ----------
+  const L = window.AV_LOGOS || { paths: {}, hex: {}, brand: {} };
+  const MONO = { 'GREAT WALL': 'GWM', 'CAOA CHANGAN': 'CHANGAN', 'CRRC ELETRIC': 'CRRC', 'OUTRAS MARCAS': '···' };
+  const lum = (h) => { const n = parseInt(h.slice(1), 16); return (0.299 * (n >> 16) + 0.587 * ((n >> 8) & 255) + 0.114 * (n & 255)) / 255; };
+  const SVGNS = 'http://www.w3.org/2000/svg';
+  function logoEl(marca) {
+    const s = document.createElement('span');
+    s.className = 'av-logo';
+    const slug = L.brand[marca];
+    if (slug && L.paths[slug]) {
+      const hex = L.hex[slug] || C.fg;
+      s.style.setProperty('--brand', lum(hex) < 0.25 ? C.fg : hex);
+      const svg = document.createElementNS(SVGNS, 'svg'); svg.setAttribute('viewBox', '0 0 24 24'); svg.setAttribute('aria-hidden', 'true');
+      const p = document.createElementNS(SVGNS, 'path'); p.setAttribute('d', L.paths[slug]); svg.append(p); s.append(svg);
+    } else {
+      const b = document.createElement('b'); b.textContent = MONO[marca] || marca.split(/[ /]/)[0].slice(0, 5); s.append(b);
+    }
+    return s;
+  }
+  const nice = (m) => ({ 'GREAT WALL': 'GWM', 'VOLKS CAMINHOES': 'VW Caminhões' }[m] || m);
 
   // ---------- estado ----------
   const P = () => dash.params();
@@ -284,6 +372,34 @@
     if (a && b && a > b) [a, b] = [b, a];
     return [a, b];
   };
+
+  // ---------- vidro: reflexo e pílula ----------
+  root.querySelectorAll('.av-glass').forEach((g) => g.addEventListener('pointermove', (e) => {
+    const r = g.getBoundingClientRect(); g.style.setProperty('--mx', (e.clientX - r.left) + 'px'); g.style.setProperty('--my', (e.clientY - r.top) + 'px');
+  }));
+  const segEls = [...root.querySelectorAll('.av-seg')];
+  segEls.forEach((s) => { const p = document.createElement('span'); p.className = 'av-pill'; s.prepend(p); });
+  const placePill = (seg) => {
+    const b = seg.querySelector('button[aria-pressed="true"], button[aria-selected="true"]'), p = seg.querySelector('.av-pill');
+    if (!p) return;
+    if (!b) { p.style.opacity = 0; return; }
+    p.style.left = b.offsetLeft + 'px'; p.style.top = b.offsetTop + 'px'; p.style.width = b.offsetWidth + 'px'; p.style.height = b.offsetHeight + 'px'; p.style.opacity = 1;
+  };
+  const placeAll = () => segEls.forEach(placePill);
+  if (document.fonts) document.fonts.ready.then(placeAll);
+
+  // ---------- popovers ⓘ ----------
+  root.addEventListener('click', (e) => {
+    const b = e.target.closest('.av-ib');
+    const openNow = b ? b.parentElement : null;
+    root.querySelectorAll('.av-info.is-open').forEach((x) => { if (x !== openNow) { x.classList.remove('is-open'); x.querySelector('.av-ib').setAttribute('aria-expanded', 'false'); } });
+    if (openNow && !e.target.closest('.av-pop')) {
+      const r = openNow.getBoundingClientRect(), rr = root.getBoundingClientRect();
+      openNow.classList.toggle('av-r', r.left - rr.left > rr.width - 340);
+      const o = openNow.classList.toggle('is-open'); b.setAttribute('aria-expanded', String(o));
+    }
+  });
+  root.addEventListener('keydown', (e) => { if (e.key === 'Escape') root.querySelectorAll('.av-info.is-open').forEach((x) => x.classList.remove('is-open')); });
 
   // ---------- controles ----------
   const segs = { 'f-tipo': 'tipo', 'f-cat': 'categoria', 'f-proc': 'procedencia' };
@@ -310,99 +426,123 @@
   document.getElementById('marca-chip').addEventListener('click', () => set({ marca: null }));
   document.getElementById('f-reset').addEventListener('click', () => dash.resetParams());
 
-  // ---------- abas ----------
+  // ---------- abas (dock) ----------
   const TABS = ['mercado', 'marcas', 'eletrificacao', 'importados', 'caminhoes'];
   let tab = TABS.includes(location.hash.slice(1)) ? location.hash.slice(1) : 'mercado';
   const showTab = (t, link) => {
+    const changed = t !== tab;
     tab = t;
     TABS.forEach((x) => {
-      document.getElementById(x).hidden = x !== t;
+      const pg = document.getElementById(x);
+      pg.hidden = x !== t;
+      if (x === t && changed && !RM()) { pg.classList.remove('av-in'); void pg.offsetWidth; pg.classList.add('av-in'); }
       document.getElementById('tab-' + x).setAttribute('aria-selected', String(x === t));
     });
     if (link) dash.setLink(t);
     draw();
   };
-  document.querySelector('.av-tabs').addEventListener('click', (e) => {
+  document.querySelector('.av-dock').addEventListener('click', (e) => {
     const b = e.target.closest('button[data-tab]');
     if (b) showTab(b.dataset.tab, true);
   });
 
+  // ---------- números com contagem ----------
+  const setNum = (id, v, fmt) => {
+    const e = document.getElementById(id);
+    e.classList.remove('dash-skeleton', 'av-up', 'av-down');
+    const from = e._v; e._v = v;
+    if (RM() || !isFinite(v) || (from != null && from === v)) { d3.select(e).interrupt(); e.textContent = fmt(v); return; }
+    const i = d3.interpolateNumber(from != null && isFinite(from) ? from : 0, v);
+    d3.select(e).transition('n').duration(from == null ? 1100 : 700).ease(d3.easeCubicOut).tween('n', () => (t) => { e.textContent = fmt(i(t)); }).on('end', () => { e.textContent = fmt(v); });
+  };
+
   // ---------- gráficos ----------
-  const css = (v) => getComputedStyle(document.getElementById('dash-root') || document.body).getPropertyValue(v).trim() || null;
   const measure = (svg, txt) => {
-    const t = svg.append('text').attr('font-size', 11).text(txt);
+    const t = svg.append('text').attr('font-size', 11).attr('font-family', 'IBM Plex Mono, ui-monospace, monospace').text(txt);
     const w = t.node().getComputedTextLength();
     t.remove();
     return w;
   };
-  const fail = (el) => { el.classList.remove('dash-skeleton'); el.replaceChildren(); const d = document.createElement('div'); d.className = 'av-fail'; d.textContent = 'Failed to load'; el.append(d); };
+  const fail = (el) => { el.classList.remove('dash-skeleton'); el.replaceChildren(); const d = document.createElement('div'); d.className = 'av-fail'; d.textContent = 'Não carregou'; el.append(d); };
+  const sigOf = (months, bars, lines) => months.join() + '|' + (bars ? months.map((m) => bars.values[m] || 0).join() : '') + '|' + lines.map((s) => s.name + ':' + months.map((m) => s.values[m] ?? '').join()).join(';');
 
   // x: lista de meses; series: [{name,color,values:{mes:v},dash?}]; bars: {name,color,values}
   function chart(el, { months, bars, lines = [], yFmt = big, height = 260, highlight = null }) {
     el.classList.remove('dash-skeleton');
     el.replaceChildren();
     if (!months.length) return;
+    const sig = sigOf(months, bars, lines) + '|' + highlight;
+    const animate = el._sig !== sig && !RM();
+    el._sig = sig;
     const W = Math.max(el.clientWidth, 280);
-    const svg = d3.select(el).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${height}`).attr('font-family', 'inherit');
+    const svg = d3.select(el).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${height}`);
     const all = [];
     if (bars) months.forEach((m) => all.push(bars.values[m] || 0));
     lines.forEach((s) => months.forEach((m) => { if (s.values[m] != null) all.push(s.values[m]); }));
     const ymax = d3.max(all) || 1;
-    const y0 = d3.scaleLinear([0, ymax], [height - 24, 8]).nice(5);
-    const ticks = y0.ticks(5);
+    const y = d3.scaleLinear([0, ymax], [height - 24, 8]).nice(5);
+    const ticks = y.ticks(5);
     const ml = Math.ceil(d3.max(ticks, (t) => measure(svg, yFmt(t)))) + 10;
     const endW = lines.some((s) => s.label) ? d3.max(lines.filter((s) => s.label), (s) => measure(svg, s.label)) + 10 : 6;
-    const x = d3.scaleBand(months, [ml, W - endW]).paddingInner(0.25).paddingOuter(0.1);
-    const y = y0;
-    const grid = css('--cds-chart-grid'), muted = css('--color-fg-muted');
+    const x = d3.scaleBand(months, [ml, W - endW]).paddingInner(0.28).paddingOuter(0.1);
     svg.append('g').selectAll('line').data(ticks).join('line')
       .attr('x1', ml).attr('x2', W - endW).attr('y1', (t) => y(t)).attr('y2', (t) => y(t))
-      .attr('stroke', grid).attr('stroke-width', 1);
+      .attr('stroke', C.grid).attr('stroke-dasharray', (t) => (t === 0 ? null : '2 4'));
     svg.append('g').selectAll('text').data(ticks).join('text')
       .attr('x', ml - 8).attr('y', (t) => y(t)).attr('dy', '0.32em').attr('text-anchor', 'end')
-      .attr('font-size', 11).attr('fill', muted).text(yFmt);
+      .attr('font-size', 11).attr('fill', C.muted).text(yFmt);
     const lw = measure(svg, 'set/26') + 8;
     const step = Math.max(1, Math.ceil(lw / x.step()));
     const lastIdx = months.length - 1;
     svg.append('g').selectAll('text').data(months.filter((m, i) => (lastIdx - i) % step === 0)).join('text')
       .attr('x', (m) => x(m) + x.bandwidth() / 2).attr('y', height - 6).attr('text-anchor', 'middle')
-      .attr('font-size', 11).attr('fill', muted).text(mesLbl);
+      .attr('font-size', 11).attr('fill', C.muted).text(mesLbl);
     if (bars) {
-      svg.append('g').selectAll('rect').data(months).join('rect')
+      const r = svg.append('g').selectAll('rect').data(months).join('rect')
         .attr('x', (m) => x(m)).attr('width', x.bandwidth())
-        .attr('y', (m) => y(bars.values[m] || 0)).attr('height', (m) => y(0) - y(bars.values[m] || 0))
-        .attr('rx', Math.min(4, x.bandwidth() / 2)).attr('fill', bars.color);
+        .attr('rx', Math.min(3, x.bandwidth() / 2))
+        .attr('fill', (m, i) => (i === lastIdx ? bars.color : d3.color(bars.color).copy({ opacity: 0.55 })));
+      if (animate) {
+        r.attr('y', y(0)).attr('height', 0).transition().duration(700).delay((m, i) => i * Math.min(18, 600 / months.length)).ease(d3.easeCubicOut)
+          .attr('y', (m) => y(bars.values[m] || 0)).attr('height', (m) => y(0) - y(bars.values[m] || 0));
+      } else r.attr('y', (m) => y(bars.values[m] || 0)).attr('height', (m) => y(0) - y(bars.values[m] || 0));
     }
-    lines.forEach((s) => {
+    lines.forEach((s, k) => {
       const pts = months.filter((m) => s.values[m] != null);
       const hi = highlight == null || highlight === s.name;
-      svg.append('path').datum(pts)
-        .attr('d', d3.line().x((m) => x(m) + x.bandwidth() / 2).y((m) => y(s.values[m])))
-        .attr('fill', 'none').attr('stroke', s.color).attr('stroke-width', hi ? 2 : 1.5)
-        .attr('stroke-opacity', hi ? 1 : 0.35)
-        .attr('stroke-linecap', 'round').attr('stroke-linejoin', 'round')
-        .attr('stroke-dasharray', s.dash ? '4 3' : null);
-      if (s.label && pts.length) {
+      const path = svg.append('path').datum(pts)
+        .attr('d', d3.line().x((m) => x(m) + x.bandwidth() / 2).y((m) => y(s.values[m])).curve(d3.curveMonotoneX))
+        .attr('fill', 'none').attr('stroke', s.color).attr('stroke-width', hi ? 2.2 : 1.4)
+        .attr('stroke-opacity', hi ? 1 : 0.3)
+        .attr('stroke-linecap', 'round').attr('stroke-linejoin', 'round');
+      if (animate && pts.length > 1) {
+        const len = path.node().getTotalLength();
+        path.attr('stroke-dasharray', `${len} ${len}`).attr('stroke-dashoffset', len)
+          .transition().delay(k * 90).duration(1300).ease(d3.easeCubicInOut).attr('stroke-dashoffset', 0)
+          .on('end', () => path.attr('stroke-dasharray', s.dash ? '4 4' : null));
+      } else if (s.dash) path.attr('stroke-dasharray', '4 4');
+      if (pts.length && hi && lines.length <= 2 && !s.dash) {
         const m = pts[pts.length - 1];
-        s._ly = y(s.values[m]);
+        svg.append('circle').attr('cx', x(m) + x.bandwidth() / 2).attr('cy', y(s.values[m])).attr('r', 3.5).attr('fill', s.color).attr('stroke', C.bg).attr('stroke-width', 2);
       }
+      if (s.label && pts.length) s._ly = y(s.values[pts[pts.length - 1]]);
     });
     const labeled = lines.filter((s) => s.label && s._ly != null).sort((a, b) => a._ly - b._ly);
     for (let i = 1; i < labeled.length; i++) if (labeled[i]._ly - labeled[i - 1]._ly < 12) labeled[i]._ly = labeled[i - 1]._ly + 12;
     labeled.forEach((s) => {
       svg.append('text').attr('x', W - endW + 6).attr('y', s._ly).attr('dy', '0.32em').attr('font-size', 11)
-        .attr('fill', s.color).attr('fill-opacity', highlight == null || highlight === s.name ? 1 : 0.5).text(s.label);
+        .attr('fill', s.color).attr('fill-opacity', highlight == null || highlight === s.name ? 1 : 0.45).text(s.label);
     });
     // tooltip
     const tt = document.createElement('div');
     tt.className = 'av-tt'; tt.hidden = true; el.append(tt);
-    const rule = svg.append('line').attr('y1', 8).attr('y2', height - 24).attr('stroke', css('--cds-chart-axis')).attr('stroke-width', 1).attr('opacity', 0);
+    const rule = svg.append('line').attr('y1', 8).attr('y2', height - 24).attr('stroke', C.accent).attr('stroke-opacity', 0.45).attr('opacity', 0);
     svg.append('g').selectAll('rect').data(months).join('rect')
       .attr('x', (m) => x(m) - (x.step() - x.bandwidth()) / 2).attr('width', x.step())
       .attr('y', 0).attr('height', height).attr('fill', 'transparent')
       .on('mousemove', (ev, m) => {
         const cx = x(m) + x.bandwidth() / 2;
-        rule.attr('x1', cx).attr('x2', cx).attr('opacity', lines.length ? 1 : 0);
+        rule.attr('x1', cx).attr('x2', cx).attr('opacity', 1);
         tt.replaceChildren();
         const h = document.createElement('b'); h.textContent = mesLbl(m); tt.append(h);
         const add = (name, color, v) => {
@@ -427,20 +567,25 @@
     el.classList.remove('dash-skeleton');
     el.replaceChildren();
     if (!items.length) return;
-    const W = Math.max(el.clientWidth, 280), rowH = 22, H = items.length * rowH + 8;
+    const sig = items.map((d) => d.label + d.v).join();
+    const animate = el._sig !== sig && !RM();
+    el._sig = sig;
+    const W = Math.max(el.clientWidth, 280), rowH = 24, H = items.length * rowH + 8;
     const svg = d3.select(el).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`);
-    const lab = d3.max(items, (d) => measure(svg, d.label)) + 10;
+    const lab = d3.max(items, (d) => measure(svg, nice(d.label))) + 10;
     const valW = d3.max(items, (d) => measure(svg, fmt(d.v))) + 8;
     const m = d3.max(items, (d) => Math.abs(d.v)) || 1;
     const x = d3.scaleLinear([-m, m], [lab + valW, W - valW]);
-    const muted = css('--color-fg-muted');
-    svg.append('line').attr('x1', x(0)).attr('x2', x(0)).attr('y1', 0).attr('y2', H).attr('stroke', css('--cds-chart-axis'));
+    svg.append('line').attr('x1', x(0)).attr('x2', x(0)).attr('y1', 0).attr('y2', H).attr('stroke', C.grid);
     const g = svg.append('g').selectAll('g').data(items).join('g').attr('transform', (d, i) => `translate(0,${i * rowH + 4})`);
-    g.append('text').attr('x', lab - 6).attr('y', rowH / 2).attr('dy', '0.32em').attr('text-anchor', 'end').attr('font-size', 11).attr('fill', 'currentColor').text((d) => d.label);
-    g.append('rect').attr('x', (d) => Math.min(x(0), x(d.v))).attr('width', (d) => Math.abs(x(d.v) - x(0))).attr('y', 4).attr('height', rowH - 8).attr('rx', 3)
-      .attr('fill', (d) => (d.v >= 0 ? dash.colors[0] : css('--cds-chart-status-critical')));
+    g.append('text').attr('x', lab - 6).attr('y', rowH / 2).attr('dy', '0.32em').attr('text-anchor', 'end').attr('font-size', 11).attr('fill', C.fg).text((d) => nice(d.label));
+    const r = g.append('rect').attr('y', 5).attr('height', rowH - 10).attr('rx', 3)
+      .attr('fill', (d) => (d.v >= 0 ? C.accent : C.down));
+    const fx = (d) => Math.min(x(0), x(d.v)), fw = (d) => Math.abs(x(d.v) - x(0));
+    if (animate) r.attr('x', x(0)).attr('width', 0).transition().duration(650).delay((d, i) => i * 35).ease(d3.easeCubicOut).attr('x', fx).attr('width', fw);
+    else r.attr('x', fx).attr('width', fw);
     g.append('text').attr('x', (d) => (d.v >= 0 ? x(d.v) + 4 : x(d.v) - 4)).attr('y', rowH / 2).attr('dy', '0.32em')
-      .attr('text-anchor', (d) => (d.v >= 0 ? 'start' : 'end')).attr('font-size', 11).attr('fill', muted).text((d) => fmt(d.v));
+      .attr('text-anchor', (d) => (d.v >= 0 ? 'start' : 'end')).attr('font-size', 11).attr('fill', C.muted).text((d) => fmt(d.v));
   }
 
   function legend(el, items) {
@@ -453,7 +598,7 @@
   }
 
   function table(el, cols, rows, opt = {}) {
-    // cols: [{key,label,fmt,left,hideNarrow,bar}]
+    // cols: [{key,label,fmt,left,hideNarrow,bar,logo,num}]
     const st = el._sort || (el._sort = { key: opt.sortKey || cols[1].key, dir: -1 });
     const sorted = rows.slice().sort((a, b) => {
       const va = a[st.key], vb = b[st.key];
@@ -480,9 +625,10 @@
       if (opt.selected && opt.selected(r)) t.classList.add('av-sel');
       cols.forEach((c) => {
         const td = document.createElement('td');
-        if (c.left) td.className = 'av-l';
+        if (c.left) td.className = 'av-l'; else if (c.key !== 'rank') td.className = 'av-num';
         if (c.hideNarrow) td.classList.add('av-hide-narrow');
         if (c.cls) { const k = c.cls(r[c.key]); if (k) td.classList.add(k); }
+        if (c.logo) td.append(logoEl(r[c.key]));
         if (c.bar) { const s = document.createElement('span'); s.className = 'av-bar'; s.style.width = (3 * r[c.key] / barMax[c.key]) + 'rem'; td.append(s); }
         td.append(document.createTextNode(c.fmt ? c.fmt(r[c.key], r) : r[c.key]));
         t.append(td);
@@ -495,8 +641,64 @@
   const setTxt = (id, t, cls) => { const e = document.getElementById(id); e.textContent = t; e.classList.remove('dash-skeleton', 'av-up', 'av-down'); if (cls) e.classList.add(cls); };
   const delta = (id, cur, prev, label) => {
     const d = dpct(cur, prev);
-    setTxt(id, d == null ? 'sem base de comparação' : sgn(d) + '% vs ' + label, upDown(d));
+    setTxt(id, d == null ? 'sem base de comparação' : (d >= 0 ? '▲ ' : '▼ ') + sgn(d).replace(/^[+−]/, '') + '% vs ' + label, upDown(d));
   };
+  const ppDelta = (id, v, label, extra = '') => setTxt(id, v == null ? 'sem base de comparação' + extra : (v >= 0 ? '▲ ' : '▼ ') + sgn(v).replace(/^[+−]/, '') + ' p.p. vs ' + label + extra, upDown(v));
+
+  // ---------- disputa de share (ranking animado) ----------
+  const race = { el: document.getElementById('race'), rows: {}, months: [], data: [], i: 0, timer: null, key: '' };
+  const raceRange = document.getElementById('race-r'), racePlay = document.getElementById('race-play'), playIco = racePlay.innerHTML;
+  const RACE_N = 10, RACE_GAP = 38;
+  function raceSet(i) {
+    race.i = i; raceRange.value = i;
+    const mo = race.months[i]; document.getElementById('race-m').textContent = mo ? mesLbl(mo) : '';
+    const top = race.data[i] || [];
+    race.el.style.height = (Math.max(top.length, 1) * RACE_GAP) + 'px';
+    const max = d3.max(race.data.flat(), (d) => d.s) || 1;
+    const seen = new Set();
+    top.forEach((d, k) => {
+      let r = race.rows[d.m];
+      if (!r) {
+        r = document.createElement('div'); r.className = 'av-race-row';
+        const pos = document.createElement('span'); pos.className = 'av-race-pos';
+        const bar = document.createElement('div'); bar.className = 'av-race-bar'; bar.append(document.createElement('i'), document.createElement('span'));
+        bar.lastChild.textContent = nice(d.m);
+        const sh = document.createElement('span'); sh.className = 'av-race-sh';
+        const dd = document.createElement('span'); dd.className = 'av-race-d';
+        r.append(pos, logoEl(d.m), bar, sh, dd);
+        r.style.transform = `translateY(${RACE_N * RACE_GAP}px)`; r.style.opacity = 0;
+        race.el.append(r); race.rows[d.m] = r; r.getBoundingClientRect();
+      }
+      seen.add(d.m);
+      r.style.opacity = 1; r.style.transform = `translateY(${k * RACE_GAP}px)`;
+      r.children[0].textContent = k + 1;
+      r.children[2].firstChild.style.width = (d.s / max * 100) + '%';
+      r.children[3].textContent = pc(d.s);
+      const dd = r.children[4]; dd.textContent = d.d == null ? '' : sgn(d.d) ; dd.className = 'av-race-d ' + (upDown(d.d) || '');
+    });
+    Object.keys(race.rows).forEach((m) => { if (!seen.has(m)) { race.rows[m].style.opacity = 0; race.rows[m].style.transform = `translateY(${RACE_N * RACE_GAP}px)`; } });
+  }
+  const raceStop = () => { clearInterval(race.timer); race.timer = null; racePlay.innerHTML = playIco; racePlay.setAttribute('aria-label', 'Reproduzir meses'); };
+  raceRange.addEventListener('input', () => { raceStop(); raceSet(+raceRange.value); });
+  racePlay.addEventListener('click', () => {
+    if (race.timer) return raceStop();
+    let i = race.i >= race.months.length - 1 ? 0 : race.i;
+    raceSet(i);
+    racePlay.innerHTML = '<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2 1h3v10H2zM7 1h3v10H7z"/></svg>'; racePlay.setAttribute('aria-label', 'Pausar');
+    race.timer = setInterval(() => { i += 1; if (i >= race.months.length) { raceStop(); return; } raceSet(i); }, RM() ? 400 : 1000);
+  });
+  function drawRace(base, ms) {
+    const byM = d3.rollup(base, (v) => d3.sum(v, (r) => r.valor), (r) => r.periodo, (r) => r.marca);
+    const first = byM.get(ms[0]) || new Map(), firstT = d3.sum([...first.values()]) || 1;
+    const data = ms.map((mo) => {
+      const mm = byM.get(mo) || new Map(), T = d3.sum([...mm.values()]) || 1;
+      return [...mm].filter(([m, v]) => v > 0 && m !== 'OUTRAS MARCAS').map(([m, v]) => ({ m, s: v / T, d: ms.length > 1 ? v / T - (first.get(m) || 0) / firstT : null }))
+        .sort((a, b) => b.s - a.s).slice(0, RACE_N);
+    });
+    const key = ms.join() + '|' + base.length + '|' + d3.sum(base, (r) => r.valor);
+    race.months = ms; race.data = data; raceRange.max = Math.max(0, ms.length - 1);
+    if (key !== race.key) { raceStop(); race.key = key; raceSet(ms.length - 1); } else raceSet(Math.min(race.i, ms.length - 1));
+  }
 
   // ---------- páginas ----------
   function drawMercado(series, a, b, pa, pb, wl, pl) {
@@ -507,14 +709,14 @@
     tipos.forEach((t, i) => {
       const cur = f(t, a, b), prev = hasPrev ? f(t, pa, pb) : 0;
       setTxt(`k${i + 1}l`, t + ' · ' + wl);
-      setTxt(`k${i + 1}v`, big(cur));
+      setNum(`k${i + 1}v`, cur, big);
       delta(`k${i + 1}d`, cur, prev, pl);
     });
     const r = f('Exportação', a, b) / (f('Produção', a, b) || 1);
     const rp = hasPrev ? f('Exportação', pa, pb) / (f('Produção', pa, pb) || 1) : null;
-    setTxt('k4l', 'Exportação sobre produção · ' + wl);
-    setTxt('k4v', pc(r));
-    setTxt('k4d', rp == null ? 'sem base de comparação' : sgn(r - rp) + ' p.p. vs ' + pl);
+    setTxt('k4l', 'Exportação ÷ produção · ' + wl);
+    setNum('k4v', r, (v) => pc(v));
+    ppDelta('k4d', rp == null ? null : r - rp, pl);
 
     const ms = MESES.filter((m) => inWin(m, a, b));
     const byM = (t, c = categoria) => Object.fromEntries(MESES.map((m) => [m, sum(series, (x) => x.tipo_dado === t && catOk(c, x.categoria) && x.periodo === m)]));
@@ -523,10 +725,10 @@
     ms.forEach((m) => { const p = addM(m, -12); if (p >= MESES[0]) prevVals[m] = cur[p]; });
     document.getElementById('t-mensal').textContent = `${tipo} mensal · ${categoria === 'Todas' ? 'todas as categorias' : categoria}`;
     chart(document.getElementById('ch-mensal'), {
-      months: ms, bars: { name: tipo, color: dash.colors[0], values: cur },
-      lines: Object.keys(prevVals).length ? [{ name: 'Ano anterior', color: css('--cds-chart-reference') || css('--color-fg-muted'), values: prevVals, dash: true }] : [],
+      months: ms, bars: { name: tipo, color: C.accent, values: cur },
+      lines: Object.keys(prevVals).length ? [{ name: 'Ano anterior', color: C.sand, values: prevVals, dash: true }] : [],
     });
-    const fl = tipos.map((t, i) => ({ name: t, color: dash.colors[i], values: byM(t), label: t }));
+    const fl = tipos.map((t, i) => ({ name: t, color: CAT[i], values: byM(t), label: t }));
     legend(document.getElementById('lg-fluxo'), fl.map((s) => ({ name: s.name, color: s.color, line: true })));
     chart(document.getElementById('ch-fluxo'), { months: ms, lines: fl.map((s) => ({ ...s, label: null })) });
 
@@ -546,11 +748,13 @@
       { key: 'part', label: 'Part.', fmt: (v) => pc(v) },
     ], rows, { sortKey: 'valor' });
 
-    // insight
+    // insight: frase curta no chip, explicação no ⓘ
     const e = f('Emplacamento', a, b), ep = hasPrev ? f('Emplacamento', pa, pb) : 0;
     const pr = f('Produção', a, b), pp = hasPrev ? f('Produção', pa, pb) : 0;
     const ex = f('Exportação', a, b), exp = hasPrev ? f('Exportação', pa, pb) : 0;
     const best = rows.filter((x) => x.var != null).sort((x, y) => y.var - x.var);
+    const tv = f(tipo, a, b), tp = hasPrev ? f(tipo, pa, pb) : 0;
+    setTxt('h-mercado', tp ? `${tipo} ${tv >= tp ? 'cresce' : 'cai'} ${sgn(Math.abs(tv / tp - 1)).replace('+', '')}% vs ${pl}` : `${tipo}: ${big(tv)} em ${wl}`);
     let s = `${categoria === 'Todas' ? 'Autoveículos' : categoria}, ${wl}: emplacamento de ${big(e)}${ep ? ` (${sgn(e / ep - 1)}% a/a)` : ''}, produção de ${big(pr)}${pp ? ` (${sgn(pr / pp - 1)}%)` : ''} e exportação de ${big(ex)}${exp ? ` (${sgn(ex / exp - 1)}%)` : ''}.`;
     if (e > pr) s += ` O mercado interno absorveu ${big(e - pr)} unidades a mais do que a indústria produziu, sinal de espaço ocupado por importados.`;
     if (best.length > 1 && categoria === 'Todas') s += ` Em ${tipo.toLowerCase()}, ${best[0].categoria.toLowerCase()} cresceu mais (${sgn(best[0].var)}%) e ${best[best.length - 1].categoria.toLowerCase()} menos (${sgn(best[best.length - 1].var)}%).`;
@@ -567,9 +771,10 @@
       ? `Emplacamento por marca existe na ANFAVEA só a partir de ${mesLbl(first)}. Este recorte usa ${janela(a, b)}.`
       : `Recorte: ${janela(a, b)}. Emplacamento por marca existe na ANFAVEA desde ${mesLbl(first)}.`;
     if (b < first) {
-      ['ins-marcas', 'm1v', 'm2v', 'm3v', 'm4v'].forEach((id) => setTxt(id, '—'));
+      ['ins-marcas', 'h-marcas', 'm1v', 'm2v', 'm3v', 'm4v'].forEach((id) => setTxt(id, '—'));
       ['ch-share', 'ch-ganhos'].forEach((id) => { const e = document.getElementById(id); e.classList.remove('dash-skeleton'); e.replaceChildren(); });
       document.getElementById('tb-marcas').replaceChildren();
+      drawRace([], []);
       return;
     }
     const base = marcas.filter((r) => catOk(categoria, r.categoria) && (procedencia === 'Todas' || r.procedencia === procedencia) && inWin(r.periodo, a, b));
@@ -596,37 +801,39 @@
 
     // KPIs
     setTxt('m1l', 'Mercado no recorte · ' + wl);
-    setTxt('m1v', big(tot));
+    setNum('m1v', tot, big);
     setTxt('m1d', `${rows.length} marcas com emplacamento`);
     const sel = marca ? rows.find((r) => r.marca === marca) : null;
     if (sel) {
-      setTxt('m2l', marca);
-      setTxt('m2v', pc(sel.part));
+      setTxt('m2l', nice(marca));
+      setNum('m2v', sel.part, (v) => pc(v));
       setTxt('m2d', `${sel.rank}º lugar · ${nf.format(sel.valor)} un. · ${pc(sel.imp, 0)} importado`);
     } else if (rows[0]) {
-      setTxt('m2l', 'Líder: ' + rows[0].marca);
-      setTxt('m2v', pc(rows[0].part));
+      setTxt('m2l', 'Líder: ' + nice(rows[0].marca));
+      setNum('m2v', rows[0].part, (v) => pc(v));
       setTxt('m2d', `${nf.format(rows[0].valor)} un. · ${pc(rows[0].imp, 0)} importado`);
     }
     const cr5 = d3.sum(rows.slice(0, 5), (r) => r.part);
-    setTxt('m3v', pc(cr5));
-    setTxt('m3d', rows.slice(0, 5).map((r) => r.marca).join(', '));
+    setNum('m3v', cr5, (v) => pc(v));
+    setTxt('m3d', rows.slice(0, 5).map((r) => nice(r.marca)).join(', '));
     const isCn = (r) => CHINESAS.includes(r.marca);
     const cn = d3.sum(rows.filter(isCn), (r) => r.part);
     const cnT = d3.sum(rows.filter(isCn), (r) => r.tend || 0);
-    setTxt('m4v', pc(cn));
-    setTxt('m4d', ms.length > 1 ? `${sgn(cnT)} p.p. entre ${janela(ini[0], ini[ini.length - 1])} e ${janela(fim[0], fim[fim.length - 1])}` : '', null);
+    setNum('m4v', cn, (v) => pc(v));
+    if (ms.length > 1) ppDelta('m4d', cnT, janela(ini[0], ini[ini.length - 1])); else setTxt('m4d', '');
+
+    drawRace(base, ms);
 
     // gráfico de participação
     const top = rows.slice(0, 6).map((r) => r.marca);
     if (sel && !top.includes(sel.marca)) top.push(sel.marca);
     const lines = top.map((m, i) => {
       const o = g.get(m);
-      return { name: m, label: m, color: dash.colors[i % dash.colors.length], values: Object.fromEntries(ms.map((x) => [x, (byMonthTot.get(x) ? (o.mes.get(x) || 0) / byMonthTot.get(x) : 0)])) };
+      return { name: nice(m), label: nice(m), color: CAT[i % CAT.length], values: Object.fromEntries(ms.map((x) => [x, (byMonthTot.get(x) ? (o.mes.get(x) || 0) / byMonthTot.get(x) : 0)])) };
     });
-    document.getElementById('t-share').textContent = sel ? `Participação mensal: ${sel.marca} e maiores marcas` : 'Participação mensal das maiores marcas';
+    document.getElementById('t-share').textContent = sel ? `Participação mensal: ${nice(sel.marca)} e maiores` : 'Participação mensal das maiores marcas';
     legend(document.getElementById('lg-share'), lines.map((l) => ({ name: l.name, color: l.color, line: true })));
-    chart(document.getElementById('ch-share'), { months: ms, lines, yFmt: (v) => pc(v, 0), highlight: sel ? sel.marca : null });
+    chart(document.getElementById('ch-share'), { months: ms, lines, yFmt: (v) => pc(v, 0), highlight: sel ? nice(sel.marca) : null });
 
     // ganhos e perdas
     const mov = rows.filter((r) => r.tend != null && r.part >= 0.002).sort((x, y) => y.tend - x.tend);
@@ -642,7 +849,7 @@
     const shown = rows.filter((r) => !q || r.marca.toLowerCase().includes(q) || r.empresa.toLowerCase().includes(q));
     table(document.getElementById('tb-marcas'), [
       { key: 'rank', label: '#', fmt: (v) => v },
-      { key: 'marca', label: 'Marca', left: true },
+      { key: 'marca', label: 'Marca', left: true, logo: true, fmt: (v) => nice(v) },
       { key: 'empresa', label: 'Empresa', left: true, hideNarrow: true },
       { key: 'valor', label: 'Unidades', fmt: (v) => nf.format(v), bar: true },
       { key: 'part', label: 'Part.', fmt: (v) => pc(v) },
@@ -652,11 +859,12 @@
 
     // insight
     const gain = mov[0], lose = mov[mov.length - 1];
-    let s = `${wl}: ${rows[0] ? rows[0].marca + ' lidera com ' + pc(rows[0].part) : ''}, e as 5 maiores somam ${pc(cr5)} do recorte.`;
-    if (gain && gain.tend > 0) s += ` ${gain.marca} foi quem mais ganhou participação (${sgn(gain.tend)} p.p.)`;
-    if (lose && lose.tend < 0) s += `, e ${lose.marca} quem mais perdeu (${sgn(lose.tend)} p.p.).`; else if (gain) s += '.';
+    setTxt('h-marcas', sel ? `${nice(sel.marca)}: ${sel.rank}º lugar, ${pc(sel.part)}` : rows[0] ? `${nice(rows[0].marca)} lidera com ${pc(rows[0].part)} · chinesas ${pc(cn)}` : '—');
+    let s = `${wl}: ${rows[0] ? nice(rows[0].marca) + ' lidera com ' + pc(rows[0].part) : ''}, e as 5 maiores somam ${pc(cr5)} do recorte.`;
+    if (gain && gain.tend > 0) s += ` ${nice(gain.marca)} foi quem mais ganhou participação (${sgn(gain.tend)} p.p.)`;
+    if (lose && lose.tend < 0) s += `, e ${nice(lose.marca)} quem mais perdeu (${sgn(lose.tend)} p.p.).`; else if (gain) s += '.';
     s += ` Marcas chinesas têm ${pc(cn)} do recorte.`;
-    if (sel) s += ` ${sel.marca}: ${sel.rank}º lugar, ${pc(sel.part)} de participação${sel.tend != null ? ` (${sgn(sel.tend)} p.p. no período)` : ''}.`;
+    if (sel) s += ` ${nice(sel.marca)}: ${sel.rank}º lugar, ${pc(sel.part)} de participação${sel.tend != null ? ` (${sgn(sel.tend)} p.p. no período)` : ''}.`;
     setTxt('ins-marcas', s);
   }
 
@@ -674,17 +882,17 @@
     ];
     kp.forEach(([id, f]) => {
       const s = share(a, b, f);
-      setTxt(id + 'v', pc(s));
-      setTxt(id + 'd', hasPrev ? `${sgn(s - share(pa, pb, f))} p.p. vs ${pl} · ${big(tot(a, b, f))} un.` : `${big(tot(a, b, f))} un.`);
+      setNum(id + 'v', s, (v) => pc(v));
+      ppDelta(id + 'd', hasPrev ? s - share(pa, pb, f) : null, pl, ` · ${big(tot(a, b, f))} un.`);
     });
     setTxt('e1l', `Eletrificados · ${wl}`);
     const ms = MESES.filter((m) => inWin(m, a, b));
     const mt = d3.rollup(base, (v) => d3.sum(v, (r) => r.valor), (r) => r.periodo);
     const lines = ELE.map((f, i) => ({
-      name: f, label: f, color: dash.colors[i],
+      name: f, label: f, color: CAT[i],
       values: Object.fromEntries(ms.map((m) => [m, sum(base, (r) => r.periodo === m && r.combustivel === f) / (mt.get(m) || 1)])),
     }));
-    lines.push({ name: 'Total eletrificados', label: 'Total', color: css('--color-fg'), values: Object.fromEntries(ms.map((m) => [m, d3.sum(lines, (l) => l.values[m])])) });
+    lines.push({ name: 'Total eletrificados', label: 'Total', color: C.fg, values: Object.fromEntries(ms.map((m) => [m, d3.sum(lines, (l) => l.values[m])])) });
     legend(document.getElementById('lg-ele'), lines.map((l) => ({ name: l.name, color: l.color, line: true })));
     document.getElementById('s-ele').textContent = `Elétrico, híbrido plug-in e híbrido, em % do emplacamento mensal · ${categoria === 'Todas' ? 'todas as categorias' : categoria}.`;
     chart(document.getElementById('ch-ele'), { months: ms, lines, yFmt: (v) => pc(v, 0) });
@@ -704,6 +912,7 @@
     ], rows, { sortKey: 'valor' });
     const se = share(a, b, kp[0][1]), sep = hasPrev ? share(pa, pb, kp[0][1]) : null;
     const fast = rows.filter((r) => r.var != null && r.valor > 1000).sort((x, y) => y.var - x.var)[0];
+    setTxt('h-ele', `Eletrificados: ${pc(se)} do emplacamento${sep != null ? ` (${sgn(se - sep)} p.p.)` : ''}`);
     let s = `Eletrificados foram ${pc(se)} do emplacamento (${categoria === 'Todas' ? 'todas as categorias' : categoria.toLowerCase()}) em ${wl}`;
     s += sep != null ? `, ${sgn(se - sep)} p.p. sobre ${pl}.` : '.';
     if (fast) s += ` O combustível que mais cresceu foi ${fast.combustivel.toLowerCase()} (${sgn(fast.var)}%).`;
@@ -719,21 +928,22 @@
     const f = (a1, b1, pr, c = categoria) => sum(proc, (r) => catOk(c, r.categoria) && inWin(r.periodo, a1, b1) && (!pr || r.procedencia === pr));
     const s = f(a, b, 'Importado') / (f(a, b) || 1);
     const sp = hasPrev ? f(pa, pb, 'Importado') / (f(pa, pb) || 1) : null;
-    setTxt('i1v', pc(s));
-    setTxt('i1d', sp == null ? 'sem base de comparação' : `${sgn(s - sp)} p.p. vs ${pl}`);
-    setTxt('i2v', big(f(a, b, 'Importado')));
+    setNum('i1v', s, (v) => pc(v));
+    ppDelta('i1d', sp == null ? null : s - sp, pl);
+    setNum('i2v', f(a, b, 'Importado'), big);
     delta('i2d', f(a, b, 'Importado'), hasPrev ? f(pa, pb, 'Importado') : 0, pl);
-    setTxt('i3v', big(f(a, b, 'Nacional')));
+    setNum('i3v', f(a, b, 'Nacional'), big);
     delta('i3d', f(a, b, 'Nacional'), hasPrev ? f(pa, pb, 'Nacional') : 0, pl);
     const ms = MESES.filter((m) => inWin(m, a, b));
     const cats = ['Automóveis', 'Comerciais leves', 'Caminhões', 'Ônibus'];
     const lines = cats.map((c, i) => ({
-      name: c, label: c, color: dash.colors[i],
+      name: c, label: c, color: CAT[i],
       values: Object.fromEntries(ms.map((m) => [m, f(m, m, 'Importado', c) / (f(m, m, null, c) || 1)])),
     }));
     legend(document.getElementById('lg-imp'), lines.map((l) => ({ name: l.name, color: l.color, line: true })));
     const hl = ['Todas', 'Leves'].includes(categoria) ? null : categoria;
     chart(document.getElementById('ch-imp'), { months: ms, lines, yFmt: (v) => pc(v, 0), highlight: hl });
+    setTxt('h-imp', `Importados: ${pc(s)} do emplacamento${sp != null ? ` (${sgn(s - sp)} p.p.)` : ''}`);
     let t = `Importados foram ${pc(s)} do emplacamento (${categoria === 'Todas' ? 'todas as categorias' : categoria.toLowerCase()}) em ${wl}`;
     t += sp != null ? `, ${sgn(s - sp)} p.p. sobre ${pl}.` : '.';
     const iv = f(a, b, 'Importado'), ivp = hasPrev ? f(pa, pb, 'Importado') : 0, nv = f(a, b, 'Nacional'), nvp = hasPrev ? f(pa, pb, 'Nacional') : 0;
@@ -747,7 +957,7 @@
     const base = cam.filter((r) => r.tipo_dado === tipo);
     const subs = ['Semileves', 'Leves', 'Médios', 'Semipesados', 'Pesados'];
     const ms = MESES.filter((m) => inWin(m, a, b));
-    const lines = subs.map((s, i) => ({ name: s, label: s, color: dash.colors[i], values: Object.fromEntries(ms.map((m) => [m, sum(base, (r) => r.periodo === m && r.subsegmento === s)])) }));
+    const lines = subs.map((s, i) => ({ name: s, label: s, color: CAT[i], values: Object.fromEntries(ms.map((m) => [m, sum(base, (r) => r.periodo === m && r.subsegmento === s)])) }));
     document.getElementById('t-cam').textContent = `Caminhões por subsegmento · ${tipo.toLowerCase()}`;
     legend(document.getElementById('lg-cam'), lines.map((l) => ({ name: l.name, color: l.color, line: true })));
     chart(document.getElementById('ch-cam'), { months: ms, lines });
@@ -766,6 +976,7 @@
     ], rows, { sortKey: 'valor' });
     const sorted = rows.filter((r) => r.var != null).sort((x, y) => y.var - x.var);
     const p = hasPrev ? sum(base, (r) => inWin(r.periodo, pa, pb)) : 0;
+    setTxt('h-cam', `Caminhões: ${big(T)} un. em ${wl}${p ? ` (${sgn(T / p - 1)}% a/a)` : ''}`);
     let s = `${tipo} de caminhões em ${wl}: ${big(T)} unidades${p ? ` (${sgn(T / p - 1)}% a/a)` : ''}. Pesados respondem por ${pc(rows[4].part)} do volume.`;
     if (sorted.length > 1) s += ` ${sorted[0].subsegmento} teve o melhor desempenho (${sgn(sorted[0].var)}%) e ${sorted[sorted.length - 1].subsegmento.toLowerCase()} o pior (${sgn(sorted[sorted.length - 1].var)}%).`;
     setTxt('ins-cam', s);
@@ -776,6 +987,7 @@
   function draw() {
     const series = rowsOf('series');
     const status = dash.data('series').status;
+    placeAll();
     if (!series) {
       if (status === 'error') ['ch-mensal', 'ch-fluxo'].forEach((id) => fail(document.getElementById(id)));
       return;
@@ -788,6 +1000,7 @@
     markSeg('f-tipo', p.tipo); markSeg('f-cat', p.categoria); markSeg('f-proc', p.procedencia);
     const last = MESES[MESES.length - 1];
     markSeg('f-atalho', a === last.slice(0, 4) + '-01' && b === last ? 'ytd' : a === addM(last, -11) && b === last ? '12m' : a === MESES[0] && b === last ? 'tudo' : '');
+    placeAll();
     const opts = (sel, v) => { sel.replaceChildren(...MESES.slice().reverse().map((m) => new Option(mesLbl(m), m))); sel.value = v; };
     opts(selI, a); opts(selF, b);
 
@@ -798,7 +1011,7 @@
       selM.value = p.marca || '';
     }
     const chip = document.getElementById('marca-chip');
-    chip.hidden = !p.marca; chip.textContent = p.marca ? p.marca + ' ×' : '';
+    chip.hidden = !p.marca; chip.textContent = p.marca ? nice(p.marca) + '  ×' : '';
 
     const m = drawMercado(series, a, b, pa, pb, wl, pl);
     let ele = null;
@@ -807,15 +1020,18 @@
     if (tab === 'marcas') { if (marcas) drawMarcas(marcas, a, b); else if (dash.data('marcas').status === 'error') ['ch-share', 'ch-ganhos'].forEach((id) => fail(document.getElementById(id))); }
     if (tab === 'importados') { const pr = rowsOf('procedencia'); if (pr) drawImp(pr, a, b, pa, pb, wl, pl); else if (dash.data('procedencia').status === 'error') fail(document.getElementById('ch-imp')); }
     if (tab === 'caminhoes') { const c = rowsOf('caminhoes'); if (c) drawCam(c, a, b, pa, pb, wl, pl); else if (dash.data('caminhoes').status === 'error') fail(document.getElementById('ch-cam')); }
+    if (tab !== 'marcas') raceStop();
 
-    // frase de destaque do topo
+    // resumo do topo: chip curto + texto completo no ⓘ
+    setTxt('takeaway-h', `${wl} · ${big(m.e)} emplacamentos${m.ep ? ` (${sgn(m.e / m.ep - 1)}%)` : ''}`);
     let t = `${wl}: ${big(m.e)} emplacamentos${m.ep ? ` (${sgn(m.e / m.ep - 1)}% sobre ${pl})` : ''}, ${big(m.pr)} produzidos${m.pp ? ` (${sgn(m.pr / m.pp - 1)}%)` : ''} e ${big(m.ex)} exportados${m.exp ? ` (${sgn(m.ex / m.exp - 1)}%)` : ''}`;
     if (comb) {
       const base = comb.filter((r) => LEVES.includes(r.categoria) && inWin(r.periodo, a, b));
       const ev = sum(base, (r) => ['Elétrico', 'Híbrido Plug-In', 'Híbrido'].includes(r.combustivel)) / (sum(base, () => true) || 1);
-      t += `. Eletrificados já são ${pc(ev)} dos leves`;
+      t += `. Eletrificados (elétrico, plug-in e híbrido) já são ${pc(ev)} dos leves`;
     }
     t += p.categoria !== 'Todas' ? ` (recorte: ${p.categoria.toLowerCase()}).` : '.';
+    t += ' Fonte: ANFAVEA, Central de Dados; emplacamento via Renavam/Senatran.';
     setTxt('takeaway', t);
   }
 

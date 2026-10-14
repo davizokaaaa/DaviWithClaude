@@ -14,6 +14,11 @@ agregação mensal desde jan/2023, e relatório consolidado.
 categoria, marca e procedência; abas Mercado, Marcas, Eletrificação, Importados e Caminhões).
 Ele lê os CSVs de `relatorio/dashboard/`, gerados por `build_report.py`.
 
+O visual segue o design system **Grafite** (escuro, vidro líquido na navegação, um destaque azul aço):
+filtros e abas em controles de vidro, insights em chips com detalhe no ⓘ, KPIs com contagem, gráficos
+animados e um ranking de marcas que reordena mês a mês. `dashboard/logos.js` traz as logos vetoriais
+das marcas (Simple Icons, CC0); marcas sem logo livre aparecem como monograma.
+
 ## O que é coletado
 
 | Série | Aberturas | Desde |

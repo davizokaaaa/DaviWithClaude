@@ -67,7 +67,28 @@
   .av select option { background: var(--bg); color: var(--fg); }
   .av-range { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; color: var(--muted); }
   .av-reset { font: 500 12.5px var(--sans); background: none; border: 0; color: var(--accent); text-decoration: underline; text-underline-offset: 4px; cursor: pointer; padding: 8px 0; }
-  .av-marca-chip { font: 600 12.5px var(--sans); border: 0; background: var(--accent); color: var(--on-accent); padding: 6px 12px; cursor: pointer; }
+
+  /* lente da marca: aparece no topo de cada aba quando há uma marca escolhida */
+  .av-lens { display: grid; grid-template-columns: minmax(0, 16rem) minmax(0, 1fr); gap: 18px 36px; padding: 16px 0 18px; border-top: 2px solid var(--accent); border-bottom: 1px solid var(--line); animation: av-lens-in .6s var(--ease) both; }
+  .av-lens[hidden] { display: none; }
+  @keyframes av-lens-in { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: none; } }
+  .av-lens-id { display: grid; gap: 8px; align-content: start; }
+  .av-lens-name { display: flex; align-items: center; gap: 10px; margin: 0; font: 400 32px/1.05 var(--serif); font-variation-settings: "opsz" 144; letter-spacing: -.02em; }
+  .av-lens-name .av-logo { width: 34px; height: 34px; margin: 0; color: var(--brand, var(--fg)); }
+  .av-lens-name .av-logo svg { width: 18px; height: 18px; }
+  .av-lens-nums { display: grid; grid-template-columns: repeat(3, auto); justify-content: start; gap: 18px; margin-top: 4px; }
+  .av-lens-nums > div { display: grid; gap: 2px; }
+  .av-lens-nums span { font: 600 10px/1.3 var(--sans); letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+  .av-lens-nums b { font: 400 26px/1.05 var(--serif); font-weight: 400; font-variant-numeric: lining-nums tabular-nums; letter-spacing: -.02em; }
+  .av-lens-x { justify-self: start; font: 500 12.5px var(--sans); background: none; border: 0; padding: 4px 0; color: var(--accent); text-decoration: underline; text-underline-offset: 4px; cursor: pointer; }
+  .av-lens-main { display: grid; gap: 10px; align-content: start; min-width: 0; }
+  .av-lens-split { display: flex; gap: 2px; height: 8px; }
+  .av-lens-split i { display: block; height: 100%; min-width: 2px; transition: flex-grow .8s var(--ease); }
+  .av-lens-leg { display: flex; flex-wrap: wrap; gap: 4px 16px; font: 500 11.5px var(--mono); color: var(--muted); }
+  .av-lens-leg span { display: inline-flex; align-items: center; gap: 6px; }
+  .av-lens-leg i { width: 8px; height: 8px; display: inline-block; }
+  .av-lens-note { margin: 0; font: italic 400 14px/1.45 var(--serif); color: var(--muted); max-width: 46rem; }
+  @media (max-width: 640px) { .av-lens { grid-template-columns: 1fr; } }
 
   /* linha do tempo */
   .av-tl { display: grid; gap: 4px; margin-top: -10px; }
@@ -162,7 +183,9 @@
   .av-race-pos { font: 400 15px var(--serif); color: var(--muted); text-align: right; font-variant-numeric: tabular-nums; }
   .av-race-bar { position: relative; height: 22px; min-width: 0; }
   .av-race-bar i { position: absolute; left: 0; top: 0; bottom: 0; width: 0; background: var(--fg); transition: width .75s var(--ease); }
-  .av-race-row.av-lead .av-race-bar i { background: var(--accent); }
+  .av-race-row.av-lead .av-race-bar i, .av-race-row.av-sel .av-race-bar i { background: var(--accent); }
+  .av-race-row.av-sel .av-race-pos { color: var(--accent); }
+  .av-race.av-has-sel .av-race-row:not(.av-sel) > * { opacity: .42; }
   .av-race-bar span { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); font: 600 11.5px var(--sans); letter-spacing: .06em; text-transform: uppercase; color: var(--bg); white-space: nowrap; mix-blend-mode: normal; }
   .av-race-sh { font: 500 13px var(--mono); text-align: right; font-variant-numeric: tabular-nums; }
   .av-race-d { font: 500 11.5px var(--mono); text-align: right; font-variant-numeric: tabular-nums; color: var(--muted); }
@@ -303,7 +326,6 @@
     <div class="av-row">
       <div class="av-lede"><span class="av-kicker">02 · Marcas</span>
         <h2 class="av-h" data-source="marcas"><span id="h-marcas">—</span><span class="av-info"><button type="button" class="av-ib" aria-label="Detalhes" aria-expanded="false">i</button><span class="av-pop"><span id="ins-marcas">—</span><br><br><span id="nota-marcas">Emplacamento por marca existe na ANFAVEA só a partir de jan/2026.</span></span></span></h2>
-        <div><button type="button" class="av-marca-chip" id="marca-chip" hidden></button></div>
       </div>
       <div class="av-seg" id="f-proc" role="group" aria-label="Procedência">
         <button type="button" data-v="Todas">Nacional e importado</button>
@@ -374,9 +396,9 @@
   <section class="av-page" id="importados" role="tabpanel" aria-labelledby="tab-importados" hidden>
     <div class="av-lede"><span class="av-kicker">04 · Importados</span><h2 class="av-h" data-source="procedencia"><span id="h-imp">—</span><span class="av-info"><button type="button" class="av-ib" aria-label="Detalhes" aria-expanded="false">i</button><span class="av-pop" id="ins-imp">—</span></span></h2></div>
     <div class="av-kpis">
-      <div class="av-kpi" data-source="procedencia"><span class="av-kpi-l">Importados no emplacamento</span><span class="av-kpi-v dash-skeleton" id="i1v">—</span><span class="av-kpi-d" id="i1d"></span></div>
-      <div class="av-kpi" data-source="procedencia"><span class="av-kpi-l">Unidades importadas</span><span class="av-kpi-v dash-skeleton" id="i2v">—</span><span class="av-kpi-d" id="i2d"></span></div>
-      <div class="av-kpi" data-source="procedencia"><span class="av-kpi-l">Unidades nacionais</span><span class="av-kpi-v dash-skeleton" id="i3v">—</span><span class="av-kpi-d" id="i3d"></span></div>
+      <div class="av-kpi" data-source="procedencia"><span class="av-kpi-l" id="i1l">Importados no emplacamento</span><span class="av-kpi-v dash-skeleton" id="i1v">—</span><span class="av-kpi-d" id="i1d"></span></div>
+      <div class="av-kpi" data-source="procedencia"><span class="av-kpi-l" id="i2l">Unidades importadas</span><span class="av-kpi-v dash-skeleton" id="i2v">—</span><span class="av-kpi-d" id="i2d"></span></div>
+      <div class="av-kpi" data-source="procedencia"><span class="av-kpi-l" id="i3l">Unidades nacionais</span><span class="av-kpi-v dash-skeleton" id="i3v">—</span><span class="av-kpi-d" id="i3d"></span></div>
     </div>
     <article class="av-card" id="card-bfly">
       <div class="av-card-head"><div><h3 id="t-bfly">Nacionais e importados</h3><span class="av-info"><button type="button" class="av-ib" aria-label="Sobre o gráfico" aria-expanded="false">i</button><span class="av-pop">Emplacamento mensal: nacionais para cima, importados para baixo, na mesma escala.</span></span></div><div class="av-legend" id="lg-bfly"></div></div>
@@ -584,7 +606,6 @@
   selI.addEventListener('change', () => set({ inicio: selI.value }));
   selF.addEventListener('change', () => set({ fim: selF.value }));
   selM.addEventListener('change', () => set({ marca: selM.value || null }));
-  document.getElementById('marca-chip').addEventListener('click', () => set({ marca: null }));
   document.getElementById('f-reset').addEventListener('click', () => dash.resetParams());
 
   // ---------- abas (dock) ----------
@@ -723,7 +744,7 @@
         const add = (name, color, v) => {
           const r = document.createElement('div');
           const sw = document.createElement('i'); sw.style.background = color;
-          r.append(sw, document.createTextNode(name + ': ' + (v == null ? '—' : yFmt === big ? nf.format(v) : yFmt(v))));
+          r.append(sw, document.createTextNode(name + ': ' + (v == null ? '—' : typeof v === 'string' ? v : yFmt === big ? nf.format(v) : yFmt(v))));
           tt.append(r);
         };
         if (bars) add(bars.name, bars.color, bars.values[m] || 0);
@@ -743,8 +764,9 @@
     el.classList.remove('dash-skeleton');
     el.replaceChildren();
     if (!items.length) return;
-    const sig = items.map((d) => d.label + d.v).join();
+    const sig = items.map((d) => d.label + d.v + (d.hi ? '*' : '')).join();
     const animate = el._sig !== sig && !RM();
+    const anyHi = items.some((d) => d.hi);
     el._sig = sig;
     const W = Math.max(el.clientWidth, 280), rowH = 24, H = items.length * rowH + 8;
     const svg = d3.select(el).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`);
@@ -754,7 +776,8 @@
     const x = d3.scaleLinear([-m, m], [lab + valW, W - valW]);
     svg.append('line').attr('x1', x(0)).attr('x2', x(0)).attr('y1', 0).attr('y2', H).attr('stroke', C.grid);
     const g = svg.append('g').selectAll('g').data(items).join('g').attr('transform', (d, i) => `translate(0,${i * rowH + 4})`);
-    g.append('text').attr('x', lab - 6).attr('y', rowH / 2).attr('dy', '0.32em').attr('text-anchor', 'end').attr('font-size', 11).attr('fill', C.fg).text((d) => nice(d.label));
+    g.attr('opacity', (d) => (anyHi && !d.hi ? 0.38 : 1));
+    g.append('text').attr('x', lab - 6).attr('y', rowH / 2).attr('dy', '0.32em').attr('text-anchor', 'end').attr('font-size', 11).attr('font-weight', (d) => (d.hi ? 700 : null)).attr('fill', C.fg).text((d) => nice(d.label));
     const r = g.append('rect').attr('y', 5).attr('height', rowH - 10).attr('rx', 3)
       .attr('fill', (d) => (d.v >= 0 ? C.accent : C.down));
     const fx = (d) => Math.min(x(0), x(d.v)), fw = (d) => Math.abs(x(d.v) - x(0));
@@ -960,10 +983,14 @@
     if (!rows.length) return;
     const W = Math.max(el.clientWidth, 280), H = Math.round(Math.max(280, Math.min(420, W * 0.46)));
     const N = W < 520 ? 14 : 24;
-    const topR = rows.filter((r) => r.marca !== 'OUTRAS MARCAS').slice(0, N), rest = rows.filter((r) => !topR.includes(r));
+    const topR = rows.filter((r) => r.marca !== 'OUTRAS MARCAS').slice(0, N);
+    const sr = sel && rows.find((r) => r.marca === sel);
+    if (sr && !topR.includes(sr)) topR.push(sr);
+    const rest = rows.filter((r) => !topR.includes(r));
     const kids = topR.map((r) => ({ id: r.marca, v: r.valor, part: r.part, tend: r.tend }));
     if (rest.length) kids.push({ id: 'Outras', v: d3.sum(rest, (r) => r.valor), part: d3.sum(rest, (r) => r.part), tend: null, n: rest.length });
     const animate = anim(el, kids.map((k) => k.id + k.v).join() + W);
+    const op = (d) => (sr && d.data.id !== sel ? 0.36 : 1);
     const h = d3.hierarchy({ children: kids }).sum((d) => d.v || 0).sort((p, q) => q.value - p.value);
     d3.treemap().size([W, H]).paddingInner(3).round(true).tile(d3.treemapSquarify.ratio(1.15))(h);
     const m = d3.max(kids, (k) => Math.abs(k.tend || 0)) || 0.01;
@@ -995,8 +1022,8 @@
     if (animate) {
       g.attr('opacity', 0).attr('transform', (d) => `translate(${(d.x0 + d.x1) / 2},${(d.y0 + d.y1) / 2}) scale(0.5) translate(${-(d.x1 - d.x0) / 2},${-(d.y1 - d.y0) / 2})`)
         .transition().delay((d, i) => 60 + i * 32).duration(750).ease(d3.easeCubicOut)
-        .attr('opacity', 1).attr('transform', (d) => `translate(${d.x0},${d.y0}) scale(1) translate(0,0)`);
-    }
+        .attr('opacity', op).attr('transform', (d) => `translate(${d.x0},${d.y0}) scale(1) translate(0,0)`);
+    } else g.attr('opacity', op);
     const tt = tipBox(el);
     g.on('mousemove', (ev, d) => {
       const [px, py] = d3.pointer(ev, el);
@@ -1281,6 +1308,7 @@
     race.i = i; raceRange.value = i;
     const mo = race.months[i]; document.getElementById('race-m').textContent = mo ? mesLbl(mo) : '';
     const top = race.data[i] || [];
+    race.el.classList.toggle('av-has-sel', top.some((d) => d.m === P().marca));
     race.el.style.height = (Math.max(top.length, 1) * RACE_GAP) + 'px';
     const max = d3.max(race.data.flat(), (d) => d.s) || 1;
     const seen = new Set();
@@ -1298,8 +1326,9 @@
         race.el.append(r); race.rows[d.m] = r; r.getBoundingClientRect();
       }
       seen.add(d.m);
-      r.style.opacity = 1; r.style.transform = `translateY(${k * RACE_GAP}px)`; r.classList.toggle('av-lead', k === 0);
-      r.children[0].textContent = k + 1;
+      r.style.opacity = 1; r.style.transform = `translateY(${k * RACE_GAP}px)`;
+      r.classList.toggle('av-lead', k === 0 && !P().marca); r.classList.toggle('av-sel', d.m === P().marca);
+      r.children[0].textContent = d.r || k + 1;
       r.children[2].firstChild.style.width = (d.s / max * 100) + '%';
       r.children[3].textContent = pc(d.s);
       const dd = r.children[4]; dd.textContent = d.d == null ? '' : sgn(d.d) ; dd.className = 'av-race-d ' + (upDown(d.d) || '');
@@ -1320,12 +1349,71 @@
     const first = byM.get(ms[0]) || new Map(), firstT = d3.sum([...first.values()]) || 1;
     const data = ms.map((mo) => {
       const mm = byM.get(mo) || new Map(), T = d3.sum([...mm.values()]) || 1;
-      return [...mm].filter(([m, v]) => v > 0 && m !== 'OUTRAS MARCAS').map(([m, v]) => ({ m, s: v / T, d: ms.length > 1 ? v / T - (first.get(m) || 0) / firstT : null }))
-        .sort((a, b) => b.s - a.s).slice(0, RACE_N);
+      const all = [...mm].filter(([m, v]) => v > 0 && m !== 'OUTRAS MARCAS').map(([m, v]) => ({ m, s: v / T, d: ms.length > 1 ? v / T - (first.get(m) || 0) / firstT : null }))
+        .sort((a, b) => b.s - a.s);
+      all.forEach((d, k) => { d.r = k + 1; });
+      const top = all.slice(0, RACE_N), sel = P().marca;
+      const extra = sel && all.find((d) => d.m === sel && d.r > RACE_N);
+      return extra ? [...top, extra] : top;
     });
     const key = ms.join() + '|' + base.length + '|' + d3.sum(base, (r) => r.valor);
     race.months = ms; race.data = data; raceRange.max = Math.max(0, ms.length - 1);
     if (key !== race.key) { raceStop(); race.key = key; raceSet(ms.length - 1); } else raceSet(Math.min(race.i, ms.length - 1));
+  }
+
+  // ---------- lente da marca ----------
+  const lensEls = {};
+  function lensEl(page) {
+    if (lensEls[page]) return lensEls[page];
+    const pg = document.getElementById(page);
+    const el = document.createElement('article');
+    el.className = 'av-lens'; el.hidden = true; el.dataset.source = 'marcas';
+    el.innerHTML = '<div class="av-lens-id"><span class="av-kicker">Lente da marca</span><h3 class="av-lens-name"></h3><div class="av-lens-nums"></div><button type="button" class="av-lens-x">Limpar marca ×</button></div>'
+      + '<div class="av-lens-main"><div class="av-chart av-lens-ch"></div><div class="av-lens-split"></div><div class="av-lens-leg"></div><p class="av-lens-note"></p></div>';
+    el.querySelector('.av-lens-x').addEventListener('click', () => set({ marca: null }));
+    pg.querySelector(':scope > .av-row, :scope > .av-lede').after(el);
+    return (lensEls[page] = el);
+  }
+  // cat: recorte de categoria da lente; note: o que muda (ou não) nos gráficos da aba
+  function lens(page, marcas, a0, b, { cat, note }) {
+    const { marca } = P();
+    Object.entries(lensEls).forEach(([k, e]) => { if (k !== page) e.hidden = true; });
+    const el = lensEl(page);
+    if (!marca || !marcas) { el.hidden = true; return; }
+    el.hidden = false;
+    const first = d3.min(marcas, (r) => r.periodo);
+    const a = a0 < first ? first : a0;
+    const ms = MESES.filter((m) => inWin(m, a, b));
+    const base = marcas.filter((r) => catOk(cat, r.categoria) && inWin(r.periodo, a, b));
+    const mine = base.filter((r) => r.marca === marca);
+    const tot = d3.sum(base, (r) => r.valor), v = d3.sum(mine, (r) => r.valor);
+    const order = d3.rollups(base.filter((r) => r.marca !== 'OUTRAS MARCAS'), (x) => d3.sum(x, (r) => r.valor), (r) => r.marca).sort((p, q) => q[1] - p[1]);
+    const rank = order.findIndex(([m]) => m === marca) + 1;
+    el.querySelector('.av-lens-name').replaceChildren(logoEl(marca), document.createTextNode(nice(marca)));
+    const nums = [['Unidades', nf.format(v)], ['Participação', pc(tot ? v / tot : 0)], ['Posição', rank && v ? `${rank}º de ${order.length}` : '—']];
+    el.querySelector('.av-lens-nums').replaceChildren(...nums.map(([l, x]) => {
+      const d = document.createElement('div'), sp = document.createElement('span'), bb = document.createElement('b');
+      sp.textContent = l; bb.textContent = x; d.append(sp, bb); return d;
+    }));
+    const byM = d3.rollup(mine, (x) => d3.sum(x, (r) => r.valor), (r) => r.periodo);
+    const totM = d3.rollup(base, (x) => d3.sum(x, (r) => r.valor), (r) => r.periodo);
+    chart(el.querySelector('.av-lens-ch'), {
+      months: ms, height: 170,
+      bars: { name: nice(marca), color: C.fg, last: C.accent, values: Object.fromEntries(ms.map((m) => [m, byM.get(m) || 0])) },
+      tipExtra: (m) => [[C.accent, 'Participação no mês', pc(totM.get(m) ? (byM.get(m) || 0) / totM.get(m) : 0)]],
+    });
+    // divisão: por categoria quando a lente cobre várias, senão nacional × importado
+    const byCat = ['Todas', 'Leves'].includes(cat);
+    const keys = byCat ? ['Automóveis', 'Comerciais leves', 'Caminhões', 'Ônibus'] : ['Nacional', 'Importado'];
+    const cols = byCat ? CAT : [C.fg, C.accent];
+    const parts = keys.map((k, i) => ({ k, v: d3.sum(mine, (r) => ((byCat ? r.categoria : r.procedencia) === k ? r.valor : 0)), c: cols[i] })).filter((x) => x.v > 0);
+    el.querySelector('.av-lens-split').replaceChildren(...parts.map((x) => { const i = document.createElement('i'); i.style.flexGrow = x.v; i.style.background = x.c; i.title = x.k; return i; }));
+    el.querySelector('.av-lens-leg').replaceChildren(...parts.map((x) => {
+      const sp = document.createElement('span'), i = document.createElement('i'); i.style.background = x.c;
+      sp.append(i, document.createTextNode(`${x.k} ${pc(x.v / (v || 1), 0)}`)); return sp;
+    }));
+    const catTxt = cat === 'Todas' ? '' : cat === 'Leves' ? ' de leves' : ` de ${cat.toLowerCase()}`;
+    el.querySelector('.av-lens-note').textContent = v ? note : `${nice(marca)} não teve emplacamento${catTxt} em ${janela(a, b)}. ${note}`;
   }
 
   // ---------- páginas ----------
@@ -1490,8 +1578,9 @@
 
     // ganhos e perdas
     const mov = rows.filter((r) => r.tend != null && r.part >= 0.002).sort((x, y) => y.tend - x.tend);
-    const items = [...mov.slice(0, 6), ...mov.slice(-6).filter((r) => r.tend < 0 && !mov.slice(0, 6).includes(r))]
-      .map((r) => ({ label: r.marca, v: r.tend }));
+    const pick = [...mov.slice(0, 6), ...mov.slice(-6).filter((r) => r.tend < 0 && !mov.slice(0, 6).includes(r))];
+    if (sel && sel.tend != null && !pick.includes(sel)) { pick.push(sel); pick.sort((x, y) => y.tend - x.tend); }
+    const items = pick.map((r) => ({ label: r.marca, v: r.tend, hi: sel && r === sel }));
     document.getElementById('s-ganhos').textContent = ms.length > 1
       ? `Variação da participação, em pontos percentuais: ${janela(fim[0], fim[fim.length - 1])} contra ${janela(ini[0], ini[ini.length - 1])}.`
       : 'Escolha um período com mais de um mês para ver a tendência.';
@@ -1581,9 +1670,15 @@
     return se;
   }
 
-  function drawImp(proc, a, b, pa, pb, wl, pl) {
+  function drawImp(proc, a0, b, pa, pb, wl0, pl, brand) {
     const { categoria } = P();
-    const hasPrev = pa >= MESES[0];
+    const first = brand ? (d3.min(proc, (r) => r.periodo) || MESES[0]) : MESES[0];
+    const a = a0 < first ? first : a0, wl = a === a0 ? wl0 : janela(a, b);
+    const hasPrev = pa >= first;
+    const who = brand ? nice(brand) : null;
+    setTxt('i1l', who ? `Fatia importada · ${who}` : 'Importados no emplacamento');
+    setTxt('i2l', who ? `Importadas · ${who}` : 'Unidades importadas');
+    setTxt('i3l', who ? `Nacionais · ${who}` : 'Unidades nacionais');
     const f = (a1, b1, pr, c = categoria) => sum(proc, (r) => catOk(c, r.categoria) && inWin(r.periodo, a1, b1) && (!pr || r.procedencia === pr));
     const s = f(a, b, 'Importado') / (f(a, b) || 1);
     const sp = hasPrev ? f(pa, pb, 'Importado') / (f(pa, pb) || 1) : null;
@@ -1594,7 +1689,7 @@
     setNum('i3v', f(a, b, 'Nacional'), big);
     delta('i3d', f(a, b, 'Nacional'), hasPrev ? f(pa, pb, 'Nacional') : 0, pl);
     const ms = MESES.filter((m) => inWin(m, a, b));
-    const cats = ['Automóveis', 'Comerciais leves', 'Caminhões', 'Ônibus'];
+    const cats = ['Automóveis', 'Comerciais leves', 'Caminhões', 'Ônibus'].filter((c) => !brand || f(a, b, null, c) > 0);
     const lines = cats.map((c, i) => ({
       name: c, label: c, color: CAT[i],
       values: Object.fromEntries(ms.map((m) => [m, f(m, m, 'Importado', c) / (f(m, m, null, c) || 1)])),
@@ -1603,7 +1698,7 @@
     const hl = ['Todas', 'Leves'].includes(categoria) ? null : categoria;
     chart(document.getElementById('ch-imp'), { months: ms, lines, yFmt: (v) => pc(v, 0), highlight: hl });
     // espelhado: nacionais acima, importados abaixo
-    document.getElementById('t-bfly').textContent = `Nacionais e importados · ${categoria === 'Todas' ? 'todas as categorias' : categoria}`;
+    document.getElementById('t-bfly').textContent = `Nacionais e importados · ${who ? who + ' · ' : ''}${categoria === 'Todas' ? 'todas as categorias' : categoria}`;
     const byP = (pr) => Object.fromEntries(ms.map((m) => [m, f(m, m, pr)]));
     butterfly(document.getElementById('ch-bfly'), ms, byP('Nacional'), byP('Importado'));
     // antes e agora, por categoria
@@ -1611,8 +1706,8 @@
     slope(document.getElementById('ch-slope'), cats.map((c, i) => ({
       name: c, color: CAT[i], a: hasPrev ? sh(pa, pb, c) : null, b: sh(a, b, c), hi: hl === c, dim: hl != null && hl !== c,
     })), pl, wl);
-    setTxt('h-imp', `Importados: ${pc(s)} do emplacamento${sp != null ? ` (${sgn(s - sp)} p.p.)` : ''}`);
-    let t = `Importados foram ${pc(s)} do emplacamento (${categoria === 'Todas' ? 'todas as categorias' : categoria.toLowerCase()}) em ${wl}`;
+    setTxt('h-imp', who ? `${who}: ${pc(s)} importado, ${pc(1 - s)} feito no Brasil` : `Importados: ${pc(s)} do emplacamento${sp != null ? ` (${sgn(s - sp)} p.p.)` : ''}`);
+    let t = `${who ? who + ': i' : 'I'}mportados foram ${pc(s)} do emplacamento${who ? ' da marca' : ''} (${categoria === 'Todas' ? 'todas as categorias' : categoria.toLowerCase()}) em ${wl}`;
     t += sp != null ? `, ${sgn(s - sp)} p.p. sobre ${pl}.` : '.';
     const iv = f(a, b, 'Importado'), ivp = hasPrev ? f(pa, pb, 'Importado') : 0, nv = f(a, b, 'Nacional'), nvp = hasPrev ? f(pa, pb, 'Nacional') : 0;
     if (ivp && nvp) t += ` Os importados ${iv >= ivp ? 'cresceram' : 'caíram'} ${sgn(Math.abs(iv / ivp - 1)).replace('+', '')}% e os nacionais ${nv >= nvp ? 'cresceram' : 'caíram'} ${sgn(Math.abs(nv / nvp - 1)).replace('+', '')}%.`;
@@ -1678,8 +1773,6 @@
       if (selM.options.length !== ms.length + 1) selM.replaceChildren(new Option('Todas as marcas', ''), ...ms.map((m) => new Option(m, m)));
       selM.value = p.marca || '';
     }
-    const chip = document.getElementById('marca-chip');
-    chip.hidden = !p.marca; chip.textContent = p.marca ? nice(p.marca) + '  ×' : '';
 
     timeline(series, a, b);
     const m = drawMercado(series, a, b, pa, pb, wl, pl);
@@ -1687,9 +1780,17 @@
     const comb = rowsOf('combustivel');
     if (tab === 'eletrificacao') { if (comb) ele = drawEle(comb, a, b, pa, pb, wl, pl); else if (dash.data('combustivel').status === 'error') ['ch-ele', 'ch-waffle'].forEach((id) => fail(document.getElementById(id))); }
     if (tab === 'marcas') { if (marcas) drawMarcas(marcas, a, b); else if (dash.data('marcas').status === 'error') ['ch-share', 'ch-ganhos', 'ch-tree'].forEach((id) => fail(document.getElementById(id))); }
-    if (tab === 'importados') { const pr = rowsOf('procedencia'); if (pr) drawImp(pr, a, b, pa, pb, wl, pl); else if (dash.data('procedencia').status === 'error') ['ch-imp', 'ch-bfly', 'ch-slope'].forEach((id) => fail(document.getElementById(id))); }
+    if (tab === 'importados') { const pr = rowsOf('procedencia'); const bm = p.marca && marcas ? p.marca : null; if (pr) drawImp(bm ? marcas.filter((r) => r.marca === bm) : pr, a, b, pa, pb, wl, pl, bm); else if (dash.data('procedencia').status === 'error') ['ch-imp', 'ch-bfly', 'ch-slope'].forEach((id) => fail(document.getElementById(id))); }
     if (tab === 'caminhoes') { const c = rowsOf('caminhoes'); if (c) drawCam(c, a, b, pa, pb, wl, pl); else if (dash.data('caminhoes').status === 'error') fail(document.getElementById('ch-cam')); }
     if (tab !== 'marcas') raceStop();
+    const LENS = {
+      mercado: { cat: p.categoria, note: 'A ANFAVEA só publica o emplacamento por marca. Produção e exportação, abaixo, seguem o mercado todo.' },
+      marcas: { cat: p.categoria, note: 'Abaixo, a marca fica em destaque em todos os gráficos: no mapa, na disputa mês a mês, nas posições, em ganhos e perdas e no ranking.' },
+      eletrificacao: { cat: 'Leves', note: 'A ANFAVEA não publica combustível por marca. A lente mostra os leves da marca; os gráficos abaixo seguem o mercado todo.' },
+      importados: { cat: p.categoria, note: 'Toda a aba abaixo está filtrada pela marca. Os dados por marca começam em jan/2026, por isso não há comparação com o ano anterior.' },
+      caminhoes: { cat: 'Caminhões', note: 'Os subsegmentos (semileves a pesados) não são publicados por marca. A lente mostra os caminhões da marca; os gráficos abaixo seguem o mercado todo.' },
+    };
+    lens(tab, marcas, a, b, LENS[tab]);
 
     // resumo do topo: chip curto + texto completo no ⓘ
     setTxt('takeaway-h', `${wl} · ${big(m.e)} emplacamentos${m.ep ? ` (${sgn(m.e / m.ep - 1)}%)` : ''}`);

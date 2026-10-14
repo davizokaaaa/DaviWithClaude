@@ -1,7 +1,7 @@
 {
  "inicio": "2023-01",
  "fim": "2026-10",
- "coletado_em": "2026-10-14T14:28:59.866379+00:00",
+ "coletado_em": "2026-10-14T14:31:37.735184+00:00",
  "consultas": [
   {
    "consulta": "producao__categorias",
@@ -110,6 +110,17 @@
    ]
   },
   {
+   "consulta": "emplacamento__automoveis__procedencia",
+   "ok": true,
+   "linhas": 45,
+   "colunas": [
+    "PERÍODO",
+    "AUTOMÓVEIS - IMPORTADO",
+    "AUTOMÓVEIS - NACIONAL",
+    "AUTOMÓVEIS - TOTAL"
+   ]
+  },
+  {
    "consulta": "emplacamento__automoveis__procedencia_empresa",
    "ok": true,
    "linhas": 10,
@@ -161,6 +172,17 @@
     "COMERCIAIS LEVES - FCA FIAT CHRYSLER - RAM - IMPORTADO",
     "COMERCIAIS LEVES - FCA FIAT CHRYSLER - RAM - NACIONAL",
     "COMERCIAIS LEVES - FCA FIAT CHRYSLER - RAM - TOTAL"
+   ]
+  },
+  {
+   "consulta": "emplacamento__comerciais_leves__procedencia",
+   "ok": true,
+   "linhas": 45,
+   "colunas": [
+    "PERÍODO",
+    "COMERCIAIS LEVES - IMPORTADO",
+    "COMERCIAIS LEVES - NACIONAL",
+    "COMERCIAIS LEVES - TOTAL"
    ]
   },
   {
@@ -218,6 +240,17 @@
    ]
   },
   {
+   "consulta": "emplacamento__caminhoes__procedencia",
+   "ok": true,
+   "linhas": 45,
+   "colunas": [
+    "PERÍODO",
+    "CAMINHÕES - IMPORTADO",
+    "CAMINHÕES - NACIONAL",
+    "CAMINHÕES - TOTAL"
+   ]
+  },
+  {
    "consulta": "emplacamento__caminhoes__procedencia_empresa",
    "ok": true,
    "linhas": 10,
@@ -266,6 +299,17 @@
     "ÔNIBUS - VOLKSWAGEN TRUCK & BUS - VOLKS CAMINHOES - NACIONAL",
     "ÔNIBUS - VOLVO - VOLVO - IMPORTADO",
     "ÔNIBUS - VOLVO - VOLVO - NACIONAL"
+   ]
+  },
+  {
+   "consulta": "emplacamento__onibus__procedencia",
+   "ok": true,
+   "linhas": 45,
+   "colunas": [
+    "PERÍODO",
+    "ÔNIBUS - IMPORTADO",
+    "ÔNIBUS - NACIONAL",
+    "ÔNIBUS - TOTAL"
    ]
   },
   {

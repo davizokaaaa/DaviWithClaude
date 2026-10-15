@@ -1,0 +1,137 @@
+@import url("https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300..700&family=Inter+Tight:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap");
+/* ==========================================================================
+   Inteligência de Mercado · Indicadores — design system "IM" v1
+   Origem: o redesign editorial do Painel ANFAVEA (papel, tinta, filetes finos,
+   um único vermelhão de destaque). Tudo fica sob a classe .im, para não vazar
+   para fora da página do dashboard. Claro e escuro com passos próprios.
+   ========================================================================== */
+.im {
+  --mode: light;
+  /* cor */
+  --bg: #f7f4ee; --surface: #efebe3; --fg: #1b1a18; --muted: #6e6a62; --rule: #1b1a18;
+  --line: rgba(27,26,24,.14); --grid: rgba(27,26,24,.09); --accent: #c8452c; --on-accent: #fff;
+  --up: #2f7d55; --down: #b8432f; --warn: #b07a1f;
+  --heat-lo: #ebe5d9; --heat-hi: #1f3f66; --tile-mid: #e4ded2; --empty: rgba(27,26,24,.07);
+  --pop: rgba(251,249,245,.94); --shadow: 0 1px 0 rgba(27,26,24,.06), 0 12px 32px -12px rgba(27,26,24,.28);
+  /* séries (seguem a entidade, nunca a posição) */
+  --s1: #2a62a0; --s2: #c8452c; --s3: #1f8a70; --s4: #b07a1f; --s5: #8a4f8f; --s6: #6b7d2a; --s7: #c0577a; --s8: #5b5fc7;
+  --s-muted: rgba(27,26,24,.28);
+  /* tipo */
+  --serif: "Fraunces", Georgia, "Times New Roman", serif;
+  --sans: "Inter Tight", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --t-cap: 11px; --t-small: 12.5px; --t-body: 14px; --t-lede: clamp(17px, 2vw, 21px);
+  --t-h2: clamp(24px, 3.4vw, 38px); --t-h1: clamp(40px, 7.5vw, 92px); --t-kpi: 44px;
+  /* espaço */
+  --g-xs: 4px; --g-sm: 8px; --g-md: 14px; --g-lg: 28px; --g-xl: 44px;
+  --ease: cubic-bezier(.3,.8,.25,1); --spring: cubic-bezier(.2,.9,.25,1.05);
+
+  /* ponte para os tokens do tipo Dashboard: quem ainda usa --color-* / --cds-* / --font-anthropic-* herda o IM */
+  --color-fg: var(--fg); --color-fg-muted: var(--muted); --color-bg: var(--bg); --color-panel: transparent;
+  --color-border-line: var(--line); --color-ok: var(--up); --color-bad: var(--down); --color-warn: var(--warn);
+  --font-anthropic-serif: var(--serif); --font-anthropic-sans: var(--sans);
+  --cds-chart-grid: var(--grid); --cds-chart-axis: var(--line); --cds-chart-reference: var(--muted); --cds-chart-muted: var(--s-muted);
+  --cds-surface-popover: var(--pop); --cds-border: var(--line); --cds-shadow-popover: var(--shadow); --cds-text-secondary: var(--muted);
+  --cds-radius: 0px;
+
+  color-scheme: light;
+  position: relative; display: grid; gap: var(--g-lg); padding: var(--g-lg) clamp(16px, 4vw, 44px) 40px;
+  background: var(--bg); color: var(--fg); font-family: var(--sans); font-size: var(--t-body); line-height: 1.5;
+  -webkit-font-smoothing: antialiased; font-variant-numeric: tabular-nums;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .im {
+  --mode: dark; --bg: #161514; --surface: #1f1d1b; --fg: #ece8e1; --muted: #9a958c; --rule: #ece8e1;
+  --line: rgba(236,232,225,.14); --grid: rgba(236,232,225,.08); --accent: #e0603f; --on-accent: #161514;
+  --up: #6cbf8f; --down: #e5785f; --warn: #d9a441;
+  --heat-lo: #25231f; --heat-hi: #a6c6ec; --tile-mid: #2b2926; --empty: rgba(236,232,225,.08);
+  --pop: rgba(32,30,28,.94); --shadow: 0 12px 32px -12px rgba(0,0,0,.6);
+  --s1: #5a8fd0; --s2: #e0603f; --s3: #2fa385; --s4: #b8842a; --s5: #a874b2; --s6: #8a9c3f; --s7: #d06f94; --s8: #8a86e8;
+  --s-muted: rgba(236,232,225,.3);
+  color-scheme: dark; } }
+:root[data-theme="dark"] .im {
+  --mode: dark; --bg: #161514; --surface: #1f1d1b; --fg: #ece8e1; --muted: #9a958c; --rule: #ece8e1;
+  --line: rgba(236,232,225,.14); --grid: rgba(236,232,225,.08); --accent: #e0603f; --on-accent: #161514;
+  --up: #6cbf8f; --down: #e5785f; --warn: #d9a441;
+  --heat-lo: #25231f; --heat-hi: #a6c6ec; --tile-mid: #2b2926; --empty: rgba(236,232,225,.08);
+  --pop: rgba(32,30,28,.94); --shadow: 0 12px 32px -12px rgba(0,0,0,.6);
+  --s1: #5a8fd0; --s2: #e0603f; --s3: #2fa385; --s4: #b8842a; --s5: #a874b2; --s6: #8a9c3f; --s7: #d06f94; --s8: #8a86e8;
+  --s-muted: rgba(236,232,225,.3);
+  color-scheme: dark; }
+.im :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* --- barra do projeto: igual em todas as páginas ------------------------- */
+.im-bar { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 6px 18px; padding-bottom: 8px; border-bottom: 1px solid var(--rule); }
+.im-bar-brand { display: inline-flex; align-items: baseline; gap: 10px; font: 600 var(--t-cap)/1.2 var(--sans); letter-spacing: .14em; text-transform: uppercase; color: var(--fg); text-decoration: none; }
+.im-bar-brand b { font-weight: 600; color: var(--accent); }
+.im-bar-nav { display: flex; flex-wrap: wrap; gap: 2px 14px; }
+.im-bar-nav a { font: 500 var(--t-small)/1.6 var(--sans); color: var(--muted); text-decoration: none; border-bottom: 1px solid transparent; }
+.im-bar-nav a:hover { color: var(--fg); border-bottom-color: var(--line); }
+.im-bar-nav a[aria-current="page"] { color: var(--fg); border-bottom-color: var(--accent); }
+
+/* --- cabeçalho (masthead) ------------------------------------------------ */
+.im-mast { display: grid; gap: var(--g-md); border-bottom: 3px double var(--rule); padding-bottom: 18px; }
+.im-eyebrow { margin: 0; font: 600 var(--t-cap)/1.2 var(--sans); letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+.im-title { margin: 0; font: 400 var(--t-h1)/.92 var(--serif); font-variation-settings: "opsz" 144; letter-spacing: -.035em; text-wrap: balance; }
+.im-title em { font-style: italic; font-weight: 300; color: var(--accent); }
+.im-dek { margin: 0; max-width: 46rem; font: 400 var(--t-lede)/1.35 var(--serif); font-variation-settings: "opsz" 24; text-wrap: pretty; }
+.im-kicker { font: 600 var(--t-cap)/1.2 var(--sans); letter-spacing: .16em; text-transform: uppercase; color: var(--accent); }
+.im-h2 { margin: 0; font: 400 var(--t-h2)/1.12 var(--serif); font-variation-settings: "opsz" 72; letter-spacing: -.02em; text-wrap: balance; }
+.im-h3 { margin: 0; font: 600 15px/1.3 var(--sans); }
+.im-note { margin: 0; font-size: var(--t-small); color: var(--muted); line-height: 1.45; max-width: 70ch; }
+.im-label { font: 600 10.5px/1.3 var(--sans); letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+
+/* --- abas / controles ---------------------------------------------------- */
+.im-tabs { display: flex; gap: 4px; overflow-x: auto; scrollbar-width: none; border-bottom: 1px solid var(--line); }
+.im-tabs button { font: 600 13px var(--sans); letter-spacing: .02em; padding: 14px 14px 13px; border: 0; border-bottom: 2px solid transparent; margin-bottom: -1px; background: none; color: var(--muted); cursor: pointer; white-space: nowrap; }
+.im-tabs button:hover { color: var(--fg); }
+.im-tabs button[aria-selected="true"] { color: var(--fg); border-bottom-color: var(--accent); }
+.im-seg { display: inline-flex; gap: 2px; flex-wrap: wrap; }
+.im-seg button { font: 500 13px/1.2 var(--sans); padding: 7px 10px; border: 0; border-bottom: 2px solid transparent; background: none; color: var(--muted); cursor: pointer; }
+.im-seg button[aria-pressed="true"] { color: var(--fg); border-bottom-color: var(--accent); }
+.im select, .im input[type="search"] { font: 500 13px var(--sans); padding: 6px 2px; border: 0; border-bottom: 1px solid var(--rule); border-radius: 0; background: transparent; color: var(--fg); max-width: 100%; }
+.im select option { background: var(--bg); color: var(--fg); }
+.im-link { font: 500 var(--t-small) var(--sans); background: none; border: 0; padding: 8px 0; color: var(--accent); text-decoration: underline; text-underline-offset: 4px; cursor: pointer; }
+.im-chip { font: 500 var(--t-small) var(--sans); display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border: 1px solid var(--line); border-radius: 999px; background: none; color: var(--muted); cursor: pointer; }
+.im-chip[aria-pressed="true"] { color: var(--fg); border-color: var(--fg); }
+
+/* --- números ------------------------------------------------------------- */
+.im-kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr)); border-block: 1px solid var(--line); }
+.im-kpi { display: grid; gap: 4px; align-content: start; min-width: 0; padding: 14px 18px 12px; border-right: 1px solid var(--line); }
+.im-kpi:last-child { border-right: 0; }
+.im-kpi-l { font: 600 10.5px/1.3 var(--sans); letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+.im-kpi-v { font: 400 var(--t-kpi)/1.05 var(--serif); font-variation-settings: "opsz" 144; letter-spacing: -.03em; font-variant-numeric: lining-nums tabular-nums; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.im-kpi-d { font: 500 12px/1.4 var(--mono); color: var(--muted); }
+.im .up, .im [data-tone="up"] { color: var(--up); }
+.im .down, .im [data-tone="down"] { color: var(--down); }
+
+/* --- cartões: filete de tinta no topo, sem caixa ---------------------------- */
+.im-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 24rem), 1fr)); gap: var(--g-lg) var(--g-lg); }
+.im-card { position: relative; display: grid; gap: 12px; align-content: start; min-width: 0; padding-top: 12px; border-top: 2px solid var(--rule); background: none; }
+.im-card::before { content: ""; position: absolute; left: 0; top: -2px; width: 56px; height: 2px; background: var(--accent); }
+.im-card-head { display: flex; flex-wrap: wrap; gap: 8px; justify-content: space-between; align-items: flex-start; }
+
+/* --- gráficos ------------------------------------------------------------ */
+/* só o texto de eixo d3: regra CSS venceria fill/font-size postos por .attr() nos rótulos dos gráficos */
+.im svg .tick text { fill: var(--muted); font: 500 11px var(--mono); }
+.im svg .im-grid-l, .im svg .grid line, .im svg .tick line { stroke: var(--grid); }
+.im svg .domain { stroke: var(--line); }
+.im-legend { display: flex; flex-wrap: wrap; gap: 4px 16px; font: 500 11.5px var(--mono); color: var(--muted); }
+.im-legend span { display: inline-flex; align-items: center; gap: 6px; }
+.im-legend i { width: 8px; height: 8px; display: inline-block; }
+.im-tt { position: absolute; z-index: 20; pointer-events: none; background: var(--pop); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); border: 1px solid var(--line); box-shadow: var(--shadow); padding: 8px 10px; font: 500 12px/1.45 var(--mono); color: var(--fg); min-width: 9rem; }
+.im-tt .h { font: 600 10.5px var(--sans); letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin-bottom: 2px; }
+
+/* --- tabelas ------------------------------------------------------------- */
+.im table { border-collapse: collapse; width: 100%; font: 500 12.5px var(--mono); }
+.im th { font: 600 10.5px var(--sans); letter-spacing: .12em; text-transform: uppercase; color: var(--muted); text-align: right; padding: 8px 10px; border-bottom: 1px solid var(--rule); background: var(--bg); position: sticky; top: 0; }
+.im td { padding: 7px 10px; border-bottom: 1px solid var(--line); text-align: right; }
+.im th:first-child, .im td:first-child { text-align: left; }
+
+/* --- rodapé de fonte ----------------------------------------------------- */
+.im-foot { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 24px; padding-top: 12px; border-top: 3px double var(--rule); font: 500 11.5px var(--mono); color: var(--muted); }
+
+@media (prefers-reduced-motion: no-preference) {
+  .im-title, .im-dek { animation: im-rise .9s var(--ease) both; }
+  .im-dek { animation-delay: .15s; }
+}
+@keyframes im-rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }

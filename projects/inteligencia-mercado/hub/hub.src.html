@@ -1,0 +1,168 @@
+<title>Inteligência de Mercado</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+/*@@IMCSS@@*/
+/* Hub: masthead de jornal, o overall como manchete, os quatro painéis como seções do caderno. */
+body { margin: 0; background: #f7f4ee; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) body { background: #161514; } }
+:root[data-theme="dark"] body { background: #161514; }
+.hub { min-height: 100vh; max-width: 82rem; margin-inline: auto; padding-block: 24px 40px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+@media (min-width: 720px) { .hub { padding-left: max(44px, env(safe-area-inset-left, 0px)); padding-right: max(44px, env(safe-area-inset-right, 0px)); } }
+.hub-lead { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: var(--g-lg) var(--g-xl); padding: 18px 0 22px; border-top: 2px solid var(--accent); border-bottom: 1px solid var(--line); text-decoration: none; color: inherit; }
+.hub-lead:hover .hub-go { color: var(--accent); }
+.hub-lead-t { margin: 6px 0 10px; font: 400 clamp(30px, 4.6vw, 54px)/1 var(--serif); font-variation-settings: "opsz" 144; letter-spacing: -.03em; text-wrap: balance; }
+.hub-lead-t em { font-style: italic; font-weight: 300; color: var(--accent); }
+.hub-lead p { margin: 0; max-width: 40rem; font: 400 17px/1.45 var(--serif); }
+.hub-chan { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-content: start; border-top: 1px solid var(--rule); }
+.hub-chan div { padding: 10px 12px 10px 0; border-bottom: 1px solid var(--line); display: grid; gap: 2px; }
+.hub-chan b { font: 600 13px var(--sans); }
+.hub-chan span { font: 500 11.5px/1.4 var(--mono); color: var(--muted); }
+.hub-go, .hub-chan .hub-go { font: 600 12.5px var(--sans); letter-spacing: .04em; color: var(--fg); transition: color .2s; }
+.hub-sec { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+.hub-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr)); gap: var(--g-lg) var(--g-lg); }
+@media (min-width: 640px) and (max-width: 1100px) { .hub-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.hub-card { display: grid; grid-template-rows: auto auto auto 1fr auto auto; gap: 10px; padding-top: 12px; border-top: 2px solid var(--rule); color: inherit; text-decoration: none; min-width: 0; }
+.hub-card:hover .hub-card-t, .hub-card:focus-visible .hub-card-t { color: var(--accent); }
+.hub-card-top { display: flex; justify-content: space-between; gap: 8px; }
+.hub-card-t { margin: 0; font: 400 30px/1.05 var(--serif); font-variation-settings: "opsz" 96; letter-spacing: -.02em; transition: color .2s; }
+.hub-card p { margin: 0; font-size: 13.5px; line-height: 1.5; }
+.hub-why { font: italic 400 14px/1.45 var(--serif); color: var(--muted); }
+.hub-spark { display: grid; gap: 4px; padding-top: 10px; border-top: 1px solid var(--line); }
+.hub-spark-row { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+.hub-spark-v { font: 400 28px/1 var(--serif); font-variation-settings: "opsz" 144; letter-spacing: -.02em; font-variant-numeric: lining-nums tabular-nums; }
+.hub-spark svg { display: block; width: 100%; height: 44px; overflow: visible; }
+.hub-meta { display: flex; justify-content: space-between; gap: 8px; font: 500 11.5px var(--mono); color: var(--muted); }
+.hub-ds { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr)); gap: 0 var(--g-lg); border-top: 1px solid var(--rule); }
+.hub-ds div { padding: 12px 0; border-bottom: 1px solid var(--line); display: grid; gap: 4px; }
+.hub-ds .hub-sw { display: flex; gap: 3px; flex-wrap: wrap; } .hub-sw i { width: 18px; height: 10px; display: block; }
+.hub-ds .hub-fonts { display: flex; flex-wrap: wrap; gap: 4px 14px; align-items: baseline; }
+@media (max-width: 760px) { .hub-lead { grid-template-columns: 1fr; } }
+</style>
+
+<div class="im hub">
+  <div id="im-bar"></div>
+
+  <header class="im-mast">
+    <p class="im-eyebrow">Projeto · quatro painéis de indicadores e uma leitura integrada · outubro de 2026</p>
+    <h1 class="im-title">Inteligência de <em>Mercado</em></h1>
+    <p class="im-dek">Indicadores de veículos, combustíveis, rodovias e indústria num só lugar, para acompanhar a economia brasileira e projetar a demanda de pneus.</p>
+  </header>
+
+  <a class="hub-lead" id="overall" href="https://claude.ai/artifact/BLaQZRNXjzwTWnfyC96Qf9" target="_blank" rel="noopener">
+    <div>
+      <span class="im-kicker">Leitura integrada · Michelin</span>
+      <h2 class="hub-lead-t">Overall <em>Michelin</em></h2>
+      <p>Os quatro relatórios cruzados numa só análise: o que cada indicador diz sobre a demanda de pneus no equipamento original e na reposição, o termômetro de cada canal, projeções para 2026 e 2027 e as ações recomendadas.</p>
+    </div>
+    <div class="hub-chan" aria-label="Canais analisados">
+      <div><b>Equipamento original</b><span>produção ANFAVEA</span></div>
+      <div><b>Reposição passeio</b><span>gasolina, etanol, ABCR leves</span></div>
+      <div><b>Carga e ônibus</b><span>diesel, ABCR pesados, caminhões</span></div>
+      <div><b>Indústria</b><span>PIM-PF borracha, veículos, RJ</span></div>
+      <div style="grid-column: 1 / -1; border-bottom: 0;"><span class="hub-go">Abrir o overall →</span></div>
+    </div>
+  </a>
+
+  <section style="display:grid; gap: var(--g-md);" id="paineis">
+    <div class="hub-sec">
+      <h2 class="im-h2">Os painéis</h2>
+      <span class="im-note">Cada um abre em uma nova aba, com seus filtros e fontes.</span>
+    </div>
+    <div class="hub-cards" id="cards"></div>
+  </section>
+
+  <section style="display:grid; gap: var(--g-md);" id="design-system">
+    <div class="hub-sec">
+      <h2 class="im-h2">Padrão visual</h2>
+      <span class="im-note">O mesmo sistema em todas as páginas do projeto.</span>
+    </div>
+    <div class="hub-ds">
+      <div><span class="im-label">Papel e tinta</span><div class="hub-sw"><i style="background:var(--bg); outline:1px solid var(--line)"></i><i style="background:var(--surface)"></i><i style="background:var(--fg)"></i><i style="background:var(--accent)"></i></div><span class="im-note">Vermelhão só para o destaque do momento.</span></div>
+      <div><span class="im-label">Séries</span><div class="hub-sw" id="sw-series"></div><span class="im-note">A cor segue a entidade, nunca a posição.</span></div>
+      <div><span class="im-label">Tipografia</span><div class="hub-fonts"><span style="font:400 22px var(--serif)">Fraunces</span><span style="font:600 13px var(--sans)">Inter Tight</span><span style="font:500 12px var(--mono)">Plex Mono</span></div><span class="im-note">Títulos e números, texto, dados.</span></div>
+      <div><span class="im-label">Variação</span><div class="hub-fonts"><span class="up" style="font:500 13px var(--mono)">▲ +3,2%</span><span class="down" style="font:500 13px var(--mono)">▼ −1,4%</span></div><span class="im-note">Verde e vermelho só para direção.</span></div>
+    </div>
+  </section>
+
+  <footer class="im-foot">
+    <span>Fontes: ANFAVEA, ANP, ABCR, IBGE (SIDRA 8888)</span>
+    <span id="foot-upd">Última leitura dos dados: 15/10/2026</span>
+  </footer>
+</div>
+
+<script>
+/*@@IMJS@@*/
+</script>
+<script>
+(function () {
+  var SPARK = /*@@SPARK@@*/;
+  var PANELS = [
+    { id: 'anfavea', src: 'ANFAVEA', name: 'Autoveículos', what: 'Produção, emplacamento e exportação por categoria, marcas, eletrificação, importados e caminhões por subsegmento.', why: 'Sinal direto do equipamento original e da frota que vai pedir reposição.', cov: 'jan/2023 → set/2026', fmt: 'k' },
+    { id: 'anp', src: 'ANP', name: 'Combustíveis', what: 'Vendas das distribuidoras em m³ por produto, estado e segmento, desde 1990.', why: 'Litro vendido é quilômetro rodado: o melhor proxy de desgaste e reposição.', cov: 'jan/1990 → ago/2026', fmt: 'M' },
+    { id: 'abcr', src: 'ABCR', name: 'Fluxo pedagiado', what: 'Índice de fluxo de veículos leves e pesados em rodovias pedagiadas, original e dessazonalizado.', why: 'Pesados na estrada antecipam a demanda de pneus de carga.', cov: 'jan/1999 → set/2026', fmt: 'i' },
+    { id: 'pim', src: 'IBGE · PIM-PF', name: 'Produção industrial', what: 'Índices e variações das 27 atividades da indústria e de 17 estados.', why: 'Borracha e plástico, veículos e Rio de Janeiro: o chão de fábrica do setor.', cov: 'jan/2023 → ago/2026', fmt: 'i' },
+  ];
+  var MES = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'];
+  var mes = function (p) { return MES[+p.slice(5, 7) - 1] + '/' + p.slice(2, 4); };
+  var nf = function (v, d) { return v.toLocaleString('pt-BR', { minimumFractionDigits: d, maximumFractionDigits: d }); };
+  var fmt = function (v, f) { return f === 'k' ? nf(v / 1000, 1) + ' mil' : f === 'M' ? nf(v / 1e6, 2) + ' mi' : nf(v, 1); };
+  var host = document.getElementById('cards');
+  var NS = 'http://www.w3.org/2000/svg';
+  var el = function (tag, cls, txt) { var e = document.createElement(tag); if (cls) e.className = cls; if (txt != null) e.textContent = txt; return e; };
+
+  function spark(svg, pts) {
+    var W = 300, H = 44, P = 3, ys = pts.map(function (p) { return p[1]; });
+    var lo = Math.min.apply(null, ys), hi = Math.max.apply(null, ys), r = hi - lo || 1;
+    var x = function (i) { return P + i * (W - 2 * P) / (pts.length - 1); };
+    var y = function (v) { return H - P - (v - lo) / r * (H - 2 * P); };
+    svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H); svg.setAttribute('preserveAspectRatio', 'none');
+    svg.replaceChildren();
+    var base = document.createElementNS(NS, 'line');
+    base.setAttribute('x1', 0); base.setAttribute('x2', W); base.setAttribute('y1', y(pts[11][1])); base.setAttribute('y2', y(pts[11][1]));
+    base.setAttribute('stroke', IM.tok('--grid')); base.setAttribute('stroke-dasharray', '3 3'); base.setAttribute('vector-effect', 'non-scaling-stroke');
+    var path = document.createElementNS(NS, 'path');
+    path.setAttribute('d', pts.map(function (p, i) { return (i ? 'L' : 'M') + x(i).toFixed(1) + ',' + y(p[1]).toFixed(1); }).join(''));
+    path.setAttribute('fill', 'none'); path.setAttribute('stroke', IM.tok('--fg')); path.setAttribute('stroke-width', 1.5);
+    path.setAttribute('stroke-linejoin', 'round'); path.setAttribute('vector-effect', 'non-scaling-stroke');
+    var dot = document.createElementNS(NS, 'circle');
+    dot.setAttribute('cx', x(pts.length - 1)); dot.setAttribute('cy', y(pts[pts.length - 1][1])); dot.setAttribute('r', 3); dot.setAttribute('fill', IM.tok('--accent'));
+    svg.append(base, path, dot);
+  }
+
+  var svgs = [];
+  PANELS.forEach(function (p) {
+    var link = IM.links.filter(function (l) { return l.id === p.id; })[0];
+    var s = SPARK[p.id], pts = s.pts, last = pts[pts.length - 1], prev = pts[pts.length - 13];
+    var yoy = last[1] / prev[1] - 1;
+    var a = el('a', 'hub-card'); a.href = link.url; a.target = '_blank'; a.rel = 'noopener'; a.id = 'card-' + p.id;
+    var top = el('div', 'hub-card-top'); top.append(el('span', 'im-kicker', p.src), el('span', 'hub-go', 'Abrir →'));
+    var sp = el('div', 'hub-spark');
+    var row = el('div', 'hub-spark-row');
+    var lab = el('span', 'im-label', s.lab + ' · ' + mes(last[0]));
+    row.append(lab);
+    var row2 = el('div', 'hub-spark-row');
+    var d = el('span', 'im-kpi-d ' + (yoy >= 0 ? 'up' : 'down'), (yoy >= 0 ? '▲ +' : '▼ −') + nf(Math.abs(yoy) * 100, 1) + '% vs ' + mes(prev[0]));
+    row2.append(el('span', 'hub-spark-v', fmt(last[1], p.fmt)), d);
+    var svg = document.createElementNS(NS, 'svg'); svg.setAttribute('aria-label', s.lab + ', últimos 24 meses'); svg.setAttribute('role', 'img');
+    svgs.push([svg, pts]);
+    sp.append(row, row2, svg, el('span', 'im-note', s.unit + ' · 24 meses; tracejado = mesmo mês do ano anterior'));
+    var meta = el('div', 'hub-meta'); meta.append(el('span', null, p.cov), el('span', null, p.name));
+    a.append(top, el('h3', 'hub-card-t', p.name), el('p', null, p.what), el('p', 'hub-why', p.why), sp, meta);
+    host.append(a);
+  });
+
+  function draw() {
+    svgs.forEach(function (x) { spark(x[0], x[1]); });
+    var sw = document.getElementById('sw-series'); sw.replaceChildren();
+    IM.colors().forEach(function (c) { var i = document.createElement('i'); i.style.background = c; sw.append(i); });
+  }
+  IM.bar(document.getElementById('im-bar'), 'hub');
+  draw();
+  if (window.matchMedia) {
+    var mq = matchMedia('(prefers-color-scheme: dark)');
+    if (mq.addEventListener) mq.addEventListener('change', draw);
+  }
+  new MutationObserver(draw).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+})();
+</script>

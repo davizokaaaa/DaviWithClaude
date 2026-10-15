@@ -1,0 +1,347 @@
+<title>Inteligência de Mercado</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+@import url("https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300..700&family=Inter+Tight:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap");
+/* ==========================================================================
+   Inteligência de Mercado · Indicadores — design system "IM" v1
+   Origem: o redesign editorial do Painel ANFAVEA (papel, tinta, filetes finos,
+   um único vermelhão de destaque). Tudo fica sob a classe .im, para não vazar
+   para fora da página do dashboard. Claro e escuro com passos próprios.
+   ========================================================================== */
+.im {
+  --mode: light;
+  /* cor */
+  --bg: #f7f4ee; --surface: #efebe3; --fg: #1b1a18; --muted: #6e6a62; --rule: #1b1a18;
+  --line: rgba(27,26,24,.14); --grid: rgba(27,26,24,.09); --accent: #c8452c; --on-accent: #fff;
+  --up: #2f7d55; --down: #b8432f; --warn: #b07a1f;
+  --heat-lo: #ebe5d9; --heat-hi: #1f3f66; --tile-mid: #e4ded2; --empty: rgba(27,26,24,.07);
+  --pop: rgba(251,249,245,.94); --shadow: 0 1px 0 rgba(27,26,24,.06), 0 12px 32px -12px rgba(27,26,24,.28);
+  /* séries (seguem a entidade, nunca a posição) */
+  --s1: #2a62a0; --s2: #c8452c; --s3: #1f8a70; --s4: #b07a1f; --s5: #8a4f8f; --s6: #6b7d2a; --s7: #c0577a; --s8: #5b5fc7;
+  --s-muted: rgba(27,26,24,.28);
+  /* tipo */
+  --serif: "Fraunces", Georgia, "Times New Roman", serif;
+  --sans: "Inter Tight", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --t-cap: 11px; --t-small: 12.5px; --t-body: 14px; --t-lede: clamp(17px, 2vw, 21px);
+  --t-h2: clamp(24px, 3.4vw, 38px); --t-h1: clamp(40px, 7.5vw, 92px); --t-kpi: 44px;
+  /* espaço */
+  --g-xs: 4px; --g-sm: 8px; --g-md: 14px; --g-lg: 28px; --g-xl: 44px;
+  --ease: cubic-bezier(.3,.8,.25,1); --spring: cubic-bezier(.2,.9,.25,1.05);
+
+  /* ponte para os tokens do tipo Dashboard: quem ainda usa --color-* / --cds-* / --font-anthropic-* herda o IM */
+  --color-fg: var(--fg); --color-fg-muted: var(--muted); --color-bg: var(--bg); --color-panel: transparent;
+  --color-border-line: var(--line); --color-ok: var(--up); --color-bad: var(--down); --color-warn: var(--warn);
+  --font-anthropic-serif: var(--serif); --font-anthropic-sans: var(--sans);
+  --cds-chart-grid: var(--grid); --cds-chart-axis: var(--line); --cds-chart-reference: var(--muted); --cds-chart-muted: var(--s-muted);
+  --cds-surface-popover: var(--pop); --cds-border: var(--line); --cds-shadow-popover: var(--shadow); --cds-text-secondary: var(--muted);
+  --cds-radius: 0px;
+
+  color-scheme: light;
+  position: relative; display: grid; gap: var(--g-lg); padding: var(--g-lg) clamp(16px, 4vw, 44px) 40px;
+  background: var(--bg); color: var(--fg); font-family: var(--sans); font-size: var(--t-body); line-height: 1.5;
+  -webkit-font-smoothing: antialiased; font-variant-numeric: tabular-nums;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .im {
+  --mode: dark; --bg: #161514; --surface: #1f1d1b; --fg: #ece8e1; --muted: #9a958c; --rule: #ece8e1;
+  --line: rgba(236,232,225,.14); --grid: rgba(236,232,225,.08); --accent: #e0603f; --on-accent: #161514;
+  --up: #6cbf8f; --down: #e5785f; --warn: #d9a441;
+  --heat-lo: #25231f; --heat-hi: #a6c6ec; --tile-mid: #2b2926; --empty: rgba(236,232,225,.08);
+  --pop: rgba(32,30,28,.94); --shadow: 0 12px 32px -12px rgba(0,0,0,.6);
+  --s1: #5a8fd0; --s2: #e0603f; --s3: #2fa385; --s4: #b8842a; --s5: #a874b2; --s6: #8a9c3f; --s7: #d06f94; --s8: #8a86e8;
+  --s-muted: rgba(236,232,225,.3);
+  color-scheme: dark; } }
+:root[data-theme="dark"] .im {
+  --mode: dark; --bg: #161514; --surface: #1f1d1b; --fg: #ece8e1; --muted: #9a958c; --rule: #ece8e1;
+  --line: rgba(236,232,225,.14); --grid: rgba(236,232,225,.08); --accent: #e0603f; --on-accent: #161514;
+  --up: #6cbf8f; --down: #e5785f; --warn: #d9a441;
+  --heat-lo: #25231f; --heat-hi: #a6c6ec; --tile-mid: #2b2926; --empty: rgba(236,232,225,.08);
+  --pop: rgba(32,30,28,.94); --shadow: 0 12px 32px -12px rgba(0,0,0,.6);
+  --s1: #5a8fd0; --s2: #e0603f; --s3: #2fa385; --s4: #b8842a; --s5: #a874b2; --s6: #8a9c3f; --s7: #d06f94; --s8: #8a86e8;
+  --s-muted: rgba(236,232,225,.3);
+  color-scheme: dark; }
+.im :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* --- barra do projeto: igual em todas as páginas ------------------------- */
+.im-bar { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 6px 18px; padding-bottom: 8px; border-bottom: 1px solid var(--rule); }
+.im-bar-brand { display: inline-flex; align-items: baseline; gap: 10px; font: 600 var(--t-cap)/1.2 var(--sans); letter-spacing: .14em; text-transform: uppercase; color: var(--fg); text-decoration: none; }
+.im-bar-brand b { font-weight: 600; color: var(--accent); }
+.im-bar-nav { display: flex; flex-wrap: wrap; gap: 2px 14px; }
+.im-bar-nav a { font: 500 var(--t-small)/1.6 var(--sans); color: var(--muted); text-decoration: none; border-bottom: 1px solid transparent; }
+.im-bar-nav a:hover { color: var(--fg); border-bottom-color: var(--line); }
+.im-bar-nav a[aria-current="page"] { color: var(--fg); border-bottom-color: var(--accent); }
+
+/* --- cabeçalho (masthead) ------------------------------------------------ */
+.im-mast { display: grid; gap: var(--g-md); border-bottom: 3px double var(--rule); padding-bottom: 18px; }
+.im-eyebrow { margin: 0; font: 600 var(--t-cap)/1.2 var(--sans); letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+.im-title { margin: 0; font: 400 var(--t-h1)/.92 var(--serif); font-variation-settings: "opsz" 144; letter-spacing: -.035em; text-wrap: balance; }
+.im-title em { font-style: italic; font-weight: 300; color: var(--accent); }
+.im-dek { margin: 0; max-width: 46rem; font: 400 var(--t-lede)/1.35 var(--serif); font-variation-settings: "opsz" 24; text-wrap: pretty; }
+.im-kicker { font: 600 var(--t-cap)/1.2 var(--sans); letter-spacing: .16em; text-transform: uppercase; color: var(--accent); }
+.im-h2 { margin: 0; font: 400 var(--t-h2)/1.12 var(--serif); font-variation-settings: "opsz" 72; letter-spacing: -.02em; text-wrap: balance; }
+.im-h3 { margin: 0; font: 600 15px/1.3 var(--sans); }
+.im-note { margin: 0; font-size: var(--t-small); color: var(--muted); line-height: 1.45; max-width: 70ch; }
+.im-label { font: 600 10.5px/1.3 var(--sans); letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+
+/* --- abas / controles ---------------------------------------------------- */
+.im-tabs { display: flex; gap: 4px; overflow-x: auto; scrollbar-width: none; border-bottom: 1px solid var(--line); }
+.im-tabs button { font: 600 13px var(--sans); letter-spacing: .02em; padding: 14px 14px 13px; border: 0; border-bottom: 2px solid transparent; margin-bottom: -1px; background: none; color: var(--muted); cursor: pointer; white-space: nowrap; }
+.im-tabs button:hover { color: var(--fg); }
+.im-tabs button[aria-selected="true"] { color: var(--fg); border-bottom-color: var(--accent); }
+.im-seg { display: inline-flex; gap: 2px; flex-wrap: wrap; }
+.im-seg button { font: 500 13px/1.2 var(--sans); padding: 7px 10px; border: 0; border-bottom: 2px solid transparent; background: none; color: var(--muted); cursor: pointer; }
+.im-seg button[aria-pressed="true"] { color: var(--fg); border-bottom-color: var(--accent); }
+.im select, .im input[type="search"] { font: 500 13px var(--sans); padding: 6px 2px; border: 0; border-bottom: 1px solid var(--rule); border-radius: 0; background: transparent; color: var(--fg); max-width: 100%; }
+.im select option { background: var(--bg); color: var(--fg); }
+.im-link { font: 500 var(--t-small) var(--sans); background: none; border: 0; padding: 8px 0; color: var(--accent); text-decoration: underline; text-underline-offset: 4px; cursor: pointer; }
+.im-chip { font: 500 var(--t-small) var(--sans); display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border: 1px solid var(--line); border-radius: 999px; background: none; color: var(--muted); cursor: pointer; }
+.im-chip[aria-pressed="true"] { color: var(--fg); border-color: var(--fg); }
+
+/* --- números ------------------------------------------------------------- */
+.im-kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr)); border-block: 1px solid var(--line); }
+.im-kpi { display: grid; gap: 4px; align-content: start; min-width: 0; padding: 14px 18px 12px; border-right: 1px solid var(--line); }
+.im-kpi:last-child { border-right: 0; }
+.im-kpi-l { font: 600 10.5px/1.3 var(--sans); letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+.im-kpi-v { font: 400 var(--t-kpi)/1.05 var(--serif); font-variation-settings: "opsz" 144; letter-spacing: -.03em; font-variant-numeric: lining-nums tabular-nums; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.im-kpi-d { font: 500 12px/1.4 var(--mono); color: var(--muted); }
+.im .up, .im [data-tone="up"] { color: var(--up); }
+.im .down, .im [data-tone="down"] { color: var(--down); }
+
+/* --- cartões: filete de tinta no topo, sem caixa ---------------------------- */
+.im-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 24rem), 1fr)); gap: var(--g-lg) var(--g-lg); }
+.im-card { position: relative; display: grid; gap: 12px; align-content: start; min-width: 0; padding-top: 12px; border-top: 2px solid var(--rule); background: none; }
+.im-card::before { content: ""; position: absolute; left: 0; top: -2px; width: 56px; height: 2px; background: var(--accent); }
+.im-card-head { display: flex; flex-wrap: wrap; gap: 8px; justify-content: space-between; align-items: flex-start; }
+
+/* --- gráficos ------------------------------------------------------------ */
+/* só o texto de eixo d3: regra CSS venceria fill/font-size postos por .attr() nos rótulos dos gráficos */
+.im svg .tick text { fill: var(--muted); font: 500 11px var(--mono); }
+.im svg .im-grid-l, .im svg .grid line, .im svg .tick line { stroke: var(--grid); }
+.im svg .domain { stroke: var(--line); }
+.im-legend { display: flex; flex-wrap: wrap; gap: 4px 16px; font: 500 11.5px var(--mono); color: var(--muted); }
+.im-legend span { display: inline-flex; align-items: center; gap: 6px; }
+.im-legend i { width: 8px; height: 8px; display: inline-block; }
+.im-tt { position: absolute; z-index: 20; pointer-events: none; background: var(--pop); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); border: 1px solid var(--line); box-shadow: var(--shadow); padding: 8px 10px; font: 500 12px/1.45 var(--mono); color: var(--fg); min-width: 9rem; }
+.im-tt .h { font: 600 10.5px var(--sans); letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin-bottom: 2px; }
+
+/* --- tabelas ------------------------------------------------------------- */
+.im table { border-collapse: collapse; width: 100%; font: 500 12.5px var(--mono); }
+.im th { font: 600 10.5px var(--sans); letter-spacing: .12em; text-transform: uppercase; color: var(--muted); text-align: right; padding: 8px 10px; border-bottom: 1px solid var(--rule); background: var(--bg); position: sticky; top: 0; }
+.im td { padding: 7px 10px; border-bottom: 1px solid var(--line); text-align: right; }
+.im th:first-child, .im td:first-child { text-align: left; }
+
+/* --- rodapé de fonte ----------------------------------------------------- */
+.im-foot { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 24px; padding-top: 12px; border-top: 3px double var(--rule); font: 500 11.5px var(--mono); color: var(--muted); }
+
+@media (prefers-reduced-motion: no-preference) {
+  .im-title, .im-dek { animation: im-rise .9s var(--ease) both; }
+  .im-dek { animation-delay: .15s; }
+}
+@keyframes im-rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+
+/* Hub: masthead de jornal, o overall como manchete, os quatro painéis como seções do caderno. */
+body { margin: 0; background: #f7f4ee; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) body { background: #161514; } }
+:root[data-theme="dark"] body { background: #161514; }
+.hub { min-height: 100vh; max-width: 82rem; margin-inline: auto; padding-block: 24px 40px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+@media (min-width: 720px) { .hub { padding-left: max(44px, env(safe-area-inset-left, 0px)); padding-right: max(44px, env(safe-area-inset-right, 0px)); } }
+.hub-lead { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: var(--g-lg) var(--g-xl); padding: 18px 0 22px; border-top: 2px solid var(--accent); border-bottom: 1px solid var(--line); text-decoration: none; color: inherit; }
+.hub-lead:hover .hub-go { color: var(--accent); }
+.hub-lead-t { margin: 6px 0 10px; font: 400 clamp(30px, 4.6vw, 54px)/1 var(--serif); font-variation-settings: "opsz" 144; letter-spacing: -.03em; text-wrap: balance; }
+.hub-lead-t em { font-style: italic; font-weight: 300; color: var(--accent); }
+.hub-lead p { margin: 0; max-width: 40rem; font: 400 17px/1.45 var(--serif); }
+.hub-chan { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-content: start; border-top: 1px solid var(--rule); }
+.hub-chan div { padding: 10px 12px 10px 0; border-bottom: 1px solid var(--line); display: grid; gap: 2px; }
+.hub-chan b { font: 600 13px var(--sans); }
+.hub-chan span { font: 500 11.5px/1.4 var(--mono); color: var(--muted); }
+.hub-go, .hub-chan .hub-go { font: 600 12.5px var(--sans); letter-spacing: .04em; color: var(--fg); transition: color .2s; }
+.hub-sec { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+.hub-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr)); gap: var(--g-lg) var(--g-lg); }
+@media (min-width: 640px) and (max-width: 1100px) { .hub-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.hub-card { display: grid; grid-template-rows: auto auto auto 1fr auto auto; gap: 10px; padding-top: 12px; border-top: 2px solid var(--rule); color: inherit; text-decoration: none; min-width: 0; }
+.hub-card:hover .hub-card-t, .hub-card:focus-visible .hub-card-t { color: var(--accent); }
+.hub-card-top { display: flex; justify-content: space-between; gap: 8px; }
+.hub-card-t { margin: 0; font: 400 30px/1.05 var(--serif); font-variation-settings: "opsz" 96; letter-spacing: -.02em; transition: color .2s; }
+.hub-card p { margin: 0; font-size: 13.5px; line-height: 1.5; }
+.hub-why { font: italic 400 14px/1.45 var(--serif); color: var(--muted); }
+.hub-spark { display: grid; gap: 4px; padding-top: 10px; border-top: 1px solid var(--line); }
+.hub-spark-row { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+.hub-spark-v { font: 400 28px/1 var(--serif); font-variation-settings: "opsz" 144; letter-spacing: -.02em; font-variant-numeric: lining-nums tabular-nums; }
+.hub-spark svg { display: block; width: 100%; height: 44px; overflow: visible; }
+.hub-meta { display: flex; justify-content: space-between; gap: 8px; font: 500 11.5px var(--mono); color: var(--muted); }
+.hub-ds { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr)); gap: 0 var(--g-lg); border-top: 1px solid var(--rule); }
+.hub-ds div { padding: 12px 0; border-bottom: 1px solid var(--line); display: grid; gap: 4px; }
+.hub-ds .hub-sw { display: flex; gap: 3px; flex-wrap: wrap; } .hub-sw i { width: 18px; height: 10px; display: block; }
+.hub-ds .hub-fonts { display: flex; flex-wrap: wrap; gap: 4px 14px; align-items: baseline; }
+@media (max-width: 760px) { .hub-lead { grid-template-columns: 1fr; } }
+</style>
+
+<div class="im hub">
+  <div id="im-bar"></div>
+
+  <header class="im-mast">
+    <p class="im-eyebrow">Projeto · quatro painéis de indicadores e uma leitura integrada · outubro de 2026</p>
+    <h1 class="im-title">Inteligência de <em>Mercado</em></h1>
+    <p class="im-dek">Indicadores de veículos, combustíveis, rodovias e indústria num só lugar, para acompanhar a economia brasileira e projetar a demanda de pneus.</p>
+  </header>
+
+  <a class="hub-lead" id="overall" href="https://claude.ai/artifact/BLaQZRNXjzwTWnfyC96Qf9" target="_blank" rel="noopener">
+    <div>
+      <span class="im-kicker">Leitura integrada · Michelin</span>
+      <h2 class="hub-lead-t">Overall <em>Michelin</em></h2>
+      <p>Os quatro relatórios cruzados numa só análise: o que cada indicador diz sobre a demanda de pneus no equipamento original e na reposição, o termômetro de cada canal, projeções para 2026 e 2027 e as ações recomendadas.</p>
+    </div>
+    <div class="hub-chan" aria-label="Canais analisados">
+      <div><b>Equipamento original</b><span>produção ANFAVEA</span></div>
+      <div><b>Reposição passeio</b><span>gasolina, etanol, ABCR leves</span></div>
+      <div><b>Carga e ônibus</b><span>diesel, ABCR pesados, caminhões</span></div>
+      <div><b>Indústria</b><span>PIM-PF borracha, veículos, RJ</span></div>
+      <div style="grid-column: 1 / -1; border-bottom: 0;"><span class="hub-go">Abrir o overall →</span></div>
+    </div>
+  </a>
+
+  <section style="display:grid; gap: var(--g-md);" id="paineis">
+    <div class="hub-sec">
+      <h2 class="im-h2">Os painéis</h2>
+      <span class="im-note">Cada um abre em uma nova aba, com seus filtros e fontes.</span>
+    </div>
+    <div class="hub-cards" id="cards"></div>
+  </section>
+
+  <section style="display:grid; gap: var(--g-md);" id="design-system">
+    <div class="hub-sec">
+      <h2 class="im-h2">Padrão visual</h2>
+      <span class="im-note">O mesmo sistema em todas as páginas do projeto.</span>
+    </div>
+    <div class="hub-ds">
+      <div><span class="im-label">Papel e tinta</span><div class="hub-sw"><i style="background:var(--bg); outline:1px solid var(--line)"></i><i style="background:var(--surface)"></i><i style="background:var(--fg)"></i><i style="background:var(--accent)"></i></div><span class="im-note">Vermelhão só para o destaque do momento.</span></div>
+      <div><span class="im-label">Séries</span><div class="hub-sw" id="sw-series"></div><span class="im-note">A cor segue a entidade, nunca a posição.</span></div>
+      <div><span class="im-label">Tipografia</span><div class="hub-fonts"><span style="font:400 22px var(--serif)">Fraunces</span><span style="font:600 13px var(--sans)">Inter Tight</span><span style="font:500 12px var(--mono)">Plex Mono</span></div><span class="im-note">Títulos e números, texto, dados.</span></div>
+      <div><span class="im-label">Variação</span><div class="hub-fonts"><span class="up" style="font:500 13px var(--mono)">▲ +3,2%</span><span class="down" style="font:500 13px var(--mono)">▼ −1,4%</span></div><span class="im-note">Verde e vermelho só para direção.</span></div>
+    </div>
+  </section>
+
+  <footer class="im-foot">
+    <span>Fontes: ANFAVEA, ANP, ABCR, IBGE (SIDRA 8888)</span>
+    <span id="foot-upd">Última leitura dos dados: 15/10/2026</span>
+  </footer>
+</div>
+
+<script>
+/* Inteligência de Mercado · Indicadores — helpers do design system IM v1. Só forma e navegação, nenhum dado. */
+(function () {
+  var LINKS = [
+    { id: 'hub', label: 'Hub', url: 'https://claude.ai/artifact/V1bVorfGMvbgGWoQbHjA1r' },
+    { id: 'overall', label: 'Overall Michelin', url: 'https://claude.ai/artifact/BLaQZRNXjzwTWnfyC96Qf9' },
+    { id: 'anfavea', label: 'Autoveículos', url: 'https://claude.ai/artifact/BFjv7uaNAb6ZKscpYy2Y1m' },
+    { id: 'anp', label: 'Combustíveis', url: 'https://claude.ai/artifact/5zCFL7zy2UTQxKTgj4Lk5P' },
+    { id: 'abcr', label: 'Fluxo pedagiado', url: 'https://claude.ai/artifact/4QNxE4hMyDfYFqYGQHaAQ4' },
+    { id: 'pim', label: 'Produção industrial', url: 'https://claude.ai/artifact/FBhGpvwfJWYiW2esC4Pb8J' },
+  ];
+  var CATS = {
+    light: ['#2a62a0', '#c8452c', '#1f8a70', '#b07a1f', '#8a4f8f', '#6b7d2a', '#c0577a', '#5b5fc7'],
+    dark: ['#5a8fd0', '#e0603f', '#2fa385', '#b8842a', '#a874b2', '#8a9c3f', '#d06f94', '#8a86e8'],
+  };
+  function root(el) { return el || document.querySelector('.im') || document.documentElement; }
+  function isDark(el) { return getComputedStyle(root(el)).getPropertyValue('--mode').trim() === 'dark'; }
+  window.IM = {
+    links: LINKS,
+    // paleta categórica do tema atual (hex), para d3; chame dentro de cada desenho
+    colors: function (el) { return (isDark(el) ? CATS.dark : CATS.light).slice(); },
+    tok: function (name, el) { return getComputedStyle(root(el)).getPropertyValue(name).trim(); },
+    isDark: isDark,
+    // monta a barra do projeto dentro de `host`; `current` é o id da página
+    bar: function (host, current) {
+      if (!host) return;
+      host.classList.add('im-bar');
+      host.replaceChildren();
+      var brand = document.createElement('a');
+      brand.className = 'im-bar-brand'; brand.href = LINKS[0].url; brand.target = '_blank'; brand.rel = 'noopener';
+      var b = document.createElement('b'); b.textContent = 'Inteligência de Mercado';
+      brand.append(b, document.createTextNode('Indicadores'));
+      var nav = document.createElement('nav'); nav.className = 'im-bar-nav'; nav.setAttribute('aria-label', 'Painéis do projeto');
+      LINKS.forEach(function (l) {
+        if (l.id === 'hub') return;
+        var a = document.createElement('a'); a.href = l.url; a.target = '_blank'; a.rel = 'noopener'; a.textContent = l.label;
+        if (l.id === current) a.setAttribute('aria-current', 'page');
+        nav.append(a);
+      });
+      host.append(brand, nav);
+    },
+  };
+})();
+
+</script>
+<script>
+(function () {
+  var SPARK = {"anfavea": {"lab": "Emplacamentos de autoveículos", "unit": "unid./mês", "pts": [["2024-10", 264949.0], ["2024-11", 253499.0], ["2024-12", 257431.0], ["2025-01", 171248.0], ["2025-02", 184960.0], ["2025-03", 195536.0], ["2025-04", 208704.0], ["2025-05", 225709.0], ["2025-06", 212932.0], ["2025-07", 243238.0], ["2025-08", 225380.0], ["2025-09", 243230.0], ["2025-10", 260717.0], ["2025-11", 238564.0], ["2025-12", 279416.0], ["2026-01", 170536.0], ["2026-02", 185163.0], ["2026-03", 269483.0], ["2026-04", 248337.0], ["2026-05", 274682.0], ["2026-06", 272474.0], ["2026-07", 279544.0], ["2026-08", 275122.0], ["2026-09", 281361.0]]}, "anp": {"lab": "Vendas de óleo diesel", "unit": "m³/mês", "pts": [["2024-09", 5793933.745999999], ["2024-10", 6270659.496999999], ["2024-11", 5607131.0139999995], ["2024-12", 5054317.222], ["2025-01", 5376453.722999999], ["2025-02", 5283454.311000001], ["2025-03", 5698602.097999999], ["2025-04", 5477035.461000001], ["2025-05", 5856275.998], ["2025-06", 5640408.231], ["2025-07", 6373131.975000001], ["2025-08", 6044501.407000001], ["2025-09", 6246149.819], ["2025-10", 6429837.819999999], ["2025-11", 5626768.340000001], ["2025-12", 5424093.992000001], ["2026-01", 5200698.483999999], ["2026-02", 5324997.979], ["2026-03", 6307614.769000002], ["2026-04", 5655256.783], ["2026-05", 5674314.700999999], ["2026-06", 5736689.2250000015], ["2026-07", 6351580.031999999], ["2026-08", 6161373.332]]}, "abcr": {"lab": "Fluxo de pesados, dessazonalizado", "unit": "índice 1999=100", "pts": [["2024-10", 179.4275], ["2024-11", 175.6707], ["2024-12", 170.7008], ["2025-01", 176.878], ["2025-02", 176.7962], ["2025-03", 177.1648], ["2025-04", 178.0317], ["2025-05", 177.1338], ["2025-06", 177.5052], ["2025-07", 180.7531], ["2025-08", 179.0285], ["2025-09", 182.7109], ["2025-10", 183.1969], ["2025-11", 181.8592], ["2025-12", 175.7739], ["2026-01", 179.495], ["2026-02", 180.6041], ["2026-03", 184.4627], ["2026-04", 181.6296], ["2026-05", 182.8522], ["2026-06", 181.4906], ["2026-07", 180.9353], ["2026-08", 182.1356], ["2026-09", 180.0383]]}, "pim": {"lab": "Indústria geral, com ajuste sazonal", "unit": "índice 2022=100", "pts": [["2024-09", 104.38586], ["2024-10", 104.42643], ["2024-11", 103.87211], ["2024-12", 103.74973], ["2025-01", 103.58029], ["2025-02", 103.1218], ["2025-03", 104.71471], ["2025-04", 104.04158], ["2025-05", 103.19962], ["2025-06", 104.14317], ["2025-07", 103.80599], ["2025-08", 104.71624], ["2025-09", 104.28812], ["2025-10", 104.39012], ["2025-11", 104.20743], ["2025-12", 102.14184], ["2026-01", 104.265], ["2026-02", 105.24917], ["2026-03", 105.35784], ["2026-04", 106.56871], ["2026-05", 105.47322], ["2026-06", 103.81117], ["2026-07", 103.86675], ["2026-08", 103.25254]]}};
+  var PANELS = [
+    { id: 'anfavea', src: 'ANFAVEA', name: 'Autoveículos', what: 'Produção, emplacamento e exportação por categoria, marcas, eletrificação, importados e caminhões por subsegmento.', why: 'Sinal direto do equipamento original e da frota que vai pedir reposição.', cov: 'jan/2023 → set/2026', fmt: 'k' },
+    { id: 'anp', src: 'ANP', name: 'Combustíveis', what: 'Vendas das distribuidoras em m³ por produto, estado e segmento, desde 1990.', why: 'Litro vendido é quilômetro rodado: o melhor proxy de desgaste e reposição.', cov: 'jan/1990 → ago/2026', fmt: 'M' },
+    { id: 'abcr', src: 'ABCR', name: 'Fluxo pedagiado', what: 'Índice de fluxo de veículos leves e pesados em rodovias pedagiadas, original e dessazonalizado.', why: 'Pesados na estrada antecipam a demanda de pneus de carga.', cov: 'jan/1999 → set/2026', fmt: 'i' },
+    { id: 'pim', src: 'IBGE · PIM-PF', name: 'Produção industrial', what: 'Índices e variações das 27 atividades da indústria e de 17 estados.', why: 'Borracha e plástico, veículos e Rio de Janeiro: o chão de fábrica do setor.', cov: 'jan/2023 → ago/2026', fmt: 'i' },
+  ];
+  var MES = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'];
+  var mes = function (p) { return MES[+p.slice(5, 7) - 1] + '/' + p.slice(2, 4); };
+  var nf = function (v, d) { return v.toLocaleString('pt-BR', { minimumFractionDigits: d, maximumFractionDigits: d }); };
+  var fmt = function (v, f) { return f === 'k' ? nf(v / 1000, 1) + ' mil' : f === 'M' ? nf(v / 1e6, 2) + ' mi' : nf(v, 1); };
+  var host = document.getElementById('cards');
+  var NS = 'http://www.w3.org/2000/svg';
+  var el = function (tag, cls, txt) { var e = document.createElement(tag); if (cls) e.className = cls; if (txt != null) e.textContent = txt; return e; };
+
+  function spark(svg, pts) {
+    var W = 300, H = 44, P = 3, ys = pts.map(function (p) { return p[1]; });
+    var lo = Math.min.apply(null, ys), hi = Math.max.apply(null, ys), r = hi - lo || 1;
+    var x = function (i) { return P + i * (W - 2 * P) / (pts.length - 1); };
+    var y = function (v) { return H - P - (v - lo) / r * (H - 2 * P); };
+    svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H); svg.setAttribute('preserveAspectRatio', 'none');
+    svg.replaceChildren();
+    var base = document.createElementNS(NS, 'line');
+    base.setAttribute('x1', 0); base.setAttribute('x2', W); base.setAttribute('y1', y(pts[11][1])); base.setAttribute('y2', y(pts[11][1]));
+    base.setAttribute('stroke', IM.tok('--grid')); base.setAttribute('stroke-dasharray', '3 3'); base.setAttribute('vector-effect', 'non-scaling-stroke');
+    var path = document.createElementNS(NS, 'path');
+    path.setAttribute('d', pts.map(function (p, i) { return (i ? 'L' : 'M') + x(i).toFixed(1) + ',' + y(p[1]).toFixed(1); }).join(''));
+    path.setAttribute('fill', 'none'); path.setAttribute('stroke', IM.tok('--fg')); path.setAttribute('stroke-width', 1.5);
+    path.setAttribute('stroke-linejoin', 'round'); path.setAttribute('vector-effect', 'non-scaling-stroke');
+    var dot = document.createElementNS(NS, 'circle');
+    dot.setAttribute('cx', x(pts.length - 1)); dot.setAttribute('cy', y(pts[pts.length - 1][1])); dot.setAttribute('r', 3); dot.setAttribute('fill', IM.tok('--accent'));
+    svg.append(base, path, dot);
+  }
+
+  var svgs = [];
+  PANELS.forEach(function (p) {
+    var link = IM.links.filter(function (l) { return l.id === p.id; })[0];
+    var s = SPARK[p.id], pts = s.pts, last = pts[pts.length - 1], prev = pts[pts.length - 13];
+    var yoy = last[1] / prev[1] - 1;
+    var a = el('a', 'hub-card'); a.href = link.url; a.target = '_blank'; a.rel = 'noopener'; a.id = 'card-' + p.id;
+    var top = el('div', 'hub-card-top'); top.append(el('span', 'im-kicker', p.src), el('span', 'hub-go', 'Abrir →'));
+    var sp = el('div', 'hub-spark');
+    var row = el('div', 'hub-spark-row');
+    var lab = el('span', 'im-label', s.lab + ' · ' + mes(last[0]));
+    row.append(lab);
+    var row2 = el('div', 'hub-spark-row');
+    var d = el('span', 'im-kpi-d ' + (yoy >= 0 ? 'up' : 'down'), (yoy >= 0 ? '▲ +' : '▼ −') + nf(Math.abs(yoy) * 100, 1) + '% vs ' + mes(prev[0]));
+    row2.append(el('span', 'hub-spark-v', fmt(last[1], p.fmt)), d);
+    var svg = document.createElementNS(NS, 'svg'); svg.setAttribute('aria-label', s.lab + ', últimos 24 meses'); svg.setAttribute('role', 'img');
+    svgs.push([svg, pts]);
+    sp.append(row, row2, svg, el('span', 'im-note', s.unit + ' · 24 meses; tracejado = mesmo mês do ano anterior'));
+    var meta = el('div', 'hub-meta'); meta.append(el('span', null, p.cov), el('span', null, p.name));
+    a.append(top, el('h3', 'hub-card-t', p.name), el('p', null, p.what), el('p', 'hub-why', p.why), sp, meta);
+    host.append(a);
+  });
+
+  function draw() {
+    svgs.forEach(function (x) { spark(x[0], x[1]); });
+    var sw = document.getElementById('sw-series'); sw.replaceChildren();
+    IM.colors().forEach(function (c) { var i = document.createElement('i'); i.style.background = c; sw.append(i); });
+  }
+  IM.bar(document.getElementById('im-bar'), 'hub');
+  draw();
+  if (window.matchMedia) {
+    var mq = matchMedia('(prefers-color-scheme: dark)');
+    if (mq.addEventListener) mq.addEventListener('change', draw);
+  }
+  new MutationObserver(draw).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+})();
+</script>

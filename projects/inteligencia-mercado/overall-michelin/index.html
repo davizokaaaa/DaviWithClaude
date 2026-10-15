@@ -1,0 +1,618 @@
+<title>Overall Michelin</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+@import url("https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300..700&family=Inter+Tight:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap");
+/* ==========================================================================
+   Inteligência de Mercado · Indicadores — design system "IM" v1
+   Origem: o redesign editorial do Painel ANFAVEA (papel, tinta, filetes finos,
+   um único vermelhão de destaque). Tudo fica sob a classe .im, para não vazar
+   para fora da página do dashboard. Claro e escuro com passos próprios.
+   ========================================================================== */
+.im {
+  --mode: light;
+  /* cor */
+  --bg: #f7f4ee; --surface: #efebe3; --fg: #1b1a18; --muted: #6e6a62; --rule: #1b1a18;
+  --line: rgba(27,26,24,.14); --grid: rgba(27,26,24,.09); --accent: #c8452c; --on-accent: #fff;
+  --up: #2f7d55; --down: #b8432f; --warn: #b07a1f;
+  --heat-lo: #ebe5d9; --heat-hi: #1f3f66; --tile-mid: #e4ded2; --empty: rgba(27,26,24,.07);
+  --pop: rgba(251,249,245,.94); --shadow: 0 1px 0 rgba(27,26,24,.06), 0 12px 32px -12px rgba(27,26,24,.28);
+  /* séries (seguem a entidade, nunca a posição) */
+  --s1: #2a62a0; --s2: #c8452c; --s3: #1f8a70; --s4: #b07a1f; --s5: #8a4f8f; --s6: #6b7d2a; --s7: #c0577a; --s8: #5b5fc7;
+  --s-muted: rgba(27,26,24,.28);
+  /* tipo */
+  --serif: "Fraunces", Georgia, "Times New Roman", serif;
+  --sans: "Inter Tight", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --t-cap: 11px; --t-small: 12.5px; --t-body: 14px; --t-lede: clamp(17px, 2vw, 21px);
+  --t-h2: clamp(24px, 3.4vw, 38px); --t-h1: clamp(40px, 7.5vw, 92px); --t-kpi: 44px;
+  /* espaço */
+  --g-xs: 4px; --g-sm: 8px; --g-md: 14px; --g-lg: 28px; --g-xl: 44px;
+  --ease: cubic-bezier(.3,.8,.25,1); --spring: cubic-bezier(.2,.9,.25,1.05);
+
+  /* ponte para os tokens do tipo Dashboard: quem ainda usa --color-* / --cds-* / --font-anthropic-* herda o IM */
+  --color-fg: var(--fg); --color-fg-muted: var(--muted); --color-bg: var(--bg); --color-panel: transparent;
+  --color-border-line: var(--line); --color-ok: var(--up); --color-bad: var(--down); --color-warn: var(--warn);
+  --font-anthropic-serif: var(--serif); --font-anthropic-sans: var(--sans);
+  --cds-chart-grid: var(--grid); --cds-chart-axis: var(--line); --cds-chart-reference: var(--muted); --cds-chart-muted: var(--s-muted);
+  --cds-surface-popover: var(--pop); --cds-border: var(--line); --cds-shadow-popover: var(--shadow); --cds-text-secondary: var(--muted);
+  --cds-radius: 0px;
+
+  color-scheme: light;
+  position: relative; display: grid; gap: var(--g-lg); padding: var(--g-lg) clamp(16px, 4vw, 44px) 40px;
+  background: var(--bg); color: var(--fg); font-family: var(--sans); font-size: var(--t-body); line-height: 1.5;
+  -webkit-font-smoothing: antialiased; font-variant-numeric: tabular-nums;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .im {
+  --mode: dark; --bg: #161514; --surface: #1f1d1b; --fg: #ece8e1; --muted: #9a958c; --rule: #ece8e1;
+  --line: rgba(236,232,225,.14); --grid: rgba(236,232,225,.08); --accent: #e0603f; --on-accent: #161514;
+  --up: #6cbf8f; --down: #e5785f; --warn: #d9a441;
+  --heat-lo: #25231f; --heat-hi: #a6c6ec; --tile-mid: #2b2926; --empty: rgba(236,232,225,.08);
+  --pop: rgba(32,30,28,.94); --shadow: 0 12px 32px -12px rgba(0,0,0,.6);
+  --s1: #5a8fd0; --s2: #e0603f; --s3: #2fa385; --s4: #b8842a; --s5: #a874b2; --s6: #8a9c3f; --s7: #d06f94; --s8: #8a86e8;
+  --s-muted: rgba(236,232,225,.3);
+  color-scheme: dark; } }
+:root[data-theme="dark"] .im {
+  --mode: dark; --bg: #161514; --surface: #1f1d1b; --fg: #ece8e1; --muted: #9a958c; --rule: #ece8e1;
+  --line: rgba(236,232,225,.14); --grid: rgba(236,232,225,.08); --accent: #e0603f; --on-accent: #161514;
+  --up: #6cbf8f; --down: #e5785f; --warn: #d9a441;
+  --heat-lo: #25231f; --heat-hi: #a6c6ec; --tile-mid: #2b2926; --empty: rgba(236,232,225,.08);
+  --pop: rgba(32,30,28,.94); --shadow: 0 12px 32px -12px rgba(0,0,0,.6);
+  --s1: #5a8fd0; --s2: #e0603f; --s3: #2fa385; --s4: #b8842a; --s5: #a874b2; --s6: #8a9c3f; --s7: #d06f94; --s8: #8a86e8;
+  --s-muted: rgba(236,232,225,.3);
+  color-scheme: dark; }
+.im :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* --- barra do projeto: igual em todas as páginas ------------------------- */
+.im-bar { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 6px 18px; padding-bottom: 8px; border-bottom: 1px solid var(--rule); }
+.im-bar-brand { display: inline-flex; align-items: baseline; gap: 10px; font: 600 var(--t-cap)/1.2 var(--sans); letter-spacing: .14em; text-transform: uppercase; color: var(--fg); text-decoration: none; }
+.im-bar-brand b { font-weight: 600; color: var(--accent); }
+.im-bar-nav { display: flex; flex-wrap: wrap; gap: 2px 14px; }
+.im-bar-nav a { font: 500 var(--t-small)/1.6 var(--sans); color: var(--muted); text-decoration: none; border-bottom: 1px solid transparent; }
+.im-bar-nav a:hover { color: var(--fg); border-bottom-color: var(--line); }
+.im-bar-nav a[aria-current="page"] { color: var(--fg); border-bottom-color: var(--accent); }
+
+/* --- cabeçalho (masthead) ------------------------------------------------ */
+.im-mast { display: grid; gap: var(--g-md); border-bottom: 3px double var(--rule); padding-bottom: 18px; }
+.im-eyebrow { margin: 0; font: 600 var(--t-cap)/1.2 var(--sans); letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+.im-title { margin: 0; font: 400 var(--t-h1)/.92 var(--serif); font-variation-settings: "opsz" 144; letter-spacing: -.035em; text-wrap: balance; }
+.im-title em { font-style: italic; font-weight: 300; color: var(--accent); }
+.im-dek { margin: 0; max-width: 46rem; font: 400 var(--t-lede)/1.35 var(--serif); font-variation-settings: "opsz" 24; text-wrap: pretty; }
+.im-kicker { font: 600 var(--t-cap)/1.2 var(--sans); letter-spacing: .16em; text-transform: uppercase; color: var(--accent); }
+.im-h2 { margin: 0; font: 400 var(--t-h2)/1.12 var(--serif); font-variation-settings: "opsz" 72; letter-spacing: -.02em; text-wrap: balance; }
+.im-h3 { margin: 0; font: 600 15px/1.3 var(--sans); }
+.im-note { margin: 0; font-size: var(--t-small); color: var(--muted); line-height: 1.45; max-width: 70ch; }
+.im-label { font: 600 10.5px/1.3 var(--sans); letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+
+/* --- abas / controles ---------------------------------------------------- */
+.im-tabs { display: flex; gap: 4px; overflow-x: auto; scrollbar-width: none; border-bottom: 1px solid var(--line); }
+.im-tabs button { font: 600 13px var(--sans); letter-spacing: .02em; padding: 14px 14px 13px; border: 0; border-bottom: 2px solid transparent; margin-bottom: -1px; background: none; color: var(--muted); cursor: pointer; white-space: nowrap; }
+.im-tabs button:hover { color: var(--fg); }
+.im-tabs button[aria-selected="true"] { color: var(--fg); border-bottom-color: var(--accent); }
+.im-seg { display: inline-flex; gap: 2px; flex-wrap: wrap; }
+.im-seg button { font: 500 13px/1.2 var(--sans); padding: 7px 10px; border: 0; border-bottom: 2px solid transparent; background: none; color: var(--muted); cursor: pointer; }
+.im-seg button[aria-pressed="true"] { color: var(--fg); border-bottom-color: var(--accent); }
+.im select, .im input[type="search"] { font: 500 13px var(--sans); padding: 6px 2px; border: 0; border-bottom: 1px solid var(--rule); border-radius: 0; background: transparent; color: var(--fg); max-width: 100%; }
+.im select option { background: var(--bg); color: var(--fg); }
+.im-link { font: 500 var(--t-small) var(--sans); background: none; border: 0; padding: 8px 0; color: var(--accent); text-decoration: underline; text-underline-offset: 4px; cursor: pointer; }
+.im-chip { font: 500 var(--t-small) var(--sans); display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border: 1px solid var(--line); border-radius: 999px; background: none; color: var(--muted); cursor: pointer; }
+.im-chip[aria-pressed="true"] { color: var(--fg); border-color: var(--fg); }
+
+/* --- números ------------------------------------------------------------- */
+.im-kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr)); border-block: 1px solid var(--line); }
+.im-kpi { display: grid; gap: 4px; align-content: start; min-width: 0; padding: 14px 18px 12px; border-right: 1px solid var(--line); }
+.im-kpi:last-child { border-right: 0; }
+.im-kpi-l { font: 600 10.5px/1.3 var(--sans); letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+.im-kpi-v { font: 400 var(--t-kpi)/1.05 var(--serif); font-variation-settings: "opsz" 144; letter-spacing: -.03em; font-variant-numeric: lining-nums tabular-nums; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.im-kpi-d { font: 500 12px/1.4 var(--mono); color: var(--muted); }
+.im .up, .im [data-tone="up"] { color: var(--up); }
+.im .down, .im [data-tone="down"] { color: var(--down); }
+
+/* --- cartões: filete de tinta no topo, sem caixa ---------------------------- */
+.im-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 24rem), 1fr)); gap: var(--g-lg) var(--g-lg); }
+.im-card { position: relative; display: grid; gap: 12px; align-content: start; min-width: 0; padding-top: 12px; border-top: 2px solid var(--rule); background: none; }
+.im-card::before { content: ""; position: absolute; left: 0; top: -2px; width: 56px; height: 2px; background: var(--accent); }
+.im-card-head { display: flex; flex-wrap: wrap; gap: 8px; justify-content: space-between; align-items: flex-start; }
+
+/* --- gráficos ------------------------------------------------------------ */
+/* só o texto de eixo d3: regra CSS venceria fill/font-size postos por .attr() nos rótulos dos gráficos */
+.im svg .tick text { fill: var(--muted); font: 500 11px var(--mono); }
+.im svg .im-grid-l, .im svg .grid line, .im svg .tick line { stroke: var(--grid); }
+.im svg .domain { stroke: var(--line); }
+.im-legend { display: flex; flex-wrap: wrap; gap: 4px 16px; font: 500 11.5px var(--mono); color: var(--muted); }
+.im-legend span { display: inline-flex; align-items: center; gap: 6px; }
+.im-legend i { width: 8px; height: 8px; display: inline-block; }
+.im-tt { position: absolute; z-index: 20; pointer-events: none; background: var(--pop); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); border: 1px solid var(--line); box-shadow: var(--shadow); padding: 8px 10px; font: 500 12px/1.45 var(--mono); color: var(--fg); min-width: 9rem; }
+.im-tt .h { font: 600 10.5px var(--sans); letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin-bottom: 2px; }
+
+/* --- tabelas ------------------------------------------------------------- */
+.im table { border-collapse: collapse; width: 100%; font: 500 12.5px var(--mono); }
+.im th { font: 600 10.5px var(--sans); letter-spacing: .12em; text-transform: uppercase; color: var(--muted); text-align: right; padding: 8px 10px; border-bottom: 1px solid var(--rule); background: var(--bg); position: sticky; top: 0; }
+.im td { padding: 7px 10px; border-bottom: 1px solid var(--line); text-align: right; }
+.im th:first-child, .im td:first-child { text-align: left; }
+
+/* --- rodapé de fonte ----------------------------------------------------- */
+.im-foot { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 24px; padding-top: 12px; border-top: 3px double var(--rule); font: 500 11.5px var(--mono); color: var(--muted); }
+
+@media (prefers-reduced-motion: no-preference) {
+  .im-title, .im-dek { animation: im-rise .9s var(--ease) both; }
+  .im-dek { animation-delay: .15s; }
+}
+@keyframes im-rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+
+</style>
+<style>
+body{margin:0;background:var(--im-body,#f7f4ee)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) body{background:#161514}}
+:root[data-theme="dark"] body{background:#161514}
+.im.ov{padding-left:max(16px, env(safe-area-inset-left,0px));padding-right:max(16px, env(safe-area-inset-right,0px));max-width:1240px;margin:0 auto;overflow-x:clip}
+.ov section{display:grid;gap:18px;scroll-margin-top:12px}
+.ov .sec-h{display:grid;gap:6px;max-width:52rem}
+.ov .sec-h p{margin:0;font:400 16px/1.45 var(--serif);font-variation-settings:"opsz" 24;color:var(--fg)}
+.ov .tw{overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%}
+.ov .tw table{min-width:640px}
+.ov .chart{position:relative;width:100%}
+.ov .chart svg{display:block;width:100%;height:auto;overflow:visible}
+.ov .sig{display:inline-block;font:600 10px/1 var(--sans);letter-spacing:.1em;text-transform:uppercase;padding:4px 7px;border:1px solid currentColor;white-space:nowrap}
+.ov .sig.fav{color:var(--up)} .ov .sig.desf{color:var(--down)} .ov .sig.neu{color:var(--muted)}
+.ov td.n-up{color:var(--up)} .ov td.n-dn{color:var(--down)}
+.ov td .src{color:var(--muted);font-size:11px}
+.ov .toc{display:flex;flex-wrap:wrap;gap:4px 16px;font:500 12.5px var(--sans)}
+.ov .toc a{color:var(--muted);text-decoration:none;border-bottom:1px solid var(--line)}
+.ov .toc a:hover{color:var(--fg);border-bottom-color:var(--accent)}
+.ov .callout{border-left:2px solid var(--accent);padding:2px 0 2px 14px;font:400 15px/1.5 var(--serif);font-variation-settings:"opsz" 24;max-width:62ch}
+.ov .callout b{font-weight:600}
+.ov .est{font:600 10px/1 var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--warn);border:1px dashed var(--warn);padding:3px 6px;display:inline-block}
+.ov .facts{display:grid;gap:0;grid-template-columns:repeat(auto-fit,minmax(min(100%,15rem),1fr));border-top:1px solid var(--line)}
+.ov .fact{padding:10px 14px 10px 0;border-bottom:1px solid var(--line);display:grid;gap:2px}
+.ov .fact b{font:400 26px/1.1 var(--serif);font-variation-settings:"opsz" 72}
+.ov .fact span{font-size:var(--t-small);color:var(--muted)}
+.ov ol.recs{margin:0;padding:0;list-style:none;counter-reset:r;display:grid;gap:0}
+.ov ol.recs li{counter-increment:r;display:grid;grid-template-columns:44px 1fr;gap:4px 14px;padding:16px 0;border-bottom:1px solid var(--line)}
+.ov ol.recs li::before{content:counter(r,decimal-leading-zero);font:300 30px/1 var(--serif);color:var(--accent);grid-row:span 3}
+.ov ol.recs h4{margin:0;font:600 15px/1.35 var(--sans)}
+.ov ol.recs p{margin:0;font-size:14px;line-height:1.5;max-width:72ch}
+.ov ol.recs .num{font:500 12px/1.4 var(--mono);color:var(--muted)}
+.ov .tag{font:600 10px/1 var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-left:6px}
+.ov .mult{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,17rem),1fr));gap:24px 28px}
+.ov .mult .im-card{gap:6px}
+.ov .lbl{font:500 11px var(--mono);fill:var(--muted)}
+.ov .lbl-fg{font:600 11px var(--mono);fill:var(--fg)}
+.ov .method{font-size:var(--t-small);color:var(--muted);max-width:78ch;line-height:1.5;border-top:1px dashed var(--line);padding-top:10px;margin:0}
+.ov .lede-num{font:500 12px var(--mono);color:var(--muted)}
+@media (max-width:520px){.ov .im-kpi{border-right:0;border-bottom:1px solid var(--line)} .ov ol.recs li{grid-template-columns:32px 1fr} .ov ol.recs li::before{font-size:22px}}
+</style>
+
+<div class="im ov">
+  <div id="im-bar"></div>
+
+  <header class="im-mast">
+    <p class="im-eyebrow">Inteligência de Mercado · Overall · Michelin</p>
+    <h1 class="im-title">O carro <em>acelera</em>, o caminhão freia</h1>
+    <p class="im-dek">Em 2026 a demanda de pneus OE de passeio cresce dois dígitos puxada por emplacamentos 18% maiores e pelas montadoras chinesas, enquanto a carga só se sustenta na reposição: a frota roda mais, mas compra menos caminhões.</p>
+    <nav class="toc" aria-label="Seções">
+      <a href="#s1">1 · Termômetro</a><a href="#s2">2 · Equipamento original</a><a href="#s3">3 · Reposição</a><a href="#s4">4 · Carga</a><a href="#s5">5 · Indústria</a><a href="#s6">6 · Mix e risco</a><a href="#s7">7 · Projeções</a><a href="#s8">8 · Recomendações</a>
+    </nav>
+  </header>
+
+  <div class="im-kpis" id="kpis"></div>
+
+  <!-- 1 -->
+  <section id="s1">
+    <div class="sec-h">
+      <span class="im-kicker">1 · Termômetro geral</span>
+      <h2 class="im-h2">Nove sinais verdes, oito neutros, três vermelhos</h2>
+      <p>Cada indicador-proxy de demanda de pneus comparado com o ano anterior. O sinal combina o acumulado do ano e o último trimestre contra o mesmo trimestre de 2025: acima de +2% é favorável, abaixo de −2% desfavorável.</p>
+    </div>
+    <div class="im-card">
+      <div class="tw"><table id="thermo"></table></div>
+      <p class="im-note">Acum. ano = jan até o último mês disponível de 2026 vs mesmo período de 2025. 12m = últimos 12 meses vs 12 anteriores. Momentum 3m = média dessazonalizada dos últimos 3 meses vs os 3 anteriores (só ABCR e PIM têm série dessazonalizada). Índices (ABCR, PIM) usam média; volumes usam soma. Os acumulados da PIM conferem com os publicados pelo IBGE.</p>
+    </div>
+  </section>
+
+  <!-- 2 -->
+  <section id="s2">
+    <div class="sec-h">
+      <span class="im-kicker">2 · Equipamento original (OE)</span>
+      <h2 class="im-h2">Cerca de 11,1 milhões de pneus montados de fábrica até setembro</h2>
+      <p>Pneus OE estimados = produção de autoveículos × pneus por veículo. Automóveis e comerciais leves levam 5 (4 rodando + estepe); ônibus, 6; caminhões, 8.</p>
+    </div>
+    <div class="im-grid">
+      <div class="im-card">
+        <div class="im-card-head"><h3 class="im-h3">Pneus OE estimados por mês, por categoria</h3><span class="est">estimativa</span></div>
+        <div class="im-legend" id="lg-oe"></div>
+        <div class="chart" id="ch-oe"></div>
+        <p class="im-note">Por que 8 em caminhões: um leve/médio 4×2 roda com 6 pneus; um semipesado 6×2 ou um pesado cavalo 6×2/6×4, com 10. Como semipesados e pesados são cerca de 80% da produção de caminhões, a média ponderada fica perto de 8–9. Usamos 8 porque o estepe raramente sai de fábrica e porque os pneus de semirreboques não entram nesta conta. Com 6 ou com 10, o total de jan–set/2026 varia só entre 10,9 e 11,3 milhões.</p>
+      </div>
+      <div class="im-card">
+        <h3 class="im-h3">Jan–set: 2026 vs 2025</h3>
+        <div class="tw"><table id="oe-tab" style="min-width:500px"></table></div>
+        <div class="callout" id="oe-call"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3 -->
+  <section id="s3">
+    <div class="sec-h">
+      <span class="im-kicker">3 · Reposição</span>
+      <h2 class="im-h2">A frota roda mais, devagar e sem susto</h2>
+      <p>Para a reposição, o que importa é o quanto a frota roda. Usamos o diesel (ANP) e o fluxo de pesados nas rodovias pedagiadas (ABCR) para carga, e a gasolina C mais o etanol hidratado (em gasolina-equivalente, etanol × 0,7) com o fluxo de leves para passeio.</p>
+    </div>
+    <div class="im-grid">
+      <div class="im-card">
+        <div class="im-card-head"><h3 class="im-h3">Carga: diesel vs ABCR pesados, var. % anual (média móvel 3m)</h3></div>
+        <div class="im-legend" id="lg-rc"></div>
+        <div class="chart" id="ch-rc"></div>
+        <p class="im-note" id="corr-c"></p>
+      </div>
+      <div class="im-card">
+        <div class="im-card-head"><h3 class="im-h3">Passeio: ciclo Otto vs ABCR leves, var. % anual (média móvel 3m)</h3></div>
+        <div class="im-legend" id="lg-rp"></div>
+        <div class="chart" id="ch-rp"></div>
+        <p class="im-note" id="corr-p"></p>
+      </div>
+    </div>
+    <div class="facts" id="rep-facts"></div>
+  </section>
+
+  <!-- 4 -->
+  <section id="s4">
+    <div class="sec-h">
+      <span class="im-kicker">4 · Carga (truck &amp; bus)</span>
+      <h2 class="im-h2">Menos caminhão pesado novo, mesma estrada</h2>
+      <p>A produção de pesados cai dois dígitos, mas o diesel e o fluxo de pesados seguem positivos. O caminhão que deixa de ser trocado continua rodando, e com isso a demanda vai do OE para a reposição e a recapagem.</p>
+    </div>
+    <div class="im-grid">
+      <div class="im-card">
+        <h3 class="im-h3">Acumulado jan–set/2026 vs 2025, var. %</h3>
+        <div class="chart" id="ch-cg"></div>
+        <p class="im-note">Caminhões por subsegmento (ANFAVEA, jan–set). Diesel por segmento e PIM até agosto. A TRR (revenda retalhista, que abastece fazendas e frotas) é a melhor proxy de consumo agro no dado da ANP.</p>
+      </div>
+      <div class="im-card">
+        <h3 class="im-h3">Emplacamentos de caminhões por subsegmento (unid./mês)</h3>
+        <div class="im-legend" id="lg-cm"></div>
+        <div class="chart" id="ch-cm"></div>
+        <p class="im-note">Semipesados e pesados, a base do pneu de carga radial, somam cerca de 75% dos emplacamentos.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5 -->
+  <section id="s5">
+    <div class="sec-h">
+      <span class="im-kicker">5 · Indústria</span>
+      <h2 class="im-h2">Borracha e plástico de lado, veículos em alta</h2>
+      <p>No setor que contém os pneus, a PIM fica estável no ano e perde força nos últimos meses, enquanto a montagem de veículos cresce. No Rio de Janeiro, onde ficam as duas fábricas, a indústria geral cresce puxada pelo petróleo e a transformação fica parada.</p>
+    </div>
+    <div class="im-grid">
+      <div class="im-card">
+        <h3 class="im-h3">PIM-PF Brasil, índice dessazonalizado (2022 = 100)</h3>
+        <div class="im-legend" id="lg-pim"></div>
+        <div class="chart" id="ch-pim"></div>
+        <p class="im-note">IBGE, Pesquisa Industrial Mensal, base fixa com ajuste sazonal.</p>
+      </div>
+      <div class="im-card">
+        <h3 class="im-h3">Rio de Janeiro na PIM regional</h3>
+        <div class="tw"><table id="rj-tab" style="min-width:420px"></table></div>
+        <h3 class="im-h3" style="margin-top:8px">Transformação: acumulado no ano por UF</h3>
+        <div class="chart" id="ch-uf"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6 -->
+  <section id="s6">
+    <div class="sec-h">
+      <span class="im-kicker">6 · Mix e risco</span>
+      <h2 class="im-h2">Um em cada cinco carros vendidos já é eletrificado</h2>
+      <p>Importados, elétricos e híbridos, e as marcas chinesas, mudam quem a Michelin precisa homologar no OE e que pneu a frota vai pedir na reposição.</p>
+    </div>
+    <div class="im-grid">
+      <div class="im-card">
+        <h3 class="im-h3">Participação nos emplacamentos de automóveis + comerciais leves, %</h3>
+        <div class="im-legend" id="lg-mix"></div>
+        <div class="chart" id="ch-mix"></div>
+      </div>
+      <div class="im-card">
+        <h3 class="im-h3">Marcas chinesas: participação mensal em 2026, %</h3>
+        <div class="chart" id="ch-cn"></div>
+        <div class="tw"><table id="brand-tab" style="min-width:380px"></table></div>
+        <p class="im-note" id="cn-note"></p>
+      </div>
+    </div>
+    <div class="callout" id="mix-call"></div>
+  </section>
+
+  <!-- 7 -->
+  <section id="s7">
+    <div class="sec-h">
+      <span class="im-kicker">7 · Projeções <span class="est" style="margin-left:6px">estimativa</span></span>
+      <h2 class="im-h2">2026 fecha forte; 2027 desacelera</h2>
+      <p>Três cenários simples e auditáveis para o fechamento de 2026 e para 2027. As barras sólidas são dados realizados; as hachuradas, estimativas (base), com a faixa entre o pessimista e o otimista.</p>
+    </div>
+    <div class="mult" id="proj"></div>
+    <div class="tw"><table id="proj-tab"></table></div>
+    <p class="method" id="method"></p>
+  </section>
+
+  <!-- 8 -->
+  <section id="s8">
+    <div class="sec-h">
+      <span class="im-kicker">8 · Recomendações</span>
+      <h2 class="im-h2">Sete movimentos para os próximos 12 meses</h2>
+      <p>Em ordem de prioridade. Cada uma parte de um número deste painel.</p>
+    </div>
+    <ol class="recs" id="recs"></ol>
+  </section>
+
+  <footer class="im-foot">
+    <span>Fontes: <a href="https://www.anfavea.com.br/site/edicoes-em-excel/" target="_blank" rel="noopener" style="color:inherit">ANFAVEA</a> (emplacamento, produção, exportação, até <span data-u="anfavea"></span>) · <a href="https://www.gov.br/anp/pt-br/centrais-de-conteudo/dados-abertos" target="_blank" rel="noopener" style="color:inherit">ANP</a> vendas de derivados (até <span data-u="anp"></span>) · <a href="https://melhoresrodovias.abcr.org.br/indice-abcr/" target="_blank" rel="noopener" style="color:inherit">ABCR</a> índice de fluxo pedagiado (até <span data-u="abcr"></span>) · <a href="https://sidra.ibge.gov.br/pesquisa/pim-pf-brasil/quadros/brasil/agosto-2026" target="_blank" rel="noopener" style="color:inherit">IBGE PIM-PF</a> (até <span data-u="pim"></span>)</span>
+    <span>Pneus OE, índices de reposição e projeções são estimativas deste painel · atualizado em 15/10/2026</span>
+  </footer>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+<script>
+/* Inteligência de Mercado · Indicadores — helpers do design system IM v1. Só forma e navegação, nenhum dado. */
+(function () {
+  var LINKS = [
+    { id: 'hub', label: 'Hub', url: 'https://claude.ai/artifact/V1bVorfGMvbgGWoQbHjA1r' },
+    { id: 'overall', label: 'Overall Michelin', url: 'https://claude.ai/artifact/BLaQZRNXjzwTWnfyC96Qf9' },
+    { id: 'anfavea', label: 'Autoveículos', url: 'https://claude.ai/artifact/BFjv7uaNAb6ZKscpYy2Y1m' },
+    { id: 'anp', label: 'Combustíveis', url: 'https://claude.ai/artifact/5zCFL7zy2UTQxKTgj4Lk5P' },
+    { id: 'abcr', label: 'Fluxo pedagiado', url: 'https://claude.ai/artifact/4QNxE4hMyDfYFqYGQHaAQ4' },
+    { id: 'pim', label: 'Produção industrial', url: 'https://claude.ai/artifact/FBhGpvwfJWYiW2esC4Pb8J' },
+  ];
+  var CATS = {
+    light: ['#2a62a0', '#c8452c', '#1f8a70', '#b07a1f', '#8a4f8f', '#6b7d2a', '#c0577a', '#5b5fc7'],
+    dark: ['#5a8fd0', '#e0603f', '#2fa385', '#b8842a', '#a874b2', '#8a9c3f', '#d06f94', '#8a86e8'],
+  };
+  function root(el) { return el || document.querySelector('.im') || document.documentElement; }
+  function isDark(el) { return getComputedStyle(root(el)).getPropertyValue('--mode').trim() === 'dark'; }
+  window.IM = {
+    links: LINKS,
+    // paleta categórica do tema atual (hex), para d3; chame dentro de cada desenho
+    colors: function (el) { return (isDark(el) ? CATS.dark : CATS.light).slice(); },
+    tok: function (name, el) { return getComputedStyle(root(el)).getPropertyValue(name).trim(); },
+    isDark: isDark,
+    // monta a barra do projeto dentro de `host`; `current` é o id da página
+    bar: function (host, current) {
+      if (!host) return;
+      host.classList.add('im-bar');
+      host.replaceChildren();
+      var brand = document.createElement('a');
+      brand.className = 'im-bar-brand'; brand.href = LINKS[0].url; brand.target = '_blank'; brand.rel = 'noopener';
+      var b = document.createElement('b'); b.textContent = 'Inteligência de Mercado';
+      brand.append(b, document.createTextNode('Indicadores'));
+      var nav = document.createElement('nav'); nav.className = 'im-bar-nav'; nav.setAttribute('aria-label', 'Painéis do projeto');
+      LINKS.forEach(function (l) {
+        if (l.id === 'hub') return;
+        var a = document.createElement('a'); a.href = l.url; a.target = '_blank'; a.rel = 'noopener'; a.textContent = l.label;
+        if (l.id === current) a.setAttribute('aria-current', 'page');
+        nav.append(a);
+      });
+      host.append(brand, nav);
+    },
+  };
+})();
+
+</script>
+<script id="ov-data" type="application/json">{"TH": [{"key": "empl", "nome": "Emplacamentos de autoveículos", "fonte": "ANFAVEA", "unid": "unid.", "ultimo": "2026-09", "v_ultimo": 281361.0, "ytd": 18.1, "u12m": 13.0, "mes_yoy": 15.7, "tri_yoy": 17.4, "v_ytd": 2256702.0, "mom3": null, "score": 17.8, "sinal": "fav"}, {"key": "empl|Automóveis", "nome": "Emplacamentos · automóveis", "fonte": "ANFAVEA", "unid": "unid.", "ultimo": "2026-09", "v_ultimo": 216579.0, "ytd": 22.5, "u12m": 16.3, "mes_yoy": 21.3, "tri_yoy": 20.6, "v_ytd": 1729542.0, "mom3": null, "score": 21.6, "sinal": "fav"}, {"key": "empl|Comerciais leves", "nome": "Emplacamentos · comerciais leves", "fonte": "ANFAVEA", "unid": "unid.", "ultimo": "2026-09", "v_ultimo": 52181.0, "ytd": 8.0, "u12m": 5.9, "mes_yoy": -1.4, "tri_yoy": 7.9, "v_ytd": 429365.0, "mom3": null, "score": 8.0, "sinal": "fav"}, {"key": "empl|Caminhões", "nome": "Emplacamentos · caminhões", "fonte": "ANFAVEA", "unid": "unid.", "ultimo": "2026-09", "v_ultimo": 10232.0, "ytd": -3.8, "u12m": -6.4, "mes_yoy": 4.4, "tri_yoy": 8.8, "v_ytd": 80882.0, "mom3": null, "score": 2.5, "sinal": "fav"}, {"key": "prod", "nome": "Produção de autoveículos (OE)", "fonte": "ANFAVEA", "unid": "unid.", "ultimo": "2026-09", "v_ultimo": 268269.0, "ytd": 8.7, "u12m": 5.4, "mes_yoy": 10.2, "tri_yoy": 8.5, "v_ytd": 2165787.0, "mom3": null, "score": 8.6, "sinal": "fav"}, {"key": "prod|Caminhões", "nome": "Produção · caminhões", "fonte": "ANFAVEA", "unid": "unid.", "ultimo": "2026-09", "v_ultimo": 11625.0, "ytd": -6.4, "u12m": -14.2, "mes_yoy": 15.0, "tri_yoy": 10.1, "v_ytd": 92305.0, "mom3": null, "score": 1.8, "sinal": "neu"}, {"key": "prodcam|PesSemi", "nome": "Produção · caminhões pesados + semipesados", "fonte": "ANFAVEA", "unid": "unid.", "ultimo": "2026-09", "v_ultimo": 9527.0, "ytd": -7.5, "u12m": -16.3, "mes_yoy": 12.7, "tri_yoy": 8.5, "v_ytd": 74509.0, "mom3": null, "score": 0.5, "sinal": "neu"}, {"key": "prod|Ônibus", "nome": "Produção · ônibus", "fonte": "ANFAVEA", "unid": "unid.", "ultimo": "2026-09", "v_ultimo": 1425.0, "ytd": -11.2, "u12m": -16.6, "mes_yoy": -48.9, "tri_yoy": -34.6, "v_ytd": 21343.0, "mom3": null, "score": -22.9, "sinal": "desf"}, {"key": "exp", "nome": "Exportação de autoveículos", "fonte": "ANFAVEA", "unid": "unid.", "ultimo": "2026-09", "v_ultimo": 39843.0, "ytd": -23.0, "u12m": -22.0, "mes_yoy": -24.2, "tri_yoy": -25.4, "v_ytd": 333953.0, "mom3": null, "score": -24.2, "sinal": "desf"}, {"key": "diesel", "nome": "Vendas de óleo diesel", "fonte": "ANP", "unid": "mil m³", "ultimo": "2026-08", "v_ultimo": 6161.4, "ytd": 1.4, "u12m": 2.4, "mes_yoy": 1.9, "tri_yoy": 1.1, "v_ytd": 46412.5, "mom3": null, "score": 1.2, "sinal": "neu"}, {"key": "otto", "nome": "Ciclo Otto (gasolina C + 0,7×etanol hidr.)", "fonte": "ANP", "unid": "mil m³ gas.-eq.", "ultimo": "2026-08", "v_ultimo": 5325.1, "ytd": 4.1, "u12m": 4.4, "mes_yoy": 5.3, "tri_yoy": 5.3, "v_ytd": 41507.8, "mom3": null, "score": 4.7, "sinal": "fav"}, {"key": "abcr_pesados", "nome": "Fluxo pedagiado · pesados", "fonte": "ABCR", "unid": "índice", "ultimo": "2026-09", "v_ultimo": 185.8, "ytd": 1.7, "u12m": 2.0, "mes_yoy": -1.1, "tri_yoy": 0.2, "v_ytd": 181.6, "mom3": -0.5, "score": 1.0, "sinal": "neu"}, {"key": "abcr_leves", "nome": "Fluxo pedagiado · leves", "fonte": "ABCR", "unid": "índice", "ultimo": "2026-09", "v_ultimo": 168.6, "ytd": 1.6, "u12m": 2.0, "mes_yoy": 0.7, "tri_yoy": 1.6, "v_ytd": 171.9, "mom3": -0.1, "score": 1.6, "sinal": "neu"}, {"key": "pim_borr", "nome": "PIM · borracha e material plástico", "fonte": "IBGE", "unid": "índice", "ultimo": "2026-08", "v_ultimo": 107.1, "ytd": -0.1, "u12m": 0.5, "mes_yoy": -4.6, "tri_yoy": -2.6, "v_ytd": 107.6, "mom3": -3.9, "score": -1.4, "sinal": "neu"}, {"key": "pim_veic", "nome": "PIM · veículos, reboques e carrocerias", "fonte": "IBGE", "unid": "índice", "ultimo": "2026-08", "v_ultimo": 122.9, "ytd": 5.8, "u12m": 1.5, "mes_yoy": 6.6, "tri_yoy": 10.0, "v_ytd": 111.8, "mom3": 2.4, "score": 7.9, "sinal": "fav"}, {"key": "pim_geral", "nome": "PIM · indústria geral", "fonte": "IBGE", "unid": "índice", "ultimo": "2026-08", "v_ultimo": 111.7, "ytd": 0.8, "u12m": 0.6, "mes_yoy": -1.2, "tri_yoy": -0.0, "v_ytd": 103.8, "mom3": -2.0, "score": 0.4, "sinal": "neu"}, {"key": "pim_extr", "nome": "PIM · indústrias extrativas", "fonte": "IBGE", "unid": "índice", "ultimo": "2026-08", "v_ultimo": 124.9, "ytd": 6.1, "u12m": 6.3, "mes_yoy": 2.4, "tri_yoy": 3.5, "v_ytd": 116.8, "mom3": -1.9, "score": 4.8, "sinal": "fav"}, {"key": "pim_metal", "nome": "PIM · metalurgia (aço p/ cabos)", "fonte": "IBGE", "unid": "índice", "ultimo": "2026-08", "v_ultimo": 109.5, "ytd": 1.1, "u12m": 0.3, "mes_yoy": 3.7, "tri_yoy": 3.4, "v_ytd": 103.4, "mom3": 1.8, "score": 2.2, "sinal": "fav"}, {"key": "pim_alim", "nome": "PIM · alimentos (proxy agro)", "fonte": "IBGE", "unid": "índice", "ultimo": "2026-08", "v_ultimo": 117.7, "ytd": 0.2, "u12m": 1.9, "mes_yoy": -1.0, "tri_yoy": -1.4, "v_ytd": 104.8, "mom3": -1.8, "score": -0.6, "sinal": "neu"}, {"key": "pim_maq", "nome": "PIM · máquinas e equipamentos", "fonte": "IBGE", "unid": "índice", "ultimo": "2026-08", "v_ultimo": 96.6, "ytd": -7.8, "u12m": -4.8, "mes_yoy": -8.0, "tri_yoy": -6.3, "v_ytd": 92.7, "mom3": -1.9, "score": -7.0, "sinal": "desf"}], "OE": {"monthly": [{"p": "2023-01", "Automóveis": 625300, "Comerciais leves": 113875, "Caminhões": 32392, "Ônibus": 4692}, {"p": "2023-02", "Automóveis": 618470, "Comerciais leves": 142130, "Caminhões": 64984, "Ônibus": 7650}, {"p": "2023-03", "Automóveis": 838310, "Comerciais leves": 199450, "Caminhões": 98600, "Ônibus": 11748}, {"p": "2023-04", "Automóveis": 687745, "Comerciais leves": 162105, "Caminhões": 58040, "Ônibus": 9768}, {"p": "2023-05", "Automóveis": 875255, "Comerciais leves": 212620, "Caminhões": 67136, "Ônibus": 11682}, {"p": "2023-06", "Automóveis": 713635, "Comerciais leves": 187385, "Caminhões": 56232, "Ônibus": 11694}, {"p": "2023-07", "Automóveis": 709295, "Comerciais leves": 162525, "Caminhões": 53992, "Ônibus": 11418}, {"p": "2023-08", "Automóveis": 868465, "Comerciais leves": 207950, "Caminhões": 76984, "Ônibus": 12288}, {"p": "2023-09", "Automóveis": 797515, "Comerciais leves": 196505, "Caminhões": 65760, "Ônibus": 11190}, {"p": "2023-10", "Automóveis": 748625, "Comerciais leves": 187285, "Caminhões": 83824, "Ônibus": 12588}, {"p": "2023-11", "Automóveis": 777585, "Comerciais leves": 176205, "Caminhões": 80240, "Ônibus": 11322}, {"p": "2023-12", "Automóveis": 650195, "Comerciais leves": 160095, "Caminhões": 66096, "Ônibus": 7548}, {"p": "2024-01", "Automóveis": 585125, "Comerciais leves": 130010, "Caminhões": 63528, "Ônibus": 9576}, {"p": "2024-02", "Automóveis": 703440, "Comerciais leves": 182830, "Caminhões": 81296, "Ônibus": 13608}, {"p": "2024-03", "Automóveis": 717095, "Comerciais leves": 192410, "Caminhões": 89792, "Ônibus": 15756}, {"p": "2024-04", "Automóveis": 837010, "Comerciais leves": 201245, "Caminhões": 93248, "Ônibus": 16848}, {"p": "2024-05", "Automóveis": 635235, "Comerciais leves": 128910, "Caminhões": 89376, "Ônibus": 16386}, {"p": "2024-06", "Automóveis": 794905, "Comerciais leves": 185895, "Caminhões": 97888, "Ônibus": 15834}, {"p": "2024-07", "Automóveis": 903355, "Comerciais leves": 259725, "Caminhões": 95272, "Ônibus": 13176}, {"p": "2024-08", "Automóveis": 967335, "Comerciais leves": 254445, "Caminhões": 104808, "Ônibus": 12936}, {"p": "2024-09", "Automóveis": 845535, "Comerciais leves": 227475, "Caminhões": 105680, "Ônibus": 13062}, {"p": "2024-10", "Automóveis": 916265, "Comerciais leves": 243275, "Caminhões": 118336, "Ônibus": 14484}, {"p": "2024-11", "Automóveis": 885570, "Comerciais leves": 229630, "Caminhões": 105360, "Ônibus": 14664}, {"p": "2024-12", "Automóveis": 704205, "Comerciais leves": 193415, "Caminhões": 85432, "Ônibus": 10164}, {"p": "2025-01", "Automóveis": 704020, "Comerciais leves": 153770, "Caminhões": 64328, "Ônibus": 10836}, {"p": "2025-02", "Automóveis": 829010, "Comerciais leves": 211920, "Caminhões": 95760, "Ônibus": 14910}, {"p": "2025-03", "Automóveis": 719785, "Comerciais leves": 181085, "Caminhões": 93760, "Ônibus": 17286}, {"p": "2025-04", "Automóveis": 867970, "Comerciais leves": 226630, "Caminhões": 88160, "Ônibus": 17244}, {"p": "2025-05", "Automóveis": 801770, "Comerciais leves": 222385, "Caminhões": 98616, "Ônibus": 17520}, {"p": "2025-06", "Automóveis": 766820, "Comerciais leves": 212470, "Caminhões": 90344, "Ônibus": 16656}, {"p": "2025-07", "Automóveis": 921060, "Comerciais leves": 203185, "Caminhões": 96464, "Ônibus": 17364}, {"p": "2025-08", "Automóveis": 975630, "Comerciais leves": 200445, "Caminhões": 80768, "Ônibus": 15642}, {"p": "2025-09", "Automóveis": 915810, "Comerciais leves": 236685, "Caminhões": 80856, "Ônibus": 16722}, {"p": "2025-10", "Automóveis": 924205, "Comerciais leves": 253175, "Caminhões": 81280, "Ônibus": 12804}, {"p": "2025-11", "Automóveis": 824340, "Comerciais leves": 216315, "Caminhões": 76808, "Ônibus": 7956}, {"p": "2025-12", "Automóveis": 699735, "Comerciais leves": 190515, "Caminhões": 45784, "Ônibus": 4206}, {"p": "2026-01", "Automóveis": 620965, "Comerciais leves": 153910, "Caminhões": 54504, "Ônibus": 10998}, {"p": "2026-02", "Automóveis": 774730, "Comerciais leves": 207495, "Caminhões": 62376, "Ônibus": 16362}, {"p": "2026-03", "Automóveis": 995580, "Comerciais leves": 251070, "Caminhões": 89064, "Ônibus": 18612}, {"p": "2026-04", "Automóveis": 914815, "Comerciais leves": 214095, "Caminhões": 77384, "Ônibus": 18354}, {"p": "2026-05", "Automóveis": 1005730, "Comerciais leves": 194550, "Caminhões": 83904, "Ônibus": 17262}, {"p": "2026-06", "Automóveis": 941450, "Comerciais leves": 223785, "Caminhões": 87152, "Ônibus": 13950}, {"p": "2026-07", "Automóveis": 981575, "Comerciais leves": 217200, "Caminhões": 96872, "Ônibus": 12828}, {"p": "2026-08", "Automóveis": 1074755, "Comerciais leves": 212895, "Caminhões": 94184, "Ônibus": 11142}, {"p": "2026-09", "Automóveis": 1044975, "Comerciais leves": 231120, "Caminhões": 93000, "Ônibus": 8550}], "tpv": {"Automóveis": 5, "Comerciais leves": 5, "Caminhões": 8, "Ônibus": 6}, "annual": {"Automóveis": {"2023": 8910395.0, "2024": 9495075.0, "2025": 9950155.0, "2026": 8354575.0}, "Comerciais leves": {"2023": 2108130.0, "2024": 2429265.0, "2025": 2508580.0, "2026": 1906120.0}, "Caminhões": {"2023": 804280.0, "2024": 1130016.0, "2025": 992928.0, "2026": 738440.0}, "Ônibus": {"2023": 123588.0, "2024": 166494.0, "2025": 169146.0, "2026": 128058.0}}, "ytd": {"Automóveis": {"2023": 6733990.0, "2024": 6989035.0, "2025": 7501875.0, "2026": 8354575.0}, "Comerciais leves": {"2023": 1584545.0, "2024": 1762945.0, "2025": 1848575.0, "2026": 1906120.0}, "Caminhões": {"2023": 574120.0, "2024": 820888.0, "2025": 789056.0, "2026": 738440.0}, "Ônibus": {"2023": 92130.0, "2024": 127182.0, "2025": 144180.0, "2026": 128058.0}}, "prod_ytd": {"Automóveis": {"2023": 1346798.0, "2024": 1397807.0, "2025": 1500375.0, "2026": 1670915.0}, "Comerciais leves": {"2023": 316909.0, "2024": 352589.0, "2025": 369715.0, "2026": 381224.0}, "Caminhões": {"2023": 71765.0, "2024": 102611.0, "2025": 98632.0, "2026": 92305.0}, "Ônibus": {"2023": 15355.0, "2024": 21197.0, "2025": 24030.0, "2026": 21343.0}}, "exp_ytd": {"Automóveis": {"2023": 250446.0, "2024": 209548.0, "2025": 333034.0, "2026": 251587.0}, "Comerciais leves": {"2023": 56248.0, "2024": 59345.0, "2025": 73895.0, "2026": 61802.0}, "Caminhões": {"2023": 12467.0, "2024": 11716.0, "2025": 21639.0, "2026": 17036.0}, "Ônibus": {"2023": 3736.0, "2024": 3258.0, "2025": 5233.0, "2026": 3528.0}}, "empl_ytd": {"Automóveis": {"2023": 1209715.0, "2024": 1369818.0, "2025": 1411629.0, "2026": 1729542.0}, "Comerciais leves": {"2023": 325129.0, "2024": 382432.0, "2025": 397569.0, "2026": 429365.0}, "Caminhões": {"2023": 79001.0, "2024": 91015.0, "2025": 84049.0, "2026": 80882.0}, "Ônibus": {"2023": 15788.0, "2024": 15760.0, "2025": 17690.0, "2026": 16913.0}}, "mes": 9}, "REP": {"yoy": [{"p": "2015-01", "d": 1.8, "a": -3.1, "o": 6.0, "l": 2.2}, {"p": "2015-02", "d": -1.3, "a": -7.4, "o": 4.6, "l": 2.6}, {"p": "2015-03", "d": -1.7, "a": -6.5, "o": 3.0, "l": -0.1}, {"p": "2015-04", "d": -4.0, "a": -6.9, "o": 0.4, "l": -0.7}, {"p": "2015-05", "d": -2.8, "a": -4.2, "o": 0.8, "l": -1.3}, {"p": "2015-06", "d": -3.1, "a": -5.2, "o": 1.4, "l": 0.7}, {"p": "2015-07", "d": -3.6, "a": -5.0, "o": 2.3, "l": 2.3}, {"p": "2015-08", "d": -2.4, "a": -4.1, "o": 2.9, "l": 1.4}, {"p": "2015-09", "d": -6.1, "a": -5.8, "o": 0.1, "l": 0.9}, {"p": "2015-10", "d": -7.9, "a": -6.6, "o": -2.1, "l": -0.4}, {"p": "2015-11", "d": -8.2, "a": -7.4, "o": -2.6, "l": -1.4}, {"p": "2015-12", "d": -7.1, "a": -7.0, "o": -2.7, "l": -2.8}, {"p": "2016-01", "d": -9.4, "a": -7.7, "o": -5.7, "l": -4.5}, {"p": "2016-02", "d": -5.3, "a": -4.9, "o": -2.6, "l": -2.0}, {"p": "2016-03", "d": -5.6, "a": -5.5, "o": -1.0, "l": -0.4}, {"p": "2016-04", "d": -1.2, "a": -3.2, "o": 2.2, "l": -0.5}, {"p": "2016-05", "d": -3.9, "a": -5.4, "o": 0.5, "l": -1.9}, {"p": "2016-06", "d": -3.8, "a": -3.9, "o": -1.3, "l": -4.6}, {"p": "2016-07", "d": -4.5, "a": -5.3, "o": -1.5, "l": -3.1}, {"p": "2016-08", "d": -4.2, "a": -5.2, "o": -1.3, "l": -3.8}, {"p": "2016-09", "d": -3.6, "a": -6.6, "o": 0.2, "l": -3.0}, {"p": "2016-10", "d": -5.4, "a": -8.2, "o": -0.4, "l": -5.0}, {"p": "2016-11", "d": -5.8, "a": -8.5, "o": 0.2, "l": -3.7}, {"p": "2016-12", "d": -6.9, "a": -7.6, "o": -0.4, "l": -2.6}, {"p": "2017-01", "d": -3.2, "a": -4.6, "o": 2.7, "l": -0.3}, {"p": "2017-02", "d": -4.0, "a": -4.2, "o": 0.5, "l": -1.0}, {"p": "2017-03", "d": -1.1, "a": -3.1, "o": 1.5, "l": -0.7}, {"p": "2017-04", "d": -4.3, "a": -5.0, "o": -0.2, "l": -0.3}, {"p": "2017-05", "d": -1.5, "a": -2.2, "o": 1.9, "l": 0.9}, {"p": "2017-06", "d": -1.8, "a": -2.4, "o": 2.8, "l": 2.8}, {"p": "2017-07", "d": 2.2, "a": 1.3, "o": 3.8, "l": 3.0}, {"p": "2017-08", "d": 2.0, "a": 1.6, "o": 2.9, "l": 3.2}, {"p": "2017-09", "d": 2.1, "a": 3.3, "o": 0.3, "l": 3.3}, {"p": "2017-10", "d": 3.3, "a": 5.1, "o": -0.1, "l": 3.4}, {"p": "2017-11", "d": 4.4, "a": 5.5, "o": -0.8, "l": 3.7}, {"p": "2017-12", "d": 4.3, "a": 5.1, "o": -0.8, "l": 2.4}, {"p": "2018-01", "d": 3.7, "a": 4.6, "o": -1.0, "l": 1.9}, {"p": "2018-02", "d": 2.6, "a": 3.5, "o": -1.9, "l": 1.4}, {"p": "2018-03", "d": 2.0, "a": 3.2, "o": -1.6, "l": 1.5}, {"p": "2018-04", "d": 4.3, "a": 4.5, "o": -2.2, "l": 1.1}, {"p": "2018-05", "d": -2.5, "a": -3.9, "o": -4.9, "l": -2.5}, {"p": "2018-06", "d": 0.1, "a": -1.5, "o": -6.6, "l": -5.8}, {"p": "2018-07", "d": -2.6, "a": -3.9, "o": -8.5, "l": -7.1}, {"p": "2018-08", "d": 4.8, "a": 4.9, "o": -5.2, "l": -3.7}, {"p": "2018-09", "d": 1.8, "a": 2.1, "o": -5.1, "l": -1.6}, {"p": "2018-10", "d": 1.6, "a": 1.9, "o": -2.7, "l": -1.3}, {"p": "2018-11", "d": 1.0, "a": 1.4, "o": -2.0, "l": -0.6}, {"p": "2018-12", "d": 2.9, "a": 1.5, "o": -0.0, "l": 0.0}, {"p": "2019-01", "d": 4.0, "a": 1.9, "o": 0.6, "l": 1.5}, {"p": "2019-02", "d": 5.4, "a": 3.9, "o": 1.9, "l": 0.2}, {"p": "2019-03", "d": 2.3, "a": 2.8, "o": 0.2, "l": 0.3}, {"p": "2019-04", "d": 0.4, "a": 1.8, "o": 1.1, "l": -0.5}, {"p": "2019-05", "d": 7.4, "a": 11.0, "o": 3.6, "l": 4.6}, {"p": "2019-06", "d": 6.9, "a": 9.9, "o": 5.1, "l": 7.2}, {"p": "2019-07", "d": 8.0, "a": 10.8, "o": 6.9, "l": 7.9}, {"p": "2019-08", "d": -0.5, "a": -1.0, "o": 3.7, "l": 4.6}, {"p": "2019-09", "d": 2.8, "a": 2.9, "o": 6.0, "l": 2.8}, {"p": "2019-10", "d": 3.8, "a": 3.6, "o": 4.7, "l": 4.2}, {"p": "2019-11", "d": 3.8, "a": 4.5, "o": 5.7, "l": 4.3}, {"p": "2019-12", "d": 1.9, "a": 3.3, "o": 4.8, "l": 3.6}, {"p": "2020-01", "d": -0.1, "a": 1.6, "o": 3.4, "l": 1.4}, {"p": "2020-02", "d": 0.5, "a": 0.6, "o": 2.9, "l": 2.1}, {"p": "2020-03", "d": 2.5, "a": 0.9, "o": -2.9, "l": -6.8}, {"p": "2020-04", "d": -2.4, "a": -6.6, "o": -13.4, "l": -24.0}, {"p": "2020-05", "d": -6.5, "a": -11.8, "o": -22.6, "l": -39.9}, {"p": "2020-06", "d": -7.4, "a": -13.3, "o": -22.0, "l": -41.3}, {"p": "2020-07", "d": -2.4, "a": -6.2, "o": -15.6, "l": -32.2}, {"p": "2020-08", "d": -0.2, "a": -1.0, "o": -11.6, "l": -23.3}, {"p": "2020-09", "d": 1.9, "a": 1.2, "o": -8.2, "l": -16.5}, {"p": "2020-10", "d": 2.4, "a": 1.5, "o": -4.9, "l": -9.9}, {"p": "2020-11", "d": 3.7, "a": 3.2, "o": -2.5, "l": -7.3}, {"p": "2020-12", "d": 4.5, "a": 4.5, "o": -1.8, "l": -7.1}, {"p": "2021-01", "d": 4.4, "a": 5.1, "o": -2.2, "l": -9.4}, {"p": "2021-02", "d": 3.2, "a": 5.4, "o": -3.9, "l": -10.5}, {"p": "2021-03", "d": 5.7, "a": 6.4, "o": -2.5, "l": -7.8}, {"p": "2021-04", "d": 14.0, "a": 16.4, "o": 5.5, "l": 15.6}, {"p": "2021-05", "d": 19.6, "a": 22.9, "o": 16.0, "l": 37.5}, {"p": "2021-06", "d": 17.0, "a": 23.3, "o": 18.3, "l": 47.0}, {"p": "2021-07", "d": 10.5, "a": 14.2, "o": 14.8, "l": 35.3}, {"p": "2021-08", "d": 9.1, "a": 7.7, "o": 10.0, "l": 20.8}, {"p": "2021-09", "d": 7.2, "a": 3.5, "o": 6.5, "l": 12.5}, {"p": "2021-10", "d": 5.3, "a": 1.1, "o": 1.4, "l": 4.1}, {"p": "2021-11", "d": 3.1, "a": -0.7, "o": -2.8, "l": 1.1}, {"p": "2021-12", "d": 3.7, "a": 0.0, "o": -4.1, "l": 1.9}, {"p": "2022-01", "d": 4.0, "a": 0.9, "o": -5.6, "l": 2.4}, {"p": "2022-02", "d": 6.3, "a": 1.2, "o": -2.0, "l": 2.9}, {"p": "2022-03", "d": 4.3, "a": 1.3, "o": 2.8, "l": 11.6}, {"p": "2022-04", "d": 2.8, "a": 2.0, "o": 9.7, "l": 21.8}, {"p": "2022-05", "d": 1.3, "a": 3.2, "o": 9.6, "l": 23.4}, {"p": "2022-06", "d": 1.7, "a": 3.5, "o": 5.7, "l": 14.9}, {"p": "2022-07", "d": 1.8, "a": 3.1, "o": 1.9, "l": 8.0}, {"p": "2022-08", "d": 0.1, "a": 2.7, "o": 3.2, "l": 7.1}, {"p": "2022-09", "d": 0.4, "a": 2.6, "o": 5.8, "l": 6.5}, {"p": "2022-10", "d": 0.9, "a": 2.4, "o": 8.0, "l": 4.7}, {"p": "2022-11", "d": 1.3, "a": 1.4, "o": 8.4, "l": 2.8}, {"p": "2022-12", "d": 1.5, "a": 0.0, "o": 8.5, "l": 2.2}, {"p": "2023-01", "d": 0.9, "a": 0.5, "o": 10.6, "l": 5.9}, {"p": "2023-02", "d": -0.8, "a": -0.6, "o": 10.6, "l": 8.2}, {"p": "2023-03", "d": 0.8, "a": 1.0, "o": 10.9, "l": 9.3}, {"p": "2023-04", "d": 1.0, "a": -0.4, "o": 8.5, "l": 6.0}, {"p": "2023-05", "d": 3.7, "a": 1.2, "o": 10.4, "l": 6.0}, {"p": "2023-06", "d": 3.4, "a": 0.9, "o": 11.9, "l": 7.6}, {"p": "2023-07", "d": 5.1, "a": 2.3, "o": 10.8, "l": 7.2}, {"p": "2023-08", "d": 5.5, "a": 3.0, "o": 6.7, "l": 6.3}, {"p": "2023-09", "d": 5.1, "a": 3.4, "o": 2.2, "l": 5.7}, {"p": "2023-10", "d": 4.8, "a": 5.1, "o": 1.8, "l": 5.2}, {"p": "2023-11", "d": 4.3, "a": 6.1, "o": 2.1, "l": 6.4}, {"p": "2023-12", "d": 4.7, "a": 6.6, "o": 2.4, "l": 6.0}, {"p": "2024-01", "d": 7.9, "a": 6.3, "o": 5.3, "l": 5.7}, {"p": "2024-02", "d": 7.9, "a": 7.2, "o": 3.2, "l": 5.0}, {"p": "2024-03", "d": 3.3, "a": 4.7, "o": 3.9, "l": 4.0}, {"p": "2024-04", "d": 4.2, "a": 7.1, "o": 3.7, "l": 3.1}, {"p": "2024-05", "d": 2.4, "a": 3.9, "o": 3.7, "l": 2.4}, {"p": "2024-06", "d": 6.2, "a": 6.5, "o": 2.7, "l": 2.3}, {"p": "2024-07", "d": 3.3, "a": 4.6, "o": 2.3, "l": 3.6}, {"p": "2024-08", "d": 2.8, "a": 5.5, "o": 4.0, "l": 3.9}, {"p": "2024-09", "d": 1.7, "a": 5.5, "o": 4.8, "l": 2.8}, {"p": "2024-10", "d": 2.6, "a": 5.3, "o": 4.8, "l": 2.7}, {"p": "2024-11", "d": 3.7, "a": 4.4, "o": 4.9, "l": 2.7}, {"p": "2024-12", "d": 1.7, "a": 2.4, "o": 4.5, "l": 2.6}, {"p": "2025-01", "d": 0.6, "a": 0.8, "o": 2.9, "l": 2.5}, {"p": "2025-02", "d": 1.4, "a": 1.8, "o": 2.6, "l": 1.1}, {"p": "2025-03", "d": 5.1, "a": 3.0, "o": 2.1, "l": 1.6}, {"p": "2025-04", "d": 2.4, "a": 1.9, "o": 2.1, "l": 2.8}, {"p": "2025-05", "d": 2.2, "a": 2.5, "o": 1.9, "l": 3.6}, {"p": "2025-06", "d": 0.2, "a": 1.5, "o": 3.2, "l": 3.3}, {"p": "2025-07", "d": 2.7, "a": 2.6, "o": 2.9, "l": 1.6}, {"p": "2025-08", "d": 1.1, "a": 0.7, "o": 2.1, "l": 1.8}, {"p": "2025-09", "d": 3.9, "a": 2.0, "o": 2.8, "l": 2.0}, {"p": "2025-10", "d": 3.1, "a": 1.9, "o": 3.2, "l": 3.2}, {"p": "2025-11", "d": 3.6, "a": 2.9, "o": 3.3, "l": 2.8}, {"p": "2025-12", "d": 3.4, "a": 3.0, "o": 4.4, "l": 3.3}, {"p": "2026-01", "d": 1.5, "a": 2.5, "o": 2.9, "l": 2.4}, {"p": "2026-02", "d": 1.6, "a": 1.0, "o": 4.3, "l": 2.6}, {"p": "2026-03", "d": 2.7, "a": 2.1, "o": 4.5, "l": 1.4}, {"p": "2026-04", "d": 4.9, "a": 3.2, "o": 5.7, "l": 1.8}, {"p": "2026-05", "d": 3.6, "a": 4.2, "o": 4.6, "l": 1.7}, {"p": "2026-06", "d": 0.6, "a": 2.9, "o": 3.3, "l": 1.9}, {"p": "2026-07", "d": -0.6, "a": 1.6, "o": 3.9, "l": 1.2}, {"p": "2026-08", "d": 1.1, "a": 1.8, "o": 5.3, "l": 1.4}], "corr": {"r_all": 0.84, "r_all_3m": 0.86, "ini": "2000-01", "fim": "2026-08", "r_36": 0.8, "r_36_3m": 0.7, "n": 320, "rl_all": 0.63, "rl_all_3m": 0.74, "rl_36_3m": -0.25, "r_3m_excovid": 0.84}, "carga_ytd": 1.8, "pass_ytd": 2.9, "comp_fim": "2026-08", "diesel_seg": {"CONSUMIDOR FINAL": {"ytd": 2.0, "share": 25.0}, "POSTO REVENDEDOR": {"ytd": 3.6, "share": 59.4}, "TRR": {"ytd": -6.8, "share": 15.5}}, "diesel_reg": {"Norte": 3.0, "Nordeste": 2.2, "Centro-Oeste": 2.2, "Sudeste": 1.0, "Sul": 0.4}}, "CG": {"prod|Semileves": {"ytd": -16.1, "v": 657, "vp": 783}, "empl|Semileves": {"ytd": 1.0, "v": 4226, "vp": 4183}, "prod|Leves": {"ytd": -10.5, "v": 10924, "vp": 12209}, "empl|Leves": {"ytd": -34.5, "v": 4470, "vp": 6828}, "prod|Médios": {"ytd": 22.3, "v": 6215, "vp": 5080}, "empl|Médios": {"ytd": 18.8, "v": 10873, "vp": 9155}, "prod|Semipesados": {"ytd": 0.3, "v": 31045, "vp": 30944}, "empl|Semipesados": {"ytd": -3.1, "v": 26146, "vp": 26981}, "prod|Pesados": {"ytd": -12.4, "v": 43464, "vp": 49616}, "empl|Pesados": {"ytd": -4.7, "v": 35167, "vp": 36902}}, "CGm": [{"p": "2023-01", "Semileves": 633, "Leves": 759, "Médios": 642, "Semipesados": 2429, "Pesados": 5994}, {"p": "2023-02", "Semileves": 635, "Leves": 820, "Médios": 703, "Semipesados": 2387, "Pesados": 3563}, {"p": "2023-03", "Semileves": 1124, "Leves": 922, "Médios": 924, "Semipesados": 2953, "Pesados": 4128}, {"p": "2023-04", "Semileves": 894, "Leves": 688, "Médios": 649, "Semipesados": 2101, "Pesados": 3492}, {"p": "2023-05", "Semileves": 773, "Leves": 698, "Médios": 741, "Semipesados": 2363, "Pesados": 3648}, {"p": "2023-06", "Semileves": 512, "Leves": 658, "Médios": 658, "Semipesados": 2213, "Pesados": 3843}, {"p": "2023-07", "Semileves": 653, "Leves": 754, "Médios": 632, "Semipesados": 2192, "Pesados": 4139}, {"p": "2023-08", "Semileves": 778, "Leves": 718, "Médios": 672, "Semipesados": 2611, "Pesados": 4535}, {"p": "2023-09", "Semileves": 636, "Leves": 646, "Médios": 625, "Semipesados": 2251, "Pesados": 4614}, {"p": "2023-10", "Semileves": 641, "Leves": 783, "Médios": 591, "Semipesados": 2254, "Pesados": 5178}, {"p": "2023-11", "Semileves": 549, "Leves": 822, "Médios": 786, "Semipesados": 2473, "Pesados": 4599}, {"p": "2023-12", "Semileves": 766, "Leves": 772, "Médios": 697, "Semipesados": 2549, "Pesados": 5561}, {"p": "2024-01", "Semileves": 505, "Leves": 518, "Médios": 655, "Semipesados": 2062, "Pesados": 4477}, {"p": "2024-02", "Semileves": 536, "Leves": 627, "Médios": 640, "Semipesados": 2237, "Pesados": 4336}, {"p": "2024-03", "Semileves": 507, "Leves": 829, "Médios": 712, "Semipesados": 2527, "Pesados": 5312}, {"p": "2024-04", "Semileves": 539, "Leves": 889, "Médios": 837, "Semipesados": 2781, "Pesados": 5712}, {"p": "2024-05", "Semileves": 540, "Leves": 842, "Médios": 696, "Semipesados": 2680, "Pesados": 4789}, {"p": "2024-06", "Semileves": 668, "Leves": 891, "Médios": 754, "Semipesados": 2877, "Pesados": 4792}, {"p": "2024-07", "Semileves": 742, "Leves": 896, "Médios": 856, "Semipesados": 3361, "Pesados": 5495}, {"p": "2024-08", "Semileves": 600, "Leves": 957, "Médios": 799, "Semipesados": 3127, "Pesados": 6043}, {"p": "2024-09", "Semileves": 645, "Leves": 891, "Médios": 1008, "Semipesados": 3475, "Pesados": 5436}, {"p": "2024-10", "Semileves": 800, "Leves": 1043, "Médios": 1011, "Semipesados": 3714, "Pesados": 5650}, {"p": "2024-11", "Semileves": 566, "Leves": 906, "Médios": 866, "Semipesados": 3034, "Pesados": 4797}, {"p": "2024-12", "Semileves": 650, "Leves": 948, "Médios": 878, "Semipesados": 2935, "Pesados": 6037}, {"p": "2025-01", "Semileves": 510, "Leves": 772, "Médios": 705, "Semipesados": 2592, "Pesados": 4831}, {"p": "2025-02", "Semileves": 484, "Leves": 865, "Médios": 792, "Semipesados": 2963, "Pesados": 3863}, {"p": "2025-03", "Semileves": 459, "Leves": 886, "Médios": 793, "Semipesados": 2797, "Pesados": 4437}, {"p": "2025-04", "Semileves": 633, "Leves": 768, "Médios": 901, "Semipesados": 2831, "Pesados": 4210}, {"p": "2025-05", "Semileves": 522, "Leves": 775, "Médios": 1010, "Semipesados": 3035, "Pesados": 3805}, {"p": "2025-06", "Semileves": 403, "Leves": 672, "Médios": 1104, "Semipesados": 2773, "Pesados": 3555}, {"p": "2025-07", "Semileves": 371, "Leves": 748, "Médios": 1325, "Semipesados": 3540, "Pesados": 4607}, {"p": "2025-08", "Semileves": 368, "Leves": 621, "Médios": 1154, "Semipesados": 3087, "Pesados": 3685}, {"p": "2025-09", "Semileves": 433, "Leves": 721, "Médios": 1371, "Semipesados": 3363, "Pesados": 3909}, {"p": "2025-10", "Semileves": 454, "Leves": 632, "Médios": 1370, "Semipesados": 3481, "Pesados": 4728}, {"p": "2025-11", "Semileves": 361, "Leves": 547, "Médios": 1184, "Semipesados": 2982, "Pesados": 3842}, {"p": "2025-12", "Semileves": 306, "Leves": 594, "Médios": 1211, "Semipesados": 3229, "Pesados": 4509}, {"p": "2026-01", "Semileves": 282, "Leves": 440, "Médios": 831, "Semipesados": 2167, "Pesados": 2764}, {"p": "2026-02", "Semileves": 275, "Leves": 433, "Médios": 875, "Semipesados": 2326, "Pesados": 2778}, {"p": "2026-03", "Semileves": 282, "Leves": 504, "Médios": 1152, "Semipesados": 2752, "Pesados": 4135}, {"p": "2026-04", "Semileves": 414, "Leves": 562, "Médios": 1266, "Semipesados": 2941, "Pesados": 3643}, {"p": "2026-05", "Semileves": 428, "Leves": 442, "Médios": 1275, "Semipesados": 3273, "Pesados": 3002}, {"p": "2026-06", "Semileves": 530, "Leves": 496, "Médios": 1271, "Semipesados": 2943, "Pesados": 4515}, {"p": "2026-07", "Semileves": 730, "Leves": 561, "Médios": 1524, "Semipesados": 3384, "Pesados": 5446}, {"p": "2026-08", "Semileves": 667, "Leves": 539, "Médios": 1299, "Semipesados": 3165, "Pesados": 4338}, {"p": "2026-09", "Semileves": 618, "Leves": 493, "Médios": 1380, "Semipesados": 3195, "Pesados": 4546}], "IND": {"sa": {"geral": [["2023-01", 99.7], ["2023-02", 99.6], ["2023-03", 100.3], ["2023-04", 99.8], ["2023-05", 100.5], ["2023-06", 100.2], ["2023-07", 99.5], ["2023-08", 100.1], ["2023-09", 99.7], ["2023-10", 100.1], ["2023-11", 101.3], ["2023-12", 103.1], ["2024-01", 101.7], ["2024-02", 101.7], ["2024-03", 102.0], ["2024-04", 101.7], ["2024-05", 100.2], ["2024-06", 105.2], ["2024-07", 103.6], ["2024-08", 103.4], ["2024-09", 104.4], ["2024-10", 104.4], ["2024-11", 103.9], ["2024-12", 103.7], ["2025-01", 103.6], ["2025-02", 103.1], ["2025-03", 104.7], ["2025-04", 104.0], ["2025-05", 103.2], ["2025-06", 104.1], ["2025-07", 103.8], ["2025-08", 104.7], ["2025-09", 104.3], ["2025-10", 104.4], ["2025-11", 104.2], ["2025-12", 102.1], ["2026-01", 104.3], ["2026-02", 105.2], ["2026-03", 105.4], ["2026-04", 106.6], ["2026-05", 105.5], ["2026-06", 103.8], ["2026-07", 103.9], ["2026-08", 103.3]], "borr": [["2023-01", 102.2], ["2023-02", 99.9], ["2023-03", 100.9], ["2023-04", 102.5], ["2023-05", 100.2], ["2023-06", 101.6], ["2023-07", 98.4], ["2023-08", 100.4], ["2023-09", 100.7], ["2023-10", 101.8], ["2023-11", 101.1], ["2023-12", 104.0], ["2024-01", 103.2], ["2024-02", 105.2], ["2024-03", 108.1], ["2024-04", 104.1], ["2024-05", 104.4], ["2024-06", 105.2], ["2024-07", 108.0], ["2024-08", 108.1], ["2024-09", 107.8], ["2024-10", 107.7], ["2024-11", 107.4], ["2024-12", 103.9], ["2025-01", 106.5], ["2025-02", 107.5], ["2025-03", 107.2], ["2025-04", 106.0], ["2025-05", 107.7], ["2025-06", 109.0], ["2025-07", 108.2], ["2025-08", 107.8], ["2025-09", 109.4], ["2025-10", 108.0], ["2025-11", 109.3], ["2025-12", 106.6], ["2026-01", 107.8], ["2026-02", 107.5], ["2026-03", 107.0], ["2026-04", 110.3], ["2026-05", 110.7], ["2026-06", 106.5], ["2026-07", 105.3], ["2026-08", 103.4]], "veic": [["2023-01", 97.7], ["2023-02", 95.5], ["2023-03", 94.1], ["2023-04", 93.5], ["2023-05", 96.7], ["2023-06", 93.0], ["2023-07", 89.4], ["2023-08", 90.5], ["2023-09", 90.5], ["2023-10", 89.8], ["2023-11", 90.1], ["2023-12", 97.8], ["2024-01", 96.6], ["2024-02", 99.5], ["2024-03", 99.6], ["2024-04", 106.1], ["2024-05", 92.8], ["2024-06", 104.0], ["2024-07", 106.9], ["2024-08", 105.2], ["2024-09", 110.7], ["2024-10", 115.1], ["2024-11", 108.0], ["2024-12", 104.7], ["2025-01", 107.4], ["2025-02", 104.2], ["2025-03", 108.3], ["2025-04", 109.5], ["2025-05", 102.9], ["2025-06", 104.2], ["2025-07", 105.4], ["2025-08", 107.0], ["2025-09", 103.8], ["2025-10", 105.4], ["2025-11", 103.9], ["2025-12", 95.3], ["2026-01", 103.0], ["2026-02", 109.6], ["2026-03", 110.9], ["2026-04", 111.1], ["2026-05", 115.6], ["2026-06", 115.3], ["2026-07", 115.4], ["2026-08", 115.0]], "transf": [["2023-01", 99.0], ["2023-02", 98.6], ["2023-03", 99.6], ["2023-04", 98.8], ["2023-05", 99.6], ["2023-06", 98.9], ["2023-07", 98.2], ["2023-08", 99.5], ["2023-09", 98.4], ["2023-10", 98.9], ["2023-11", 99.5], ["2023-12", 100.3], ["2024-01", 100.3], ["2024-02", 100.8], ["2024-03", 101.0], ["2024-04", 101.6], ["2024-05", 99.4], ["2024-06", 104.6], ["2024-07", 103.2], ["2024-08", 102.6], ["2024-09", 104.0], ["2024-10", 104.5], ["2024-11", 103.4], ["2024-12", 102.8], ["2025-01", 103.3], ["2025-02", 102.4], ["2025-03", 103.4], ["2025-04", 102.3], ["2025-05", 101.6], ["2025-06", 102.5], ["2025-07", 102.1], ["2025-08", 103.0], ["2025-09", 102.9], ["2025-10", 102.5], ["2025-11", 102.6], ["2025-12", 100.1], ["2026-01", 102.2], ["2026-02", 103.2], ["2026-03", 103.1], ["2026-04", 103.5], ["2026-05", 103.3], ["2026-06", 101.3], ["2026-07", 101.7], ["2026-08", 101.0]], "extr": [["2023-01", 103.6], ["2023-02", 106.6], ["2023-03", 104.9], ["2023-04", 104.3], ["2023-05", 106.4], ["2023-06", 108.0], ["2023-07", 106.7], ["2023-08", 101.4], ["2023-09", 109.0], ["2023-10", 109.5], ["2023-11", 112.9], ["2023-12", 116.4], ["2024-01", 110.1], ["2024-02", 106.9], ["2024-03", 106.8], ["2024-04", 102.1], ["2024-05", 105.8], ["2024-06", 108.7], ["2024-07", 106.4], ["2024-08", 107.4], ["2024-09", 106.8], ["2024-10", 106.0], ["2024-11", 107.8], ["2024-12", 108.5], ["2025-01", 105.2], ["2025-02", 108.1], ["2025-03", 111.6], ["2025-04", 112.0], ["2025-05", 114.5], ["2025-06", 112.5], ["2025-07", 114.5], ["2025-08", 114.6], ["2025-09", 112.6], ["2025-10", 116.5], ["2025-11", 113.8], ["2025-12", 114.8], ["2026-01", 116.5], ["2026-02", 117.8], ["2026-03", 118.2], ["2026-04", 122.3], ["2026-05", 118.9], ["2026-06", 118.5], ["2026-07", 117.3], ["2026-08", 116.6]], "metal": [["2023-01", 94.0], ["2023-02", 98.3], ["2023-03", 99.4], ["2023-04", 98.2], ["2023-05", 100.1], ["2023-06", 98.4], ["2023-07", 97.9], ["2023-08", 97.1], ["2023-09", 95.3], ["2023-10", 95.6], ["2023-11", 95.5], ["2023-12", 96.8], ["2024-01", 96.3], ["2024-02", 96.2], ["2024-03", 96.6], ["2024-04", 98.0], ["2024-05", 95.2], ["2024-06", 98.5], ["2024-07", 101.7], ["2024-08", 100.0], ["2024-09", 102.3], ["2024-10", 103.0], ["2024-11", 102.5], ["2024-12", 102.4], ["2025-01", 102.2], ["2025-02", 102.8], ["2025-03", 101.5], ["2025-04", 101.6], ["2025-05", 101.1], ["2025-06", 101.9], ["2025-07", 100.1], ["2025-08", 100.6], ["2025-09", 101.1], ["2025-10", 101.9], ["2025-11", 104.0], ["2025-12", 96.9], ["2026-01", 101.9], ["2026-02", 100.7], ["2026-03", 102.1], ["2026-04", 101.1], ["2026-05", 103.5], ["2026-06", 104.6], ["2026-07", 103.4], ["2026-08", 104.3]]}, "rj": {"1 Indústria geral": {"mes": "2026-08", "var_mm12": 8.3, "acum_ano": 6.9, "acum_12m": 6.8}, "2 Indústrias extrativas": {"mes": "2026-08", "var_mm12": 15.3, "acum_ano": 12.8, "acum_12m": 12.6}, "3 Indústrias de transformação": {"mes": "2026-08", "var_mm12": 0.1, "acum_ano": -0.1, "acum_12m": 0.1}, "3.10 Fabricação de produtos alimentícios": {"mes": "2026-08", "var_mm12": -4.6, "acum_ano": -4.8, "acum_12m": -2.1}}, "uf_transf": [["Pernambuco", 13.9], ["Mato Grosso do Sul", 7.6], ["Rio Grande do Sul", 3.7], ["Mato Grosso", 2.0], ["Goiás", 1.8], ["Minas Gerais", 0.4], ["Rio de Janeiro", -0.1], ["Espírito Santo", -0.3], ["São Paulo", -0.7], ["Paraná", -1.1], ["Santa Catarina", -1.4], ["Pará", -2.5], ["Amazonas", -2.7], ["Ceará", -3.8], ["Bahia", -4.8], ["Maranhão", -5.3], ["Rio Grande do Norte", -11.5]], "uf_geral": [["Espírito Santo", 17.7], ["Pernambuco", 13.9], ["Mato Grosso do Sul", 7.1], ["Rio de Janeiro", 6.9], ["Rio Grande do Sul", 3.7], ["Mato Grosso", 2.0], ["Goiás", 2.0], ["Minas Gerais", 0.7], ["São Paulo", -0.7], ["Paraná", -1.1], ["Santa Catarina", -1.4], ["Amazonas", -2.5], ["Ceará", -3.8], ["Bahia", -4.4], ["Pará", -5.4], ["Maranhão", -6.9], ["Rio Grande do Norte", -10.7]], "oficial": {"geral": {"var_mm12": -1.2, "acum_ano": 0.8, "acum_12m": 0.6, "var_mm1": -0.6}, "extr": {"var_mm12": 2.4, "acum_ano": 6.1, "acum_12m": 6.3, "var_mm1": -0.7}, "transf": {"var_mm12": -1.8, "acum_ano": -0.1, "acum_12m": -0.5, "var_mm1": -0.7}, "borr": {"var_mm12": -4.6, "acum_ano": -0.1, "acum_12m": 0.5, "var_mm1": -1.8}, "veic": {"var_mm12": 6.6, "acum_ano": 5.8, "acum_12m": 1.5, "var_mm1": -0.4}, "metal": {"var_mm12": 3.7, "acum_ano": 1.1, "acum_12m": 0.3, "var_mm1": 0.8}, "maq": {"var_mm12": -8.0, "acum_ano": -7.8, "acum_12m": -4.8, "var_mm1": -1.0}, "alim": {"var_mm12": -1.0, "acum_ano": 0.2, "acum_12m": 1.9, "var_mm1": 1.0}, "quim": {"var_mm12": -3.8, "acum_ano": -3.5, "acum_12m": -3.1, "var_mm1": 0.9}}}, "MIX": {"m": [{"p": "2023-01", "imp": 15.2, "bev": 0.6, "hev": 1.7, "phev": 1.2}, {"p": "2023-02", "imp": 14.1, "bev": 0.5, "hev": 2.1, "phev": 1.0}, {"p": "2023-03", "imp": 14.2, "bev": 0.3, "hev": 1.9, "phev": 1.1}, {"p": "2023-04", "imp": 14.4, "bev": 0.4, "hev": 2.1, "phev": 0.7}, {"p": "2023-05", "imp": 16.1, "bev": 0.4, "hev": 2.1, "phev": 1.4}, {"p": "2023-06", "imp": 15.3, "bev": 0.4, "hev": 1.8, "phev": 1.3}, {"p": "2023-07", "imp": 13.5, "bev": 0.4, "hev": 1.9, "phev": 1.2}, {"p": "2023-08", "imp": 16.8, "bev": 0.6, "hev": 2.4, "phev": 1.8}, {"p": "2023-09", "imp": 15.7, "bev": 1.0, "hev": 2.0, "phev": 1.6}, {"p": "2023-10", "imp": 16.3, "bev": 1.2, "hev": 1.9, "phev": 1.6}, {"p": "2023-11", "imp": 17.5, "bev": 1.6, "hev": 1.7, "phev": 1.9}, {"p": "2023-12", "imp": 18.7, "bev": 2.5, "hev": 2.2, "phev": 2.2}, {"p": "2024-01", "imp": 20.4, "bev": 2.9, "hev": 2.6, "phev": 2.5}, {"p": "2024-02", "imp": 17.8, "bev": 2.3, "hev": 2.1, "phev": 2.3}, {"p": "2024-03", "imp": 17.1, "bev": 3.5, "hev": 2.5, "phev": 1.7}, {"p": "2024-04", "imp": 17.1, "bev": 3.2, "hev": 2.3, "phev": 1.7}, {"p": "2024-05", "imp": 17.7, "bev": 2.8, "hev": 2.6, "phev": 2.0}, {"p": "2024-06", "imp": 18.6, "bev": 2.6, "hev": 2.1, "phev": 2.4}, {"p": "2024-07", "imp": 17.8, "bev": 2.1, "hev": 1.8, "phev": 2.8}, {"p": "2024-08", "imp": 17.9, "bev": 2.3, "hev": 1.7, "phev": 2.5}, {"p": "2024-09", "imp": 18.8, "bev": 2.1, "hev": 1.7, "phev": 2.1}, {"p": "2024-10", "imp": 18.5, "bev": 2.5, "hev": 1.6, "phev": 2.3}, {"p": "2024-11", "imp": 18.3, "bev": 2.3, "hev": 2.1, "phev": 2.8}, {"p": "2024-12", "imp": 21.3, "bev": 1.8, "hev": 2.9, "phev": 4.2}, {"p": "2025-01", "imp": 24.2, "bev": 2.3, "hev": 3.9, "phev": 4.1}, {"p": "2025-02", "imp": 20.3, "bev": 2.6, "hev": 3.5, "phev": 3.3}, {"p": "2025-03", "imp": 20.1, "bev": 2.6, "hev": 3.4, "phev": 3.7}, {"p": "2025-04", "imp": 18.6, "bev": 2.4, "hev": 3.7, "phev": 3.9}, {"p": "2025-05", "imp": 18.2, "bev": 3.3, "hev": 3.7, "phev": 3.5}, {"p": "2025-06", "imp": 18.9, "bev": 2.9, "hev": 4.0, "phev": 3.6}, {"p": "2025-07", "imp": 19.4, "bev": 3.0, "hev": 4.2, "phev": 3.7}, {"p": "2025-08", "imp": 18.3, "bev": 3.6, "hev": 4.6, "phev": 3.7}, {"p": "2025-09", "imp": 18.1, "bev": 3.5, "hev": 4.8, "phev": 3.5}, {"p": "2025-10", "imp": 18.5, "bev": 3.2, "hev": 4.2, "phev": 3.8}, {"p": "2025-11", "imp": 18.1, "bev": 3.2, "hev": 4.2, "phev": 4.1}, {"p": "2025-12", "imp": 20.0, "bev": 4.3, "hev": 5.4, "phev": 5.1}, {"p": "2026-01", "imp": 23.2, "bev": 5.1, "hev": 6.6, "phev": 5.1}, {"p": "2026-02", "imp": 18.9, "bev": 4.9, "hev": 6.2, "phev": 4.7}, {"p": "2026-03", "imp": 18.2, "bev": 5.5, "hev": 5.3, "phev": 4.7}, {"p": "2026-04", "imp": 20.4, "bev": 7.4, "hev": 5.4, "phev": 5.5}, {"p": "2026-05", "imp": 20.5, "bev": 7.9, "hev": 5.6, "phev": 6.0}, {"p": "2026-06", "imp": 21.9, "bev": 8.1, "hev": 5.8, "phev": 7.0}, {"p": "2026-07", "imp": 23.6, "bev": 9.7, "hev": 6.0, "phev": 7.7}, {"p": "2026-08", "imp": 23.6, "bev": 10.4, "hev": 6.2, "phev": 7.8}, {"p": "2026-09", "imp": 21.0, "bev": 8.3, "hev": 7.3, "phev": 7.5}], "imp_ytd": {"2023": 15.0, "2024": 18.1, "2025": 19.4, "2026": 21.3}, "ev_ytd": {"2023": 3.8, "2024": 7.0, "2025": 10.6, "2026": 20.1}, "bev_ytd": {"2023": 0.5, "2024": 2.6, "2025": 2.9, "2026": 7.7}, "phev_ytd": {"2023": 1.3, "2024": 2.3, "2025": 3.6, "2026": 6.4}, "ev_units_ytd": {"2025": 191814, "2026": 433932}, "cn_m": [["2026-01", 14.0], ["2026-02", 13.4], ["2026-03", 14.8], ["2026-04", 17.4], ["2026-05", 18.4], ["2026-06", 19.9], ["2026-07", 22.9], ["2026-08", 23.5], ["2026-09", 21.8]], "cn_share_ytd": 18.9, "top": [["FIAT", 422207, 19.6, false], ["VOLKSWAGEN", 350692, 16.2, false], ["CHEVROLET", 219471, 10.2, false], ["BYD", 172536, 8.0, true], ["HYUNDAI", 141779, 6.6, false], ["TOYOTA", 122838, 5.7, false], ["RENAULT", 96162, 4.5, false], ["JEEP", 85039, 3.9, false], ["HONDA", 82665, 3.8, false], ["GREAT WALL", 63414, 2.9, true], ["CHERY", 58045, 2.7, true], ["NISSAN", 56596, 2.6, false], ["FORD", 42118, 2.0, false], ["GEELY", 37816, 1.8, true], ["OMODA", 35095, 1.6, true]], "cn_nac": 40.8, "byd_nac": 49.3, "cn_list": ["BYD", "GREAT WALL", "CHERY", "GEELY", "OMODA", "GAC", "CAOA CHANGAN", "LEAPMOTOR", "JETOUR", "ZEEKR", "JAC", "MG", "FOTON", "SHINERAY", "SANY", "HIGER", "CRRC ELETRIC", "EFFA"], "cn_truck": 1.82}, "PR": {"empl": {"act": {"2023": 2308689.0, "2024": 2634904.0, "2025": 2689634.0}, "ytd_m": 9, "e26": {"base": 3190634.7, "oti": 3198554.7, "pes": 3176296.5}, "g12": 13.0, "band": 6, "e27": {"base": 3397608.5, "oti": 3597955.5, "pes": 3191762.4}, "var26": 18.6, "var27": 6.5}, "prod": {"act": {"2023": 2324838.0, "2024": 2553869.0, "2025": 2644054.0}, "ytd_m": 9, "e26": {"base": 2900226.1, "oti": 2951192.2, "pes": 2873643.0}, "g12": 5.4, "band": 6, "e27": {"base": 2978728.4, "oti": 3208145.5, "pes": 2779007.1}, "var26": 9.7, "var27": 2.7}, "diesel": {"act": {"2023": 65518.4, "2024": 67421.7, "2025": 69476.7}, "ytd_m": 8, "e26": {"base": 70328.3, "oti": 70490.4, "pes": 70011.5}, "g12": 2.4, "band": 4.1, "e27": {"base": 71182.6, "oti": 74236.8, "pes": 67991.5}, "var26": 1.2, "var27": 1.2}, "abcr_pesados": {"act": {"2023": 167.1, "2024": 174.8, "2025": 178.9}, "ytd_m": 9, "e26": {"base": 182.2, "oti": 182.9, "pes": 181.6}, "g12": 2.0, "band": 4.3, "e27": {"base": 184.0, "oti": 192.6, "pes": 175.7}, "var26": 1.8, "var27": 1.0}, "otto": {"act": {"2023": 57393.1, "2024": 59622.4, "2025": 61521.4}, "ytd_m": 8, "e26": {"base": 63674.0, "oti": 64052.7, "pes": 63476.0}, "g12": 4.4, "band": 3.9, "e27": {"base": 65067.8, "oti": 67952.9, "pes": 62389.9}, "var26": 3.5, "var27": 2.2}, "abcr_leves": {"act": {"2023": 163.2, "2024": 167.9, "2025": 172.2}, "ytd_m": 9, "e26": {"base": 174.7, "oti": 174.9, "pes": 174.5}, "g12": 2.0, "band": 2.8, "e27": {"base": 176.5, "oti": 181.6, "pes": 171.4}, "var26": 1.5, "var27": 1.0}, "prod|Automóveis": {"act": {"2023": 1782079.0, "2024": 1899015.0, "2025": 1990031.0}, "ytd_m": 9, "e26": {"base": 2232409.3, "oti": 2270050.6, "pes": 2210949.6}, "g12": 7.9, "band": 6, "e27": {"base": 2321070.7, "oti": 2496410.0, "pes": 2166101.8}, "var26": 12.2, "var27": 4.0}, "prod|Comerciais leves": {"act": {"2023": 421626.0, "2024": 485853.0, "2025": 501716.0}, "ytd_m": 9, "e26": {"base": 516612.6, "oti": 525310.8, "pes": 507192.8}, "g12": 2.0, "band": 6, "e27": {"base": 521874.4, "oti": 562179.9, "pes": 481927.1}, "var26": 3.0, "var27": 1.0}, "prod|Caminhões": {"act": {"2023": 100535.0, "2024": 141252.0, "2025": 124116.0}, "ytd_m": 9, "e26": {"base": 124176.2, "oti": 129309.3, "pes": 116154.3}, "g12": -14.2, "band": 6, "e27": {"base": 115363.6, "oti": 127891.0, "pes": 100941.8}, "var26": 0.0, "var27": -7.1}, "prod|Ônibus": {"act": {"2023": 20598.0, "2024": 27749.0, "2025": 28191.0}, "ytd_m": 9, "e26": {"base": 27203.2, "oti": 28630.6, "pes": 25038.7}, "g12": -16.6, "band": 6, "e27": {"base": 24944.7, "oti": 27971.5, "pes": 21457.6}, "var26": -3.5, "var27": -8.3}, "oe": {"act": {"2023": 11.95, "2024": 13.22, "2025": 13.62}, "e26": {"base": 14.9, "oti": 15.18, "pes": 14.67}, "e27": {"base": 15.29, "oti": 16.48, "pes": 14.18}, "var26": 9.4, "var27": 2.6}, "rep_carga": {"act": {"2023": 93.9, "2024": 97.4, "2025": 100.0}, "e26": {"base": 101.5, "oti": 101.8, "pes": 101.1}, "e27": {"base": 102.7, "oti": 107.3, "pes": 98.0}, "var26": 1.5, "var27": 1.2}, "rep_pass": {"act": {"2023": 94.0, "2024": 97.2, "2025": 100.0}, "e26": {"base": 102.5, "oti": 102.8, "pes": 102.3}, "e27": {"base": 104.1, "oti": 108.0, "pes": 100.5}, "var26": 2.5, "var27": 1.6}}, "LN": {"empl": [["2023-01", 142852.0], ["2023-02", 129949.0], ["2023-03", 198974.0], ["2023-04", 160730.0], ["2023-05", 176524.0], ["2023-06", 189528.0], ["2023-07", 225594.0], ["2023-08", 207743.0], ["2023-09", 197739.0], ["2023-10", 217848.0], ["2023-11", 212649.0], ["2023-12", 248559.0], ["2024-01", 161615.0], ["2024-02", 165225.0], ["2024-03", 187731.0], ["2024-04", 220842.0], ["2024-05", 194256.0], ["2024-06", 214304.0], ["2024-07", 241336.0], ["2024-08", 237382.0], ["2024-09", 236334.0], ["2024-10", 264949.0], ["2024-11", 253499.0], ["2024-12", 257431.0], ["2025-01", 171248.0], ["2025-02", 184960.0], ["2025-03", 195536.0], ["2025-04", 208704.0], ["2025-05", 225709.0], ["2025-06", 212932.0], ["2025-07", 243238.0], ["2025-08", 225380.0], ["2025-09", 243230.0], ["2025-10", 260717.0], ["2025-11", 238564.0], ["2025-12", 279416.0], ["2026-01", 170536.0], ["2026-02", 185163.0], ["2026-03", 269483.0], ["2026-04", 248337.0], ["2026-05", 274682.0], ["2026-06", 272474.0], ["2026-07", 279544.0], ["2026-08", 275122.0], ["2026-09", 281361.0]], "prod": [["2023-01", 152666.0], ["2023-02", 161518.0], ["2023-03", 221835.0], ["2023-04", 178853.0], ["2023-05", 227914.0], ["2023-06", 189182.0], ["2023-07", 183016.0], ["2023-08", 226954.0], ["2023-09", 208889.0], ["2023-10", 199758.0], ["2023-11", 202675.0], ["2023-12", 171578.0], ["2024-01", 152564.0], ["2024-02", 189684.0], ["2024-03", 195751.0], ["2024-04", 222115.0], ["2024-05", 166732.0], ["2024-06", 211035.0], ["2024-07", 246721.0], ["2024-08", 259613.0], ["2024-09", 229989.0], ["2024-10", 249114.0], ["2024-11", 238654.0], ["2024-12", 191897.0], ["2025-01", 181405.0], ["2025-02", 222641.0], ["2025-03", 194775.0], ["2025-04", 232814.0], ["2025-05", 220078.0], ["2025-06", 209927.0], ["2025-07", 239801.0], ["2025-08", 247918.0], ["2025-09", 243393.0], ["2025-10", 247770.0], ["2025-11", 219058.0], ["2025-12", 184474.0], ["2026-01", 163621.0], ["2026-02", 206969.0], ["2026-03", 263565.0], ["2026-04", 238514.0], ["2026-05", 253421.0], ["2026-06", 246266.0], ["2026-07", 254002.0], ["2026-08", 271160.0], ["2026-09", 268269.0]], "diesel": [["2023-01", 4542.4], ["2023-02", 4805.3], ["2023-03", 5849.4], ["2023-04", 4903.8], ["2023-05", 5645.1], ["2023-06", 5458.8], ["2023-07", 5717.4], ["2023-08", 6216.6], ["2023-09", 5761.8], ["2023-10", 5761.0], ["2023-11", 5515.6], ["2023-12", 5341.2], ["2024-01", 5098.3], ["2024-02", 5069.9], ["2024-03", 5396.9], ["2024-04", 5629.6], ["2024-05", 5650.8], ["2024-06", 5665.1], ["2024-07", 6069.9], ["2024-08", 6115.0], ["2024-09", 5793.9], ["2024-10", 6270.7], ["2024-11", 5607.1], ["2024-12", 5054.3], ["2025-01", 5376.5], ["2025-02", 5283.5], ["2025-03", 5698.6], ["2025-04", 5477.0], ["2025-05", 5856.3], ["2025-06", 5640.4], ["2025-07", 6373.1], ["2025-08", 6044.5], ["2025-09", 6246.1], ["2025-10", 6429.8], ["2025-11", 5626.8], ["2025-12", 5424.1], ["2026-01", 5200.7], ["2026-02", 5325.0], ["2026-03", 6307.6], ["2026-04", 5655.3], ["2026-05", 5674.3], ["2026-06", 5736.7], ["2026-07", 6351.6], ["2026-08", 6161.4]], "abcr_pesados_dessaz": [["2023-01", 164.4], ["2023-02", 162.4], ["2023-03", 166.4], ["2023-04", 161.6], ["2023-05", 166.3], ["2023-06", 166.6], ["2023-07", 166.7], ["2023-08", 169.3], ["2023-09", 168.7], ["2023-10", 170.0], ["2023-11", 172.0], ["2023-12", 173.1], ["2024-01", 172.5], ["2024-02", 173.7], ["2024-03", 169.9], ["2024-04", 175.9], ["2024-05", 166.5], ["2024-06", 178.9], ["2024-07", 177.0], ["2024-08", 176.8], ["2024-09", 177.8], ["2024-10", 179.4], ["2024-11", 175.7], ["2024-12", 170.7], ["2025-01", 176.9], ["2025-02", 176.8], ["2025-03", 177.2], ["2025-04", 178.0], ["2025-05", 177.1], ["2025-06", 177.5], ["2025-07", 180.8], ["2025-08", 179.0], ["2025-09", 182.7], ["2025-10", 183.2], ["2025-11", 181.9], ["2025-12", 175.8], ["2026-01", 179.5], ["2026-02", 180.6], ["2026-03", 184.5], ["2026-04", 181.6], ["2026-05", 182.9], ["2026-06", 181.5], ["2026-07", 180.9], ["2026-08", 182.1], ["2026-09", 180.0]], "abcr_leves_dessaz": [["2023-01", 162.2], ["2023-02", 159.9], ["2023-03", 162.8], ["2023-04", 161.5], ["2023-05", 163.0], ["2023-06", 163.1], ["2023-07", 163.5], ["2023-08", 163.0], ["2023-09", 165.8], ["2023-10", 163.0], ["2023-11", 164.1], ["2023-12", 166.8], ["2024-01", 165.6], ["2024-02", 165.6], ["2024-03", 164.9], ["2024-04", 166.5], ["2024-05", 167.2], ["2024-06", 168.7], ["2024-07", 169.9], ["2024-08", 168.1], ["2024-09", 168.7], ["2024-10", 167.9], ["2024-11", 170.1], ["2024-12", 169.2], ["2025-01", 169.8], ["2025-02", 172.4], ["2025-03", 170.0], ["2025-04", 170.8], ["2025-05", 171.1], ["2025-06", 171.5], ["2025-07", 171.8], ["2025-08", 173.2], ["2025-09", 172.5], ["2025-10", 174.2], ["2025-11", 174.0], ["2025-12", 174.8], ["2026-01", 173.1], ["2026-02", 172.5], ["2026-03", 172.9], ["2026-04", 177.8], ["2026-05", 174.4], ["2026-06", 172.5], ["2026-07", 172.7], ["2026-08", 178.3], ["2026-09", 173.4]], "otto": [["2023-01", 4500.7], ["2023-02", 4559.3], ["2023-03", 4784.3], ["2023-04", 4496.0], ["2023-05", 5028.0], ["2023-06", 4671.8], ["2023-07", 4609.1], ["2023-08", 4880.9], ["2023-09", 4759.6], ["2023-10", 4851.8], ["2023-11", 4815.5], ["2023-12", 5436.0], ["2024-01", 4956.6], ["2024-02", 4474.7], ["2024-03", 4950.6], ["2024-04", 4922.6], ["2024-05", 4941.3], ["2024-06", 4682.9], ["2024-07", 4992.9], ["2024-08", 5055.7], ["2024-09", 4881.4], ["2024-10", 5246.6], ["2024-11", 5015.2], ["2024-12", 5501.9], ["2025-01", 5126.7], ["2025-02", 4612.1], ["2025-03", 4946.4], ["2025-04", 5092.7], ["2025-05", 5054.9], ["2025-06", 4864.2], ["2025-07", 5113.0], ["2025-08", 5057.6], ["2025-09", 5173.4], ["2025-10", 5436.7], ["2025-11", 5031.1], ["2025-12", 6012.8], ["2026-01", 5073.9], ["2026-02", 4825.8], ["2026-03", 5435.2], ["2026-04", 5229.0], ["2026-05", 5114.4], ["2026-06", 5158.4], ["2026-07", 5346.0], ["2026-08", 5325.1]]}, "sig": {"diesel": 4.1, "abcr_pesados": 4.3, "otto": 3.9, "abcr_leves": 2.8}, "ult": {"anfavea": "2026-09", "anp": "2026-08", "abcr": "2026-09", "pim": "2026-08"}}</script>
+<script>
+(function(){
+var D=JSON.parse(document.getElementById('ov-data').textContent);
+var root=document.querySelector('.im');
+IM.bar(document.getElementById('im-bar'),'overall');
+var MES=['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+function pm(p){var a=p.split('-');return MES[+a[1]-1]+'/'+a[0];}
+function nf(v,d){if(v==null||isNaN(v))return '—';return v.toLocaleString('pt-BR',{minimumFractionDigits:d||0,maximumFractionDigits:d||0});}
+function sp(v,d){if(v==null||isNaN(v))return '—';d=d==null?1:d;return (v>0?'+':v<0?'−':'')+nf(Math.abs(v),d)+'%';}
+function ab(v){return nf(Math.abs(v),1)+'%';}
+function cls(v){return v==null?'':v>0.05?'n-up':v<-0.05?'n-dn':'';}
+function el(id){return document.getElementById(id);}
+document.querySelectorAll('[data-u]').forEach(function(s){s.textContent=pm(D.ult[s.dataset.u]);});
+var TH={};D.TH.forEach(function(t){TH[t.key]=t;});
+var cats=['Automóveis','Comerciais leves','Caminhões','Ônibus'];
+function sum(o,y){return cats.reduce(function(a,c){return a+o[c][y];},0);}
+
+/* ---------- KPIs ---------- */
+var oe26=sum(D.OE.ytd,2026),oe25=sum(D.OE.ytd,2025);
+var K=[
+ ['Pneus OE estimados · jan–set/26',nf(oe26/1e6,1)+' mi',sp((oe26/oe25-1)*100)+' vs 2025'],
+ ['Emplacamentos · jan–set/26',nf(TH.empl.v_ytd/1e6,2)+' mi',sp(TH.empl.ytd)+' vs 2025'],
+ ['Diesel · mi m³ · jan–ago/26',nf(TH.diesel.v_ytd/1000,1),sp(TH.diesel.ytd)+' vs 2025'],
+ ['ABCR pesados · jan–set/26',sp(TH.abcr_pesados.ytd),'fluxo médio vs 2025'],
+ ['Eletrificados no varejo',nf(D.MIX.ev_ytd['2026'],1)+'%','era '+nf(D.MIX.ev_ytd['2025'],1)+'% em jan–set/25'],
+ ['Marcas chinesas',nf(D.MIX.cn_share_ytd,1)+'%','dos autos + com. leves em 2026']];
+el('kpis').innerHTML=K.map(function(k){var tone=/^\+/.test(k[2])?'up':/^−/.test(k[2])?'down':'';return '<div class="im-kpi"><span class="im-kpi-l">'+k[0]+'</span><span class="im-kpi-v">'+k[1]+'</span><span class="im-kpi-d"'+(tone?' data-tone="'+tone+'"':'')+'>'+k[2]+'</span></div>';}).join('');
+
+/* ---------- Termômetro ---------- */
+var SIG={fav:'Favorável',neu:'Neutro',desf:'Desfavorável'};
+var h='<thead><tr><th>Indicador</th><th>Último</th><th>Acum. ano</th><th>12m</th><th>Mês vs mês ano ant.</th><th>Trim. vs trim. ano ant.</th><th>Momentum 3m (dessaz.)</th><th style="text-align:center">Sinal p/ pneus</th></tr></thead><tbody>';
+D.TH.forEach(function(t){h+='<tr><td>'+t.nome+' <span class="src">'+t.fonte+'</span></td><td>'+pm(t.ultimo)+'</td><td class="'+cls(t.ytd)+'">'+sp(t.ytd)+'</td><td class="'+cls(t.u12m)+'">'+sp(t.u12m)+'</td><td class="'+cls(t.mes_yoy)+'">'+sp(t.mes_yoy)+'</td><td class="'+cls(t.tri_yoy)+'">'+sp(t.tri_yoy)+'</td><td class="'+cls(t.mom3)+'">'+sp(t.mom3)+'</td><td style="text-align:center"><span class="sig '+t.sinal+'">'+SIG[t.sinal]+'</span></td></tr>';});
+el('thermo').innerHTML=h+'</tbody>';
+
+/* ---------- tooltip helper ---------- */
+function tip(host){var t=host.querySelector('.im-tt');if(!t){t=document.createElement('div');t.className='im-tt';t.style.display='none';host.appendChild(t);}return {
+ show:function(html,x,y){t.innerHTML=html;t.style.display='block';var w=host.clientWidth,tw=t.offsetWidth;var L=x+14;if(L+tw>w)L=Math.max(0,x-tw-14);t.style.left=L+'px';t.style.top=Math.max(0,y-10)+'px';},
+ hide:function(){t.style.display='none';}};}
+function legend(id,items){el(id).innerHTML=items.map(function(i){return '<span><i style="background:'+i[1]+(i[2]?';height:2px;width:14px':'')+'"></i>'+i[0]+'</span>';}).join('');}
+function W(host){return Math.max(300,Math.min(host.clientWidth||600,1200));}
+function svgIn(host,w,hgt){host.querySelectorAll('svg').forEach(function(s){s.remove();});return d3.select(host).insert('svg',':first-child').attr('viewBox','0 0 '+w+' '+hgt).attr('preserveAspectRatio','xMidYMid meet').attr('role','img');}
+var pt=d3.timeParse('%Y-%m');
+
+/* ---------- multi-line chart ---------- */
+function lines(id,series,o){
+ var host=el(id),w=W(host),hh=o.h||260,m={t:12,r:12,b:26,l:42};
+ var svg=svgIn(host,w,hh);var all=[];series.forEach(function(s){s.data.forEach(function(d){if(d[1]!=null)all.push(d);});});
+ var x=d3.scaleTime().domain(d3.extent(all,function(d){return pt(d[0]);})).range([m.l,w-m.r]);
+ var ext=d3.extent(all,function(d){return d[1];});if(o.zero){ext[0]=Math.min(0,ext[0]);ext[1]=Math.max(0,ext[1]);}
+ if(o.clip){ext=[Math.max(ext[0],o.clip[0]),Math.min(ext[1],o.clip[1])];}
+ var y=d3.scaleLinear().domain(ext).nice().range([hh-m.b,m.t]);
+ svg.append('defs').append('clipPath').attr('id','cp-'+id).append('rect').attr('x',m.l).attr('y',m.t).attr('width',w-m.l-m.r).attr('height',hh-m.t-m.b);
+ svg.append('g').attr('transform','translate('+m.l+',0)').call(d3.axisLeft(y).ticks(5).tickSize(-(w-m.l-m.r)).tickFormat(o.yf||d3.format('~s'))).call(function(g){g.select('.domain').remove();});
+ var yt=x.ticks(d3.timeYear.every(1));if(w<520&&yt.length>6)yt=yt.filter(function(d,i){return i%2===0;});svg.append('g').attr('transform','translate(0,'+(hh-m.b)+')').call(d3.axisBottom(x).tickValues(yt).tickSizeOuter(0).tickFormat(d3.timeFormat('%Y')));
+ if(o.zero)svg.append('line').attr('x1',m.l).attr('x2',w-m.r).attr('y1',y(0)).attr('y2',y(0)).attr('stroke',IM.tok('--muted')).attr('stroke-width',1);
+ var g=svg.append('g').attr('clip-path','url(#cp-'+id+')');
+ series.forEach(function(s){g.append('path').datum(s.data.filter(function(d){return d[1]!=null;})).attr('fill','none').attr('stroke',s.c).attr('stroke-width',s.w||1.8).attr('d',d3.line().x(function(d){return x(pt(d[0]));}).y(function(d){return y(d[1]);}));});
+ var T=tip(host),dates=series[0].data.map(function(d){return d[0];});
+ var vl=svg.append('line').attr('y1',m.t).attr('y2',hh-m.b).attr('stroke',IM.tok('--muted')).attr('stroke-dasharray','2 3').style('display','none');
+ svg.append('rect').attr('x',m.l).attr('y',m.t).attr('width',w-m.l-m.r).attr('height',hh-m.t-m.b).attr('fill','transparent')
+ .on('pointermove',function(ev){var p=d3.pointer(ev),dt=x.invert(p[0]);var i=d3.bisector(function(d){return pt(d);}).center(dates,dt);var dd=dates[i];var xx=x(pt(dd));vl.attr('x1',xx).attr('x2',xx).style('display',null);
+   var html='<div class="h">'+pm(dd)+'</div>'+series.map(function(s){var v=s.data.find(function(q){return q[0]===dd;});return '<div><span style="color:'+s.c+'">■</span> '+s.n+': '+(v&&v[1]!=null?(o.tf||nf)(v[1]):'—')+'</div>';}).join('');
+   var r=host.getBoundingClientRect(),sv=svg.node().getBoundingClientRect(),k=sv.width/w;T.show(html,xx*k+(sv.left-r.left),p[1]*k);})
+ .on('pointerleave',function(){vl.style('display','none');T.hide();});
+}
+
+/* ---------- stacked bars (monthly) ---------- */
+function stacked(id,rows,keys,cols,o){
+ var host=el(id),w=W(host),hh=o.h||260,m={t:12,r:10,b:26,l:42};var svg=svgIn(host,w,hh);
+ var st=d3.stack().keys(keys)(rows);var x=d3.scaleBand().domain(rows.map(function(r){return r.p;})).range([m.l,w-m.r]).padding(0.18);
+ var y=d3.scaleLinear().domain([0,d3.max(st[st.length-1],function(d){return d[1];})]).nice().range([hh-m.b,m.t]);
+ svg.append('g').attr('transform','translate('+m.l+',0)').call(d3.axisLeft(y).ticks(5).tickSize(-(w-m.l-m.r)).tickFormat(o.yf)).call(function(g){g.select('.domain').remove();});
+ var yrs=rows.filter(function(r){return r.p.slice(5)==='01';}).map(function(r){return r.p;});
+ svg.append('g').attr('transform','translate(0,'+(hh-m.b)+')').call(d3.axisBottom(x).tickValues(yrs).tickSizeOuter(0).tickFormat(function(p){return p.slice(0,4);}));
+ st.forEach(function(s,i){svg.append('g').attr('fill',cols[i]).selectAll('rect').data(s).join('rect').attr('x',function(d){return x(d.data.p);}).attr('width',x.bandwidth()).attr('y',function(d){return y(d[1]);}).attr('height',function(d){return Math.max(0,y(d[0])-y(d[1]));});});
+ var T=tip(host);
+ svg.append('g').selectAll('rect').data(rows).join('rect').attr('x',function(d){return x(d.p)-x.step()*x.padding()/2;}).attr('width',x.step()).attr('y',m.t).attr('height',hh-m.t-m.b).attr('fill','transparent')
+ .on('pointermove',function(ev,d){var tot=keys.reduce(function(a,k){return a+d[k];},0);var html='<div class="h">'+pm(d.p)+'</div>'+keys.slice().reverse().map(function(k,j){return '<div><span style="color:'+cols[keys.length-1-j]+'">■</span> '+k+': '+o.tf(d[k])+'</div>';}).join('')+'<div>Total: '+o.tf(tot)+'</div>';
+   var r=host.getBoundingClientRect(),sv=svg.node().getBoundingClientRect(),k=sv.width/w,p=d3.pointer(ev);T.show(html,(x(d.p)+x.bandwidth())*k,p[1]*k);})
+ .on('pointerleave',function(){T.hide();});
+}
+
+/* ---------- horizontal diverging bars ---------- */
+function hbars(id,items,o){
+ var host=el(id),w=W(host),rh=24,lw=Math.min(w*0.46,230),m={t:6,r:52,b:20,l:lw};var hh=m.t+m.b+items.length*rh;var svg=svgIn(host,w,hh);
+ var mx=d3.max(items,function(d){return Math.abs(d.v);});var x=d3.scaleLinear().domain([-mx,mx]).nice().range([m.l+40,w-m.r]);
+ svg.append('g').attr('transform','translate(0,'+(hh-m.b)+')').call(d3.axisBottom(x).ticks(w<520?3:5).tickSize(-(hh-m.t-m.b)).tickFormat(function(v){return v+'%';})).call(function(g){g.select('.domain').remove();});
+ svg.append('line').attr('x1',x(0)).attr('x2',x(0)).attr('y1',m.t).attr('y2',hh-m.b).attr('stroke',IM.tok('--muted'));
+ items.forEach(function(d,i){var yy=m.t+i*rh;
+   if(d.grp)svg.append('line').attr('x1',0).attr('x2',w-m.r).attr('y1',yy+1).attr('y2',yy+1).attr('stroke',IM.tok('--line'));
+   svg.append('rect').attr('x',Math.min(x(0),x(d.v))).attr('y',yy+6).attr('height',rh-12).attr('width',Math.abs(x(d.v)-x(0))).attr('fill',d.v>=0?IM.tok('--up'):IM.tok('--down')).attr('opacity',d.dim?0.55:0.9);
+   svg.append('text').attr('class','lbl-fg').attr('x',0).attr('y',yy+rh/2+4).text(d.l).style('font-weight',d.dim?400:600).style('fill',d.dim?IM.tok('--muted'):null);
+   var tx=d.v>=0?x(d.v)+5:x(d.v)-5;svg.append('text').attr('class','lbl').attr('x',tx).attr('y',yy+rh/2+4).attr('text-anchor',d.v>=0?'start':'end').text(sp(d.v));});
+}
+
+/* ---------- vertical bars simple (shares / UF) ---------- */
+function vbars(id,data,o){
+ var host=el(id),w=W(host),hh=o.h||170,m={t:16,r:8,b:26,l:34};var svg=svgIn(host,w,hh);
+ var x=d3.scaleBand().domain(data.map(function(d){return d[0];})).range([m.l,w-m.r]).padding(0.25);var y=d3.scaleLinear().domain([0,d3.max(data,function(d){return d[1];})]).nice().range([hh-m.b,m.t]);
+ svg.append('g').attr('transform','translate('+m.l+',0)').call(d3.axisLeft(y).ticks(4).tickSize(-(w-m.l-m.r)).tickFormat(function(v){return v+'%';})).call(function(g){g.select('.domain').remove();});
+ svg.append('g').attr('transform','translate(0,'+(hh-m.b)+')').call(d3.axisBottom(x).tickSizeOuter(0).tickFormat(o.xf));
+ svg.selectAll('.b').data(data).join('rect').attr('x',function(d){return x(d[0]);}).attr('width',x.bandwidth()).attr('y',function(d){return y(d[1]);}).attr('height',function(d){return y(0)-y(d[1]);}).attr('fill',o.c);
+ if(x.bandwidth()>22)svg.selectAll('.v').data(data).join('text').attr('class','lbl').attr('text-anchor','middle').attr('x',function(d){return x(d[0])+x.bandwidth()/2;}).attr('y',function(d){return y(d[1])-4;}).text(function(d){return nf(d[1],1);});
+}
+function ufbars(id,data){
+ var host=el(id),w=W(host),rh=19,lw=Math.min(150,w*0.4),m={t:4,r:46,b:18,l:lw};var hh=m.t+m.b+data.length*rh;var svg=svgIn(host,w,hh);
+ var mx=d3.max(data,function(d){return Math.abs(d[1]);});var x=d3.scaleLinear().domain([-mx,mx]).nice().range([m.l+36,w-m.r]);
+ svg.append('g').attr('transform','translate(0,'+(hh-m.b)+')').call(d3.axisBottom(x).ticks(5).tickSize(-(hh-m.t-m.b)).tickFormat(function(v){return v+'%';})).call(function(g){g.select('.domain').remove();});
+ data.forEach(function(d,i){var yy=m.t+i*rh,rj=d[0]==='Rio de Janeiro';
+  svg.append('rect').attr('x',Math.min(x(0),x(d[1]))).attr('y',yy+4).attr('height',rh-8).attr('width',Math.abs(x(d[1])-x(0))).attr('fill',rj?IM.tok('--accent'):IM.tok('--s-muted'));
+  svg.append('text').attr('class',rj?'lbl-fg':'lbl').attr('x',0).attr('y',yy+rh/2+4).text(d[0]);
+  svg.append('text').attr('class',rj?'lbl-fg':'lbl').attr('x',d[1]>=0?x(d[1])+4:x(d[1])-4).attr('text-anchor',d[1]>=0?'start':'end').attr('y',yy+rh/2+4).text(sp(d[1]));});
+}
+
+/* ---------- projection mini chart ---------- */
+function projChart(host,p,o){
+ var w=320,hh=180,m={t:28,r:6,b:22,l:6};var svg=svgIn(host,w,hh);var C=IM.colors();
+ var yrs=['2023','2024','2025','2026','2027'];var vals=yrs.map(function(y){return p.act[y]!=null?{y:y,v:p.act[y],a:1}:{y:y,v:p['e'+y.slice(2)].base,lo:p['e'+y.slice(2)].pes,hi:p['e'+y.slice(2)].oti,a:0};});
+ var mx=d3.max(vals,function(d){return d.hi||d.v;}),mn=d3.min(vals,function(d){return d.lo||d.v;});
+ var y=d3.scaleLinear().domain(o.zero?[0,mx*1.05]:[mn*0.9,mx*1.03]).range([hh-m.b,m.t]);var x=d3.scaleBand().domain(yrs).range([m.l,w-m.r]).padding(0.3);
+ var pid='hat'+Math.random().toString(36).slice(2,8);
+ svg.append('defs').append('pattern').attr('id',pid).attr('width',5).attr('height',5).attr('patternUnits','userSpaceOnUse').attr('patternTransform','rotate(45)').append('rect').attr('width',2.2).attr('height',5).attr('fill',o.c);
+ svg.append('g').attr('transform','translate(0,'+(hh-m.b)+')').call(d3.axisBottom(x).tickSizeOuter(0));
+ vals.forEach(function(d){var bx=x(d.y),bw=x.bandwidth();
+  svg.append('rect').attr('x',bx).attr('width',bw).attr('y',y(d.v)).attr('height',y.range()[0]-y(d.v)).attr('fill',d.a?o.c:'url(#'+pid+')').attr('stroke',d.a?'none':o.c).attr('stroke-width',1);
+  if(!d.a){var cx=bx+bw/2;svg.append('line').attr('x1',cx).attr('x2',cx).attr('y1',y(d.lo)).attr('y2',y(d.hi)).attr('stroke',IM.tok('--fg')).attr('stroke-width',1.2);
+   [d.lo,d.hi].forEach(function(v){svg.append('line').attr('x1',cx-6).attr('x2',cx+6).attr('y1',y(v)).attr('y2',y(v)).attr('stroke',IM.tok('--fg')).attr('stroke-width',1.2);});}
+  svg.append('text').attr('class',d.a?'lbl':'lbl-fg').attr('text-anchor','middle').attr('x',bx+bw/2).attr('y',(d.hi?y(d.hi):y(d.v))-5).text(o.f(d.v));});
+}
+
+/* ---------- textos dinâmicos ---------- */
+(function(){
+ var t='<thead><tr><th>Categoria</th><th>Produção 26</th><th>Var. prod.</th><th>Pneus OE 26</th><th>Export. / prod.</th></tr></thead><tbody>';
+ cats.forEach(function(c){var p6=D.OE.prod_ytd[c][2026],p5=D.OE.prod_ytd[c][2025];t+='<tr><td>'+c+'</td><td>'+nf(p6)+'</td><td class="'+cls(p6/p5-1)+'">'+sp((p6/p5-1)*100)+'</td><td>'+nf(D.OE.ytd[c][2026]/1e6,2)+' mi</td><td>'+nf(D.OE.exp_ytd[c][2026]/p6*100,0)+'%</td></tr>';});
+ var P6=sum(D.OE.prod_ytd,2026),P5=sum(D.OE.prod_ytd,2025),E6=sum(D.OE.exp_ytd,2026),E5=sum(D.OE.exp_ytd,2025);
+ t+='<tr><td><b>Total</b></td><td><b>'+nf(P6)+'</b></td><td class="'+cls(P6/P5-1)+'"><b>'+sp((P6/P5-1)*100)+'</b></td><td><b>'+nf(oe26/1e6,2)+' mi</b></td><td><b>'+nf(E6/P6*100,0)+'%</b></td></tr></tbody>';
+ el('oe-tab').innerHTML=t;
+ var pa=D.OE.ytd['Automóveis'][2026]+D.OE.ytd['Comerciais leves'][2026],pa5=D.OE.ytd['Automóveis'][2025]+D.OE.ytd['Comerciais leves'][2025];
+ var tb=D.OE.ytd['Caminhões'][2026]+D.OE.ytd['Ônibus'][2026],tb5=D.OE.ytd['Caminhões'][2025]+D.OE.ytd['Ônibus'][2025];
+ el('oe-call').innerHTML='Os pneus OE de <b>passeio e comerciais leves</b> somam '+nf(pa/1e6,2)+' mi ('+sp((pa/pa5-1)*100)+'), e os de <b>caminhão e ônibus</b>, '+nf(tb/1e3,0)+' mil ('+sp((tb/tb5-1)*100)+'). A exportação de veículos cai '+ab(TH.exp.ytd)+' e passa a levar '+nf(E6/P6*100,0)+'% da produção (eram '+nf(E5/P5*100,0)+'% em 2025). Com isso, uma parte menor do pneu montado no Brasil sai do país rodando, e o OE fica mais exposto ao mercado interno.';
+ var c=D.REP.corr;
+ el('corr-c').innerHTML='Correlação das variações anuais de '+pm(c.ini)+' a '+pm(c.fim)+' ('+c.n+' meses): <b>r = '+nf(c.r_all,2)+'</b> na série mensal e '+nf(c.r_all_3m,2)+' na média móvel de 3 meses ('+nf(c.r_3m_excovid,2)+' excluindo mar/20–jun/21). Nos últimos 36 meses, '+nf(c.r_36,2)+'. As duas medidas contam a mesma história, e isso dá confiança ao proxy de frota de carga.';
+ el('corr-p').innerHTML='Passeio: r = '+nf(c.rl_all_3m,2)+' na média 3m desde 2000, mas <b>'+nf(c.rl_36_3m,2)+' nos últimos 36 meses</b>. O consumo Otto (+'+nf(TH.otto.ytd,1)+'% no ano) cresce mais que o fluxo de leves (+'+nf(TH.abcr_leves.ytd,1)+'%), provavelmente por causa da troca entre etanol e gasolina e do uso urbano, que o pedágio não capta. Para a reposição de passeio, leia os dois juntos.';
+ var s=D.REP.diesel_seg,rg=D.REP.diesel_reg;
+ var F=[[sp(D.REP.carga_ytd),'Índice de reposição carga (diesel + ABCR pesados, média), jan–ago/26 vs 2025'],
+  [sp(D.REP.pass_ytd),'Índice de reposição passeio (Otto + ABCR leves), jan–ago/26 vs 2025'],
+  [sp(s['POSTO REVENDEDOR'].ytd),'Diesel em postos ('+nf(s['POSTO REVENDEDOR'].share,0)+'% do volume): o caminhão rodoviário'],
+  [sp(s['TRR'].ytd),'Diesel via TRR ('+nf(s['TRR'].share,0)+'%): fazendas e frotas, o sinal agro mais fraco'],
+  [sp(rg['Norte'])+' / '+sp(rg['Sul']),'Diesel no Norte vs no Sul: as fronteiras agrícolas crescem mais que o Sul']];
+ el('rep-facts').innerHTML=F.map(function(f){return '<div class="fact"><b>'+f[0]+'</b><span>'+f[1]+'</span></div>';}).join('');
+ var R=D.IND.rj,rt='<thead><tr><th>Seção · RJ</th><th>Mês vs ano ant.</th><th>Acum. ano</th><th>12m</th></tr></thead><tbody>';
+ Object.keys(R).forEach(function(k){var r=R[k];rt+='<tr><td>'+k.replace(/^[\d.]+ /,'')+'</td><td class="'+cls(r.var_mm12)+'">'+sp(r.var_mm12)+'</td><td class="'+cls(r.acum_ano)+'">'+sp(r.acum_ano)+'</td><td class="'+cls(r.acum_12m)+'">'+sp(r.acum_12m)+'</td></tr>';});
+ el('rj-tab').innerHTML=rt+'</tbody>';
+ var M=D.MIX,bt='<thead><tr><th>Marca (autos + com. leves)</th><th>Jan–set/26</th><th>Part.</th></tr></thead><tbody>';
+ M.top.slice(0,10).forEach(function(b){bt+='<tr><td>'+(b[3]?'<b style="color:var(--accent)">'+b[0]+'</b> <span class="tag">China</span>':b[0])+'</td><td>'+nf(b[1])+'</td><td>'+nf(b[2],1)+'%</td></tr>';});
+ el('brand-tab').innerHTML=bt+'</tbody>';
+ el('cn-note').innerHTML='Marcas de origem chinesa consideradas: '+M.cn_list.map(function(s){return s.charAt(0)+s.slice(1).toLowerCase();}).join(', ')+'. Delas, '+nf(M.cn_nac,0)+'% já são emplacamentos de veículos produzidos no Brasil (BYD: '+nf(M.byd_nac,0)+'%). Em caminhões e ônibus, as chinesas ainda têm só '+nf(M.cn_truck,1)+'%.';
+ el('mix-call').innerHTML='<b>Implicações.</b> (1) Pneus para EV: os elétricos puros foram de '+nf(M.bev_ytd['2025'],1)+'% para '+nf(M.bev_ytd['2026'],1)+'% dos emplacamentos de autos e comerciais leves (eletrificados: '+nf(M.ev_ytd['2025'],1)+'% → '+nf(M.ev_ytd['2026'],1)+'%, '+nf(M.ev_units_ytd['2026']/1e3,0)+' mil unid.). Veículo mais pesado, com torque instantâneo e menos ruído de motor, pede pneu de baixa resistência ao rolamento, carga reforçada (XL) e baixo ruído, e desgasta mais rápido; isso tende a encurtar o ciclo de reposição. (2) OE com montadoras novas: quase '+nf(M.cn_nac,0)+'% do volume chinês já sai de fábricas brasileiras, e homologação local é uma janela que se fecha rápido. (3) Os importados chegam a '+nf(M.imp_ytd['2026'],1)+'% dos veículos (eram '+nf(M.imp_ytd['2023'],1)+'% em 2023), e cada carro importado traz pneu OE de fora. <i>A pressão de pneus importados de baixo custo na reposição é contexto de mercado e não está nestes dados.</i>';
+})();
+
+/* ---------- projeções ---------- */
+var PJ=[['empl','Emplacamentos','mi unid.',function(v){return nf(v/1e6,2);},1],['prod','Produção de autoveículos','mi unid.',function(v){return nf(v/1e6,2);},1],
+ ['diesel','Diesel (ANP)','mi m³',function(v){return nf(v/1e3,1);},0],['abcr_pesados','ABCR pesados','índice 1999=100',function(v){return nf(v,0);},0],
+ ['oe','Pneus OE estimados','mi pneus',function(v){return nf(v,1);},1],['rep_carga','Reposição carga','índice 2025=100',function(v){return nf(v,1);},0],['rep_pass','Reposição passeio','índice 2025=100',function(v){return nf(v,1);},0]];
+var pt2='<thead><tr><th>Série</th><th>2025</th><th>2026 pess.</th><th>2026 base</th><th>2026 otim.</th><th>Var. 26</th><th>2027 pess.</th><th>2027 base</th><th>2027 otim.</th><th>Var. 27</th></tr></thead><tbody>';
+PJ.forEach(function(q){var p=D.PR[q[0]];pt2+='<tr><td>'+q[1]+' <span class="src">'+q[2]+'</span></td><td>'+q[3](p.act['2025'])+'</td><td>'+q[3](p.e26.pes)+'</td><td><b>'+q[3](p.e26.base)+'</b></td><td>'+q[3](p.e26.oti)+'</td><td class="'+cls(p.var26)+'">'+sp(p.var26)+'</td><td>'+q[3](p.e27.pes)+'</td><td><b>'+q[3](p.e27.base)+'</b></td><td>'+q[3](p.e27.oti)+'</td><td class="'+cls(p.var27)+'">'+sp(p.var27)+'</td></tr>';});
+el('proj-tab').innerHTML=pt2+'</tbody>';
+var sg=D.sig;
+el('method').innerHTML='<b>Método (estimativa).</b> <b>2026:</b> o acumulado do ano é dividido pelo peso que os mesmos meses tiveram no total anual de 2023, 2024 e 2025. A média dos três perfis sazonais é o cenário base; o perfil que dá o maior e o menor total são o otimista e o pessimista. Nos índices (ABCR), os meses que faltam repetem o perfil do ano de referência, escalado pelo nível de 2026. <b>2027:</b> base = 2026E × (1 + metade do crescimento dos últimos 12 meses contra os 12 anteriores). A metade é um amortecimento deliberado, de volta à média depois de um ano forte. Otimista e pessimista somam e subtraem um desvio-padrão histórico do crescimento anual (2004–2025, sem 2020–21): diesel ±'+nf(sg.diesel,1)+' p.p., ABCR pesados ±'+nf(sg.abcr_pesados,1)+', Otto ±'+nf(sg.otto,1)+', ABCR leves ±'+nf(sg.abcr_leves,1)+'. Para as séries ANFAVEA, que só existem desde 2023, a faixa é ±6 p.p. por premissa. Pneus OE = soma das projeções de produção por categoria × pneus por veículo. Os índices de reposição são a média simples dos dois componentes, cada um com base 2025 = 100. Nada aqui é previsão econométrica: é extrapolação transparente de tendência e sazonalidade.';
+
+/* ---------- recomendações ---------- */
+var cg=D.CG;
+var RECS=[
+ ['Comercial · carga','Mudar o foco de truck &amp; bus do OE para a reposição e a recapagem de frotas','A produção de caminhões pesados cai '+ab(cg['prod|Pesados'].ytd)+' em jan–set, mas o diesel (+'+nf(TH.diesel.ytd,1)+'%) e o fluxo de pesados (+'+nf(TH.abcr_pesados.ytd,1)+'%) crescem, e as duas medidas andam juntas (r = '+nf(D.REP.corr.r_all,2)+'). Frota mais velha rodando mais significa mais pneu de reposição, recapagem e contratos por km. Priorizar transportadoras e postos de rodovia, onde o diesel cresce '+sp(D.REP.diesel_seg['POSTO REVENDEDOR'].ytd)+'.','Produção pesados '+sp(cg['prod|Pesados'].ytd)+' · ABCR pesados '+sp(TH.abcr_pesados.ytd)+' · diesel '+sp(TH.diesel.ytd)],
+ ['Produção · passeio','Garantir capacidade de passeio/SUV para um OE que cresce perto de 10%','A produção de automóveis deve fechar 2026 em ~'+nf(D.PR['prod|Automóveis'].e26.base/1e6,2)+' mi ('+sp(D.PR['prod|Automóveis'].var26)+'), e os pneus OE estimados vão de '+nf(D.PR.oe.act['2025'],1)+' para ~'+nf(D.PR.oe.e26.base,1)+' mi ('+sp(D.PR.oe.var26)+'). Planejar turnos e estoque de borracha nas fábricas do RJ para o 1º semestre de 2027, quando o cenário base ainda cresce '+sp(D.PR.oe.var27)+'.','Pneus OE 2026E '+nf(D.PR.oe.e26.base,1)+' mi · 2027E '+nf(D.PR.oe.e27.base,1)+' mi'],
+ ['Mix · OE','Correr para homologar com as montadoras chinesas que estão localizando produção','As marcas chinesas já têm '+nf(D.MIX.cn_share_ytd,1)+'% dos emplacamentos de autos e comerciais leves (de '+nf(D.MIX.cn_m[0][1],1)+'% em jan a '+nf(D.MIX.cn_m[D.MIX.cn_m.length-1][1],1)+'% em set), e '+nf(D.MIX.cn_nac,0)+'% desse volume já é nacional. Cada nova plataforma homologada garante anos de OE e puxa a reposição na mesma medida.','Chinesas '+nf(D.MIX.cn_share_ytd,1)+'% · nacionais '+nf(D.MIX.cn_nac,0)+'%'],
+ ['Mix · produto','Levar a linha EV-ready (baixa resistência, XL, baixo ruído) para a reposição de passeio','Os eletrificados foram de '+nf(D.MIX.ev_ytd['2025'],1)+'% para '+nf(D.MIX.ev_ytd['2026'],1)+'% do varejo em um ano, e os elétricos puros chegaram a '+nf(D.MIX.bev_ytd['2026'],1)+'%. A primeira troca de pneu dessa frota começa em 2027–28. Posicionar o premium técnico e o selo de eficiência antes que o importado de preço chegue a esse segmento.','Eletrificados '+nf(D.MIX.ev_ytd['2026'],1)+'% · BEV '+nf(D.MIX.bev_ytd['2026'],1)+'%'],
+ ['Canais · passeio','Defender preço e sell-out na reposição de passeio, que cresce acima do PIB industrial','O consumo Otto sobe '+sp(TH.otto.ytd)+' e o fluxo de leves '+sp(TH.abcr_leves.ytd)+' (jan–ago/set), contra uma indústria geral de '+sp(TH.pim_geral.ytd)+'. Há demanda: usar a rede de revendas para vender valor (garantia, aro maior para SUV), sem entrar em guerra de preço.','Reposição passeio '+sp(D.REP.pass_ytd)+' · Otto '+sp(TH.otto.ytd)],
+ ['Comercial · agro e ônibus','Ser conservador em agrícola/fora-de-estrada e em ônibus OE; manter o estoque enxuto','O diesel via TRR (fazendas e frotas) cai '+ab(D.REP.diesel_seg['TRR'].ytd)+', a PIM de máquinas e equipamentos recua '+ab(TH.pim_maq.ytd)+' e a produção de ônibus, '+ab(TH['prod|Ônibus'].ytd)+' (só em setembro, '+ab(TH['prod|Ônibus'].mes_yoy)+'). Concentrar o agro nas regiões Norte e Centro-Oeste, onde o diesel cresce mais ('+sp(D.REP.diesel_reg['Norte'])+' e '+sp(D.REP.diesel_reg['Centro-Oeste'])+').','TRR '+sp(D.REP.diesel_seg['TRR'].ytd)+' · máquinas '+sp(TH.pim_maq.ytd)+' · ônibus '+sp(TH['prod|Ônibus'].ytd)],
+ ['Produção · exportação','Rever o plano de exportação ligado à exportação de veículos','A exportação de autoveículos cai '+ab(TH.exp.ytd)+' e leva cada vez menos pneu OE brasileiro para fora. Direcionar para o mercado interno, onde o OE cresce, a capacidade de carga que hoje atende o Mercosul. A PIM de borracha e plástico, estável no ano ('+sp(TH.pim_borr.ytd)+') e '+sp(TH.pim_borr.mes_yoy)+' em agosto, mostra que o setor ainda não acompanhou a alta da montagem ('+sp(TH.pim_veic.ytd)+').','Exportação '+sp(TH.exp.ytd)+' · PIM borracha '+sp(TH.pim_borr.ytd)+' vs veículos '+sp(TH.pim_veic.ytd)]];
+el('recs').innerHTML=RECS.map(function(r){return '<li><h4>'+r[1]+'<span class="tag">'+r[0]+'</span></h4><p>'+r[2]+'</p><span class="num">↳ '+r[3]+'</span></li>';}).join('');
+
+/* ---------- desenho dos gráficos (depende do tema / largura) ---------- */
+function draw(){
+ var C=IM.colors();
+ var oc=[C[0],C[2],C[1],C[3]];legend('lg-oe',cats.map(function(c,i){return [c,oc[i]];}));
+ stacked('ch-oe',D.OE.monthly,cats,oc,{yf:function(v){return nf(v/1e6,1)+'mi';},tf:function(v){return nf(v/1e3,0)+' mil';}});
+ var y=D.REP.yoy;
+ legend('lg-rc',[['Diesel ANP',C[1],1],['ABCR pesados',C[0],1]]);
+ lines('ch-rc',[{n:'Diesel',c:C[1],data:y.map(function(d){return [d.p,d.d];})},{n:'ABCR pesados',c:C[0],data:y.map(function(d){return [d.p,d.a];})}],{zero:1,clip:[-25,30],yf:function(v){return v+'%';},tf:function(v){return sp(v);}});
+ legend('lg-rp',[['Ciclo Otto ANP',C[3],1],['ABCR leves',C[2],1]]);
+ lines('ch-rp',[{n:'Otto',c:C[3],data:y.map(function(d){return [d.p,d.o];})},{n:'ABCR leves',c:C[2],data:y.map(function(d){return [d.p,d.l];})}],{zero:1,clip:[-35,45],yf:function(v){return v+'%';},tf:function(v){return sp(v);}});
+ var cg=D.CG,it=[];
+ ['Pesados','Semipesados','Médios','Leves'].forEach(function(s,i){it.push({l:'Produção · '+s.toLowerCase(),v:cg['prod|'+s].ytd,grp:i===0});});
+ ['Pesados','Semipesados','Médios','Leves'].forEach(function(s,i){it.push({l:'Emplac. · '+s.toLowerCase(),v:cg['empl|'+s].ytd,grp:i===0,dim:1});});
+ var s=D.REP.diesel_seg;
+ it.push({l:'Diesel · total',v:TH.diesel.ytd,grp:1},{l:'Diesel · postos',v:s['POSTO REVENDEDOR'].ytd,dim:1},{l:'Diesel · TRR (agro)',v:s['TRR'].ytd,dim:1},{l:'ABCR pesados',v:TH.abcr_pesados.ytd});
+ it.push({l:'PIM · extrativas',v:TH.pim_extr.ytd,grp:1},{l:'PIM · alimentos',v:TH.pim_alim.ytd},{l:'PIM · máquinas',v:TH.pim_maq.ytd});
+ hbars('ch-cg',it,{});
+ var sk=['Semileves','Leves','Médios','Semipesados','Pesados'],scs=[C[6],C[5],C[3],C[0],C[1]];legend('lg-cm',sk.map(function(k,i){return [k,scs[i]];}));
+ stacked('ch-cm',D.CGm,sk,scs,{yf:function(v){return nf(v/1e3,0)+'mil';},tf:function(v){return nf(v);}});
+ legend('lg-pim',[['Borracha e plástico',C[1],1],['Veículos',C[0],1],['Indústria geral',IM.tok('--muted'),1]]);
+ var I=D.IND.sa;lines('ch-pim',[{n:'Indústria geral',c:IM.tok('--muted'),w:1.4,data:I.geral},{n:'Veículos',c:C[0],data:I.veic},{n:'Borracha e plástico',c:C[1],w:2.4,data:I.borr}],{yf:function(v){return v;},tf:function(v){return nf(v,1);}});
+ ufbars('ch-uf',D.IND.uf_transf);
+ legend('lg-mix',[['Importados',C[0],1],['Eletrificados (BEV+HEV+PHEV)',C[2],1],['Elétricos puros',C[1],1]]);
+ var mm=D.MIX.m;lines('ch-mix',[{n:'Importados',c:C[0],data:mm.map(function(d){return [d.p,d.imp];})},{n:'Eletrificados',c:C[2],data:mm.map(function(d){return [d.p,+(d.bev+d.hev+d.phev).toFixed(1)];})},{n:'Elétricos puros',c:C[1],data:mm.map(function(d){return [d.p,d.bev];})}],{zero:1,yf:function(v){return v+'%';},tf:function(v){return nf(v,1)+'%';}});
+ vbars('ch-cn',D.MIX.cn_m,{c:IM.tok('--accent'),xf:function(p){return MES[+p.slice(5)-1];}});
+ var box=el('proj');box.innerHTML='';
+ PJ.forEach(function(q,i){var p=D.PR[q[0]];var card=document.createElement('div');card.className='im-card';
+  card.innerHTML='<div class="im-card-head"><h3 class="im-h3">'+q[1]+'</h3><span class="lede-num">'+q[2]+'</span></div><div class="chart"></div><span class="lede-num">2026E '+sp(p.var26)+' · 2027E '+sp(p.var27)+(q[4]?'':' · eixo não começa em zero')+'</span>';
+  box.appendChild(card);projChart(card.querySelector('.chart'),p,{c:[C[0],C[0],C[1],C[1],C[2],C[1],C[3]][i],f:q[3],zero:q[4]});});
+}
+draw();
+var lastW=window.innerWidth,rt;window.addEventListener('resize',function(){if(Math.abs(window.innerWidth-lastW)<4)return;lastW=window.innerWidth;clearTimeout(rt);rt=setTimeout(draw,150);});
+if(window.matchMedia)window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change',draw);
+new MutationObserver(draw).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
+})();
+</script>

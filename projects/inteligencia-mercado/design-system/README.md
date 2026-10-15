@@ -24,6 +24,7 @@ Padrão visual comum a todos os painéis do projeto. Origem: o redesign editoria
 2. Cabeçalho `.im-mast`: `.im-eyebrow` (fonte · cobertura · último mês), `.im-title` (com uma palavra em `<em>` no vermelhão), `.im-dek` (a conclusão em uma frase).
 3. Abas `.im-tabs` (sublinhado vermelhão), filtros como selects sublinhados e `.im-seg`.
 4. Números `.im-kpis/.im-kpi` (Fraunces 44px, deltas em mono, verde/vermelho só para variação).
-5. Cartões `.im-card`: filete de tinta de 2px no topo, sem caixa nem sombra; título `.im-h3`, nota `.im-note`.
-6. Gráficos: texto em mono 11px muted, grade `--grid`, séries por `IM.colors()` seguindo a entidade; uma série em destaque e o resto `--s-muted`.
+5. Cartões `.im-card`: filete de tinta de 2px no topo com marca vermelhão de 56px à esquerda, sem caixa nem sombra; título `.im-h3`, nota `.im-note`.
+6. Gráficos: texto de eixo em mono 11px muted, grade `--grid`, séries por `IM.colors()` seguindo a entidade; uma série em destaque (vermelhão) e o resto `--s-muted`. Sem seleção, barras em tinta (`--fg`), nunca todas em vermelhão.
+7. Entidades fixas no projeto (nunca a cor do destaque, índice 1): leves/passeio = `IM.colors()[0]`, pesados/carga = `[3]`, total = `[2]`.
 7. Tooltip `.im-tt` (vidro), rodapé `.im-foot` com fonte e data de atualização.

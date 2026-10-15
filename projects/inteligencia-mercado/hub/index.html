@@ -110,6 +110,7 @@
 /* --- cartões: filete de tinta no topo, sem caixa ---------------------------- */
 .im-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 24rem), 1fr)); gap: var(--g-lg) var(--g-lg); }
 .im-card { position: relative; display: grid; gap: 12px; align-content: start; min-width: 0; padding-top: 12px; border-top: 2px solid var(--rule); background: none; }
+.im-card::before { content: ""; position: absolute; left: 0; top: -2px; width: 56px; height: 2px; background: var(--accent); }
 .im-card-head { display: flex; flex-wrap: wrap; gap: 8px; justify-content: space-between; align-items: flex-start; }
 
 /* --- gráficos ------------------------------------------------------------ */

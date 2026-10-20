@@ -5,8 +5,8 @@ em preço, produção, oferta ou demanda de pneus no Brasil e na América do Sul
 notícias locais (Anfavea, antidumping, greve em porto) a eventos globais (guerra,
 fechamento de estreito, safra de borracha na Tailândia).
 
-> Status: **Fase 0 concluída** — decisões fechadas (seção 8). Próximo passo: Fase 1,
-> edição piloto.
+> Status: **Fase 1 em andamento** — edição piloto nº 0 publicada em
+> `editions/2026-10-20-edicao-00.html` (+ PDF), aguardando feedback do time.
 
 ---
 

@@ -1,12 +1,12 @@
-# Newsletter MINT — Planejamento
+# Mint Newsletter — Planejamento
 
 Newsletter de inteligência de mercado para o time MINT, focada em **tudo que pode mexer
 em preço, produção, oferta ou demanda de pneus no Brasil e na América do Sul** — de
 notícias locais (Anfavea, antidumping, greve em porto) a eventos globais (guerra,
 fechamento de estreito, safra de borracha na Tailândia).
 
-> Status: **Fase 0 — planejamento**. Nada de código ainda. As decisões em aberto estão
-> na seção 8; respondê-las destrava a Fase 1.
+> Status: **Fase 0 concluída** — decisões fechadas (seção 8). Próximo passo: Fase 1,
+> edição piloto.
 
 ---
 
@@ -108,6 +108,9 @@ Construída em cima do que já existe no repo (`harness/`, `loops/`, `memory/`).
 - **Oficiais/dados:** Banco Central (SGS), MDIC/ComexStat, Gecex/Camex (DOU), IBGE,
   ANP (diesel), EIA/OPEP (petróleo).
 - Paywall: resumimos a partir do que é acessível e sempre linkamos; nada de copiar texto.
+- Sem dados próprios nem fontes pagas: só fontes abertas com credibilidade mínima
+  (grandes veículos, associações setoriais, órgãos oficiais). Blog/rede social só como
+  pista, nunca como fonte final.
 
 ## 6. Roadmap
 
@@ -117,7 +120,7 @@ Construída em cima do que já existe no repo (`harness/`, `loops/`, `memory/`).
 | **1. Edição piloto manual** | Edição #0 feita numa sessão do Claude Code, com os papéis acima simulados por prompt | Time MINT lê e dá feedback; ajustamos formato e taxonomia |
 | **2. Pipeline de agentes** | Scouts + analista + redator + revisor em Python (`newsletter/`), saída em Markdown/HTML | Gera uma edição com 1 comando (`uv run python -m newsletter.run`), toda afirmação com fonte, testes com pytest |
 | **3. Dados e painel** | Coletor de indicadores (BCB, ComexStat, cotações) + gráficos simples | Painel com números verificáveis e série histórica |
-| **4. Distribuição e agenda** | Rascunho automático (Gmail/Notion/página), execução agendada semanal | Edição chega pronta para aprovação no dia combinado |
+| **4. Distribuição e agenda** | Execução agendada semanal + gatilho de alerta extraordinário; PDF gerado e anexado a um rascunho de e-mail | Edição chega pronta para aprovação no dia combinado |
 | **5. Qualidade contínua** | Feedback do time por item (útil/não útil), ajuste de fontes e pesos | Métricas de leitura/feedback guiando a pauta |
 
 Fase 1 é deliberadamente manual: valida o *conteúdo* antes de investir na automação.
@@ -136,16 +139,27 @@ newsletter/
   tests/
 ```
 
-## 8. Decisões em aberto (preciso de você)
+## 8. Decisões tomadas
 
-1. **Público:** só o time MINT interno, a empresa toda, ou clientes externos? (muda tom,
-   profundidade e cuidado com confidencialidade)
-2. **Periodicidade:** semanal (sugestão), diária curta, ou semanal + alertas extraordinários
-   (ex.: fechamento de estreito)?
-3. **Foco de segmento:** todos os pneus ou prioridade (passeio, carga/TBR, agrícola, OTR,
-   moto, reforma)? E foco em fabricante, distribuidor/revenda ou importador?
-4. **Países:** Brasil como núcleo + quais da América do Sul com peso maior?
-5. **Formato/canal:** e-mail, PDF, página web, Notion, Teams/Slack?
-6. **Dados internos:** a MINT já tem séries/painéis próprios que devemos referenciar ou
-   integrar? Há fontes pagas (Bloomberg, S&P, ICIS, Argus) que o time assina?
-7. **Nome e identidade visual:** a newsletter terá nome próprio?
+| Tema | Decisão |
+|---|---|
+| **Nome** | Mint Newsletter (provisório) |
+| **Público** | Time MINT + algumas pessoas da empresa de fora da equipe. Uso interno: tom técnico mas acessível a quem não é da área |
+| **Periodicidade** | Semanal + **alertas extraordinários** para eventos grandes (ex.: fechamento de estreito, antidumping novo, parada de fábrica relevante) |
+| **Segmento** | Todos os pneus, sem recorte |
+| **Países** | Toda a América do Sul, com notícias que afetem direta ou indiretamente (inclui eventos globais) |
+| **Formato** | Página em estilo **jornal**, exportável em **PDF**, para encaminhar por e-mail |
+| **Dados/fontes** | Nenhum dado próprio nem assinatura paga — só fontes abertas confiáveis |
+
+### Formato e mecânica de envio (proposta)
+
+- A edição é gerada como **HTML com layout de jornal** (cabeçalho com nome/data/número
+  da edição, colunas, manchete, painel de indicadores) e CSS de impressão em A4.
+- O **PDF é gerado automaticamente** a partir desse HTML (Chromium/Playwright, já
+  disponível no ambiente) — mesmo visual na tela e no papel.
+- Cada edição também pode ser publicada como **artefato** (página privada no claude.ai)
+  para leitura na tela.
+- Envio: começar simples — você baixa o PDF e encaminha. Depois (Fase 4), criar
+  automaticamente um **rascunho no Gmail** com o PDF anexado e a lista de destinatários,
+  para você só revisar e clicar em enviar.
+- Alerta extraordinário: formato curto (1 página), mesmo visual, marcado como "ALERTA".

@@ -1,0 +1,113 @@
+{
+  "_sobre": "Notícias da semana 17-23/10/2026 que podem afetar o mercado de pneus. Campos seguem o registro do PLAN.md. 'cruza_com' lista os indicadores (series_mensais.csv / manual) usados na análise.",
+  "noticias": [
+    {
+      "id": "ormuz",
+      "titulo": "Ataques a petroleiros em Ormuz voltam a escalar",
+      "resumo": "UKMTO relatou petroleiro atingido por projétil perto de Bukha (Omã) em 21/10. Na madrugada de 22 para 23/10, a TV estatal iraniana disse que 7 petroleiros foram atingidos por ataques ou minas, o que seria o maior saldo diário desde o início da guerra (28/02); não há confirmação independente. Na semana até 4/10 foram 11 ataques (OMI). Petroleiros seguem passando sob escolta dos EUA.",
+      "fonte_url": ["https://www.nbcnews.com/world/iran/iran-says-7-oil-tankers-attacked-strait-hormuz-fears-grow-return-war-rcna605108", "https://www.cnbc.com/2026/10/09/iran-war-strait-hormuz-tanker-attack-oil.html"],
+      "data": "2026-10-23", "bloco": "logistica_geopolitica", "regiao": "global",
+      "variavel_afetada": "custo", "direcao": "alta", "horizonte": "imediato", "magnitude": 3, "confianca": "provavel",
+      "cruza_com": ["brent_usd", "brent_brl", "ipca_diesel", "anda_fertilizantes", "anp_diesel_trr"]
+    },
+    {
+      "id": "brent",
+      "titulo": "Brent spot recua de US$ 130 para US$ 115 em dez dias, ainda o dobro de um ano atrás",
+      "resumo": "O Brent spot (EIA via FRED) foi de US$ 130,18 em 8/10 para US$ 115,22 em 20/10. Mesmo com a queda, segue muito acima do mesmo período de 2025.",
+      "fonte_url": ["https://fred.stlouisfed.org/series/DCOILBRENTEU"],
+      "data": "2026-10-20", "bloco": "materias_primas", "regiao": "global",
+      "variavel_afetada": "custo", "direcao": "alta", "horizonte": "curto", "magnitude": 3, "confianca": "confirmado",
+      "cruza_com": ["brent_usd", "brent_brl", "ptax"]
+    },
+    {
+      "id": "subvencao_diesel",
+      "titulo": "Subvenção de R$ 2,12/l ao diesel vence em 26/10; importado tem R$ 3,52/l",
+      "resumo": "Portaria MF 2.946 fixou R$ 2,12/l a partir de 27/09 por 30 dias; Portaria MF 3.082 (13/10) acrescentou R$ 1,40/l ao diesel importado. Renovação depois de 26/10 ainda não confirmada em 23/10.",
+      "fonte_url": ["https://www.poder360.com.br/poder-economia/governo-mantem-subsidio-de-r-212-no-diesel-ate-fim-de-outubro/", "https://www.brasilpostos.com.br/noticias/mercado/calendario-subsidios-combustiveis-diesel-26-outubro-gasolina-9-novembro/"],
+      "data": "2026-10-13", "bloco": "macro_cambio", "regiao": "BR",
+      "variavel_afetada": "custo", "direcao": "incerto", "horizonte": "imediato", "magnitude": 3, "confianca": "confirmado",
+      "cruza_com": ["ipca_diesel", "anp_diesel", "abcr_pesados", "pms_rodoviario_cargas"]
+    },
+    {
+      "id": "borracha",
+      "titulo": "Borracha natural no maior nível desde 2012 em Kuala Lumpur; Xangai em máxima de 9 anos",
+      "resumo": "SMR 20 subiu a 1.074,5 sen/kg em 12/10, maior nível desde maio de 2012 (chuvas na Tailândia). Contrato principal de borracha em Xangai fechou a 20.145 yuan/t em 8/10, máxima de 9 anos. No spot de Qingdao houve recuo de mais de RMB 1.000/t em três dias até 16/10. Fabricantes chineses anunciaram reajustes de 3% a 5%.",
+      "fonte_url": ["https://bernama.com/en/market/news.php?id=2619120", "https://news.chemnet.com/news-4654.html"],
+      "data": "2026-10-16", "bloco": "materias_primas", "regiao": "global",
+      "variavel_afetada": "custo", "direcao": "alta", "horizonte": "curto", "magnitude": 3, "confianca": "confirmado",
+      "cruza_com": ["ipca_pneu", "ptax", "pim_borracha"]
+    },
+    {
+      "id": "anip_tarifa",
+      "titulo": "ANIP volta a pedir tarifa de 35% para pneus importados",
+      "resumo": "Em outubro, a ANIP reforçou o pedido de elevar o imposto de importação de 25% para 35%, com LNA e antidumping provisório. Importações cresceram 58,3% em jan-ago/26. Sem decisão do Gecex localizada até 23/10.",
+      "fonte_url": ["https://www.folhavitoria.com.br/folha-motor/pneus-importados-industria-imposto-maior/"],
+      "data": "2026-10-21", "bloco": "comercio_regulacao", "regiao": "BR",
+      "variavel_afetada": "preco", "direcao": "incerto", "horizonte": "medio", "magnitude": 3, "confianca": "confirmado",
+      "cruza_com": ["ipca_pneu", "pim_borracha", "ptax"]
+    },
+    {
+      "id": "michelin_9m",
+      "titulo": "Michelin mantém guidance: preço e mix compensam queda de OE",
+      "resumo": "Receita de 9 meses de €19,18 bi (+1,0% a câmbio constante) com volumes de pneus −0,8%; 3T em €6,49 bi, abaixo do consenso de €6,63 bi. Bridgestone subiu 5% preços de reposição no Japão desde 1/9.",
+      "fonte_url": ["https://www.investing.com/news/earnings/michelin-maintains-guidance-as-price-hikes-and-highvalue-mix-offset-oe-drop-4960699"],
+      "data": "2026-10-22", "bloco": "oferta_industria", "regiao": "global",
+      "variavel_afetada": "preco", "direcao": "alta", "horizonte": "curto", "magnitude": 2, "confianca": "confirmado",
+      "cruza_com": ["ipca_pneu", "anfavea_producao"]
+    },
+    {
+      "id": "frete_wci",
+      "titulo": "Frete de contêiner sobe ao maior nível em 15 semanas",
+      "resumo": "Drewry WCI composto subiu 2% a US$ 4.585/FEU em 22/10, máximo em 15 semanas; Xangai-Roterdã US$ 3.632, Xangai-Gênova US$ 4.152. O índice não cobre Ásia-América do Sul.",
+      "fonte_url": ["https://www.drewry.co.uk/supply-chain-advisors/supply-chain-expertise/world-container-index-assessed-by-drewry"],
+      "data": "2026-10-22", "bloco": "logistica_geopolitica", "regiao": "global",
+      "variavel_afetada": "custo", "direcao": "alta", "horizonte": "curto", "magnitude": 2, "confianca": "confirmado",
+      "cruza_com": ["ipca_pneu", "ptax"]
+    },
+    {
+      "id": "china_export",
+      "titulo": "Exportação chinesa dispara 36% em setembro; pneus caíram em julho com antidumping europeu",
+      "resumo": "Exportações totais da China +36,3% a/a em setembro (alfândega, 14/10). Último dado de pneus: 790 mil t em julho, −10,2% a/a, após tarifas antidumping da UE de 4,3% a 45,3% sobre pneus chineses, o que tende a redirecionar volume para outros mercados.",
+      "fonte_url": ["https://www.cnbc.com/2026/10/14/chinas-exports-likely-grew-by-double-digits-in-september.html", "https://bestsproutshop.com/blogs/news/china-tire-exports-drop-eu-duties-now-active"],
+      "data": "2026-10-14", "bloco": "comercio_regulacao", "regiao": "global",
+      "variavel_afetada": "oferta", "direcao": "alta", "horizonte": "medio", "magnitude": 2, "confianca": "provavel",
+      "cruza_com": ["ipca_pneu"]
+    },
+    {
+      "id": "fertilizantes_guerra",
+      "titulo": "Guerra no Irã derruba entrega de fertilizantes no Brasil",
+      "resumo": "ANDA: entregas −22,3% em julho e −8,8% em jan-jul/26; a entidade atribui ao esfriamento de negócios pela guerra no Irã desde maio.",
+      "fonte_url": ["https://www.canalrural.com.br/agricultura/entregas-de-fertilizantes-caem-223-em-julho-diz-anda/"],
+      "data": "2026-10-02", "bloco": "demanda", "regiao": "BR",
+      "variavel_afetada": "demanda", "direcao": "baixa", "horizonte": "medio", "magnitude": 2, "confianca": "confirmado",
+      "cruza_com": ["anda_fertilizantes", "anp_diesel_trr", "conab_safra"]
+    },
+    {
+      "id": "conab_safra",
+      "titulo": "Conab projeta safra recorde de 367,1 Mt em 2026/27",
+      "resumo": "1º levantamento: +1,4% na produção e +2,3% na área (85,4 Mha); soja 181,6 Mt (+0,7%), milho 148 Mt (+2,4%).",
+      "fonte_url": ["https://agenciagov.ebc.com.br/noticias/202610/primeiro-levantamento-da-safra-de-graos-2026-27-estima-producao-acima-de-367-milhoes-de-toneladas"],
+      "data": "2026-10-15", "bloco": "demanda", "regiao": "BR",
+      "variavel_afetada": "demanda", "direcao": "alta", "horizonte": "medio", "magnitude": 2, "confianca": "confirmado",
+      "cruza_com": ["anda_fertilizantes", "anp_diesel_trr", "abcr_pesados"]
+    },
+    {
+      "id": "motos_recorde",
+      "titulo": "Produção de motos tem melhor setembro desde 2011",
+      "resumo": "ABRACICLO: 186.758 motos em set/26 (+10,4%); 1,645 mi no ano (+9,9%); projeção 2026 elevada para 2,1 mi (+6%).",
+      "fonte_url": ["https://diariodocomercio.com.br/economia/producao-motos-brasil-setembro/"],
+      "data": "2026-10-13", "bloco": "demanda", "regiao": "BR",
+      "variavel_afetada": "demanda", "direcao": "alta", "horizonte": "curto", "magnitude": 2, "confianca": "confirmado",
+      "cruza_com": ["abraciclo_motos"]
+    },
+    {
+      "id": "argentina",
+      "titulo": "Argentina: importação de pneus leves em recorde com tarifa de 16%",
+      "resumo": "762,5 mil pneus leves importados em julho (recorde); jan-jul estável a/a (5,23 mi). Fate fechou em fevereiro.",
+      "fonte_url": ["https://www.infobae.com/economia/2026/08/16/en-julio-se-registro-el-record-de-importacion-de-neumaticos-cuantos-entraron-al-mercado-y-quienes-lideran-el-ranking/"],
+      "data": "2026-08-16", "bloco": "comercio_regulacao", "regiao": "AR",
+      "variavel_afetada": "oferta", "direcao": "alta", "horizonte": "medio", "magnitude": 2, "confianca": "confirmado",
+      "cruza_com": []
+    }
+  ]
+}

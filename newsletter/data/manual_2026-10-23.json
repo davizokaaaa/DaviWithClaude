@@ -1,0 +1,59 @@
+{
+  "_sobre": "Indicadores sem API aberta, lidos de press releases e reportagens em 23/10/2026. Cada número traz a fonte. 'a confirmar' = conferir no site da instituição antes de citar.",
+  "abraciclo": {
+    "motos_producao_set26": 186758, "motos_producao_set26_yoy_pct": 10.4,
+    "motos_producao_jan_set26": 1645034, "motos_producao_jan_set26_yoy_pct": 9.9,
+    "motos_producao_projecao_2026": 2100000, "motos_producao_projecao_2026_yoy_pct": 6.0,
+    "motos_emplacamento_set26": 205100, "motos_emplacamento_set26_yoy_pct": -0.4,
+    "motos_exportacao_set26": 4826, "motos_exportacao_set26_yoy_pct": -8.2,
+    "bikes_producao_set26": 35914, "bikes_producao_jan_set26": 272018,
+    "ebikes_producao_jan_set26": 61885, "ebikes_producao_jan_set26_yoy_pct": 85.7,
+    "fonte": ["https://abraciclo.com.br/press-release", "https://diariodocomercio.com.br/economia/producao-motos-brasil-setembro/", "https://mercadoeconsumo.com.br/14/10/2026/economia/producao-de-motos-cresce-104-e-tem-melhor-setembro-em-15-anos-mostra-abraciclo/"]
+  },
+  "anda": {
+    "fertilizantes_entregas_jul26_mt": 3.96, "fertilizantes_entregas_jul26_yoy_pct": -22.3,
+    "fertilizantes_entregas_jan_jul26_mt": 22.98, "fertilizantes_entregas_jan_jul26_yoy_pct": -8.8,
+    "producao_intermediarios_jul26_mil_t": 517, "producao_intermediarios_jul26_yoy_pct": -19.9,
+    "causa_citada": "guerra no Irã esfriou novos negócios a partir de maio",
+    "fonte": ["https://anda.org.br/recursos/#pesquisa-setorial", "https://www.canalrural.com.br/agricultura/entregas-de-fertilizantes-caem-223-em-julho-diz-anda/", "https://comprerural.com/entregas-de-fertilizantes-foram-de-2298-milhoes-de-toneladas-de-janeiro-a-julho-88-a-menos-do-que-em-2025/"]
+  },
+  "anec": {
+    "soja_exportacao_set26_t": 7113782,
+    "soja_exportacao_set25_t_aprox": 6970000,
+    "soja_exportacao_set26_yoy_pct_aprox": 2.1,
+    "soja_exportacao_jan_set26_mt_aprox": 101.5,
+    "nota": "set/25 vem de reportagem sobre projeção da ANEC; a variação é aproximada (a confirmar no relatório da ANEC)",
+    "fonte": ["https://anec.com.br", "https://comprerural.com/anec-reduz-estimativa-de-exportacao-de-soja-em-setembro-para-8-milhoes-de-t/", "https://forbes.com.br/forbes-agro/2026/09/anec-volta-a-reduzir-estimativas-de-exportacao-de-soja-do-brasil-em-setembro/"]
+  },
+  "conab_1lev_2026_27": {
+    "graos_producao_mt": 367.1, "graos_producao_yoy_pct": 1.4,
+    "area_mha": 85.4, "area_yoy_pct": 2.3,
+    "soja_mt": 181.6, "soja_yoy_pct": 0.7, "soja_area_mha": 49.3,
+    "milho_mt": 148.0, "milho_yoy_pct": 2.4,
+    "algodao_pluma_mt": 4.16, "algodao_pluma_yoy_pct": 0.3,
+    "arroz_mt": 10.8, "arroz_yoy_pct": -2.9,
+    "divulgado": "2026-10-15",
+    "fonte": ["https://agenciagov.ebc.com.br/noticias/202610/primeiro-levantamento-da-safra-de-graos-2026-27-estima-producao-acima-de-367-milhoes-de-toneladas"]
+  },
+  "anfavea_set26": {
+    "producao_caminhoes_pesados": 5965, "producao_onibus": 1425,
+    "nota": "séries completas de emplacamento/produção vêm de raw/mint_overall_2026-10-15.json (painel Overall MINT/RGM, ANFAVEA até set/26)",
+    "fonte": ["https://anfavea.com.br/site/central-de-dados/"]
+  },
+  "anp_asfalto": {"producao_ago26_m3": 245439, "fonte": ["https://www.gov.br/anp/pt-br/centrais-de-conteudo/dados-abertos/processamento-de-petroleo-e-producao-de-derivados"], "nota": "variação anual a confirmar"},
+  "cnc_icf": {"set26_pontos": 104.5, "out26": "ainda não publicado em 23/10 (esperado 20-25/10)", "fonte": ["https://portaldocomercio.org.br"]},
+  "fgv_confianca": {"out26": "ICC esperado ~24/10, ICI ~28/10, ICE 01/11", "fonte": ["https://portalibre.fgv.br/calendario-de-divulgacao"]},
+  "anip": {
+    "importacao_pneus_jan_ago26_yoy_pct": 58.3,
+    "importacao_pneus_1s26_yoy_pct": 81.2,
+    "importados_share_reposicao_1s26_pct": 71,
+    "pleito": "tarifa de importação de 25% para 35%, licença não automática (LNA), antidumping provisório, linha de financiamento para pneu nacional",
+    "status_23out": "sem decisão do Gecex localizada",
+    "fonte": ["https://www.folhavitoria.com.br/folha-motor/pneus-importados-industria-imposto-maior/", "https://www.carrosegaragem.com.br/pneus-importados-em-alta/", "https://www.autodata.com.br/noticias/2026/05/20/industria-de-pneus-pede-aumento-de-imposto-e-outras-medidas-contra-importados/103810/"]
+  },
+  "argentina_neumaticos": {
+    "importacao_leves_jul26_unid": 762548, "importacao_leves_jan_jul26_unid": 5227553, "importacao_leves_jan_jul25_unid": 5217916,
+    "tarifa_pct": 16, "tarifa_anterior_pct": 35, "fate": "fechou em fev/2026",
+    "fonte": ["https://www.infobae.com/economia/2026/08/16/en-julio-se-registro-el-record-de-importacion-de-neumaticos-cuantos-entraron-al-mercado-y-quienes-lideran-el-ranking/"]
+  }
+}

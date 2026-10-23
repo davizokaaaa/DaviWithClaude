@@ -5,8 +5,9 @@ em preço, produção, oferta ou demanda de pneus no Brasil e na América do Sul
 notícias locais (Anfavea, antidumping, greve em porto) a eventos globais (guerra,
 fechamento de estreito, safra de borracha na Tailândia).
 
-> Status: **Fase 1 em andamento** — edição piloto nº 0 publicada em
-> `editions/2026-10-20-edicao-00.html` (+ PDF), aguardando feedback do time.
+> Status: **Fase 1 em andamento**. A edição piloto nº 0 está em `editions/2026-10-20-edicao-00.html` (+ PDF).
+> Para a nº 1, os dados já estão coletados e as análises escritas (`data/analises_2026-10-23.md`).
+> O artefato no novo formato de capa com cards (seção 9) só será construído depois do aval do time.
 
 ---
 
@@ -99,7 +100,13 @@ Construída em cima do que já existe no repo (`harness/`, `loops/`, `memory/`).
   `memory/retrieval.py`, para o analista saber o que já foi noticiado e fazer follow-up.
 - **Humano no loop:** a edição sempre sai como rascunho; você aprova antes de enviar.
 
-## 5. Fontes (lista inicial, a validar)
+## 5. Fontes
+
+**Indicadores:** as fontes oficiais são as da planilha de Indicadores MINT, documentadas aba a aba em
+[`FONTES.md`](FONTES.md): o que cada uma mede, link para o leitor, defasagem, citação sugerida e cuidados.
+`collect.py` baixa as que têm dado aberto, e `analyze.py` monta as séries e o termômetro (seção 9).
+
+**Notícias (lista inicial, a validar):**
 
 - **Setor:** ANIP, Anfavea, ABR (reforma de pneus), Reciclanip, Tire Business, European
   Rubber Journal, Rubber News, ANRPC, IRSG.
@@ -119,7 +126,7 @@ Construída em cima do que já existe no repo (`harness/`, `loops/`, `memory/`).
 | **0. Planejamento** *(agora)* | Este documento + decisões da seção 8 | Escopo, público, periodicidade e formato fechados |
 | **1. Edição piloto manual** | Edição #0 feita numa sessão do Claude Code, com os papéis acima simulados por prompt | Time MINT lê e dá feedback; ajustamos formato e taxonomia |
 | **2. Pipeline de agentes** | Scouts + analista + redator + revisor em Python (`newsletter/`), saída em Markdown/HTML | Gera uma edição com 1 comando (`uv run python -m newsletter.run`), toda afirmação com fonte, testes com pytest |
-| **3. Dados e painel** | Coletor de indicadores (BCB, ComexStat, cotações) + gráficos simples | Painel com números verificáveis e série histórica |
+| **3. Dados e painel** *(iniciada)* | `collect.py` + `analyze.py`: IBGE (PMS, PMC, PIM, IPCA com subitem pneu), BCB (PTAX, Selic, Focus), ANP (diesel, Otto, segmentos), ABCR, Brent; ANFAVEA via painel Overall. Falta ComexStat NCM 4011 | Painel com números verificáveis e série histórica |
 | **4. Distribuição e agenda** | Execução agendada semanal + gatilho de alerta extraordinário; PDF gerado e anexado a um rascunho de e-mail | Edição chega pronta para aprovação no dia combinado |
 | **5. Qualidade contínua** | Feedback do time por item (útil/não útil), ajuste de fontes e pesos | Métricas de leitura/feedback guiando a pauta |
 
@@ -163,3 +170,38 @@ newsletter/
   automaticamente um **rascunho no Gmail** com o PDF anexado e a lista de destinatários,
   para você só revisar e clicar em enviar.
 - Alerta extraordinário: formato curto (1 página), mesmo visual, marcado como "ALERTA".
+
+## 9. Princípios do painel Overall MINT/RGM aplicados à newsletter
+
+A edição segue o artefato "Análise de mercado - MINT/RGM" (Overall Michelin):
+
+- **Título é tese.** A manchete e cada chamada afirmam algo ("O carro acelera, o caminhão freia"),
+  e a linha fina dá o número que sustenta a afirmação.
+- **Termômetro com regra explícita.** O sinal de cada indicador-proxy é a média do acumulado no
+  ano e do último trimestre contra o ano anterior: acima de +2% é favorável, abaixo de −2% é
+  desfavorável. Preço (IPCA, Brent, câmbio) não recebe sinal.
+- **Número sempre com fonte e mês de referência**, e o rodapé diz "até quando" vai cada fonte e
+  quando a edição foi atualizada.
+- **Estimativa leva selo "estimativa"** e nota de método. Hipótese não é apresentada como fato,
+  e o grau de confiança vem marcado.
+- **Recomendações partem de um número** do próprio painel.
+- **Mesmo design system "IM"** do hub de Inteligência de Mercado: papel #f7f4ee, Fraunces,
+  Inter Tight, IBM Plex Mono e um único acento vermelhão.
+
+### Cruzamento notícia × indicador
+
+Cada matéria nasce do cruzamento entre uma notícia da semana (`data/noticias_<data>.json`,
+uma ficha por notícia, com o campo `cruza_com`) e as séries (`data/series_mensais.csv`,
+`data/termometro.json`, `data/manual_<data>.json`). A notícia diz o que mudou; o indicador
+diz se isso já aparece no Brasil e com que tamanho.
+
+### Formato de capa (pedido do time em 23/10/2026)
+
+- A capa é de jornal, mas com **pouco texto**: cada matéria é um **card horizontal**, com a
+  imagem da matéria em cima e a chamada e a linha fina embaixo (uma ou duas linhas).
+- **Clicar no card abre a matéria**, que é a análise completa: números, gráfico, leitura,
+  fontes e confiança.
+- A imagem do card é um **gráfico ou ilustração gerada a partir dos próprios dados**. Não
+  usamos foto de agência, para não ter problema de direito autoral.
+- No PDF, os cards viram a primeira página e as matérias, as páginas seguintes, com links
+  internos.

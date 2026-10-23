@@ -27,6 +27,10 @@ This repository is for building autonomous systems on top of Claude: custom harn
 - Run tests (excludes integration tests that call the real API): `uv run pytest`
 - Run integration tests too: `uv run pytest -m integration`
 - Run a single test: `uv run pytest path/to/test_file.py::test_name`
+- Download newsletter indicator data (IBGE, BCB, ANP, ABCR, FRED) into `newsletter/data/raw/`: `uv run python newsletter/collect.py`
+- Build monthly series + indicator thermometer from the raw data: `uv run python newsletter/analyze.py`
+- Build edition nº 1 (fills the chart slots of `editions/2026-10-23-edicao-01.src.html` with SVGs from `charts.py`, renders the PDF and embeds it for the artifact's "Baixar PDF" button): `uv run python newsletter/build_edicao_01.py`
+- Render a newsletter edition to PDF: `uv run python newsletter/render_pdf.py newsletter/editions/<edition>.html`
 
 ## Project layout
 
@@ -36,6 +40,7 @@ This repository is for building autonomous systems on top of Claude: custom harn
   - `tests/` — pytest tests; real-API tests are marked `@pytest.mark.integration` and excluded by default.
 - `memory/` — experiments with memory strategies beyond CLAUDE.md/auto-memory (custom retrieval, summarization, persistence). `retrieval.py` has a first experiment: keyword-overlap retrieval over `notes/*.md`, wired into `harness/basic_loop.py`'s `run_with_memory()`.
 - `loops/` — loop-prompting patterns: scripts driving repeated/iterative agent cycles (plan → act → review → repeat). `plan_act_review.py` is the first experiment: cycles plan/act/review via `harness.basic_loop.run()`, stopping when the review step says "DONE" or after `max_iterations`.
+- `newsletter/` — Mint Newsletter: weekly tire-market intelligence for Brazil/South America. `PLAN.md` holds scope, driver taxonomy, agent architecture and roadmap; `editions/` holds each edition as an artifact-style HTML fragment plus its A4 PDF; `render_pdf.py` renders an edition to PDF with headless Chromium. `FONTES.md` documents every indicator source (from the MINT indicator spreadsheet); `collect.py` downloads them to `data/raw/`, `analyze.py` writes `data/series_mensais.csv` + `data/termometro.json`; per-edition news records (`data/noticias_*.json`), press-release figures (`data/manual_*.json`) and the written analyses (`data/analises_*.md`) live next to them. `charts.py` draws inline SVG charts (theme-aware via CSS tokens) from `data/series_mensais.csv`; an edition with charts has a `.src.html` source and a build script that writes the final `.html`.
 - `experiments/` — one-off scripts, graduate into the folders above once proven.
 - `notes/` — versioned knowledge base (see `notes/README.md`); `notes/agent-sdk.md` has SDK-specific gotchas learned so far (e.g. auth, trust dialog behavior when running headless).
 

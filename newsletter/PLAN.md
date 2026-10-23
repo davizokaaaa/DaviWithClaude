@@ -6,8 +6,8 @@ notícias locais (Anfavea, antidumping, greve em porto) a eventos globais (guerr
 fechamento de estreito, safra de borracha na Tailândia).
 
 > Status: **Fase 1 em andamento**. A edição piloto nº 0 está em `editions/2026-10-20-edicao-00.html` (+ PDF).
-> Para a nº 1, os dados já estão coletados e as análises escritas (`data/analises_2026-10-23.md`).
-> O artefato no novo formato de capa com cards (seção 9) só será construído depois do aval do time.
+> A edição nº 1, no formato de capa com cards (seção 9), está em `editions/2026-10-23-edicao-01.html`
+> (+ PDF de 7 páginas, a capa e uma página por matéria) e publicada como artefato. As análises estão em `data/analises_2026-10-23.md`.
 
 ---
 

@@ -1,12 +1,17 @@
-"""Build Mint Newsletter edition nº 1 (23/10/2026): fills the chart slots of the source page.
+"""Build Mint Newsletter edition nº 1 (23/10/2026): fills the chart slots of the source page
+and embeds its A4 PDF so the published artifact can offer it through a "Baixar PDF" button.
 
 Usage: uv run python newsletter/build_edicao_01.py
 Reads editions/2026-10-23-edicao-01.src.html, replaces each <!--chart:NAME--> with an inline
-SVG drawn from data/series_mensais.csv, and writes editions/2026-10-23-edicao-01.html."""
+SVG drawn from data/series_mensais.csv, renders the A4 PDF (render_pdf.py), then writes
+editions/2026-10-23-edicao-01.html with the PDF embedded as base64 in the <!--pdf--> slot."""
+
+import base64
 
 from pathlib import Path
 
 from charts import bar_chart, chips, line_chart, load_series
+from render_pdf import render
 
 HERE = Path(__file__).parent
 SRC = HERE / "editions" / "2026-10-23-edicao-01.src.html"
@@ -84,5 +89,10 @@ def build() -> str:
 
 
 if __name__ == "__main__":
-    OUT.write_text(build(), encoding="utf-8")
-    print(OUT)
+    html = build()
+    # The PDF is printed from the page without the embed (print CSS hides the button), then embedded.
+    OUT.write_text(html.replace("<!--pdf-->", ""), encoding="utf-8")
+    pdf = render(OUT)
+    b64 = base64.b64encode(pdf.read_bytes()).decode("ascii")
+    OUT.write_text(html.replace("<!--pdf-->", f'<script type="text/plain" id="pdf-data">{b64}</script>'), encoding="utf-8")
+    print(OUT, pdf)

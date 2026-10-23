@@ -29,7 +29,7 @@ This repository is for building autonomous systems on top of Claude: custom harn
 - Run a single test: `uv run pytest path/to/test_file.py::test_name`
 - Download newsletter indicator data (IBGE, BCB, ANP, ABCR, FRED) into `newsletter/data/raw/`: `uv run python newsletter/collect.py`
 - Build monthly series + indicator thermometer from the raw data: `uv run python newsletter/analyze.py`
-- Build edition nº 1 (fills the chart slots of `editions/2026-10-23-edicao-01.src.html` with SVGs from `charts.py`): `uv run python newsletter/build_edicao_01.py`
+- Build edition nº 1 (fills the chart slots of `editions/2026-10-23-edicao-01.src.html` with SVGs from `charts.py`, renders the PDF and embeds it for the artifact's "Baixar PDF" button): `uv run python newsletter/build_edicao_01.py`
 - Render a newsletter edition to PDF: `uv run python newsletter/render_pdf.py newsletter/editions/<edition>.html`
 
 ## Project layout

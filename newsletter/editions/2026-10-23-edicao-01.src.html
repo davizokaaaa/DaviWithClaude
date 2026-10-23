@@ -40,6 +40,13 @@ a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
   padding-bottom: 8px; border-bottom: 1px solid var(--rule); font: 600 11px/1.3 var(--sans); letter-spacing: .14em; text-transform: uppercase; }
 .bar b { color: var(--accent); font-weight: 600; }
 .bar span { color: var(--muted); }
+.bar-r { display: inline-flex; flex-wrap: wrap; align-items: baseline; gap: 4px 14px; }
+.pdf-btn { font: 600 11px/1 var(--sans); letter-spacing: .14em; text-transform: uppercase; color: var(--bg); background: var(--accent);
+  border: 0; padding: 7px 11px; cursor: pointer; }
+.pdf-btn:hover { filter: brightness(1.08); }
+.pdf-btn:focus-visible { outline: 2px solid var(--fg); outline-offset: 2px; }
+.pdf-btn[disabled] { opacity: .6; cursor: progress; }
+.bar .pdf-msg { color: var(--fg); letter-spacing: .04em; text-transform: none; font-weight: 500; }
 .mast { display: grid; justify-items: center; text-align: center; gap: 6px; padding: 22px 0 16px; border-bottom: 3px double var(--rule); }
 .mast .name { margin: 0; font: 400 clamp(44px, 8vw, 96px)/.9 var(--serif); font-variation-settings: "opsz" 144; letter-spacing: -.04em; }
 .mast .name em { font-style: italic; font-weight: 300; color: var(--accent); }
@@ -146,14 +153,14 @@ svg .c-fav-t { fill: var(--up); } svg .c-neu-t { fill: var(--muted); } svg .c-de
   .fig svg { max-height: 70mm; } .body { grid-template-columns: 1.25fr 1fr; gap: 18px; }
   .texto p { font-size: 10pt; line-height: 1.45; } .texto { gap: 8px; }
   table { font-size: 8pt; } td { padding: 2px 0; } td small { font-size: 7pt; } .side { gap: 9px; } .semana { font-size: 9pt; } .fontes { font-size: 8pt; }
-  .back, .nav { display: none; }
+  .back, .nav, .pdf-btn, .pdf-msg { display: none !important; }
   .foot { margin-top: 12px; font-size: 7.5pt; }
   a { text-decoration: none; }
 }
 </style>
 
 <div class="np">
-  <div class="bar"><span><b>Inteligência de Mercado</b> · MINT</span><span>Pneus · Brasil e América do Sul</span></div>
+  <div class="bar"><span><b>Inteligência de Mercado</b> · MINT</span><span class="bar-r"><span>Pneus · Brasil e América do Sul</span><button type="button" class="pdf-btn" id="pdf-btn" hidden>Baixar PDF</button><span class="pdf-msg" id="pdf-msg" role="status"></span></span></div>
 
   <!-- ===================== CAPA ===================== -->
   <section class="view capa" id="capa">
@@ -566,6 +573,32 @@ svg .c-fav-t { fill: var(--up); } svg .c-neu-t { fill: var(--muted); } svg .c-de
   </footer>
 </div>
 
+<!--pdf-->
+<script>
+(async function () {
+  // "Baixar PDF": entrega o PDF A4 da edição (capa + uma página por matéria), embutido na página.
+  var btn = document.getElementById('pdf-btn'), msg = document.getElementById('pdf-msg');
+  var data = document.getElementById('pdf-data');
+  if (!data || !window.claude || !window.claude.use) return;
+  var downloads = await window.claude.use('downloads');
+  if (!downloads) return;
+  btn.hidden = false;
+  btn.addEventListener('click', async function () {
+    btn.disabled = true; msg.textContent = '';
+    try {
+      var bin = atob(data.textContent.trim()), bytes = new Uint8Array(bin.length);
+      for (var i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+      await downloads.save({ filename: 'Mint Newsletter 01 - 2026-10-23.pdf', data: new Blob([bytes]) });
+      msg.textContent = 'PDF salvo';
+    } catch (e) {
+      var code = e && e.code;
+      if (code === 'declined') msg.textContent = '';
+      else if (code === 'rate_limited') msg.textContent = 'Já há um download aberto. Tente de novo em instantes.';
+      else { btn.hidden = true; msg.textContent = 'O download de PDF não está disponível nesta visualização.'; }
+    } finally { btn.disabled = false; }
+  });
+})();
+</script>
 <script>
 (function () {
   var views = Array.prototype.slice.call(document.querySelectorAll('.view'));

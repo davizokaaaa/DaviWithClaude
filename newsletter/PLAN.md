@@ -207,3 +207,18 @@ diz se isso já aparece no Brasil e com que tamanho.
   usamos foto de agência, para não ter problema de direito autoral.
 - No PDF, os cards viram a primeira página e as matérias, as páginas seguintes, com links
   internos.
+
+## 10. MINT Journal (redesenho de 28/10/2026)
+
+Pedido do time: visual Michelin, comunicação jornalística e fontes só da matéria.
+
+- **Nome:** MINT Journal.
+- **Visual:** azul Michelin (#27509B) e amarelo (#FCE500), tipografia Barlow / Barlow Condensed (a fonte
+  proprietária da Michelin não está disponível). Sem logo e sem fotos: o time não tem acesso ao banco de
+  imagens nem aos arquivos de marca, então as imagens são ilustrações desenhadas (`journal_art.py`).
+- **Capa:** faixa azul, nota "Nesta edição", manchete grande com duas chamadas, faixa "Números do mês",
+  cards de Mundo / América do Sul / Indicadores, Curtas e Para acompanhar.
+- **Matéria:** chapéu (seção), título, linha fina, assinatura, lide, intertítulos, olho com o número
+  mais forte, box "Por que importa para a Michelin", box "Em números" e "Fontes desta matéria".
+- **Indicadores:** uma página-infográfico com os números do resumo mensal, por setor, com as notas de leitura.
+- **América do Sul:** seção fixa (Argentina, Chile, Colômbia e outros quando houver dado).

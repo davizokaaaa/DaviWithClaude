@@ -207,6 +207,102 @@ Private Function BuscarGamaPorNomeCompleto(candidatos As Variant, descNorm As St
 End Function
 
 ' ==========================================================================
+' Devolve as chaves de dicGamaGlobalUnicos (arrGamas) e suas versões
+' normalizadas (arrNorm), ORDENADAS do maior pro menor comprimento
+' normalizado. Cacheado (Static): ExtrairGama roda uma vez por linha e,
+' sem cache, NormalizarParaComparacao era recalculado pra milhares de gamas
+' em CADA linha. O cache é invalidado por IDENTIDADE do objeto (não por
+' Count — duas Tabelas de Referência diferentes podem ter a mesma
+' contagem); modReferencia.CarregarTabelaReferencia sempre cria um
+' Dictionary novo. Ordenação por "bucket" de comprimento é ESTÁVEL: entre
+' itens de mesmo comprimento, preserva a ordem original de .Keys — mesmo
+' desempate que BuscarGamaPorNomeCompleto tinha (fica com o primeiro).
+' ==========================================================================
+Private Sub ObterGamasOrdenadas(dicGamaGlobalUnicos As Object, ByRef arrGamas As Variant, ByRef arrNorm As Variant)
+    Static cacheGamas As Variant, cacheNorm As Variant, cacheDicRef As Object
+
+    If cacheDicRef Is Nothing Or Not (cacheDicRef Is dicGamaGlobalUnicos) Then
+        Dim chaves As Variant
+        chaves = dicGamaGlobalUnicos.Keys
+
+        Dim n As Long
+        n = dicGamaGlobalUnicos.Count
+
+        Dim origGamas() As Variant, origNorm() As Variant
+        Dim saidaGamas() As Variant, saidaNorm() As Variant
+        If n = 0 Then
+            ReDim saidaGamas(0 To -1)
+            ReDim saidaNorm(0 To -1)
+        Else
+            ReDim origGamas(0 To n - 1)
+            ReDim origNorm(0 To n - 1)
+            ReDim saidaGamas(0 To n - 1)
+            ReDim saidaNorm(0 To n - 1)
+
+            Dim i As Long, k As Long, maiorLen As Long, tam As Long
+            maiorLen = 0
+            k = 0
+            For i = LBound(chaves) To UBound(chaves)
+                origGamas(k) = CStr(chaves(i))
+                origNorm(k) = NormalizarParaComparacao(CStr(chaves(i)))
+                If Len(origNorm(k)) > maiorLen Then maiorLen = Len(origNorm(k))
+                k = k + 1
+            Next i
+
+            ' --- Bucket por comprimento: do maior pro menor, varrendo na ---
+            ' --- ordem original — preserva o desempate antigo.            ---
+            k = 0
+            For tam = maiorLen To 0 Step -1
+                For i = 0 To n - 1
+                    If Len(origNorm(i)) = tam Then
+                        saidaGamas(k) = origGamas(i)
+                        saidaNorm(k) = origNorm(i)
+                        k = k + 1
+                    End If
+                Next i
+            Next tam
+        End If
+
+        cacheGamas = saidaGamas
+        cacheNorm = saidaNorm
+        Set cacheDicRef = dicGamaGlobalUnicos
+    End If
+
+    arrGamas = cacheGamas
+    arrNorm = cacheNorm
+End Sub
+
+' ==========================================================================
+' Equivalente a BuscarGamaPorNomeCompleto(dicGamaGlobalUnicos.Keys, ...),
+' só que mais rápido: usa as gamas já normalizadas e ordenadas (cache, ver
+' ObterGamasOrdenadas) e para assim que o comprimento do candidato não
+' puder mais superar o melhor achado (Exit For) — como a lista vem do
+' maior pro menor, nenhum restante passaria no "Len(candNorm) > melhorLen"
+' do código antigo. Mesmo resultado, inclusive no desempate e com
+' dicionário vazio (devolve "").
+' ==========================================================================
+Private Function BuscarGamaGlobalOrdenada(dicGamaGlobalUnicos As Object, descNorm As String, descComEspaco As String, somenteMinBr As Boolean) As String
+    Dim arrGamas As Variant, arrNorm As Variant
+    ObterGamasOrdenadas dicGamaGlobalUnicos, arrGamas, arrNorm
+
+    Dim melhorGama As String, melhorLen As Long
+    melhorGama = ""
+    melhorLen = 0
+
+    Dim i As Long, candNorm As String
+    For i = LBound(arrGamas) To UBound(arrGamas)
+        candNorm = CStr(arrNorm(i))
+        If Len(candNorm) <= melhorLen Then Exit For
+        If CandidatoGamaBate(candNorm, descNorm, descComEspaco, somenteMinBr) Then
+            melhorLen = Len(candNorm)
+            melhorGama = CStr(arrGamas(i))
+        End If
+    Next i
+
+    BuscarGamaGlobalOrdenada = melhorGama
+End Function
+
+' ==========================================================================
 ' Extrai a GAMA em camadas, da mais confiável pra mais permissiva:
 '   1) Exceções/abreviações (dicExcecoesGama, aba "ExcecoesGama").
 '   2) Nome completo da gama (normalizado contra espaço/barra/hífen/ponto),
@@ -280,7 +376,10 @@ Function ExtrairGama(descricao As String, ByRef marca As String, _
     End If
 
     ' --- Camada 2: nome completo (normalizado), busca ampla ---
-    resultadoNomeCompleto = BuscarGamaPorNomeCompleto(dicGamaGlobalUnicos.Keys, descNorm, descComEspaco, somenteMinBr)
+    ' (versão cacheada/ordenada com corte antecipado — mesmo resultado de
+    ' BuscarGamaPorNomeCompleto(dicGamaGlobalUnicos.Keys, ...), ver
+    ' BuscarGamaGlobalOrdenada)
+    resultadoNomeCompleto = BuscarGamaGlobalOrdenada(dicGamaGlobalUnicos, descNorm, descComEspaco, somenteMinBr)
     If Len(resultadoNomeCompleto) > 0 Then
         ExtrairGama = resultadoNomeCompleto
         If Len(marca) = 0 And dicMarcaPorGama.Exists(ExtrairGama) Then

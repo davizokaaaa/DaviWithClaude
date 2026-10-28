@@ -1,0 +1,293 @@
+<title>Mint Newsletter #0</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;0,6..72,800;1,6..72,400&family=IBM+Plex+Sans+Condensed:wght@400;500;600&display=swap">
+<style>
+/* Layout: a paper broadsheet page (A4 in print) — masthead, lead story across, then two news columns with a data sidebar. Single paper look by design. */
+:root {
+  --paper: #fbfcfb;
+  --ink: #16201d;
+  --ink-soft: #4a5753;
+  --rule: #c9d3cf;
+  --mint: #0f7a5c;
+  --mint-wash: #e3f2ec;
+  --up: #a33a1f;
+  --down: #1d5f8a;
+  --display: "Newsreader", "Georgia", "Times New Roman", serif;
+  --body: "Newsreader", "Georgia", "Times New Roman", serif;
+  --label: "IBM Plex Sans Condensed", "Arial Narrow", "Helvetica Neue", Arial, sans-serif;
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+body { background: var(--paper); color: var(--ink); font-family: var(--body); font-size: 16px; line-height: 1.5; }
+.sheet { max-width: 1040px; margin: 0 auto; padding-block: 28px 40px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+a { color: var(--mint); text-underline-offset: 2px; }
+a:focus-visible { outline: 2px solid var(--mint); outline-offset: 2px; }
+
+/* Masthead */
+.masthead { border-bottom: 3px double var(--ink); padding-bottom: 10px; display: grid; gap: 6px; }
+.topline { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 16px; font-family: var(--label); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-soft); border-bottom: 1px solid var(--rule); padding-bottom: 6px; }
+.brand { display: flex; align-items: baseline; justify-content: center; gap: 14px; flex-wrap: wrap; }
+.brand h1 { font-family: var(--display); font-weight: 800; font-size: clamp(44px, 9vw, 92px); line-height: .95; letter-spacing: -.02em; margin: 6px 0 0; text-align: center; }
+.brand h1 span { color: var(--mint); }
+.tagline { text-align: center; font-style: italic; color: var(--ink-soft); font-size: 15px; margin: 0; }
+.editionbar { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 16px; font-family: var(--label); font-size: 12.5px; text-transform: uppercase; letter-spacing: .06em; border-top: 1px solid var(--ink); padding-top: 6px; }
+.pilot { background: var(--mint); color: var(--paper); padding: 1px 8px; font-weight: 600; }
+
+/* Kicker / labels */
+.kicker { font-family: var(--label); font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: .1em; color: var(--mint); }
+.impact { display: flex; flex-wrap: wrap; gap: 6px; margin: 10px 0 0; padding: 0; list-style: none; }
+.impact li { font-family: var(--label); font-size: 12px; font-weight: 500; border: 1px solid currentColor; padding: 1px 7px; white-space: nowrap; }
+.impact .up { color: var(--up); }
+.impact .down { color: var(--down); }
+.impact .flat { color: var(--ink-soft); }
+.why { margin: 10px 0 0; padding: 8px 10px; background: var(--mint-wash); font-size: 15px; }
+.why b { font-family: var(--label); font-size: 12px; text-transform: uppercase; letter-spacing: .08em; color: var(--mint); margin-right: 4px; }
+.src { font-family: var(--label); font-size: 12px; color: var(--ink-soft); margin: 8px 0 0; }
+
+/* Lead */
+.lead { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); gap: 28px; padding: 22px 0; border-bottom: 1px solid var(--ink); }
+.lead h2 { font-family: var(--display); font-weight: 800; font-size: clamp(30px, 4.6vw, 46px); line-height: 1.04; letter-spacing: -.01em; margin: 6px 0 12px; text-wrap: balance; }
+.lead .dek { font-size: 19px; line-height: 1.4; color: var(--ink-soft); margin: 0 0 12px; font-style: italic; }
+.lead p { margin: 0 0 10px; }
+.radar { border-left: 1px solid var(--rule); padding-left: 24px; min-width: 0; }
+.radar h3, .side h3, .col h3.section { font-family: var(--label); font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: .12em; margin: 0 0 10px; padding-bottom: 6px; border-bottom: 2px solid var(--ink); }
+.radar ol { margin: 0; padding: 0; list-style: none; display: grid; gap: 12px; counter-reset: r; }
+.radar li { counter-increment: r; display: grid; grid-template-columns: 26px minmax(0, 1fr); gap: 8px; font-size: 15px; line-height: 1.4; }
+.radar li::before { content: counter(r); font-family: var(--display); font-weight: 800; font-size: 24px; line-height: 1; color: var(--mint); }
+.arrow { font-family: var(--label); font-weight: 600; }
+.arrow.up { color: var(--up); }
+.arrow.down { color: var(--down); }
+
+/* Body grid */
+.body { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, .82fr); gap: 0 28px; padding-top: 20px; }
+.col { min-width: 0; display: grid; gap: 22px; align-content: start; }
+.col + .col { border-left: 1px solid var(--rule); padding-left: 28px; }
+article h4 { font-family: var(--display); font-weight: 600; font-size: 22px; line-height: 1.15; margin: 4px 0 8px; text-wrap: balance; }
+article p { margin: 0 0 8px; font-size: 15.5px; }
+article + article { border-top: 1px solid var(--rule); padding-top: 18px; }
+
+/* Data panel */
+.side { min-width: 0; border-left: 1px solid var(--rule); padding-left: 24px; display: grid; gap: 24px; align-content: start; }
+.panel { width: 100%; border-collapse: collapse; font-family: var(--label); font-size: 13.5px; font-variant-numeric: tabular-nums; }
+.panel th { text-align: left; font-weight: 500; padding: 7px 0; border-bottom: 1px solid var(--rule); vertical-align: top; }
+.panel th small { display: block; font-weight: 400; color: var(--ink-soft); font-size: 11.5px; }
+.panel td { text-align: right; padding: 7px 0 7px 8px; border-bottom: 1px solid var(--rule); font-weight: 600; white-space: nowrap; vertical-align: top; }
+.panel td small { display: block; font-weight: 400; color: var(--ink-soft); font-size: 11.5px; }
+.note { font-family: var(--label); font-size: 11.5px; color: var(--ink-soft); margin: 8px 0 0; line-height: 1.4; }
+.agenda { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.agenda li { display: grid; grid-template-columns: 62px minmax(0, 1fr); gap: 8px; font-size: 14.5px; line-height: 1.35; }
+.agenda time { font-family: var(--label); font-weight: 600; font-size: 12.5px; color: var(--mint); text-transform: uppercase; padding-top: 2px; }
+.box { background: var(--mint-wash); padding: 14px; }
+.box p { margin: 0; font-size: 14.5px; }
+
+footer { margin-top: 28px; border-top: 3px double var(--ink); padding-top: 10px; font-family: var(--label); font-size: 12px; color: var(--ink-soft); display: grid; gap: 4px; }
+
+@media screen and (max-width: 860px) {
+  .lead { grid-template-columns: minmax(0, 1fr); }
+  .radar { border-left: 0; padding-left: 0; }
+  .body { grid-template-columns: minmax(0, 1fr); gap: 22px; }
+  .col + .col, .side { border-left: 0; padding-left: 0; border-top: 1px solid var(--ink); padding-top: 20px; }
+}
+
+@media print {
+  @page { size: A4; margin: 9mm 10mm 9mm; }
+  body { font-size: 10pt; background: var(--paper); -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .sheet { max-width: none; padding: 0; }
+  .brand h1 { font-size: 38pt; }
+  .masthead { gap: 1.5mm; padding-bottom: 2mm; }
+  .agenda li { grid-template-columns: 11mm minmax(0, 1fr); }
+  .col, .side { gap: 3mm; }
+  .radar ol { gap: 2.5mm; }
+  .tagline { font-size: 10pt; }
+  .box { break-inside: avoid; }
+  .agenda, .side > div { display: block; }
+  .agenda li { margin-bottom: 2mm; }
+  .lead { grid-template-columns: 1.6fr 1fr; gap: 6mm; padding: 4mm 0; }
+  .lead h2 { font-size: 19pt; margin: 1mm 0 2mm; }
+  .lead .dek { font-size: 11pt; }
+  .radar { border-left: 1px solid var(--rule); padding-left: 5mm; }
+  .radar li { font-size: 9.5pt; }
+  .body { grid-template-columns: 1fr 1fr .82fr; gap: 0 5mm; padding-top: 4mm; }
+  .col + .col, .side { border-left: 1px solid var(--rule); padding-left: 5mm; border-top: 0; padding-top: 0; }
+  article h4 { font-size: 12pt; }
+  article p, .why, .agenda li, .box p, .lead p { font-size: 8.6pt; line-height: 1.36; }
+  .impact { margin-top: 2mm; gap: 3pt; }
+  .why { padding: 2mm 2.5mm; margin-top: 2mm; }
+  .src { margin-top: 1.5mm; }
+  article h4 { margin: 2pt 0 4pt; }
+  .col, .side { gap: 4mm; }
+  article + article { padding-top: 3mm; }
+  .src, .impact li, .note, .panel { font-size: 8pt; }
+  .panel { font-size: 8.5pt; }
+  article h4, .why, .impact, .panel tr, .agenda li { break-inside: avoid; }
+  article h4 { break-after: avoid; }
+  a { color: var(--ink); text-decoration: none; }
+  .panel th, .panel td { padding-block: 1.2mm; }
+  .radar li { font-size: 9pt; }
+  article p { margin-bottom: 1.5mm; }
+  .body { padding-top: 3mm; }
+  .lead { padding: 3mm 0; }
+  footer { margin-top: 3mm; padding-top: 1.5mm; font-size: 7.5pt; gap: 0; }
+  footer span + span { display: none; }
+}
+</style>
+
+<div class="sheet">
+  <header class="masthead">
+    <div class="topline">
+      <span>Inteligência de mercado · pneus · América do Sul</span>
+      <span>Uso interno</span>
+    </div>
+    <div class="brand"><h1>Mint <span>Newsletter</span></h1></div>
+    <p class="tagline">O que mexe em preço, produção, oferta e demanda de pneus, do seringal ao porto.</p>
+    <div class="editionbar">
+      <span><span class="pilot">Edição piloto</span> &nbsp;Nº 0</span>
+      <span>Semana de 13 a 20 de outubro de 2026</span>
+      <span>Terça-feira, 20 de outubro de 2026</span>
+    </div>
+  </header>
+
+  <section class="lead">
+    <div>
+      <div class="kicker">Geopolítica · Petróleo</div>
+      <h2>Ataques no Golfo levam o Brent de volta a US$ 110 e encarecem a borracha sintética e o negro de fumo</h2>
+      <p class="dek">O fluxo de petróleo do Golfo Pérsico caiu a menos da metade em duas semanas. O custo da indústria de pneus sobe mesmo para quem não compra nada do Oriente Médio.</p>
+      <p>O Brent chegou a US$ 110 por barril na sexta (16), a maior cotação desde maio, e oscilou entre US$ 107 e US$ 110 na segunda (19). Segundo a Kpler, citada pela Reuters, houve pelo menos 18 ataques a petroleiros em duas semanas. A saída média de petróleo do Golfo caiu para 8,5 milhões de barris por dia, contra mais de 20 milhões duas semanas antes. Os houthis do Iêmen voltaram a atacar instalações de energia na Arábia Saudita.</p>
+      <p>Na direção contrária, Trump assinou uma ordem que suspende sanções e tarifas sobre a Rússia previstas na Lei Graham. Isso pode ampliar a oferta de diesel russo e ajudou a segurar os preços na segunda-feira.</p>
+      <p class="why"><b>Impacto em pneu</b>Petróleo caro chega ao pneu por três caminhos: borracha sintética (butadieno, SBR), negro de fumo e frete. Também tira o incentivo para trocar borracha natural por sintética, o que sustenta a alta da natural.</p>
+      <ul class="impact">
+        <li class="up">↑ Custo de matéria-prima</li>
+        <li class="up">↑ Frete</li>
+        <li class="flat">Horizonte: 1–3 meses</li>
+        <li class="flat">Confiança: confirmado</li>
+      </ul>
+      <p class="src">Fontes: <a href="https://oilprice.com/Latest-Energy-News/World-News/Brent-Tops-110-as-Tanker-Attacks-Threaten-Persian-Gulf-Supply.html">OilPrice/Reuters, 19/10</a> · <a href="https://hdfcsky.com/news/brent-crude-oil-price-today-october-19-2026-brent-falls-1-9percent-to-107-8-wti-drops-1percent-to-100-4-as-trump-eases-russia-sanctions">HDFC Sky, 19/10</a></p>
+    </div>
+    <aside class="radar">
+      <h3>Radar da semana</h3>
+      <ol>
+        <li><span><span class="arrow up">↑ custo</span> Brent volta a US$ 110 com os ataques no Golfo Pérsico.</span></li>
+        <li><span><span class="arrow up">↑ custo</span> Borracha natural segue perto da máxima em dez anos. A TSR20 europeia sobe 68% em 12 meses.</span></li>
+        <li><span><span class="arrow up">↑ preço</span> Frete de contêiner atingiu o pico, mas deve seguir alto até o fim do ano.</span></li>
+        <li><span><span class="arrow up">↑ demanda</span> Anfavea tem o melhor setembro desde 2014 e eleva a projeção de 2026.</span></li>
+        <li><span><span class="arrow up">↑ risco</span> Subvenção ao diesel vence por volta de 24/10. Sem renovação, o frete rodoviário sobe.</span></li>
+      </ol>
+    </aside>
+  </section>
+
+  <div class="body">
+    <div class="col">
+      <h3 class="section">Matérias-primas</h3>
+      <article>
+        <div class="kicker">Borracha natural</div>
+        <h4>Borracha natural segue perto da máxima em dez anos, e a oferta asiática não ajuda</h4>
+        <p>Em setembro, os preços subiram 33% em 12 meses na Tailândia (STR20), 39% na Indonésia (SIR20), 34% na Malásia (SMR20) e 68% na TSR20 europeia, segundo o IRSG. Na quinta (15), a ANRPC cotou o SMR 20 a US$ 2,56/kg e o RSS3 de Bangkok a US$ 2,88/kg.</p>
+        <p>A ANRPC reduziu a previsão de produção mundial de 2026 para 15,04 milhões de toneladas, contra 15,28 milhões na estimativa anterior. O consumo deve continuar acima da produção. O El Niño em formação é um risco a mais para a colheita no Sudeste Asiático.</p>
+        <p class="why"><b>Impacto em pneu</b>A borracha natural é o principal insumo de pneus de carga. O custo maior chega primeiro aos fabricantes locais e depois aos preços de tabela.</p>
+        <ul class="impact"><li class="up">↑ Custo</li><li class="flat">Horizonte: imediato a 6 meses</li><li class="flat">Confirmado</li></ul>
+        <p class="src">Fontes: <a href="https://rubberworld.com/natural-rubber-prices-at-multi-year-highs/">Rubber World/IRSG, 07/10</a> · <a href="https://www.anrpc.org/anrpc-daily-price">ANRPC, preço diário</a> · <a href="https://www.european-rubber-journal.com/article/2099779/anrpc-cuts-2026-natural-rubber-supply-forecast">ERJ</a></p>
+      </article>
+      <article>
+        <div class="kicker">Sintéticos</div>
+        <h4>Borracha sintética deve subir até 15% em 2026, e o repasse maior fica para 2027</h4>
+        <p>A PricePedia prevê alta de 15,3% para a E-SBR em 2026 e de mais 10,9% em 2027. Para a borracha butadieno (BR), a previsão é de 7,9% e 10,7%.</p>
+        <p class="why"><b>Impacto em pneu</b>A maior parte do aumento deve chegar aos preços em 2027. Vale levar em conta no orçamento e nas negociações do próximo ano.</p>
+        <ul class="impact"><li class="up">↑ Custo</li><li class="flat">Horizonte: 6–12 meses</li><li class="flat">Projeção</li></ul>
+        <p class="src">Fonte: <a href="https://www.pricepedia.it/en/magazine/article/2026/10/19/elastomer-price-forecasts-for-2026-2027/">PricePedia, 19/10</a></p>
+      </article>
+
+      <h3 class="section">Logística</h3>
+      <article>
+        <div class="kicker">Frete marítimo</div>
+        <h4>Frete de contêiner passou do pico, mas não deve cair até dezembro</h4>
+        <p>Para a Xeneta, o pico da crise de Ormuz já passou, mas os embarcadores devem pagar fretes altos até o fim do ano. O índice WCI da Drewry estava em US$ 4.434 por contêiner de 40 pés em 1º de outubro. A Maersk cobra US$ 1.000 a mais por contêiner que passa pelo estreito.</p>
+        <p>Na rota Ásia–Brasil, a Abidip relatou em setembro cotações de US$ 8.000 a US$ 9.500 por contêiner de 40 pés, contra cerca de US$ 3.000 antes da crise.</p>
+        <p class="why"><b>Impacto em pneu</b>Com cerca de 71% da reposição abastecida por importados, frete alto vai direto para o preço na prateleira. Isso diminui a vantagem de preço do pneu asiático sobre o nacional.</p>
+        <ul class="impact"><li class="up">↑ Preço do importado</li><li class="flat">Horizonte: até dez/26</li><li class="flat">Confirmado</li></ul>
+        <p class="src">Fontes: <a href="https://wwd.com/sourcing-journal/logistics/strait-of-hormuz-freight-rates-peaked-iran-war-xeneta-container-shipping-oil-1239320306/">Sourcing Journal/Xeneta</a> · <a href="https://timesbrasil.com.br/empresas-e-negocios/petroquimicos/pneus-alta-precos-frete-tarifas-importacao/">Times Brasil/Abidip, 09/09</a></p>
+      </article>
+    </div>
+
+    <div class="col">
+      <h3 class="section">Brasil</h3>
+      <article>
+        <div class="kicker">Política comercial</div>
+        <h4>Importados já têm 71% da reposição, e governo deve analisar alta da tarifa</h4>
+        <p>Segundo a ANIP, os importados tiveram 71% do mercado de reposição no 1º semestre de 2026. Em 2021, essa fatia era de 36%. As importações cresceram 81,2%, e as vendas das fábricas instaladas no país caíram 6,8%, para 17,8 milhões de unidades. Nos pneus de carga, os importados já têm 73% da reposição.</p>
+        <p>A indústria pede que a tarifa de importação de pneus de passeio suba de 25% para 35% e que volte o licenciamento não automático. O tema deve voltar à pauta do governo em outubro. Seguem abertas a revisão do antidumping sobre pneus de carga radiais (Circular SECEX nº 20/2026) e uma investigação sobre pneus agrícolas (Circular SECEX nº 30/2026).</p>
+        <p class="why"><b>Impacto em pneu</b>Se a tarifa subir, o importado fica mais caro e os fabricantes locais podem aumentar preços. Ainda não há decisão nem data marcada.</p>
+        <ul class="impact"><li class="up">↑ Preço (se aprovado)</li><li class="flat">Horizonte: 1–6 meses</li><li class="flat">Em análise</li></ul>
+        <p class="src">Fontes: <a href="https://www.carrosegaragem.com.br/pneus-importados-em-alta/">Carros&amp;Garagem/ANIP</a> · <a href="https://www.cnnbrasil.com.br/auto/dependencia-de-pneus-importados-deixa-frota-do-brasil-em-risco-diz-anip/">CNN Brasil</a> · <a href="https://www.legisweb.com.br/legislacao/?id=492816">Circular SECEX 20/2026</a></p>
+      </article>
+      <article>
+        <div class="kicker">Demanda · Montadoras</div>
+        <h4>Montadoras têm o melhor setembro desde 2014, mas a venda de caminhões cai</h4>
+        <p>Foram produzidos 268,3 mil veículos em setembro, alta de 10,2% em 12 meses, e emplacados 281,4 mil. A Anfavea elevou a projeção de 2026: 3,1 milhões de emplacamentos (+15,2%) e produção 6,7% maior, a melhor desde 2019. Já os emplacamentos de caminhões e ônibus devem cair 6,5%, e as exportações, 17,7%. A queda das exportações vem quase toda da Argentina.</p>
+        <p class="why"><b>Impacto em pneu</b>Mais demanda das montadoras por pneus de passeio e comerciais leves e menos por pneus de carga.</p>
+        <ul class="impact"><li class="up">↑ Demanda passeio</li><li class="down">↓ Demanda carga</li><li class="flat">Confirmado</li></ul>
+        <p class="src">Fonte: <a href="https://agenciabrasil.ebc.com.br/economia/noticia/2026-10/producao-de-veiculos-tem-melhor-setembro-desde-2014-diz-anfavea">Agência Brasil/Anfavea, 07/10</a></p>
+      </article>
+      <article>
+        <div class="kicker">Diesel</div>
+        <h4>Subvenção ao diesel vence nesta semana, com o petróleo em alta</h4>
+        <p>A subvenção federal de R$ 2,12 por litro foi prorrogada em 24 de setembro por mais 30 dias. Ela segura o preço nas bombas apesar do reajuste da Petrobras. No começo de outubro, a Abicom calculou que o diesel da estatal estava 100% abaixo do preço de importação.</p>
+        <p class="why"><b>Impacto em pneu</b>Diesel mais caro encarece o frete e leva transportadoras a adiar a troca de pneus e a recapar mais.</p>
+        <ul class="impact"><li class="up">↑ Custo logístico</li><li class="down">↓ Demanda carga (novo)</li><li class="flat">A confirmar</li></ul>
+        <p class="src">Fontes: <a href="https://www.brasilemfolhas.com.br/2026/09/petrobras-evita-novo-reajuste-no-diesel-apos-prorrogacao-de-subvencao/">Brasil em Folhas</a> · <a href="https://clickpetroleoegas.com.br/diesel-da-petrobras-diferenca-para-o-preco-de-importacao-cai-de-r-3-67-para-r-3-27-por-litro-em-um-dia-diz-abicom-e-defasagem-recua-a-100-btl96/">CPG/Abicom</a></p>
+      </article>
+    </div>
+
+    <aside class="side">
+      <div>
+        <h3>Painel</h3>
+        <table class="panel">
+          <tbody>
+            <tr><th>Brent<small>US$/barril</small></th><td>~108–110<small>19/10</small></td></tr>
+            <tr><th>Borracha SMR 20<small>US$/kg · ANRPC</small></th><td>2,56<small>15/10</small></td></tr>
+            <tr><th>Borracha RSS3 (BKK)<small>US$/kg · ANRPC</small></th><td>2,88<small>15/10</small></td></tr>
+            <tr><th>Dólar comercial<small>R$ · Cepea</small></th><td>5,05<small>19/10</small></td></tr>
+            <tr><th>Frete Drewry WCI<small>US$/contêiner 40 pés</small></th><td>4.434<small>01/10</small></td></tr>
+            <tr><th>Selic<small>% a.a. · Copom</small></th><td>13,75<small>set/26</small></td></tr>
+          </tbody>
+        </table>
+        <p class="note">Edição piloto: os valores vêm da fonte citada na data indicada. A variação semanal entra quando a coleta automática estiver pronta.</p>
+      </div>
+
+      <div>
+        <h3>América do Sul</h3>
+        <article>
+          <div class="kicker">Argentina</div>
+          <h4>Argentina bate recorde de pneus importados após corte de tarifa</h4>
+          <p>O país importou 762,5 mil pneus de passeio e camionetas em julho, um recorde. A tarifa de importação caiu de 35% para 16% em setembro de 2025. Cerca de 75% do mercado já é importado, e a Fate, única fabricante de capital nacional, fechou.</p>
+          <p class="why"><b>Impacto</b>O Brasil perde espaço no maior destino de suas exportações de pneus e veículos.</p>
+          <p class="src">Fontes: <a href="https://www.infobae.com/economia/2026/08/16/en-julio-se-registro-el-record-de-importacion-de-neumaticos-cuantos-entraron-al-mercado-y-quienes-lideran-el-ranking/">Infobae, 16/08</a> · <a href="https://tradenews.com.ar/gracias-a-la-baja-de-aranceles-de-35-a-16-las-importaciones-de-neumaticos-fueron-record/">Trade News</a></p>
+        </article>
+        <article>
+          <div class="kicker">Chile · Mineração</div>
+          <h4>Chile exige reciclar 75% dos pneus de mineração a partir de 2027</h4>
+          <p>A Lei REP chilena fixa metas para pneus fora de estrada de aro 45" ou maior: 75% recolhidos e reaproveitados a partir de 2027 e 100% até 2030. Levar os pneus das minas do norte até a reciclagem ainda é o maior obstáculo.</p>
+          <p class="src">Fonte: <a href="https://www.reporteminero.cl/noticia/noticias/2026/09/neumaticos-otr-mineros-telemetria-tpms-cuello-botella-ley-rep">Reporte Minero, set/26</a></p>
+        </article>
+      </div>
+
+      <div>
+        <h3>No radar</h3>
+        <ul class="agenda">
+          <li><time>~24/10</time><span>Fim da subvenção ao diesel: renovação ou reajuste</span></li>
+          <li><time>Out</time><span>Governo analisa o pedido de tarifa de 35% para pneus de passeio</span></li>
+          <li><time>3–4/11</time><span>Copom: decisão sobre a Selic</span></li>
+          <li><time>Início nov</time><span>Anfavea divulga os números de outubro</span></li>
+          <li><time>30/12</time><span>Regra europeia antidesmatamento (<a href="https://taxnews.ey.com/news/2026-0237-eu-deforestation-regulation-application-postponed-to-30-december-2026">EUDR</a>) passa a valer para a borracha</span></li>
+        </ul>
+      </div>
+
+    </aside>
+  </div>
+
+  <footer>
+    <span>Mint Newsletter · Edição piloto nº 0 · produzida com Claude a partir de fontes públicas. Cada informação traz link para a fonte original.</span>
+    <span>As setas indicam a direção provável do efeito sobre o mercado de pneus. Confira a fonte antes de usar um número em uma decisão.</span>
+  </footer>
+</div>

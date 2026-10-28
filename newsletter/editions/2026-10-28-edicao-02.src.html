@@ -1,0 +1,739 @@
+<title>Mint Newsletter nº 2</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300..700&family=Inter+Tight:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+/* Layout: capa de jornal com cards de indicadores e de notícias (imagem em cima, chamada embaixo) que abrem a matéria;
+   cada matéria é uma "página" própria (#m1..#m6). Design system IM v1 do hub de Inteligência de Mercado. */
+:root {
+  --bg: #f7f4ee; --surface: #efebe3; --fg: #1b1a18; --muted: #6e6a62; --rule: #1b1a18;
+  --line: rgba(27,26,24,.14); --grid: rgba(27,26,24,.10); --accent: #c8452c;
+  --up: #2f7d55; --down: #b8432f; --warn: #b07a1f;
+  --up-wash: rgba(47,125,85,.12); --down-wash: rgba(184,67,47,.12); --neu-wash: rgba(27,26,24,.06);
+  --s1: #2a62a0; --s4: #b07a1f;
+  --serif: "Fraunces", Georgia, "Times New Roman", serif;
+  --sans: "Inter Tight", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #161514; --surface: #1f1d1b; --fg: #ece8e1; --muted: #9a958c; --rule: #ece8e1;
+  --line: rgba(236,232,225,.14); --grid: rgba(236,232,225,.09); --accent: #e0603f;
+  --up: #6cbf8f; --down: #e5785f; --warn: #d9a441;
+  --up-wash: rgba(108,191,143,.14); --down-wash: rgba(229,120,95,.14); --neu-wash: rgba(236,232,225,.07);
+  --s1: #5a8fd0; --s4: #d9a441; color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --bg: #161514; --surface: #1f1d1b; --fg: #ece8e1; --muted: #9a958c; --rule: #ece8e1;
+  --line: rgba(236,232,225,.14); --grid: rgba(236,232,225,.09); --accent: #e0603f;
+  --up: #6cbf8f; --down: #e5785f; --warn: #d9a441;
+  --up-wash: rgba(108,191,143,.14); --down-wash: rgba(229,120,95,.14); --neu-wash: rgba(236,232,225,.07);
+  --s1: #5a8fd0; --s4: #d9a441; color-scheme: dark; }
+
+body { background: var(--bg); color: var(--fg); font: 15px/1.55 var(--sans); -webkit-font-smoothing: antialiased; }
+.np { max-width: 1180px; margin: 0 auto; padding-block: 18px 48px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+a { color: inherit; }
+a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+/* barra e cabeçalho */
+.bar { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 4px 16px;
+  padding-bottom: 8px; border-bottom: 1px solid var(--rule); font: 600 11px/1.3 var(--sans); letter-spacing: .14em; text-transform: uppercase; }
+.bar b { color: var(--accent); font-weight: 600; }
+.bar span { color: var(--muted); }
+.bar-r { display: inline-flex; flex-wrap: wrap; align-items: baseline; gap: 4px 14px; }
+.pdf-btn { font: 600 11px/1 var(--sans); letter-spacing: .14em; text-transform: uppercase; color: var(--bg); background: var(--accent);
+  border: 0; padding: 7px 11px; cursor: pointer; }
+.pdf-btn:hover { filter: brightness(1.08); }
+.pdf-btn:focus-visible { outline: 2px solid var(--fg); outline-offset: 2px; }
+.pdf-btn[disabled] { opacity: .6; cursor: progress; }
+.bar .pdf-msg { color: var(--fg); letter-spacing: .04em; text-transform: none; font-weight: 500; }
+.mast { display: grid; justify-items: center; text-align: center; gap: 6px; padding: 22px 0 16px; border-bottom: 3px double var(--rule); }
+.mast .name { margin: 0; font: 400 clamp(44px, 8vw, 96px)/.9 var(--serif); font-variation-settings: "opsz" 144; letter-spacing: -.04em; }
+.mast .name em { font-style: italic; font-weight: 300; color: var(--accent); }
+.mast .meta { display: flex; flex-wrap: wrap; justify-content: center; gap: 2px 18px; font: 500 12px var(--mono); color: var(--muted); }
+
+.lead { display: grid; gap: 8px; padding: 26px 0 22px; max-width: 54rem; }
+.kicker { font: 600 11px/1.2 var(--sans); letter-spacing: .16em; text-transform: uppercase; color: var(--accent); }
+.lead h2 { margin: 0; font: 400 clamp(34px, 5.4vw, 62px)/1 var(--serif); font-variation-settings: "opsz" 144; letter-spacing: -.03em; text-wrap: balance; }
+.lead h2 em { font-style: italic; font-weight: 300; color: var(--accent); }
+.lead p { margin: 0; font: 400 clamp(17px, 2vw, 20px)/1.4 var(--serif); font-variation-settings: "opsz" 24; max-width: 46rem; text-wrap: pretty; }
+
+/* cards da capa */
+.cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 30px 26px; padding-top: 4px; }
+.card { display: grid; grid-template-rows: auto auto auto 1fr; gap: 8px; text-decoration: none; min-width: 0; }
+.card .img { display: block; aspect-ratio: 16 / 9; max-width: 100%; background: var(--surface); border-top: 2px solid var(--rule);
+  padding: 10px 10px 4px; position: relative; }
+.card .img::before { content: ""; position: absolute; left: 0; top: -2px; width: 56px; height: 2px; background: var(--accent); }
+.card .img svg { width: 100%; height: 100%; }
+.card h3 { margin: 0; font: 500 21px/1.15 var(--serif); font-variation-settings: "opsz" 48; letter-spacing: -.01em; text-wrap: balance; }
+.card p { margin: 0; font-size: 14px; color: var(--muted); line-height: 1.45; }
+.card:hover h3 { text-decoration: underline; text-decoration-color: var(--accent); text-underline-offset: 4px; text-decoration-thickness: 2px; }
+.card .ler { font: 600 11px var(--sans); letter-spacing: .12em; text-transform: uppercase; color: var(--accent); align-self: end; }
+
+/* painel e agenda na capa */
+.below { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); gap: 26px; margin-top: 36px; padding-top: 14px; border-top: 1px solid var(--rule); }
+.label { font: 600 10.5px/1.3 var(--sans); letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin: 0 0 8px; }
+.kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 9.5rem), 1fr)); border-block: 1px solid var(--line); }
+.kpi { display: grid; gap: 2px; padding: 10px 14px 10px 0; min-width: 0; }
+.kpi b { font: 400 30px/1.05 var(--serif); font-variation-settings: "opsz" 144; letter-spacing: -.02em; font-variant-numeric: lining-nums tabular-nums; }
+.kpi span { font: 500 11.5px/1.35 var(--mono); color: var(--muted); }
+.agenda { margin: 0; padding: 0; list-style: none; display: grid; font-size: 13.5px; }
+.agenda li { display: grid; grid-template-columns: 5.2rem 1fr; gap: 10px; padding: 6px 0; border-bottom: 1px solid var(--line); }
+.agenda time { font: 500 12px var(--mono); color: var(--accent); padding-top: 1px; }
+
+/* matéria */
+.materia { display: grid; gap: 18px; padding-top: 18px; }
+.back { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; font: 600 12px var(--sans); letter-spacing: .1em; text-transform: uppercase; }
+.back a { color: var(--accent); text-decoration: none; }
+.back a:hover { text-decoration: underline; text-underline-offset: 4px; }
+.materia header { display: grid; gap: 10px; max-width: 52rem; padding-bottom: 6px; }
+.materia h2 { margin: 0; font: 400 clamp(32px, 5vw, 54px)/1.02 var(--serif); font-variation-settings: "opsz" 144; letter-spacing: -.03em; text-wrap: balance; }
+.materia .dek { margin: 0; font: 400 19px/1.4 var(--serif); font-variation-settings: "opsz" 24; text-wrap: pretty; }
+.fig { margin: 0; display: grid; gap: 6px; border-top: 2px solid var(--rule); padding-top: 12px; position: relative; }
+.fig::before { content: ""; position: absolute; left: 0; top: -2px; width: 56px; height: 2px; background: var(--accent); }
+.fig svg { width: 100%; height: auto; max-height: 440px; }
+.fig figcaption { font: 500 11.5px/1.45 var(--mono); color: var(--muted); }
+.body { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 34px; align-items: start; }
+.texto { display: grid; gap: 14px; max-width: 64ch; }
+.texto h4, .side h4 { margin: 0; font: 600 10.5px/1.3 var(--sans); letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+.texto p { margin: 0; font: 400 16.5px/1.6 var(--serif); font-variation-settings: "opsz" 18; }
+.texto p strong { font-weight: 600; }
+.side { display: grid; gap: 18px; min-width: 0; }
+.tw { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font: 500 12.5px/1.4 var(--mono); font-variant-numeric: tabular-nums; }
+td { padding: 7px 0; border-bottom: 1px solid var(--line); vertical-align: top; }
+td:last-child { text-align: right; padding-left: 12px; white-space: nowrap; }
+td small { display: block; color: var(--muted); font-size: 11px; }
+.semana { margin: 0; padding: 0; list-style: none; display: grid; gap: 8px; font-size: 14px; }
+.semana li { padding-left: 12px; border-left: 2px solid var(--accent); }
+.conf { display: inline-flex; flex-wrap: wrap; gap: 6px; }
+.chip { font: 600 10px/1 var(--sans); letter-spacing: .1em; text-transform: uppercase; padding: 5px 7px; border: 1px solid currentColor; }
+.chip.ok { color: var(--up); } .chip.prov { color: var(--warn); } .chip.hip { color: var(--muted); border-style: dashed; }
+.fontes { margin: 0; padding: 0; list-style: none; font: 500 12px/1.5 var(--mono); color: var(--muted); display: grid; gap: 3px; }
+.fontes a { color: var(--muted); text-underline-offset: 3px; }
+.nav { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; padding-top: 14px; border-top: 3px double var(--rule); font: 500 15px var(--serif); }
+.nav a { text-decoration: none; max-width: 48%; }
+.nav a span { display: block; font: 600 10.5px var(--sans); letter-spacing: .14em; text-transform: uppercase; color: var(--accent); }
+
+.foot { margin-top: 34px; padding-top: 12px; border-top: 3px double var(--rule); display: grid; gap: 6px; font: 500 11.5px/1.5 var(--mono); color: var(--muted); }
+.foot a { color: var(--muted); }
+
+/* gráficos (classes usadas pelos SVG de newsletter/charts.py) */
+svg .c-grid { stroke: var(--grid); stroke-width: 1; }
+svg .c-zero { stroke: var(--muted); stroke-width: 1.2; }
+svg .c-tick { fill: var(--muted); font: 500 12px var(--mono); }
+svg .c-end { font: 500 13px var(--mono); }
+svg .c-strong { font-weight: 600; }
+svg .c-val { fill: var(--fg); font: 500 11px var(--mono); }
+svg .c-bar-up { fill: var(--s4); }
+svg .c-bar-dn { fill: var(--down); }
+svg .c-chip { stroke: none; }
+svg .c-fav { fill: var(--up-wash); } svg .c-neu { fill: var(--neu-wash); } svg .c-desf { fill: var(--down-wash); }
+svg .c-chip-l { fill: var(--fg); font: 600 16px var(--sans); }
+svg .c-chip-v { font: 500 15px var(--mono); }
+svg .c-fav-t { fill: var(--up); } svg .c-neu-t { fill: var(--muted); } svg .c-desf-t { fill: var(--down); }
+
+/* uma "página" por vez na tela; o PDF imprime todas */
+@media screen { .view:not(.on) { display: none; } }
+@media screen and (max-width: 900px) { .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); } .body, .below { grid-template-columns: 1fr; } }
+@media screen and (max-width: 560px) { .cards { grid-template-columns: 1fr; } .card h3 { font-size: 20px; } .nav a { max-width: 100%; } }
+@media (prefers-reduced-motion: no-preference) { .view.on { animation: rise .5s cubic-bezier(.3,.8,.25,1) both; } }
+@keyframes rise { from { opacity: .4; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+@page { size: A4; margin: 10mm 11mm; }
+@media print {
+  body { font-size: 10pt; }
+  .np { max-width: none; padding: 0; }
+  .materia { break-before: page; gap: 10px; padding-top: 0; }
+  .mast { padding: 10px 0 8px; } .mast .name { font-size: 54pt; }
+  .lead { padding: 10px 0 8px; gap: 4px; } .lead h2 { font-size: 28pt; } .lead p { font-size: 11.5pt; }
+  .cards { gap: 12px 16px; } .card { gap: 4px; } .card h3 { font-size: 13.5pt; } .card p { font-size: 9pt; } .card .ler { display: none; }
+  .below { margin-top: 10px; gap: 14px; grid-template-columns: 1.5fr 1fr; } .kpis { grid-template-columns: repeat(3, 1fr); } .kpi { padding: 5px 8px 5px 0; } .kpi b { font-size: 15pt; } .kpi span { font-size: 7pt; } .agenda { font-size: 8pt; } .agenda li { padding: 2px 0; grid-template-columns: 4.6rem 1fr; } .agenda time { font-size: 7.5pt; }
+  .materia h2 { font-size: 24pt; } .materia .dek { font-size: 11.5pt; } .materia header { gap: 4px; }
+  .fig svg { max-height: 70mm; } .body { grid-template-columns: 1.25fr 1fr; gap: 18px; }
+  .texto p { font-size: 10pt; line-height: 1.45; } .texto { gap: 8px; }
+  table { font-size: 8pt; } td { padding: 2px 0; } td small { font-size: 7pt; } .side { gap: 9px; } .semana { font-size: 9pt; } .fontes { font-size: 8pt; }
+  .back, .nav, .pdf-btn, .pdf-msg { display: none !important; }
+  .foot { margin-top: 12px; font-size: 7.5pt; }
+  a { text-decoration: none; }
+}
+
+/* edição 2: seção de indicadores */
+.sec-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 4px 18px;
+  margin: 34px 0 14px; padding-top: 10px; border-top: 1px solid var(--rule); }
+.sec-head h3 { margin: 0; font: 400 clamp(24px, 3vw, 32px)/1.1 var(--serif); font-variation-settings: "opsz" 72; letter-spacing: -.02em; }
+.sec-head p { margin: 0; font: 500 12px/1.45 var(--mono); color: var(--muted); max-width: 46rem; }
+.sec-head:first-of-type { margin-top: 8px; }
+.ind td { vertical-align: top; }
+.ind td.v { text-align: right; white-space: normal; }
+.ind td.v b { font-weight: 600; display: block; }
+.ind td.v span { display: block; color: var(--muted); font-size: 11px; }
+.notas { margin: 0; padding: 0 0 0 16px; display: grid; gap: 4px; font-size: 13px; color: var(--muted); line-height: 1.45; }
+.novo { font: 600 9.5px/1 var(--sans); letter-spacing: .12em; text-transform: uppercase; color: var(--bg); background: var(--accent); padding: 3px 5px; margin-left: 6px; vertical-align: 2px; }
+svg .c-hbar-up { fill: var(--up); }
+svg .c-hbar-dn { fill: var(--down); }
+svg .c-hlabel { fill: var(--fg); font: 500 17px var(--sans); }
+svg .c-hval { fill: var(--fg); font: 600 16px var(--mono); }
+svg .c-big { fill: var(--accent); font: 400 104px var(--serif); font-variation-settings: "opsz" 144; letter-spacing: -.03em; }
+svg .c-cap { fill: var(--fg); font: 500 21px var(--sans); }
+.fontes-lista { margin: 4px 0 0; padding: 0 0 0 16px; display: grid; gap: 3px; }
+.fontes-lista a { word-break: break-all; }
+@media print {
+  .sec-head { margin: 10px 0 8px; padding-top: 6px; } .sec-head h3 { font-size: 15pt; } .sec-head p { font-size: 7.5pt; }
+  .notas { font-size: 8pt; gap: 1px; } .ind td.v span { font-size: 7pt; }
+  .foot { break-before: page; font-size: 7.5pt; }
+  .sec-news { break-before: page; }
+}
+</style>
+
+<div class="np">
+  <div class="bar"><span><b>Inteligência de Mercado</b> · MINT</span><span class="bar-r"><span>Pneus · Brasil e América do Sul</span><button type="button" class="pdf-btn" id="pdf-btn" hidden>Baixar PDF</button><span class="pdf-msg" id="pdf-msg" role="status"></span></span></div>
+
+  <!-- ===================== CAPA ===================== -->
+  <section class="view capa" id="capa">
+    <header class="mast">
+      <h1 class="name">Mint <em>Newsletter</em></h1>
+      <div class="meta"><span>Edição nº 2</span><span>Quarta-feira, 28 de outubro de 2026</span><span>Indicadores de outubro/2026</span></div>
+    </header>
+
+    <div class="lead">
+      <span class="kicker">A tese do mês</span>
+      <h2>A estrada segue cheia; <em>ônibus e adubo</em> freiam</h2>
+      <p>A produção de caminhões pesados sobe 16,1% e o diesel 1,9% na comparação anual, enquanto a produção de ônibus cai 48,9% e as entregas de fertilizantes, 22,3%. Para o pneu, a carga segue firme; o ônibus e o agro pedem cautela.</p>
+    </div>
+
+    <div class="sec-head">
+      <h3>Seção de Indicadores · outubro/2026</h3>
+      <p>Resumo atualizado em 28/10/2026 com dados das fontes oficiais. Primeira geração do resumo: nenhum indicador está marcado como novo nesta edição.</p>
+    </div>
+    <nav class="cards" aria-label="Indicadores do mês">
+      <a class="card" href="#i1">
+        <span class="img"><!--chart:atividade--></span>
+        <span class="kicker">Atividade econômica</span>
+        <h3>Indústria e serviços crescem em valor; o agro recua</h3>
+        <p>Produção industrial −0,9% a/a em agosto; varejo +4,3%.</p>
+        <span class="ler">Ver indicadores →</span>
+      </a>
+      <a class="card" href="#i2">
+        <span class="img"><!--chart:precos--></span>
+        <span class="kicker">Preços</span>
+        <h3>IPCA de 0,82% em setembro; mercado vê 5,19% em 2026</h3>
+        <p>Em 12 meses, a inflação está em 4,58%.</p>
+        <span class="ler">Ver indicadores →</span>
+      </a>
+      <a class="card" href="#i3">
+        <span class="img"><!--chart:confianca--></span>
+        <span class="kicker">Confiança e consumo</span>
+        <h3>Famílias ainda dispostas a consumir; indústria perde ritmo</h3>
+        <p>ICF em 103,6 pontos; NUCI da indústria cai 1,4 p.p. no mês.</p>
+        <span class="ler">Ver indicadores →</span>
+      </a>
+      <a class="card" href="#i4">
+        <span class="img"><!--chart:transporte--></span>
+        <span class="kicker">Transporte e mobilidade</span>
+        <h3>Caminhão pesado acelera, ônibus despenca</h3>
+        <p>Pesados +16,1% a/a, ônibus −48,9%; etanol +21,1%.</p>
+        <span class="ler">Ver indicadores →</span>
+      </a>
+      <a class="card" href="#i5">
+        <span class="img"><!--chart:agro--></span>
+        <span class="kicker">Agro</span>
+        <h3>O campo compra menos adubo e projeta safra maior</h3>
+        <p>Fertilizantes −22,3% a/a em julho; grãos +1,5% em 2026/27.</p>
+        <span class="ler">Ver indicadores →</span>
+      </a>
+      <a class="card" href="#i6">
+        <span class="img"><!--chart:infra--></span>
+        <span class="kicker">Infraestrutura e internacional</span>
+        <h3>Produção de asfalto sobe 11% em um ano</h3>
+        <p>245.440 m³ em agosto; PIB per capita de 23,43 mil US$ (PPP).</p>
+        <span class="ler">Ver indicadores →</span>
+      </a>
+    </nav>
+
+    <div class="sec-head sec-news">
+      <h3>Na semana</h3>
+      <p>Notícias de 23 a 28/10 que mexem com o mercado de pneus, cruzadas com os indicadores acima.</p>
+    </div>
+    <nav class="cards" aria-label="Notícias da semana">
+      <a class="card" href="#n1">
+        <span class="img"><!--chart:n_diesel--></span>
+        <span class="kicker">Diesel</span>
+        <h3>Governo renova a subvenção ao diesel por mais 30 dias</h3>
+        <p>Alívio para o frete, que sustenta a reposição de pneus de carga.</p>
+        <span class="ler">Ler a análise →</span>
+      </a>
+      <a class="card" href="#n2">
+        <span class="img"><!--chart:n_brent--></span>
+        <span class="kicker">Guerra e petróleo</span>
+        <h3>Brent recua com conversas de paz, mas Ormuz segue sob ataque</h3>
+        <p>Petróleo perto de US$ 115 em 27/10.</p>
+        <span class="ler">Ler a análise →</span>
+      </a>
+      <a class="card" href="#n3">
+        <span class="img"><!--chart:n_borracha--></span>
+        <span class="kicker">Matéria-prima</span>
+        <h3>Borracha natural na máxima em dez anos</h3>
+        <p>Custo do pneu sobe enquanto a demanda de carga cresce.</p>
+        <span class="ler">Ler a análise →</span>
+      </a>
+    </nav>
+
+    <div class="below">
+      <div>
+        <p class="label">Painel do mês</p>
+        <div class="kpis">
+          <div class="kpi"><b>0,82%</b><span>IPCA, set/2026 (IBGE)</span></div>
+          <div class="kpi"><b>5,19%</b><span>Focus, IPCA 2026 (boletim de 23/10)</span></div>
+          <div class="kpi"><b>103,6</b><span>ICF, out/2026 (CNC)</span></div>
+          <div class="kpi"><b>91,0</b><span>Confiança da indústria, out/2026 (FGV IBRE)</span></div>
+          <div class="kpi"><b>174,4</b><span>Fluxo pedagiado, set/2026 (ABCR, 1999=100)</span></div>
+        </div>
+      </div>
+      <div>
+        <p class="label">No radar</p>
+        <ul class="agenda">
+          <li><time>fim de out</time><span>Gecex analisa o pedido da ANIP de tarifa de 35% para pneus</span></li>
+          <li><time>3–4/11</time><span>Copom</span></li>
+          <li><time>~6–8/11</time><span>ANFAVEA de outubro</span></li>
+          <li><time>~10/11</time><span>IPCA de outubro e ABCR de outubro</span></li>
+          <li><time>nov</time><span>CONAB: 2º levantamento de grãos e 3º de cana</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== I1 · ATIVIDADE ===================== -->
+  <article class="view materia" id="i1">
+    <div class="back"><a href="#capa">← Capa</a><span class="kicker">Indicadores 1 de 6 · Atividade econômica</span></div>
+    <header>
+      <h2>Indústria e serviços crescem em valor; o agro recua</h2>
+      <p class="dek">No PIB do 2º trimestre a preços correntes, a indústria sobe 9,7% e os serviços 8,0%, enquanto a agropecuária cai 18,8%. Em volume, a produção industrial de agosto fica 0,9% abaixo de um ano antes.</p>
+    </header>
+    <figure class="fig">
+      <!--chart:atividade-->
+      <figcaption>Variação sobre o mesmo período do ano anterior, %. PIB: 2º tri/2026, valores correntes (variação nominal). Produção industrial, serviços e varejo: ago/2026. Fonte: IBGE.</figcaption>
+    </figure>
+    <div class="body">
+      <div class="texto">
+        <h4>Leitura</h4>
+        <p>O PIB do 2º trimestre a preços correntes mostra a indústria em R$ 706.134 milhões (+9,7% a/a) e os serviços em R$ 2.027.144 milhões (+8,0%). A agropecuária, com R$ 204.591 milhões, cai 18,8%. São variações nominais: incluem preço e não medem crescimento real.</p>
+        <p>Os indicadores mensais de volume mostram uma economia de lado. A produção industrial ficou em 112,0 pontos em agosto, 0,9% abaixo de agosto de 2025, com alta de 0,8% no acumulado do ano. O volume de serviços subiu 0,6% no ano contra ano (1,7% no acumulado). O varejo cresce 4,3% em receita nominal (4,8% no ano), número que também inclui inflação.</p>
+        <p>Para o pneu, a produção industrial é a base da carga que roda nas estradas. Com ela praticamente parada, a demanda de reposição de carga depende mais do agro e do consumo do que da indústria.</p>
+      </div>
+      <aside class="side">
+        <div>
+          <h4>Os números</h4>
+          <div class="tw"><table class="ind">
+            <tr><td>PIB, agropecuária<small>2º tri/2026 · IBGE</small></td><td class="v"><b>204.591 R$ mi</b><span>−18,8% a/a</span></td></tr>
+            <tr><td>PIB, indústria<small>2º tri/2026 · IBGE</small></td><td class="v"><b>706.134 R$ mi</b><span>+9,7% a/a</span></td></tr>
+            <tr><td>PIB, serviços<small>2º tri/2026 · IBGE</small></td><td class="v"><b>2.027.144 R$ mi</b><span>+8,0% a/a</span></td></tr>
+            <tr><td>Produção industrial<small>ago/2026 · IBGE</small></td><td class="v"><b>112,0 (2022=100)</b><span>−0,9% a/a; acum. no ano 0,8%</span></td></tr>
+            <tr><td>Volume de serviços<small>ago/2026 · IBGE</small></td><td class="v"><b>111,3 (2022=100)</b><span>+0,6% a/a; acum. no ano 1,7%</span></td></tr>
+            <tr><td>Varejo, receita nominal<small>ago/2026 · IBGE</small></td><td class="v"><b>124,6 (2022=100)</b><span>+4,3% a/a; acum. no ano 4,8%</span></td></tr>
+          </table></div>
+        </div>
+        <div>
+          <h4>Notas</h4>
+          <ul class="notas">
+            <li>PIB a preços correntes: a variação é nominal, não descontada a inflação.</li>
+            <li>Varejo em receita nominal, sem desconto da inflação.</li>
+            <li>O IBGE revisa meses anteriores; vale o dado da última extração.</li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+    <nav class="nav"><a href="#capa"><span>← Voltar</span>Capa</a><a href="#i2" style="text-align:right"><span>Próxima →</span>Preços</a></nav>
+  </article>
+
+  <!-- ===================== I2 · PREÇOS ===================== -->
+  <article class="view materia" id="i2">
+    <div class="back"><a href="#capa">← Capa</a><span class="kicker">Indicadores 2 de 6 · Preços</span></div>
+    <header>
+      <h2>IPCA de 0,82% em setembro; mercado vê 5,19% em 2026</h2>
+      <p class="dek">A inflação de 12 meses está em 4,58%, e a mediana do Focus para o ano está acima disso. O custo de rodar e de produzir segue pressionado.</p>
+    </header>
+    <figure class="fig">
+      <!--chart:precos-->
+      <figcaption>IPCA: set/2026, variação no mês e em 12 meses (IBGE). Focus: mediana das expectativas de IPCA para 2026 e 2027, boletim de 23/10/2026 (Banco Central do Brasil).</figcaption>
+    </figure>
+    <div class="body">
+      <div class="texto">
+        <h4>Leitura</h4>
+        <p>O IPCA subiu 0,82% em setembro e acumula 4,58% em 12 meses. O mercado espera mais: a mediana do Focus de 23/10 aponta 5,19% para 2026 e 4,34% para 2027.</p>
+        <p>Para o mercado de pneus, inflação alta tem dois lados. Encarece frete, energia e mão de obra para quem produz e distribui, e tira poder de compra do consumidor na hora de trocar pneu. A expectativa de 2027 abaixo da de 2026 indica que o mercado vê alívio só no ano que vem.</p>
+      </div>
+      <aside class="side">
+        <div>
+          <h4>Os números</h4>
+          <div class="tw"><table class="ind">
+            <tr><td>IPCA, variação mensal<small>set/2026 · IBGE</small></td><td class="v"><b>0,82%</b><span>12 meses 4,58%</span></td></tr>
+            <tr><td>Focus, IPCA 2026<small>mediana, boletim de 23/10/2026 · Banco Central</small></td><td class="v"><b>5,19%</b></td></tr>
+            <tr><td>Focus, IPCA 2027<small>mediana, boletim de 23/10/2026 · Banco Central</small></td><td class="v"><b>4,34%</b></td></tr>
+          </table></div>
+        </div>
+        <div>
+          <h4>Notas</h4>
+          <ul class="notas">
+            <li>O IBGE revisa meses anteriores; vale o dado da última extração.</li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+    <nav class="nav"><a href="#i1"><span>← Anterior</span>Atividade econômica</a><a href="#i3" style="text-align:right"><span>Próxima →</span>Confiança e consumo</a></nav>
+  </article>
+
+  <!-- ===================== I3 · CONFIANÇA ===================== -->
+  <article class="view materia" id="i3">
+    <div class="back"><a href="#capa">← Capa</a><span class="kicker">Indicadores 3 de 6 · Confiança e consumo</span></div>
+    <header>
+      <h2>Famílias ainda dispostas a consumir; indústria perde ritmo</h2>
+      <p class="dek">A intenção de consumo segue acima de 100 pontos, mas caiu no mês. Consumidor e indústria seguem abaixo da linha de neutralidade, e a indústria usa menos da sua capacidade.</p>
+    </header>
+    <figure class="fig">
+      <!--chart:confianca-->
+      <figcaption>Pontos, out/2026. ICF: escala de 0 a 200, com 100 como limiar (CNC). ICC e ICI: séries dessazonalizadas (FGV IBRE). A linha vertical marca 100.</figcaption>
+    </figure>
+    <div class="body">
+      <div class="texto">
+        <h4>Leitura</h4>
+        <p>A Intenção de Consumo das Famílias ficou em 103,6 pontos em outubro, 0,8 ponto abaixo de setembro e 2,3 pontos acima de outubro de 2025. Foi a maior variação mensal entre os índices de confiança e consumo do mês.</p>
+        <p>Na FGV, a confiança do consumidor subiu 0,5 ponto, para 84,7, e a da indústria caiu 0,3 ponto, para 91,0. O uso da capacidade instalada da indústria recuou 1,4 ponto percentual, para 81,8%.</p>
+        <p>Para o pneu, o quadro favorece a reposição de passeio, puxada pela renda das famílias, mais do que a encomenda das montadoras: uma indústria que usa menos da capacidade tende a segurar a produção nos próximos meses.</p>
+      </div>
+      <aside class="side">
+        <div>
+          <h4>Os números</h4>
+          <div class="tw"><table class="ind">
+            <tr><td>Intenção de Consumo das Famílias (ICF)<small>out/2026 · CNC</small></td><td class="v"><b>103,6 pontos</b><span>−0,8 pontos m/m; +2,3 pontos a/a</span></td></tr>
+            <tr><td>Confiança do consumidor (ICC)<small>out/2026 · FGV IBRE</small></td><td class="v"><b>84,7 pontos</b><span>+0,5 pontos m/m</span></td></tr>
+            <tr><td>Confiança da indústria (ICI)<small>out/2026 · FGV IBRE</small></td><td class="v"><b>91,0 pontos</b><span>−0,3 pontos m/m</span></td></tr>
+            <tr><td>NUCI, indústria<small>out/2026 · FGV IBRE</small></td><td class="v"><b>81,8%</b><span>−1,4 p.p. m/m</span></td></tr>
+          </table></div>
+        </div>
+        <div>
+          <h4>Notas</h4>
+          <ul class="notas">
+            <li>ICF: a CNC revisa o histórico a cada edição; ajuste sazonal da série em confirmação.</li>
+            <li>FGV IBRE: valores passados podem ser revistos na reestimação do ajuste sazonal.</li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+    <nav class="nav"><a href="#i2"><span>← Anterior</span>Preços</a><a href="#i4" style="text-align:right"><span>Próxima →</span>Transporte e mobilidade</a></nav>
+  </article>
+
+  <!-- ===================== I4 · TRANSPORTE ===================== -->
+  <article class="view materia" id="i4">
+    <div class="back"><a href="#capa">← Capa</a><span class="kicker">Indicadores 4 de 6 · Transporte e mobilidade</span></div>
+    <header>
+      <h2>Caminhão pesado acelera, ônibus despenca</h2>
+      <p class="dek">Em setembro, a produção de caminhões pesados sobe 16,1% e a de ônibus cai 48,9% na comparação anual. A frota roda um pouco mais, e o etanol tem a maior alta do mês.</p>
+    </header>
+    <figure class="fig">
+      <!--chart:transporte-->
+      <figcaption>Variação sobre o mesmo mês do ano anterior, %. Caminhões pesados e ônibus: produção, set/2026 (ANFAVEA). Combustíveis: vendas, ago/2026 (ANP). Fluxo pedagiado: set/2026, série dessazonalizada (ABCR).</figcaption>
+    </figure>
+    <div class="body">
+      <div class="texto">
+        <h4>Leitura</h4>
+        <p>As montadoras produziram 5.965 caminhões pesados em setembro, 16,1% a mais que um ano antes (−1,7% sobre agosto). É demanda direta de pneu de carga de equipamento original. Os ônibus foram na direção oposta: 1.425 unidades, queda de 48,9% no ano e de 23,3% no mês, a maior queda entre os indicadores de nível.</p>
+        <p>A frota segue rodando. As vendas de diesel somaram 6.161.373 m³ em agosto (+1,9% a/a), e o fluxo nas rodovias pedagiadas ficou em 174,4 pontos em setembro, 0,2% acima de um ano antes, apesar da queda de 2,3% no mês. O etanol hidratado teve a maior alta do mês, 21,1% (2.055.369 m³), com a gasolina C quase estável, +0,4% (3.886.363 m³).</p>
+        <p>Nas duas rodas, o Polo Industrial de Manaus produziu 186.758 motocicletas (−8,5% sobre agosto) e 35.914 bicicletas (+1,1%) em setembro.</p>
+      </div>
+      <aside class="side">
+        <div>
+          <h4>Os números</h4>
+          <div class="tw"><table class="ind">
+            <tr><td>Caminhões pesados, produção<small>set/2026 · ANFAVEA</small></td><td class="v"><b>5.965 veículos</b><span>+16,1% a/a; −1,7% m/m</span></td></tr>
+            <tr><td>Ônibus, produção<small>set/2026 · ANFAVEA</small></td><td class="v"><b>1.425 veículos</b><span>−48,9% a/a; −23,3% m/m</span></td></tr>
+            <tr><td>Fluxo pedagiado<small>set/2026 · ABCR</small></td><td class="v"><b>174,4 (1999=100)</b><span>−2,3% m/m; +0,2% a/a</span></td></tr>
+            <tr><td>Diesel, vendas<small>ago/2026 · ANP</small></td><td class="v"><b>6.161.373 m³</b><span>+1,9% a/a</span></td></tr>
+            <tr><td>Gasolina C, vendas<small>ago/2026 · ANP</small></td><td class="v"><b>3.886.363 m³</b><span>+0,4% a/a</span></td></tr>
+            <tr><td>Etanol hidratado, vendas<small>ago/2026 · ANP</small></td><td class="v"><b>2.055.369 m³</b><span>+21,1% a/a</span></td></tr>
+            <tr><td>Motocicletas, produção no PIM<small>set/2026 · ABRACICLO</small></td><td class="v"><b>186.758 unidades</b><span>−8,5% m/m</span></td></tr>
+            <tr><td>Bicicletas, produção no PIM<small>set/2026 · ABRACICLO</small></td><td class="v"><b>35.914 unidades</b><span>+1,1% m/m</span></td></tr>
+          </table></div>
+        </div>
+        <div>
+          <h4>Notas</h4>
+          <ul class="notas">
+            <li>Fluxo pedagiado: variação sobre a série dessazonalizada; a ABCR revisa números anteriores.</li>
+            <li>ANFAVEA e ANP: dados sujeitos a revisão.</li>
+            <li>ABRACICLO: número do press release, pode ser retificado; sem comparação anual nesta rodada.</li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+    <nav class="nav"><a href="#i3"><span>← Anterior</span>Confiança e consumo</a><a href="#i5" style="text-align:right"><span>Próxima →</span>Agro</a></nav>
+  </article>
+
+  <!-- ===================== I5 · AGRO ===================== -->
+  <article class="view materia" id="i5">
+    <div class="back"><a href="#capa">← Capa</a><span class="kicker">Indicadores 5 de 6 · Agro</span></div>
+    <header>
+      <h2>O campo compra menos adubo e projeta safra maior</h2>
+      <p class="dek">As entregas de fertilizantes caíram 22,3% em julho na comparação anual, e a CONAB projeta mais grãos e mais cana para 2026/27. O agro adia compras agora, mas a colheita futura sustenta a demanda de pneus agrícolas e de carga.</p>
+    </header>
+    <figure class="fig">
+      <!--chart:agro-->
+      <figcaption>Fertilizantes: jul/2026 vs jul/2025 (ANDA). Grãos: 1º lev. safra 2026/27 vs safra 2025/26; cana: 2º lev. safra 2026/27 vs safra 2025/26 (CONAB). Soja: set/2026 vs ago/2026 (ANEC).</figcaption>
+    </figure>
+    <div class="body">
+      <div class="texto">
+        <h4>Leitura</h4>
+        <p>Foram entregues 3.960.837 toneladas de fertilizantes em julho, queda de 22,3% sobre julho de 2025 e alta de 11,4% sobre junho. Como a ANDA divulga com 2,5 a 3 meses de defasagem, este é o retrato do meio do ano.</p>
+        <p>As projeções da CONAB vão no sentido contrário: 367.140 mil toneladas de grãos no 1º levantamento da safra 2026/27 (+1,5% sobre 2025/26) e 705.233 mil toneladas de cana no 2º levantamento (+4,7%). As exportações de soja em grão somaram 7.113.782 toneladas em setembro, 25,9% abaixo de agosto, movimento de fim de pico de embarques.</p>
+        <p>Para o pneu agrícola e de carga rural, a safra maior é demanda futura: mais área, mais máquina e mais frete na colheita. A queda do adubo é o ponto de atenção para o curto prazo.</p>
+      </div>
+      <aside class="side">
+        <div>
+          <h4>Os números</h4>
+          <div class="tw"><table class="ind">
+            <tr><td>Fertilizantes entregues<small>jul/2026 · ANDA</small></td><td class="v"><b>3.960.837 t</b><span>−22,3% a/a; +11,4% m/m</span></td></tr>
+            <tr><td>Safra de grãos, produção<small>1º lev. safra 2026/27 (out/2026) · CONAB</small></td><td class="v"><b>367.140 mil t</b><span>+1,5% vs. safra 2025/26</span></td></tr>
+            <tr><td>Cana-de-açúcar, produção<small>2º lev. safra 2026/27 (ago/2026) · CONAB</small></td><td class="v"><b>705.233 mil t</b><span>+4,7% vs. safra 2025/26</span></td></tr>
+            <tr><td>Exportação de soja em grão<small>set/2026 · ANEC</small></td><td class="v"><b>7.113.782 t</b><span>−25,9% m/m</span></td></tr>
+          </table></div>
+        </div>
+        <div>
+          <h4>Notas</h4>
+          <ul class="notas">
+            <li>ANDA: defasagem de 2,5 a 3 meses; meses antigos podem ser revistos.</li>
+            <li>CONAB: estimativas, revisadas a cada levantamento até o fechamento da safra.</li>
+            <li>ANEC: o mês em andamento não entra; sem comparação anual nesta rodada.</li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+    <nav class="nav"><a href="#i4"><span>← Anterior</span>Transporte e mobilidade</a><a href="#i6" style="text-align:right"><span>Próxima →</span>Infraestrutura e internacional</a></nav>
+  </article>
+
+  <!-- ===================== I6 · INFRA E INTERNACIONAL ===================== -->
+  <article class="view materia" id="i6">
+    <div class="back"><a href="#capa">← Capa</a><span class="kicker">Indicadores 6 de 6 · Infraestrutura e internacional</span></div>
+    <header>
+      <h2>Produção de asfalto sobe 11% em um ano</h2>
+      <p class="dek">As refinarias produziram 245.440 m³ de asfalto em agosto, sinal de obra em estrada. No painel do Banco Mundial, o Brasil tem PIB per capita de 23,43 mil US$ (PPP) em 2025.</p>
+    </header>
+    <figure class="fig">
+      <!--chart:infra-->
+      <figcaption>Produção de asfalto, ago/2026: variação sobre ago/2025 e sobre jul/2026, %. Fonte: ANP, produção de derivados de petróleo por refinaria.</figcaption>
+    </figure>
+    <div class="body">
+      <div class="texto">
+        <h4>Leitura</h4>
+        <p>A produção de asfalto chegou a 245.440 m³ em agosto, 11,0% acima de agosto de 2025 e 15,9% acima de julho. Asfalto é insumo de pavimentação: mais produção costuma acompanhar obra em rodovia, o que pesa a favor de pneus de construção e fora de estrada e, com o tempo, de estradas em melhor estado.</p>
+        <p>No contexto socioeconômico, o Banco Mundial registra para o Brasil um PIB per capita de 23,43 mil US$ (PPP) em 2025, um índice de Gini de 50,26 pontos e uma taxa de pobreza de 1,96% da população, estes dois de 2024.</p>
+      </div>
+      <aside class="side">
+        <div>
+          <h4>Os números</h4>
+          <div class="tw"><table class="ind">
+            <tr><td>Produção de asfalto<small>ago/2026 · ANP</small></td><td class="v"><b>245.440 m³</b><span>+11,0% a/a; +15,9% m/m</span></td></tr>
+            <tr><td>PIB per capita, Brasil<small>2025 · Banco Mundial</small></td><td class="v"><b>23,43 mil US$ (PPP)</b></td></tr>
+            <tr><td>Gini, Brasil<small>2024 · Banco Mundial</small></td><td class="v"><b>50,26 pontos (0-100)</b></td></tr>
+            <tr><td>Pobreza, Brasil<small>2024 · Banco Mundial</small></td><td class="v"><b>1,96%</b></td></tr>
+          </table></div>
+        </div>
+        <div>
+          <h4>Notas</h4>
+          <ul class="notas">
+            <li>ANP: revisa números passados.</li>
+            <li>Banco Mundial: o ano de referência varia por indicador; pobreza a US$ 2,15/dia (PPP 2017).</li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+    <nav class="nav"><a href="#i5"><span>← Anterior</span>Agro</a><a href="#n1" style="text-align:right"><span>Próxima →</span>Na semana: subvenção ao diesel</a></nav>
+  </article>
+
+  <!-- ===================== N1 · DIESEL ===================== -->
+  <article class="view materia" id="n1">
+    <div class="back"><a href="#capa">← Capa</a><span class="kicker">Na semana 1 de 3 · Diesel</span></div>
+    <header>
+      <h2>Governo renova a subvenção ao diesel por mais 30 dias</h2>
+      <p class="dek">O benefício de R$ 2,12 por litro venceu em 26/10 e foi renovado no dia seguinte. O frete fica sem o salto de custo que a frota de carga temia.</p>
+    </header>
+    <figure class="fig">
+      <!--chart:n_diesel-->
+      <figcaption>Subvenção ao diesel rodoviário renovada por 30 dias em 27/10/2026. Fontes: Agência Brasil e Poder360.</figcaption>
+    </figure>
+    <div class="body">
+      <div class="texto">
+        <h4>A análise</h4>
+        <p>O governo renovou por mais 30 dias a subvenção de R$ 2,12 por litro ao diesel rodoviário, que tinha vencido em 26/10. O bônus adicional de R$ 1,40 por litro para o diesel importado continua valendo. A formalização é por portaria do Ministério da Fazenda, com base na MP 1.391/2026, que permite novas prorrogações.</p>
+        <p>O cruzamento com os indicadores do mês mostra por que isso importa para o pneu. As vendas de diesel crescem 1,9% na comparação anual (agosto, ANP), o fluxo pedagiado está 0,2% acima de um ano antes (setembro, ABCR) e a produção de caminhões pesados sobe 16,1% (setembro, ANFAVEA). A frota de carga roda e se renova; manter o diesel sem salto de preço preserva o caixa do transportador, que é quem decide quando trocar o pneu.</p>
+        <p>O alívio é de curto prazo. A próxima data de vencimento fica no fim de novembro, e a decisão volta a depender do preço internacional do petróleo.</p>
+      </div>
+      <aside class="side">
+        <div>
+          <h4>O que a notícia cruza</h4>
+          <div class="tw"><table class="ind">
+            <tr><td>Diesel, vendas<small>ago/2026 · ANP</small></td><td class="v"><b>6.161.373 m³</b><span>+1,9% a/a</span></td></tr>
+            <tr><td>Fluxo pedagiado<small>set/2026 · ABCR</small></td><td class="v"><b>174,4</b><span>+0,2% a/a</span></td></tr>
+            <tr><td>Caminhões pesados, produção<small>set/2026 · ANFAVEA</small></td><td class="v"><b>5.965 veículos</b><span>+16,1% a/a</span></td></tr>
+          </table></div>
+        </div>
+        <div class="conf"><span class="chip ok">Renovação: confirmada</span><span class="chip hip">Efeito na troca de pneus: hipótese</span></div>
+        <div>
+          <h4>Fontes</h4>
+          <ul class="fontes">
+            <li><a href="https://agenciabrasil.ebc.com.br/economia/noticia/2026-10/governo-prorroga-por-um-mes-subvencao-de-r-212-ao-diesel" target="_blank" rel="noopener">Agência Brasil, 27/10/2026</a></li>
+            <li><a href="https://www.poder360.com.br/poder-governo/governo-prorroga-subvencao-ao-diesel-por-30-dias/" target="_blank" rel="noopener">Poder360, 27/10/2026</a></li>
+            <li><a href="https://www.otempo.com.br/economia/2026/10/27/governo-federal-renova-por-30-dias-subvencao-de-r-2-12-ao-oleo-diesel" target="_blank" rel="noopener">O Tempo, 27/10/2026</a></li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+    <nav class="nav"><a href="#i6"><span>← Anterior</span>Infraestrutura e internacional</a><a href="#n2" style="text-align:right"><span>Próxima →</span>Brent e Ormuz</a></nav>
+  </article>
+
+  <!-- ===================== N2 · BRENT ===================== -->
+  <article class="view materia" id="n2">
+    <div class="back"><a href="#capa">← Capa</a><span class="kicker">Na semana 2 de 3 · Guerra e petróleo</span></div>
+    <header>
+      <h2>Brent recua com conversas de paz, mas Ormuz segue sob ataque</h2>
+      <p class="dek">O petróleo caiu para perto de US$ 115 em 27/10, com emissários sauditas, turcos e paquistaneses em Teerã. No mesmo dia, um petroleiro pegou fogo após atingir minas perto do estreito.</p>
+    </header>
+    <figure class="fig">
+      <!--chart:n_brent-->
+      <figcaption>Brent em 27/10/2026, segundo OilPrice.com. Fluxo de petróleo por Ormuz na semana mais recente, estimativa da Kpler citada pela mesma fonte.</figcaption>
+    </figure>
+    <div class="body">
+      <div class="texto">
+        <h4>A análise</h4>
+        <p>O Brent recuou para cerca de US$ 114,85 em 27/10, ante mais de US$ 117 no fim da semana anterior, com a esperança de negociações para encerrar a guerra. Os ataques continuam: houve novos ataques houthis contra instalações sauditas e um petroleiro pegou fogo após atingir minas perto de Ormuz. Pela Kpler, o fluxo de petróleo pelo estreito chegou a 13,1 milhões de barris por dia na semana mais recente, perto de 80% do nível anterior à guerra.</p>
+        <p>Nos indicadores do mês, o petróleo caro aparece na inflação: IPCA de 0,82% em setembro, 4,58% em 12 meses, e Focus de 5,19% para 2026. No transporte, o etanol hidratado subiu 21,1% na comparação anual, a maior alta do mês, enquanto a gasolina C ficou em +0,4%.</p>
+        <p>Para o pneu, petróleo é custo duas vezes: na borracha sintética e no negro de fumo, e no frete de quem distribui. Uma trégua real seria a melhor notícia de custo do ano; por ora, é só uma possibilidade.</p>
+      </div>
+      <aside class="side">
+        <div>
+          <h4>O que a notícia cruza</h4>
+          <div class="tw"><table class="ind">
+            <tr><td>IPCA, variação mensal<small>set/2026 · IBGE</small></td><td class="v"><b>0,82%</b><span>12 meses 4,58%</span></td></tr>
+            <tr><td>Focus, IPCA 2026<small>boletim de 23/10/2026 · Banco Central</small></td><td class="v"><b>5,19%</b></td></tr>
+            <tr><td>Etanol hidratado, vendas<small>ago/2026 · ANP</small></td><td class="v"><b>2.055.369 m³</b><span>+21,1% a/a</span></td></tr>
+            <tr><td>Gasolina C, vendas<small>ago/2026 · ANP</small></td><td class="v"><b>3.886.363 m³</b><span>+0,4% a/a</span></td></tr>
+          </table></div>
+        </div>
+        <div class="conf"><span class="chip ok">Preço e ataques: confirmado</span><span class="chip prov">Fluxo em Ormuz: estimativa da Kpler</span></div>
+        <div>
+          <h4>Fontes</h4>
+          <ul class="fontes">
+            <li><a href="https://oilprice.com/Latest-Energy-News/World-News/Oil-Prices-Drop-Despite-Threat-of-New-US-Strikes-on-Iran.html" target="_blank" rel="noopener">OilPrice.com, Brent e conversas de paz</a></li>
+            <li><a href="https://oilprice.com/Latest-Energy-News/World-News/Oil-Prices-Fall-as-Hormuz-Crude-Flows-Top-Pre-War-Levels.html" target="_blank" rel="noopener">OilPrice.com, fluxos em Ormuz</a></li>
+            <li><a href="https://hormuz.now/oil" target="_blank" rel="noopener">Hormuz.now, fluxo de petróleo</a></li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+    <nav class="nav"><a href="#n1"><span>← Anterior</span>Subvenção ao diesel</a><a href="#n3" style="text-align:right"><span>Próxima →</span>Borracha natural</a></nav>
+  </article>
+
+  <!-- ===================== N3 · BORRACHA ===================== -->
+  <article class="view materia" id="n3">
+    <div class="back"><a href="#capa">← Capa</a><span class="kicker">Na semana 3 de 3 · Matéria-prima</span></div>
+    <header>
+      <h2>Borracha natural na máxima em dez anos</h2>
+      <p class="dek">A borracha chegou a 265 centavos de dólar por quilo em outubro, e a Índia registrou preço recorde em 22/10. O custo do pneu sobe justamente quando a produção de caminhões pesados cresce.</p>
+    </header>
+    <figure class="fig">
+      <!--chart:n_borracha-->
+      <figcaption>Borracha natural em 12/10/2026, maior nível em dez anos, segundo Procurement Resource. Recorde na Índia em 22/10/2026.</figcaption>
+    </figure>
+    <div class="body">
+      <div class="texto">
+        <h4>A análise</h4>
+        <p>A borracha natural atingiu 265 centavos de dólar por quilo em 12/10, alta de 6,5% em um mês e o maior nível em uma década, segundo a Procurement Resource. Para fabricantes de pneus, o insumo custa cerca de 45% a mais que no início de 2026. Na Índia, o preço bateu recorde de ₹ 290 por quilo em 22/10. As projeções do setor indicam oferta global de 15,3 milhões de toneladas contra demanda de 15,4 milhões em 2026.</p>
+        <p>Do lado da demanda, os indicadores do mês mostram pressão no pneu de carga: a produção de caminhões pesados sobe 16,1% em setembro (ANFAVEA) e o diesel vendido, 1,9% (ANP). A produção industrial, base do frete, segue 0,9% abaixo de um ano antes em agosto (IBGE).</p>
+        <p>Com matéria-prima cara e demanda de carga firme, a pressão por reajuste de preço do pneu cresce. No mercado brasileiro, o repasse depende da concorrência com o importado, tema do pedido da ANIP de tarifa de 35%, que o Gecex deve analisar no fim de outubro.</p>
+      </div>
+      <aside class="side">
+        <div>
+          <h4>O que a notícia cruza</h4>
+          <div class="tw"><table class="ind">
+            <tr><td>Caminhões pesados, produção<small>set/2026 · ANFAVEA</small></td><td class="v"><b>5.965 veículos</b><span>+16,1% a/a</span></td></tr>
+            <tr><td>Diesel, vendas<small>ago/2026 · ANP</small></td><td class="v"><b>6.161.373 m³</b><span>+1,9% a/a</span></td></tr>
+            <tr><td>Produção industrial<small>ago/2026 · IBGE</small></td><td class="v"><b>112,0 (2022=100)</b><span>−0,9% a/a</span></td></tr>
+          </table></div>
+        </div>
+        <div class="conf"><span class="chip ok">Preço: confirmado</span><span class="chip prov">Repasse ao pneu: provável</span></div>
+        <div>
+          <h4>Fontes</h4>
+          <ul class="fontes">
+            <li><a href="https://www.procurementresource.com/news-and-articles/natural-rubber-prices-rise-global-supply-deficit-2026" target="_blank" rel="noopener">Procurement Resource, borracha natural</a></li>
+            <li><a href="https://www.newsbytesapp.com/news/business/natural-rubber-hits-record-rs290-per-kg-in-india/tldr" target="_blank" rel="noopener">NewsBytes, recorde na Índia</a></li>
+            <li><a href="https://www.folhavitoria.com.br/folha-motor/pneus-importados-industria-imposto-maior/" target="_blank" rel="noopener">Folha Vitória, pedido da ANIP</a></li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+    <nav class="nav"><a href="#n2"><span>← Anterior</span>Brent e Ormuz</a><a href="#capa" style="text-align:right"><span>Fim da edição →</span>Voltar à capa</a></nav>
+  </article>
+
+  <footer class="foot">
+    <p class="label" style="margin:0">Fontes dos indicadores</p>
+    <ul class="fontes-lista">
+      <li>PIB (valores correntes): IBGE, Contas Nacionais Trimestrais, tabela 1846 (valores a preços correntes). <a href="https://sidra.ibge.gov.br/tabela/1846" target="_blank" rel="noopener">https://sidra.ibge.gov.br/tabela/1846</a></li>
+      <li>Produção industrial: IBGE, Pesquisa Industrial Mensal - Produção Física (PIM-PF), tabela 8888. <a href="https://sidra.ibge.gov.br/tabela/8888" target="_blank" rel="noopener">https://sidra.ibge.gov.br/tabela/8888</a></li>
+      <li>Volume de serviços: IBGE, Pesquisa Mensal de Serviços (PMS), tabela 8688 (volume de serviços, base 2022 = 100). <a href="https://sidra.ibge.gov.br/tabela/8688" target="_blank" rel="noopener">https://sidra.ibge.gov.br/tabela/8688</a></li>
+      <li>Varejo (receita nominal): IBGE, Pesquisa Mensal de Comércio (PMC), tabela 8880 (receita nominal de vendas no varejo, base 2022 = 100). <a href="https://sidra.ibge.gov.br/tabela/8880" target="_blank" rel="noopener">https://sidra.ibge.gov.br/tabela/8880</a></li>
+      <li>IPCA (variação mensal): IBGE, IPCA (SIDRA, tabela 7060); expectativas: Banco Central do Brasil, Relatório Focus (mediana). <a href="https://sidra.ibge.gov.br/tabela/7060" target="_blank" rel="noopener">https://sidra.ibge.gov.br/tabela/7060</a></li>
+      <li>Intenção de Consumo das Famílias (ICF): CNC, Pesquisa de Intenção de Consumo das Famílias (ICF). <a href="https://portaldocomercio.org.br" target="_blank" rel="noopener">https://portaldocomercio.org.br</a></li>
+      <li>Índices de confiança (FGV IBRE): FGV IBRE, Sondagens e Indicadores de Confiança (séries dessazonalizadas). <a href="https://portalibre.fgv.br/press-releases" target="_blank" rel="noopener">https://portalibre.fgv.br/press-releases</a></li>
+      <li>Fluxo pedagiado (ABCR): ABCR, Índice ABCR de fluxo de veículos pedagiados (Melhores Rodovias). <a href="https://melhoresrodovias.org.br/indice-abcr_2/" target="_blank" rel="noopener">https://melhoresrodovias.org.br/indice-abcr_2/</a></li>
+      <li>Caminhões pesados e ônibus: produção (ANFAVEA): ANFAVEA, Central de Dados (produção e emplacamento de caminhões pesados e ônibus). <a href="https://anfavea.com.br/site/central-de-dados/" target="_blank" rel="noopener">https://anfavea.com.br/site/central-de-dados/</a></li>
+      <li>Bicicletas: produção no PIM (ABRACICLO): ABRACICLO, press release de produção de bicicletas (Polo Industrial de Manaus). <a href="https://abraciclo.com.br/press-release" target="_blank" rel="noopener">https://abraciclo.com.br/press-release</a></li>
+      <li>Motocicletas: produção no PIM (ABRACICLO): ABRACICLO, press release de produção de motocicletas (Polo Industrial de Manaus). <a href="https://abraciclo.com.br/press-release" target="_blank" rel="noopener">https://abraciclo.com.br/press-release</a></li>
+      <li>Vendas de combustíveis (ANP): ANP, Vendas de combustíveis derivados de petróleo e etanol (dados abertos); gasolina C e etanol hidratado. <a href="https://www.gov.br/anp/pt-br/centrais-de-conteudo/dados-abertos" target="_blank" rel="noopener">https://www.gov.br/anp/pt-br/centrais-de-conteudo/dados-abertos</a></li>
+      <li>Exportação de soja em grão (ANEC): ANEC, relatório de exportações acumuladas (embarques mensais de soja). <a href="https://anec.com.br" target="_blank" rel="noopener">https://anec.com.br</a></li>
+      <li>Fertilizantes entregues ao mercado (ANDA): ANDA, Principais Indicadores do Setor de Fertilizantes (fertilizantes entregues ao mercado). <a href="https://anda.org.br/recursos/#pesquisa-setorial" target="_blank" rel="noopener">https://anda.org.br/recursos/#pesquisa-setorial</a></li>
+      <li>Safra de grãos: produção (CONAB): CONAB, Acompanhamento da Safra Brasileira de Grãos, [N]º levantamento, safra [AAAA/AA]. <a href="https://www.gov.br/conab/pt-br/atuacao/informacoes-agropecuarias/safras/safra-de-graos" target="_blank" rel="noopener">https://www.gov.br/conab/pt-br/atuacao/informacoes-agropecuarias/safras/safra-de-graos</a></li>
+      <li>Safra de cana-de-açúcar: produção (CONAB): CONAB, Acompanhamento da Safra Brasileira de Cana-de-Açúcar, [N]º levantamento, safra [AAAA/AA]. <a href="https://www.gov.br/conab/pt-br/atuacao/informacoes-agropecuarias/safras/safra-de-cana-de-acucar" target="_blank" rel="noopener">https://www.gov.br/conab/pt-br/atuacao/informacoes-agropecuarias/safras/safra-de-cana-de-acucar</a></li>
+      <li>Produção de asfalto (ANP): ANP, Produção de derivados de petróleo por refinaria (asfalto), dados abertos. <a href="https://www.gov.br/anp/pt-br/centrais-de-conteudo/dados-abertos/processamento-de-petroleo-e-producao-de-derivados" target="_blank" rel="noopener">https://www.gov.br/anp/pt-br/centrais-de-conteudo/dados-abertos/processamento-de-petroleo-e-producao-de-derivados</a></li>
+      <li>Socioeconômico: Brasil (Banco Mundial): Banco Mundial, World Development Indicators (PIB per capita, PPP) e Poverty and Inequality Platform (Gini e pobreza a US$ 2,15/dia, PPP 2017); ano de referência indicado por país. <a href="https://pip.worldbank.org/poverty-calculator" target="_blank" rel="noopener">https://pip.worldbank.org/poverty-calculator</a></li>
+    </ul>
+    <span>Notícias com link em cada matéria da seção "Na semana". Os números da Seção de Indicadores vêm do resumo de indicadores de outubro/2026, atualizado em 28/10/2026. Mint Newsletter · Inteligência de Mercado.</span>
+  </footer>
+</div>
+
+<!--pdf-->
+<script>
+(async function () {
+  // "Baixar PDF": entrega o PDF A4 da edição (capa + uma página por matéria), embutido na página.
+  var btn = document.getElementById('pdf-btn'), msg = document.getElementById('pdf-msg');
+  var data = document.getElementById('pdf-data');
+  if (!data || !window.claude || !window.claude.use) return;
+  var downloads = await window.claude.use('downloads');
+  if (!downloads) return;
+  btn.hidden = false;
+  btn.addEventListener('click', async function () {
+    btn.disabled = true; msg.textContent = '';
+    try {
+      var bin = atob(data.textContent.trim()), bytes = new Uint8Array(bin.length);
+      for (var i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+      await downloads.save({ filename: 'Mint Newsletter 02 - 2026-10-28.pdf', data: new Blob([bytes]) });
+      msg.textContent = 'PDF salvo';
+    } catch (e) {
+      var code = e && e.code;
+      if (code === 'declined') msg.textContent = '';
+      else if (code === 'rate_limited') msg.textContent = 'Já há um download aberto. Tente de novo em instantes.';
+      else { btn.hidden = true; msg.textContent = 'O download de PDF não está disponível nesta visualização.'; }
+    } finally { btn.disabled = false; }
+  });
+})();
+</script>
+<script>
+(function () {
+  var views = Array.prototype.slice.call(document.querySelectorAll('.view'));
+  function show() {
+    var id = location.hash.slice(1);
+    var target = views.find(function (v) { return v.id === id; }) || document.getElementById('capa');
+    views.forEach(function (v) { v.classList.toggle('on', v === target); });
+    window.scrollTo(0, 0);
+  }
+  window.addEventListener('hashchange', show);
+  show();
+})();
+</script>

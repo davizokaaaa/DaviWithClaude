@@ -8,6 +8,8 @@ fechamento de estreito, safra de borracha na Tailândia).
 > Status: **Fase 1 em andamento**. A edição piloto nº 0 está em `editions/2026-10-20-edicao-00.html` (+ PDF).
 > A edição nº 1, no formato de capa com cards (seção 9), está em `editions/2026-10-23-edicao-01.html`
 > (+ PDF de 7 páginas, a capa e uma página por matéria) e publicada como artefato. As análises estão em `data/analises_2026-10-23.md`.
+> A edição nº 2 (`editions/2026-10-28-edicao-02.html`) traz a Seção de Indicadores de outubro/2026, montada só com os números do resumo mensal
+> `data/newsletter_indicadores_2026-10.md`, e três notícias da semana cruzadas com esses indicadores.
 
 ---
 

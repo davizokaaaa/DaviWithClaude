@@ -6,21 +6,14 @@ Reads editions/2026-10-23-edicao-01.src.html, replaces each <!--chart:NAME--> wi
 SVG drawn from data/series_mensais.csv, renders the A4 PDF (render_pdf.py), then writes
 editions/2026-10-23-edicao-01.html with the PDF embedded as base64 in the <!--pdf--> slot."""
 
-import base64
-
 from pathlib import Path
 
 from charts import bar_chart, chips, line_chart, load_series
-from render_pdf import render
+from edition import assemble, br
 
 HERE = Path(__file__).parent
 SRC = HERE / "editions" / "2026-10-23-edicao-01.src.html"
 OUT = HERE / "editions" / "2026-10-23-edicao-01.html"
-
-
-def br(v: float, dec: int = 1, sign: bool = False) -> str:
-    s = f"{v:+.{dec}f}" if sign else f"{v:.{dec}f}"
-    return s.replace("-", "−").replace(".", ",")
 
 
 def yoy(s: dict[str, float], desde: str, ate: str | None = None) -> dict[str, float]:
@@ -42,7 +35,7 @@ def chained(var_mes: dict[str, float], base: str) -> dict[str, float]:
     return out
 
 
-def build() -> str:
+def build() -> dict[str, str]:
     S = load_series()
     pct = lambda v: br(v, 0) + "%"  # noqa: E731
     pct_s = lambda v: br(v, 1, sign=True) + "%"  # noqa: E731
@@ -81,18 +74,8 @@ def build() -> str:
             "Brent spot em dólar e em reais, média mensal, base jan/2026 = 100",
             fmt=lambda v: br(v, 0), value_fmt=lambda v: br(v, 0), emphasis="Em reais", label_every=1),
     }
-    html = SRC.read_text(encoding="utf-8")
-    for name, svg in charts.items():
-        html = html.replace(f"<!--chart:{name}-->", svg)
-    assert "<!--chart:" not in html, "chart slot without a chart"
-    return html
+    return charts
 
 
 if __name__ == "__main__":
-    html = build()
-    # The PDF is printed from the page without the embed (print CSS hides the button), then embedded.
-    OUT.write_text(html.replace("<!--pdf-->", ""), encoding="utf-8")
-    pdf = render(OUT)
-    b64 = base64.b64encode(pdf.read_bytes()).decode("ascii")
-    OUT.write_text(html.replace("<!--pdf-->", f'<script type="text/plain" id="pdf-data">{b64}</script>'), encoding="utf-8")
-    print(OUT, pdf)
+    print(*assemble(SRC, OUT, build()))

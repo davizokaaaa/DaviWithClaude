@@ -99,22 +99,29 @@ Function ExtrairDimensao(descricao As String, marca As String, _
         descBrSemEspaco = Replace(descComPonto, " ", "")
         descBrEspacoBarra = Replace(descComPonto, " ", "/")
 
-        Dim chaveBr As Variant
-        For Each chaveBr In dicGeoboxGlobalUnicos.Keys
-            Dim geoBrComPonto As String
-            geoBrComPonto = Replace(CStr(chaveBr), ",", ".")
+        ' Os GEOBOX do catálogo já vêm normalizados (vírgula->ponto, sem
+        ' espaço) e ordenados do MAIOR pro MENOR, com cache entre linhas (ver
+        ' ObterGeoboxCegoOrdenado). Como a ordem é decrescente, assim que o
+        ' candidato não for mais longo que o melhor já achado, nenhum dos
+        ' restantes pode ganhar — sai do laço. Resultado idêntico ao da
+        ' varredura completa antiga: fica com o mais longo que bate e, em
+        ' empate de tamanho, com o que veio primeiro em dicGeobox.Keys.
+        Dim arrGeoBrOrdenado As Variant, arrGeoBrNorm As Variant
+        ObterGeoboxCegoOrdenado dicGeoboxGlobalUnicos, arrGeoBrOrdenado, arrGeoBrNorm
 
-            Dim geoBrSemEspaco As String
-            geoBrSemEspaco = Replace(geoBrComPonto, " ", "")
+        Dim idxBr As Long
+        Dim geoBrSemEspaco As String
+        For idxBr = LBound(arrGeoBrOrdenado) To UBound(arrGeoBrOrdenado)
+            geoBrSemEspaco = CStr(arrGeoBrNorm(idxBr))
 
-            If Len(geoBrSemEspaco) > melhorLen Then
-                If InStr(1, descBrSemEspaco, geoBrSemEspaco, vbTextCompare) > 0 _
-                   Or InStr(1, descBrEspacoBarra, geoBrSemEspaco, vbTextCompare) > 0 Then
-                    melhorLen = Len(geoBrSemEspaco)
-                    melhor = CStr(chaveBr)
-                End If
+            If Len(geoBrSemEspaco) <= melhorLen Then Exit For
+
+            If InStr(1, descBrSemEspaco, geoBrSemEspaco, vbTextCompare) > 0 _
+               Or InStr(1, descBrEspacoBarra, geoBrSemEspaco, vbTextCompare) > 0 Then
+                melhorLen = Len(geoBrSemEspaco)
+                melhor = CStr(arrGeoBrOrdenado(idxBr))
             End If
-        Next chaveBr
+        Next idxBr
     End If
 
     ' --- Medidas conhecidas DAQUELA marca E busca ampla (qualquer marca) ---
@@ -194,6 +201,82 @@ Function ExtrairDimensao(descricao As String, marca As String, _
 
     ExtrairDimensao = melhor
 End Function
+
+' ==========================================================================
+' Cache do DE-PARA cego (Passo 0 de ExtrairDimensao, modo BR/MIN). Antes,
+' cada linha da planilha varria dicGeoboxGlobalUnicos inteiro refazendo os
+' mesmos Replace em milhares de GEOBOX — era o grosso do tempo da macro.
+' Aqui a normalização (vírgula->ponto, sem espaço) é feita UMA vez e o
+' resultado fica num cache Static, ordenado do MAIOR pro MENOR comprimento.
+' A ordenação é ESTÁVEL (por "bucket" de comprimento, percorrendo sempre na
+' ordem original de Keys), pra manter o mesmo desempate do código antigo:
+' entre medidas de mesmo tamanho, vence a que aparece primeiro em Keys.
+' O cache é invalidado por IDENTIDADE do dicionário (não por contagem):
+' CarregarTabelaReferencia cria um Dictionary novo a cada execução, então
+' outra Tabela de Referência na mesma sessão do Excel nunca reusa cache velho.
+' ==========================================================================
+Private Sub ObterGeoboxCegoOrdenado(dicGeoboxGlobalUnicos As Object, _
+                                    ByRef arrChaves As Variant, ByRef arrNorm As Variant)
+    Static cacheChaves As Variant, cacheNorm As Variant
+    Static cacheDicRef As Object
+
+    Dim reconstruir As Boolean
+    If cacheDicRef Is Nothing Then
+        reconstruir = True
+    ElseIf Not (cacheDicRef Is dicGeoboxGlobalUnicos) Then
+        reconstruir = True
+    End If
+
+    If reconstruir Then
+        Dim n As Long
+        n = dicGeoboxGlobalUnicos.Count
+
+        Dim origChaves() As String, origNorm() As String
+        Dim saidaChaves() As String, saidaNorm() As String
+
+        If n = 0 Then
+            ReDim saidaChaves(0 To -1)
+            ReDim saidaNorm(0 To -1)
+        Else
+            ReDim origChaves(0 To n - 1)
+            ReDim origNorm(0 To n - 1)
+            ReDim saidaChaves(0 To n - 1)
+            ReDim saidaNorm(0 To n - 1)
+
+            ' Normaliza cada GEOBOX uma única vez, na ordem original de Keys.
+            Dim chave As Variant, i As Long, maiorLen As Long
+            i = 0
+            maiorLen = 0
+            For Each chave In dicGeoboxGlobalUnicos.Keys
+                origChaves(i) = CStr(chave)
+                origNorm(i) = Replace(Replace(CStr(chave), ",", "."), " ", "")
+                If Len(origNorm(i)) > maiorLen Then maiorLen = Len(origNorm(i))
+                i = i + 1
+            Next chave
+
+            ' Ordenação estável por bucket: do maior comprimento pro menor,
+            ' sempre percorrendo na ordem original dentro de cada comprimento.
+            Dim tam As Long, pos As Long
+            pos = 0
+            For tam = maiorLen To 0 Step -1
+                For i = 0 To n - 1
+                    If Len(origNorm(i)) = tam Then
+                        saidaChaves(pos) = origChaves(i)
+                        saidaNorm(pos) = origNorm(i)
+                        pos = pos + 1
+                    End If
+                Next i
+            Next tam
+        End If
+
+        cacheChaves = saidaChaves
+        cacheNorm = saidaNorm
+        Set cacheDicRef = dicGeoboxGlobalUnicos
+    End If
+
+    arrChaves = cacheChaves
+    arrNorm = cacheNorm
+End Sub
 
 ' ==========================================================================
 ' Normalização BÁSICA de formatação (compartilhada): maiúsculas, vírgula

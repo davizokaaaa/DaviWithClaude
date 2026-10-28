@@ -173,6 +173,44 @@ Sub ClassificarTudo()
     qtdDimensaoVazia = 0
     amostraVazios = ""
 
+    ' --- I/O EM BLOCO: cada ws.Cells(i, c).Value é uma chamada COM         ---
+    ' --- (Excel<->VBA) e, com ~11 acessos por linha numa base grande, isso ---
+    ' --- vira o gargalo — bem mais caro que toda a lógica de string/       ---
+    ' --- dicionário do laço. Aqui as colunas de ENTRADA são lidas de uma   ---
+    ' --- vez só pra arrays em memória, e as de SAÍDA são montadas em       ---
+    ' --- arrays e gravadas de uma vez só depois do laço. Os VALORES lidos  ---
+    ' --- e gravados são exatamente os mesmos — só muda o mecanismo.        ---
+    ' --- Índice do array = i - 1 (linha 2 da planilha = posição 1).        ---
+    Dim qtdLinhas As Long
+    qtdLinhas = lastRow - 1
+
+    ' --- Com uma única linha de dado, Range(...).Value de 1 célula devolve ---
+    ' --- um ESCALAR (não array 2D) — empacota manualmente nesse caso.      ---
+    Dim arrDescricaoIn As Variant, arrAdquirenteIn As Variant
+    If qtdLinhas = 1 Then
+        ReDim arrDescricaoIn(1 To 1, 1 To 1)
+        ReDim arrAdquirenteIn(1 To 1, 1 To 1)
+        arrDescricaoIn(1, 1) = ws.Cells(2, colDescricao).Value
+        arrAdquirenteIn(1, 1) = ws.Cells(2, colAdquirente).Value
+    Else
+        arrDescricaoIn = ws.Range(ws.Cells(2, colDescricao), ws.Cells(lastRow, colDescricao)).Value
+        arrAdquirenteIn = ws.Range(ws.Cells(2, colAdquirente), ws.Cells(lastRow, colAdquirente)).Value
+    End If
+
+    ' --- Arrays de SAÍDA (Variant, 1 coluna), um por coluna gravada no laço ---
+    Dim arrEstepeOut() As Variant, arrGamaOut() As Variant, arrMarcaOut() As Variant
+    Dim arrDimensaoOut() As Variant, arrRtOeOut() As Variant, arrAroOut() As Variant
+    Dim arrAnipOut() As Variant, arrTipoProdutoOut() As Variant, arrLpOut() As Variant
+    ReDim arrEstepeOut(1 To qtdLinhas, 1 To 1)
+    ReDim arrGamaOut(1 To qtdLinhas, 1 To 1)
+    ReDim arrMarcaOut(1 To qtdLinhas, 1 To 1)
+    ReDim arrDimensaoOut(1 To qtdLinhas, 1 To 1)
+    ReDim arrRtOeOut(1 To qtdLinhas, 1 To 1)
+    ReDim arrAroOut(1 To qtdLinhas, 1 To 1)
+    ReDim arrAnipOut(1 To qtdLinhas, 1 To 1)
+    ReDim arrTipoProdutoOut(1 To qtdLinhas, 1 To 1)
+    ReDim arrLpOut(1 To qtdLinhas, 1 To 1)
+
     For i = 2 To lastRow
 
         ' --- Progresso na barra de status a cada 100 linhas + DoEvents:    ---
@@ -186,13 +224,13 @@ Sub ClassificarTudo()
             DoEvents
         End If
 
-        descricao = UCase(Trim(CStr(ws.Cells(i, colDescricao).Value)))
-        adquirente = UCase(Trim(CStr(ws.Cells(i, colAdquirente).Value)))
+        descricao = UCase(Trim(CStr(arrDescricaoIn(i - 1, 1))))
+        adquirente = UCase(Trim(CStr(arrAdquirenteIn(i - 1, 1))))
 
         ' --- ESTEPE/LCV: portado da macro legada "estepe()" — reaproveita a ---
         ' --- própria "descricao" (já lida/normalizada acima), em vez de     ---
         ' --- reler a célula de novo como a macro legada fazia.              ---
-        ws.Cells(i, colEstepe).Value = ClassificarEstepe(descricao)
+        arrEstepeOut(i - 1, 1) = ClassificarEstepe(descricao)
 
         ' --- MARCA: extraída da descrição (nome conhecido na Tabela de Referência) ---
         marca = ExtrairMarca(descricao, arrMarcas, dicExcecoesMarca, somenteMinBr)
@@ -205,8 +243,8 @@ Sub ClassificarTudo()
         ' --- é passada ByRef e pode voltar preenchida daqui.              ---
         Dim gamaLinha As String
         gamaLinha = ExtrairGama(descricao, marca, dicGamasPorMarca, dicGamaGlobalUnicos, dicMarcaPorGama, dicExcecoesGama, somenteMinBr)
-        ws.Cells(i, colGama).Value = gamaLinha
-        ws.Cells(i, colMarca).Value = marca
+        arrGamaOut(i - 1, 1) = gamaLinha
+        arrMarcaOut(i - 1, 1) = marca
 
         ' --- DIMENSÃO: extraída da descrição (medida conhecida na Tabela de Referência) ---
         dimensaoBruta = ExtrairDimensao(descricao, marca, dicGeoboxPorMarca, dicGeoboxGlobalUnicos, dicPadroesLegado, somenteMinBr)
@@ -220,7 +258,7 @@ Sub ClassificarTudo()
         Else
             dimensaoFinal = Replace(dimensaoBruta, "-", "R")
         End If
-        ws.Cells(i, colDimensao).Value = dimensaoFinal
+        arrDimensaoOut(i - 1, 1) = dimensaoFinal
 
         ' --- RT/OE ---
         rtOe = "RT"
@@ -231,16 +269,16 @@ Sub ClassificarTudo()
                 Exit For
             End If
         Next chaveM
-        ws.Cells(i, colRtOe).Value = rtOe
+        arrRtOeOut(i - 1, 1) = rtOe
 
         ' --- ARO (a partir da DIMENSÃO já com hífen convertido) ---
         aro = ExtrairAro(dimensaoFinal)
-        ws.Cells(i, colAro).Value = aro
+        arrAroOut(i - 1, 1) = aro
 
         ' --- ANIP ---
         anip = "Importado"
         If dicAnip.Exists(marca) Then anip = "ANIP"
-        ws.Cells(i, colAnip).Value = anip
+        arrAnipOut(i - 1, 1) = anip
 
         ' --- TIPO PRODUTO e LP: busca direto pela DIMENSÃO na Tabela de     ---
         ' --- Referência (aba "Referencia"). SEGMENTO e LP são votações     ---
@@ -263,7 +301,7 @@ Sub ClassificarTudo()
                 lp = CStr(dicLpPorGeoboxMarca(chaveLpGeoMarca))
             End If
         End If
-        ws.Cells(i, colTipoProduto).Value = segmento
+        arrTipoProdutoOut(i - 1, 1) = segmento
 
         ' --- Diagnóstico: conta preenchidos/vazios e guarda uma amostra ---
         If Len(dimensaoBruta) = 0 Then
@@ -304,9 +342,21 @@ Sub ClassificarTudo()
         ' --- nenhuma LP foi determinada.                                    ---
         If Len(lp) = 0 And AroTerminaEmMeio(aro) Then lp = "PL"
 
-        ws.Cells(i, colLp).Value = lp
+        arrLpOut(i - 1, 1) = lp
 
     Next i
+
+    ' --- Grava as colunas de SAÍDA em bloco: UMA atribuição por coluna,    ---
+    ' --- linhas 2 até lastRow (mesmo intervalo que o laço percorreu).      ---
+    ws.Range(ws.Cells(2, colEstepe), ws.Cells(lastRow, colEstepe)).Value = arrEstepeOut
+    ws.Range(ws.Cells(2, colGama), ws.Cells(lastRow, colGama)).Value = arrGamaOut
+    ws.Range(ws.Cells(2, colMarca), ws.Cells(lastRow, colMarca)).Value = arrMarcaOut
+    ws.Range(ws.Cells(2, colDimensao), ws.Cells(lastRow, colDimensao)).Value = arrDimensaoOut
+    ws.Range(ws.Cells(2, colRtOe), ws.Cells(lastRow, colRtOe)).Value = arrRtOeOut
+    ws.Range(ws.Cells(2, colAro), ws.Cells(lastRow, colAro)).Value = arrAroOut
+    ws.Range(ws.Cells(2, colAnip), ws.Cells(lastRow, colAnip)).Value = arrAnipOut
+    ws.Range(ws.Cells(2, colTipoProduto), ws.Cells(lastRow, colTipoProduto)).Value = arrTipoProdutoOut
+    ws.Range(ws.Cells(2, colLp), ws.Cells(lastRow, colLp)).Value = arrLpOut
 
     ' --- Restaura o estado do Excel assim que o processamento linha a     ---
     ' --- linha termina (o resto daqui pra baixo só mexe numa aba auxiliar  ---

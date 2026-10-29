@@ -42,7 +42,7 @@ A Central de Dados monta as tabelas via `POST /site/wp-admin/admin-ajax.php`
 
 ```bash
 pip install -r requirements.txt
-python scripts/collect.py --inicio 2023-01      # precisa de acesso a anfavea.com.br
+python scripts/collect.py --inicio 2019-01      # precisa de acesso a anfavea.com.br
 python scripts/build_report.py                   # offline, a partir de data/csv
 ```
 

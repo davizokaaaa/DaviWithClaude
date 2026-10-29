@@ -9,7 +9,7 @@ agregação mensal desde INICIO e salva:
   data/raw/<consulta>.json   resposta bruta (table_html)
   data/csv/<consulta>.csv    tabela parseada (formato largo, valores inteiros)
 
-Uso: python collect.py [--inicio 2023-01] [--fim AAAA-MM]
+Uso: python collect.py [--inicio 2019-01] [--fim AAAA-MM]
 """
 from __future__ import annotations
 
@@ -130,7 +130,7 @@ def post(s: requests.Session, body, tries: int = 4) -> dict:
 
 def main() -> int:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--inicio", default="2023-01")
+    ap.add_argument("--inicio", default="2019-01")
     ap.add_argument("--fim", default=dt.date.today().strftime("%Y-%m"))
     ap.add_argument("--only", default="", help="regex para filtrar consultas")
     a = ap.parse_args()

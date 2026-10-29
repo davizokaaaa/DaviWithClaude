@@ -1,4 +1,388 @@
 periodo,categoria,procedencia,valor
+2019-01,Automóveis,Importado,15163
+2019-01,Automóveis,Nacional,148630
+2019-01,Caminhões,Importado,247
+2019-01,Caminhões,Nacional,6740
+2019-01,Comerciais leves,Importado,8528
+2019-01,Comerciais leves,Nacional,18888
+2019-01,Ônibus,Importado,0
+2019-01,Ônibus,Nacional,1598
+2019-02,Automóveis,Importado,13507
+2019-02,Automóveis,Nacional,149031
+2019-02,Caminhões,Importado,250
+2019-02,Caminhões,Nacional,6626
+2019-02,Comerciais leves,Importado,8189
+2019-02,Comerciais leves,Nacional,19546
+2019-02,Ônibus,Importado,0
+2019-02,Ônibus,Nacional,1492
+2019-03,Automóveis,Importado,14225
+2019-03,Automóveis,Nacional,156262
+2019-03,Caminhões,Importado,235
+2019-03,Caminhões,Nacional,7366
+2019-03,Comerciais leves,Importado,8501
+2019-03,Comerciais leves,Nacional,20986
+2019-03,Ônibus,Importado,0
+2019-03,Ônibus,Nacional,1590
+2019-04,Automóveis,Importado,15957
+2019-04,Automóveis,Nacional,173140
+2019-04,Caminhões,Importado,291
+2019-04,Caminhões,Nacional,8211
+2019-04,Comerciais leves,Importado,9914
+2019-04,Comerciais leves,Nacional,22712
+2019-04,Ônibus,Importado,0
+2019-04,Ônibus,Nacional,1711
+2019-05,Automóveis,Importado,15292
+2019-05,Automóveis,Nacional,183484
+2019-05,Caminhões,Importado,268
+2019-05,Caminhões,Nacional,8860
+2019-05,Comerciais leves,Importado,10031
+2019-05,Comerciais leves,Nacional,25792
+2019-05,Ônibus,Importado,0
+2019-05,Ônibus,Nacional,1713
+2019-06,Automóveis,Importado,13562
+2019-06,Automóveis,Nacional,167735
+2019-06,Caminhões,Importado,223
+2019-06,Caminhões,Nacional,7465
+2019-06,Comerciais leves,Importado,8934
+2019-06,Comerciais leves,Nacional,23764
+2019-06,Ônibus,Importado,0
+2019-06,Ônibus,Nacional,1515
+2019-07,Automóveis,Importado,14834
+2019-07,Automóveis,Nacional,181020
+2019-07,Caminhões,Importado,209
+2019-07,Caminhões,Nacional,8733
+2019-07,Comerciais leves,Importado,10079
+2019-07,Comerciais leves,Nacional,26928
+2019-07,Ônibus,Importado,0
+2019-07,Ônibus,Nacional,1811
+2019-08,Automóveis,Importado,15798
+2019-08,Automóveis,Nacional,180119
+2019-08,Caminhões,Importado,252
+2019-08,Caminhões,Nacional,9181
+2019-08,Comerciais leves,Importado,10077
+2019-08,Comerciais leves,Nacional,25528
+2019-08,Ônibus,Importado,0
+2019-08,Ônibus,Nacional,2030
+2019-09,Automóveis,Importado,14460
+2019-09,Automóveis,Nacional,173358
+2019-09,Caminhões,Importado,183
+2019-09,Caminhões,Nacional,8915
+2019-09,Comerciais leves,Importado,10188
+2019-09,Comerciais leves,Nacional,26008
+2019-09,Ônibus,Importado,0
+2019-09,Ônibus,Nacional,1736
+2019-10,Automóveis,Importado,15043
+2019-10,Automóveis,Nacional,189489
+2019-10,Caminhões,Importado,249
+2019-10,Caminhões,Nacional,9169
+2019-10,Comerciais leves,Importado,9886
+2019-10,Comerciais leves,Nacional,27368
+2019-10,Ônibus,Importado,0
+2019-10,Ônibus,Nacional,2157
+2019-11,Automóveis,Importado,14063
+2019-11,Automóveis,Nacional,182708
+2019-11,Caminhões,Importado,205
+2019-11,Caminhões,Nacional,8859
+2019-11,Comerciais leves,Importado,9318
+2019-11,Comerciais leves,Nacional,25501
+2019-11,Ônibus,Importado,1
+2019-11,Ônibus,Nacional,1655
+2019-12,Automóveis,Importado,18354
+2019-12,Automóveis,Nacional,196839
+2019-12,Caminhões,Importado,503
+2019-12,Caminhões,Nacional,8095
+2019-12,Comerciais leves,Importado,10638
+2019-12,Comerciais leves,Nacional,26206
+2019-12,Ônibus,Importado,0
+2019-12,Ônibus,Nacional,1923
+2020-01,Automóveis,Importado,12721
+2020-01,Automóveis,Nacional,141860
+2020-01,Caminhões,Importado,479
+2020-01,Caminhões,Nacional,6806
+2020-01,Comerciais leves,Importado,9104
+2020-01,Comerciais leves,Nacional,20997
+2020-01,Ônibus,Importado,0
+2020-01,Ônibus,Nacional,1492
+2020-02,Automóveis,Importado,11818
+2020-02,Automóveis,Nacional,153332
+2020-02,Caminhões,Importado,256
+2020-02,Caminhões,Nacional,6156
+2020-02,Comerciais leves,Importado,8998
+2020-02,Comerciais leves,Nacional,19151
+2020-02,Ônibus,Importado,0
+2020-02,Ônibus,Nacional,1286
+2020-03,Automóveis,Importado,9064
+2020-03,Automóveis,Nacional,122212
+2020-03,Caminhões,Importado,158
+2020-03,Caminhões,Nacional,6280
+2020-03,Comerciais leves,Importado,7943
+2020-03,Comerciais leves,Nacional,17085
+2020-03,Ônibus,Importado,0
+2020-03,Ônibus,Nacional,883
+2020-04,Automóveis,Importado,3654
+2020-04,Automóveis,Nacional,35847
+2020-04,Caminhões,Importado,155
+2020-04,Caminhões,Nacional,3799
+2020-04,Comerciais leves,Importado,4558
+2020-04,Comerciais leves,Nacional,7402
+2020-04,Ônibus,Importado,0
+2020-04,Ônibus,Nacional,320
+2020-05,Automóveis,Importado,4862
+2020-05,Automóveis,Nacional,39275
+2020-05,Caminhões,Importado,227
+2020-05,Caminhões,Nacional,4593
+2020-05,Comerciais leves,Importado,4705
+2020-05,Comerciais leves,Nacional,7862
+2020-05,Ônibus,Importado,0
+2020-05,Ônibus,Nacional,666
+2020-06,Automóveis,Importado,10337
+2020-06,Automóveis,Nacional,92067
+2020-06,Caminhões,Importado,435
+2020-06,Caminhões,Nacional,8519
+2020-06,Comerciais leves,Importado,6320
+2020-06,Comerciais leves,Nacional,14071
+2020-06,Ônibus,Importado,0
+2020-06,Ônibus,Nacional,1069
+2020-07,Automóveis,Importado,10948
+2020-07,Automóveis,Nacional,124008
+2020-07,Caminhões,Importado,433
+2020-07,Caminhões,Nacional,9110
+2020-07,Comerciais leves,Importado,7414
+2020-07,Comerciais leves,Nacional,21051
+2020-07,Ônibus,Importado,0
+2020-07,Ônibus,Nacional,1523
+2020-08,Automóveis,Importado,10291
+2020-08,Automóveis,Nacional,131766
+2020-08,Caminhões,Importado,360
+2020-08,Caminhões,Nacional,7719
+2020-08,Comerciais leves,Importado,7220
+2020-08,Comerciais leves,Nacional,24542
+2020-08,Ônibus,Importado,0
+2020-08,Ônibus,Nacional,1497
+2020-09,Automóveis,Importado,10395
+2020-09,Automóveis,Nacional,150719
+2020-09,Caminhões,Importado,268
+2020-09,Caminhões,Nacional,7044
+2020-09,Comerciais leves,Importado,8533
+2020-09,Comerciais leves,Nacional,29517
+2020-09,Ônibus,Importado,0
+2020-09,Ônibus,Nacional,1234
+2020-10,Automóveis,Importado,10661
+2020-10,Automóveis,Nacional,157847
+2020-10,Caminhões,Importado,235
+2020-10,Caminhões,Nacional,7674
+2020-10,Comerciais leves,Importado,8103
+2020-10,Comerciais leves,Nacional,29088
+2020-10,Ônibus,Importado,0
+2020-10,Ônibus,Nacional,1436
+2020-11,Automóveis,Importado,11577
+2020-11,Automóveis,Nacional,166000
+2020-11,Caminhões,Importado,412
+2020-11,Caminhões,Nacional,8731
+2020-11,Comerciais leves,Importado,7924
+2020-11,Comerciais leves,Nacional,28977
+2020-11,Ônibus,Importado,0
+2020-11,Ônibus,Nacional,1389
+2020-12,Automóveis,Importado,11495
+2020-12,Automóveis,Nacional,183186
+2020-12,Caminhões,Importado,527
+2020-12,Caminhões,Nacional,9311
+2020-12,Comerciais leves,Importado,9029
+2020-12,Comerciais leves,Nacional,29274
+2020-12,Ônibus,Importado,0
+2020-12,Ônibus,Nacional,1145
+2021-01,Automóveis,Importado,8131
+2021-01,Automóveis,Nacional,122673
+2021-01,Caminhões,Importado,564
+2021-01,Caminhões,Nacional,6974
+2021-01,Comerciais leves,Importado,7465
+2021-01,Comerciais leves,Nacional,24310
+2021-01,Ônibus,Importado,0
+2021-01,Ônibus,Nacional,1029
+2021-02,Automóveis,Importado,7322
+2021-02,Automóveis,Nacional,120789
+2021-02,Caminhões,Importado,389
+2021-02,Caminhões,Nacional,7392
+2021-02,Comerciais leves,Importado,6026
+2021-02,Comerciais leves,Nacional,24351
+2021-02,Ônibus,Importado,0
+2021-02,Ônibus,Nacional,1122
+2021-03,Automóveis,Importado,8700
+2021-03,Automóveis,Nacional,133252
+2021-03,Caminhões,Importado,424
+2021-03,Caminhões,Nacional,10335
+2021-03,Comerciais leves,Importado,8241
+2021-03,Comerciais leves,Nacional,27257
+2021-03,Ônibus,Importado,0
+2021-03,Ônibus,Nacional,1180
+2021-04,Automóveis,Importado,8640
+2021-04,Automóveis,Nacional,118823
+2021-04,Caminhões,Importado,366
+2021-04,Caminhões,Nacional,9420
+2021-04,Comerciais leves,Importado,8134
+2021-04,Comerciais leves,Nacional,28559
+2021-04,Ônibus,Importado,0
+2021-04,Ônibus,Nacional,1174
+2021-05,Automóveis,Importado,10440
+2021-05,Automóveis,Nacional,132261
+2021-05,Caminhões,Importado,533
+2021-05,Caminhões,Nacional,10965
+2021-05,Comerciais leves,Importado,8468
+2021-05,Comerciais leves,Nacional,24408
+2021-05,Ônibus,Importado,0
+2021-05,Ônibus,Nacional,1603
+2021-06,Automóveis,Importado,15705
+2021-06,Automóveis,Nacional,117627
+2021-06,Caminhões,Importado,625
+2021-06,Caminhões,Nacional,10746
+2021-06,Comerciais leves,Importado,8064
+2021-06,Comerciais leves,Nacional,28256
+2021-06,Ônibus,Importado,0
+2021-06,Ônibus,Nacional,1430
+2021-07,Automóveis,Importado,13611
+2021-07,Automóveis,Nacional,109987
+2021-07,Caminhões,Importado,876
+2021-07,Caminhões,Nacional,11098
+2021-07,Comerciais leves,Importado,9993
+2021-07,Comerciais leves,Nacional,28618
+2021-07,Ônibus,Importado,0
+2021-07,Ônibus,Nacional,1270
+2021-08,Automóveis,Importado,11986
+2021-08,Automóveis,Nacional,107842
+2021-08,Caminhões,Importado,689
+2021-08,Caminhões,Nacional,12258
+2021-08,Comerciais leves,Importado,10653
+2021-08,Comerciais leves,Nacional,28080
+2021-08,Ônibus,Importado,0
+2021-08,Ônibus,Nacional,1276
+2021-09,Automóveis,Importado,12064
+2021-09,Automóveis,Nacional,97022
+2021-09,Caminhões,Importado,478
+2021-09,Caminhões,Nacional,11149
+2021-09,Comerciais leves,Importado,9369
+2021-09,Comerciais leves,Nacional,24139
+2021-09,Ônibus,Importado,0
+2021-09,Ônibus,Nacional,854
+2021-10,Automóveis,Importado,13261
+2021-10,Automóveis,Nacional,106067
+2021-10,Caminhões,Importado,305
+2021-10,Caminhões,Nacional,10743
+2021-10,Comerciais leves,Importado,8408
+2021-10,Comerciais leves,Nacional,22660
+2021-10,Ônibus,Importado,0
+2021-10,Ônibus,Nacional,905
+2021-11,Automóveis,Importado,14860
+2021-11,Automóveis,Nacional,111242
+2021-11,Caminhões,Importado,306
+2021-11,Caminhões,Nacional,10167
+2021-11,Comerciais leves,Importado,9494
+2021-11,Comerciais leves,Nacional,25852
+2021-11,Ônibus,Importado,0
+2021-11,Ônibus,Nacional,1043
+2021-12,Automóveis,Importado,16433
+2021-12,Automóveis,Nacional,139729
+2021-12,Caminhões,Importado,310
+2021-12,Caminhões,Nacional,11577
+2021-12,Comerciais leves,Importado,12443
+2021-12,Comerciais leves,Nacional,25385
+2021-12,Ônibus,Importado,2
+2021-12,Ônibus,Nacional,1174
+2022-01,Automóveis,Importado,9888
+2022-01,Automóveis,Nacional,82350
+2022-01,Caminhões,Importado,457
+2022-01,Caminhões,Nacional,8249
+2022-01,Comerciais leves,Importado,7776
+2022-01,Comerciais leves,Nacional,16759
+2022-01,Ônibus,Importado,0
+2022-01,Ônibus,Nacional,1039
+2022-02,Automóveis,Importado,8913
+2022-02,Automóveis,Nacional,91120
+2022-02,Caminhões,Importado,371
+2022-02,Caminhões,Nacional,7721
+2022-02,Comerciais leves,Importado,5926
+2022-02,Comerciais leves,Nacional,17359
+2022-02,Ônibus,Importado,0
+2022-02,Ônibus,Nacional,921
+2022-03,Automóveis,Importado,9710
+2022-03,Automóveis,Nacional,98562
+2022-03,Caminhões,Importado,343
+2022-03,Caminhões,Nacional,9713
+2022-03,Comerciais leves,Importado,7706
+2022-03,Comerciais leves,Nacional,19423
+2022-03,Ônibus,Importado,0
+2022-03,Ônibus,Nacional,1362
+2022-04,Automóveis,Importado,11139
+2022-04,Automóveis,Nacional,98568
+2022-04,Caminhões,Importado,364
+2022-04,Caminhões,Nacional,9020
+2022-04,Comerciais leves,Importado,7377
+2022-04,Comerciais leves,Nacional,19647
+2022-04,Ônibus,Importado,0
+2022-04,Ônibus,Nacional,1127
+2022-05,Automóveis,Importado,13933
+2022-05,Automóveis,Nacional,125550
+2022-05,Caminhões,Importado,488
+2022-05,Caminhões,Nacional,9908
+2022-05,Comerciais leves,Importado,8415
+2022-05,Comerciais leves,Nacional,27314
+2022-05,Ônibus,Importado,0
+2022-05,Ônibus,Nacional,1456
+2022-06,Automóveis,Importado,18272
+2022-06,Automóveis,Nacional,115509
+2022-06,Caminhões,Importado,480
+2022-06,Caminhões,Nacional,10498
+2022-06,Comerciais leves,Importado,8112
+2022-06,Comerciais leves,Nacional,23792
+2022-06,Ônibus,Importado,0
+2022-06,Ônibus,Nacional,1404
+2022-07,Automóveis,Importado,14100
+2022-07,Automóveis,Nacional,121331
+2022-07,Caminhões,Importado,614
+2022-07,Caminhões,Nacional,10941
+2022-07,Comerciais leves,Importado,8020
+2022-07,Comerciais leves,Nacional,25745
+2022-07,Ônibus,Importado,1
+2022-07,Ônibus,Nacional,1242
+2022-08,Automóveis,Importado,14601
+2022-08,Automóveis,Nacional,140153
+2022-08,Caminhões,Importado,611
+2022-08,Caminhões,Nacional,11891
+2022-08,Comerciais leves,Importado,8889
+2022-08,Comerciais leves,Nacional,30750
+2022-08,Ônibus,Importado,0
+2022-08,Ônibus,Nacional,1712
+2022-09,Automóveis,Importado,15398
+2022-09,Automóveis,Nacional,127768
+2022-09,Caminhões,Importado,760
+2022-09,Caminhões,Nacional,10743
+2022-09,Comerciais leves,Importado,9018
+2022-09,Comerciais leves,Nacional,28651
+2022-09,Ônibus,Importado,0
+2022-09,Ônibus,Nacional,1640
+2022-10,Automóveis,Importado,12905
+2022-10,Automóveis,Nacional,123987
+2022-10,Caminhões,Importado,577
+2022-10,Caminhões,Nacional,10220
+2022-10,Comerciais leves,Importado,8559
+2022-10,Comerciais leves,Nacional,23249
+2022-10,Ônibus,Importado,0
+2022-10,Ônibus,Nacional,1410
+2022-11,Automóveis,Importado,19367
+2022-11,Automóveis,Nacional,139350
+2022-11,Caminhões,Importado,587
+2022-11,Caminhões,Nacional,9622
+2022-11,Comerciais leves,Importado,10048
+2022-11,Comerciais leves,Nacional,23286
+2022-11,Ônibus,Importado,0
+2022-11,Ônibus,Nacional,1751
+2022-12,Automóveis,Importado,17107
+2022-12,Automóveis,Nacional,147081
+2022-12,Caminhões,Importado,869
+2022-12,Caminhões,Nacional,11607
+2022-12,Comerciais leves,Importado,11768
+2022-12,Comerciais leves,Nacional,26199
+2022-12,Ônibus,Importado,0
+2022-12,Ônibus,Nacional,2292
 2023-01,Automóveis,Importado,12163
 2023-01,Automóveis,Nacional,91723
 2023-01,Caminhões,Importado,580

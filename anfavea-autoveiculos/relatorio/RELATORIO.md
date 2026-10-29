@@ -1,14 +1,14 @@
-# ANFAVEA – Autoveículos: relatório 01/2023 a 09/2026
+# ANFAVEA – Autoveículos: relatório 01/2019 a 09/2026
 
-Fonte: [ANFAVEA – Central de Dados](https://anfavea.com.br/site/central-de-dados/). Coletado em 2026-10-14. Unidades. Planilha completa: [relatorio_anfavea_autoveiculos.xlsx](relatorio_anfavea_autoveiculos.xlsx); base longa: [base_autoveiculos.csv](base_autoveiculos.csv).
+Fonte: [ANFAVEA – Central de Dados](https://anfavea.com.br/site/central-de-dados/). Coletado em 2026-10-29. Unidades. Planilha completa: [relatorio_anfavea_autoveiculos.xlsx](relatorio_anfavea_autoveiculos.xlsx); base longa: [base_autoveiculos.csv](base_autoveiculos.csv).
 
 ## Totais anuais
 
-| Indicador | 2023 | 2024 | 2025 | 2026 (jan-09) |
-|---|---:|---:|---:|---:|
-| Produção | 2.324.838 | 2.553.869 | 2.644.054 | 2.165.787 |
-| Emplacamento | 2.308.689 | 2.634.904 | 2.689.634 | 2.256.702 |
-| Exportação | 403.919 | 400.238 | 528.827 | 333.953 |
+| Indicador | 2019 | 2020 | 2021 | 2022 | 2023 | 2024 | 2025 | 2026 (jan-09) |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| Produção | 2.944.988 | 2.014.055 | 2.248.253 | 2.369.769 | 2.324.838 | 2.553.869 | 2.644.054 | 2.165.787 |
+| Emplacamento | 2.787.850 | 2.058.437 | 2.119.851 | 2.104.461 | 2.308.689 | 2.634.904 | 2.689.634 | 2.256.702 |
+| Exportação | 433.512 | 324.330 | 376.383 | 480.929 | 403.919 | 400.238 | 528.827 | 333.953 |
 
 ## Acumulado jan–09: 2026 vs 2025
 
@@ -48,15 +48,15 @@ Fonte: [ANFAVEA – Central de Dados](https://anfavea.com.br/site/central-de-dad
 
 ## Emplacamento por combustível (leves)
 
-| Combustível | 2023 | 2024 | 2025 | 2026 |
-|---|---:|---:|---:|---:|
-| Flex Fuel | 83,0% | 79,1% | 74,4% | 68,0% |
-| Diesel | 9,9% | 9,7% | 10,0% | 9,2% |
-| Elétrico | 0,9% | 2,5% | 3,1% | 7,7% |
-| Híbrido Plug-In | 1,5% | 2,5% | 3,9% | 6,4% |
-| Híbrido | 2,0% | 2,1% | 4,2% | 6,0% |
-| Gasolina | 2,7% | 4,1% | 4,5% | 2,6% |
-| Etanol | 0,0% | 0,0% | 0,0% | 0,1% |
+| Combustível | 2019 | 2020 | 2021 | 2022 | 2023 | 2024 | 2025 | 2026 |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| Flex Fuel | 87,4% | 85,2% | 82,2% | 83,3% | 83,0% | 79,1% | 74,4% | 68,0% |
+| Diesel | 9,4% | 10,8% | 13,4% | 11,7% | 9,9% | 9,7% | 10,0% | 9,2% |
+| Elétrico | 0,0% | 0,0% | 0,1% | 0,4% | 0,9% | 2,5% | 3,1% | 7,7% |
+| Híbrido Plug-In | 0,1% | 0,3% | 0,6% | 0,5% | 1,5% | 2,5% | 3,9% | 6,4% |
+| Híbrido | 0,4% | 0,8% | 1,1% | 1,6% | 2,0% | 2,1% | 4,2% | 6,0% |
+| Gasolina | 2,8% | 2,9% | 2,6% | 2,4% | 2,7% | 4,1% | 4,5% | 2,6% |
+| Etanol | 0,0% | 0,0% | 0,0% | 0,0% | 0,0% | 0,0% | 0,0% | 0,1% |
 
 ![Mix de combustível](graficos/04_mix_combustivel_leves.png)
 
@@ -68,6 +68,10 @@ Fonte: [ANFAVEA – Central de Dados](https://anfavea.com.br/site/central-de-dad
 
 | Ano | Nacional | Importado | % importado |
 |---|---:|---:|---:|
+| 2019 | 2.490.193 | 297.657 | 10,7% |
+| 2020 | 1.846.818 | 211.619 | 10,3% |
+| 2021 | 1.866.073 | 253.778 | 12,0% |
+| 2022 | 1.830.992 | 273.469 | 13,0% |
 | 2023 | 1.956.700 | 351.989 | 15,2% |
 | 2024 | 2.168.399 | 466.505 | 17,7% |
 | 2025 | 2.191.869 | 497.765 | 18,5% |

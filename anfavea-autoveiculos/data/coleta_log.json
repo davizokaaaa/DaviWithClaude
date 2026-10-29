@@ -1,12 +1,12 @@
 {
- "inicio": "2023-01",
+ "inicio": "2019-01",
  "fim": "2026-10",
- "coletado_em": "2026-10-14T14:45:43.768550+00:00",
+ "coletado_em": "2026-10-29T14:49:04.688800+00:00",
  "consultas": [
   {
    "consulta": "producao__categorias",
    "ok": true,
-   "linhas": 46,
+   "linhas": 94,
    "colunas": [
     "PERÍODO",
     "AUTOMÓVEIS",
@@ -21,7 +21,7 @@
   {
    "consulta": "producao__caminhoes_subsegmento",
    "ok": true,
-   "linhas": 46,
+   "linhas": 94,
    "colunas": [
     "PERÍODO",
     "CAMINHÕES SEMILEVES",
@@ -35,7 +35,7 @@
   {
    "consulta": "emplacamento__categorias",
    "ok": true,
-   "linhas": 46,
+   "linhas": 94,
    "colunas": [
     "PERÍODO",
     "AUTOMÓVEIS",
@@ -50,7 +50,7 @@
   {
    "consulta": "emplacamento__caminhoes_subsegmento",
    "ok": true,
-   "linhas": 46,
+   "linhas": 94,
    "colunas": [
     "PERÍODO",
     "CAMINHÕES SEMILEVES",
@@ -64,7 +64,7 @@
   {
    "consulta": "exportacao__categorias",
    "ok": true,
-   "linhas": 46,
+   "linhas": 94,
    "colunas": [
     "PERÍODO",
     "AUTOMÓVEIS",
@@ -79,7 +79,7 @@
   {
    "consulta": "exportacao__caminhoes_subsegmento",
    "ok": true,
-   "linhas": 46,
+   "linhas": 94,
    "colunas": [
     "PERÍODO",
     "CAMINHÕES SEMILEVES",
@@ -112,7 +112,7 @@
   {
    "consulta": "emplacamento__automoveis__procedencia",
    "ok": true,
-   "linhas": 45,
+   "linhas": 93,
    "colunas": [
     "PERÍODO",
     "AUTOMÓVEIS - IMPORTADO",
@@ -142,7 +142,7 @@
   {
    "consulta": "emplacamento__automoveis__combustivel",
    "ok": true,
-   "linhas": 46,
+   "linhas": 94,
    "colunas": [
     "PERÍODO",
     "AUTOMÓVEIS - DIESEL",
@@ -177,7 +177,7 @@
   {
    "consulta": "emplacamento__comerciais_leves__procedencia",
    "ok": true,
-   "linhas": 45,
+   "linhas": 93,
    "colunas": [
     "PERÍODO",
     "COMERCIAIS LEVES - IMPORTADO",
@@ -207,7 +207,7 @@
   {
    "consulta": "emplacamento__comerciais_leves__combustivel",
    "ok": true,
-   "linhas": 46,
+   "linhas": 94,
    "colunas": [
     "PERÍODO",
     "COMERCIAIS LEVES - DIESEL",
@@ -242,7 +242,7 @@
   {
    "consulta": "emplacamento__caminhoes__procedencia",
    "ok": true,
-   "linhas": 45,
+   "linhas": 93,
    "colunas": [
     "PERÍODO",
     "CAMINHÕES - IMPORTADO",
@@ -272,7 +272,7 @@
   {
    "consulta": "emplacamento__caminhoes__combustivel",
    "ok": true,
-   "linhas": 46,
+   "linhas": 94,
    "colunas": [
     "PERÍODO",
     "CAMINHÕES - DIESEL",
@@ -304,7 +304,7 @@
   {
    "consulta": "emplacamento__onibus__procedencia",
    "ok": true,
-   "linhas": 45,
+   "linhas": 93,
    "colunas": [
     "PERÍODO",
     "ÔNIBUS - IMPORTADO",
@@ -334,7 +334,7 @@
   {
    "consulta": "emplacamento__onibus__combustivel",
    "ok": true,
-   "linhas": 46,
+   "linhas": 94,
    "colunas": [
     "PERÍODO",
     "ÔNIBUS - DIESEL",

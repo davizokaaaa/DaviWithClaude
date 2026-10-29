@@ -1,4 +1,1060 @@
 periodo,categoria,combustivel,valor
+2019-01,Automóveis,Diesel,3544
+2019-01,Automóveis,Elétrico,37
+2019-01,Automóveis,Etanol,3
+2019-01,Automóveis,Flex Fuel,154071
+2019-01,Automóveis,Gasolina,5804
+2019-01,Automóveis,Híbrido,281
+2019-01,Automóveis,Híbrido Plug-In,53
+2019-01,Caminhões,Diesel,6984
+2019-01,Caminhões,Elétrico,0
+2019-01,Caminhões,Gasolina,3
+2019-01,Caminhões,Gás,0
+2019-01,Comerciais leves,Diesel,14082
+2019-01,Comerciais leves,Elétrico,0
+2019-01,Comerciais leves,Etanol,0
+2019-01,Comerciais leves,Flex Fuel,13307
+2019-01,Comerciais leves,Gasolina,27
+2019-01,Comerciais leves,Híbrido,0
+2019-01,Comerciais leves,Híbrido Plug-In,0
+2019-01,Ônibus,Diesel,1594
+2019-01,Ônibus,Elétrico,4
+2019-01,Ônibus,Gasolina,0
+2019-01,Ônibus,Gás,0
+2019-02,Automóveis,Diesel,3462
+2019-02,Automóveis,Elétrico,4
+2019-02,Automóveis,Etanol,0
+2019-02,Automóveis,Flex Fuel,152751
+2019-02,Automóveis,Gasolina,6037
+2019-02,Automóveis,Híbrido,201
+2019-02,Automóveis,Híbrido Plug-In,83
+2019-02,Caminhões,Diesel,6876
+2019-02,Caminhões,Elétrico,0
+2019-02,Caminhões,Gasolina,0
+2019-02,Caminhões,Gás,0
+2019-02,Comerciais leves,Diesel,12711
+2019-02,Comerciais leves,Elétrico,0
+2019-02,Comerciais leves,Etanol,0
+2019-02,Comerciais leves,Flex Fuel,15009
+2019-02,Comerciais leves,Gasolina,15
+2019-02,Comerciais leves,Híbrido,0
+2019-02,Comerciais leves,Híbrido Plug-In,0
+2019-02,Ônibus,Diesel,1492
+2019-02,Ônibus,Elétrico,0
+2019-02,Ônibus,Gasolina,0
+2019-02,Ônibus,Gás,0
+2019-03,Automóveis,Diesel,3784
+2019-03,Automóveis,Elétrico,15
+2019-03,Automóveis,Etanol,1
+2019-03,Automóveis,Flex Fuel,160649
+2019-03,Automóveis,Gasolina,5715
+2019-03,Automóveis,Híbrido,191
+2019-03,Automóveis,Híbrido Plug-In,132
+2019-03,Caminhões,Diesel,7597
+2019-03,Caminhões,Elétrico,0
+2019-03,Caminhões,Gasolina,3
+2019-03,Caminhões,Gás,1
+2019-03,Comerciais leves,Diesel,14526
+2019-03,Comerciais leves,Elétrico,0
+2019-03,Comerciais leves,Etanol,1
+2019-03,Comerciais leves,Flex Fuel,14927
+2019-03,Comerciais leves,Gasolina,33
+2019-03,Comerciais leves,Híbrido,0
+2019-03,Comerciais leves,Híbrido Plug-In,0
+2019-03,Ônibus,Diesel,1587
+2019-03,Ônibus,Elétrico,3
+2019-03,Ônibus,Gasolina,0
+2019-03,Ônibus,Gás,0
+2019-04,Automóveis,Diesel,4292
+2019-04,Automóveis,Elétrico,33
+2019-04,Automóveis,Etanol,1
+2019-04,Automóveis,Flex Fuel,178223
+2019-04,Automóveis,Gasolina,6291
+2019-04,Automóveis,Híbrido,208
+2019-04,Automóveis,Híbrido Plug-In,49
+2019-04,Caminhões,Diesel,8502
+2019-04,Caminhões,Elétrico,0
+2019-04,Caminhões,Gasolina,0
+2019-04,Caminhões,Gás,0
+2019-04,Comerciais leves,Diesel,16312
+2019-04,Comerciais leves,Elétrico,1
+2019-04,Comerciais leves,Etanol,0
+2019-04,Comerciais leves,Flex Fuel,16294
+2019-04,Comerciais leves,Gasolina,19
+2019-04,Comerciais leves,Híbrido,0
+2019-04,Comerciais leves,Híbrido Plug-In,0
+2019-04,Ônibus,Diesel,1710
+2019-04,Ônibus,Elétrico,1
+2019-04,Ônibus,Gasolina,0
+2019-04,Ônibus,Gás,0
+2019-05,Automóveis,Diesel,4287
+2019-05,Automóveis,Elétrico,23
+2019-05,Automóveis,Etanol,3
+2019-05,Automóveis,Flex Fuel,187954
+2019-05,Automóveis,Gasolina,6173
+2019-05,Automóveis,Híbrido,241
+2019-05,Automóveis,Híbrido Plug-In,95
+2019-05,Caminhões,Diesel,9127
+2019-05,Caminhões,Elétrico,0
+2019-05,Caminhões,Gasolina,1
+2019-05,Caminhões,Gás,0
+2019-05,Comerciais leves,Diesel,17368
+2019-05,Comerciais leves,Elétrico,0
+2019-05,Comerciais leves,Etanol,0
+2019-05,Comerciais leves,Flex Fuel,18434
+2019-05,Comerciais leves,Gasolina,21
+2019-05,Comerciais leves,Híbrido,0
+2019-05,Comerciais leves,Híbrido Plug-In,0
+2019-05,Ônibus,Diesel,1710
+2019-05,Ônibus,Elétrico,3
+2019-05,Ônibus,Gasolina,0
+2019-05,Ônibus,Gás,0
+2019-06,Automóveis,Diesel,4632
+2019-06,Automóveis,Elétrico,15
+2019-06,Automóveis,Etanol,1
+2019-06,Automóveis,Flex Fuel,170038
+2019-06,Automóveis,Gasolina,5909
+2019-06,Automóveis,Híbrido,554
+2019-06,Automóveis,Híbrido Plug-In,148
+2019-06,Caminhões,Diesel,7688
+2019-06,Caminhões,Elétrico,0
+2019-06,Caminhões,Gasolina,0
+2019-06,Caminhões,Gás,0
+2019-06,Comerciais leves,Diesel,16152
+2019-06,Comerciais leves,Elétrico,0
+2019-06,Comerciais leves,Etanol,1
+2019-06,Comerciais leves,Flex Fuel,16509
+2019-06,Comerciais leves,Gasolina,36
+2019-06,Comerciais leves,Híbrido,0
+2019-06,Comerciais leves,Híbrido Plug-In,0
+2019-06,Ônibus,Diesel,1508
+2019-06,Ônibus,Elétrico,7
+2019-06,Ônibus,Gasolina,0
+2019-06,Ônibus,Gás,0
+2019-07,Automóveis,Diesel,5055
+2019-07,Automóveis,Elétrico,34
+2019-07,Automóveis,Etanol,1
+2019-07,Automóveis,Flex Fuel,183924
+2019-07,Automóveis,Gasolina,5914
+2019-07,Automóveis,Híbrido,785
+2019-07,Automóveis,Híbrido Plug-In,141
+2019-07,Caminhões,Diesel,8941
+2019-07,Caminhões,Elétrico,0
+2019-07,Caminhões,Gasolina,1
+2019-07,Caminhões,Gás,0
+2019-07,Comerciais leves,Diesel,18210
+2019-07,Comerciais leves,Elétrico,0
+2019-07,Comerciais leves,Etanol,0
+2019-07,Comerciais leves,Flex Fuel,18749
+2019-07,Comerciais leves,Gasolina,48
+2019-07,Comerciais leves,Híbrido,0
+2019-07,Comerciais leves,Híbrido Plug-In,0
+2019-07,Ônibus,Diesel,1809
+2019-07,Ônibus,Elétrico,2
+2019-07,Ônibus,Gasolina,0
+2019-07,Ônibus,Gás,0
+2019-08,Automóveis,Diesel,4823
+2019-08,Automóveis,Elétrico,54
+2019-08,Automóveis,Etanol,4
+2019-08,Automóveis,Flex Fuel,183785
+2019-08,Automóveis,Gasolina,6436
+2019-08,Automóveis,Híbrido,689
+2019-08,Automóveis,Híbrido Plug-In,126
+2019-08,Caminhões,Diesel,9419
+2019-08,Caminhões,Elétrico,10
+2019-08,Caminhões,Gasolina,2
+2019-08,Caminhões,Gás,2
+2019-08,Comerciais leves,Diesel,17522
+2019-08,Comerciais leves,Elétrico,0
+2019-08,Comerciais leves,Etanol,0
+2019-08,Comerciais leves,Flex Fuel,18040
+2019-08,Comerciais leves,Gasolina,43
+2019-08,Comerciais leves,Híbrido,0
+2019-08,Comerciais leves,Híbrido Plug-In,0
+2019-08,Ônibus,Diesel,2030
+2019-08,Ônibus,Elétrico,0
+2019-08,Ônibus,Gasolina,0
+2019-08,Ônibus,Gás,0
+2019-09,Automóveis,Diesel,4169
+2019-09,Automóveis,Elétrico,163
+2019-09,Automóveis,Etanol,2
+2019-09,Automóveis,Flex Fuel,175896
+2019-09,Automóveis,Gasolina,6484
+2019-09,Automóveis,Híbrido,907
+2019-09,Automóveis,Híbrido Plug-In,197
+2019-09,Caminhões,Diesel,9094
+2019-09,Caminhões,Elétrico,1
+2019-09,Caminhões,Gasolina,3
+2019-09,Caminhões,Gás,0
+2019-09,Comerciais leves,Diesel,17347
+2019-09,Comerciais leves,Elétrico,0
+2019-09,Comerciais leves,Etanol,0
+2019-09,Comerciais leves,Flex Fuel,18803
+2019-09,Comerciais leves,Gasolina,46
+2019-09,Comerciais leves,Híbrido,0
+2019-09,Comerciais leves,Híbrido Plug-In,0
+2019-09,Ônibus,Diesel,1730
+2019-09,Ônibus,Elétrico,6
+2019-09,Ônibus,Gasolina,0
+2019-09,Ônibus,Gás,0
+2019-10,Automóveis,Diesel,4943
+2019-10,Automóveis,Elétrico,45
+2019-10,Automóveis,Etanol,0
+2019-10,Automóveis,Flex Fuel,191275
+2019-10,Automóveis,Gasolina,6329
+2019-10,Automóveis,Híbrido,1695
+2019-10,Automóveis,Híbrido Plug-In,245
+2019-10,Caminhões,Diesel,9407
+2019-10,Caminhões,Elétrico,11
+2019-10,Caminhões,Gasolina,0
+2019-10,Caminhões,Gás,0
+2019-10,Comerciais leves,Diesel,18022
+2019-10,Comerciais leves,Elétrico,4
+2019-10,Comerciais leves,Etanol,0
+2019-10,Comerciais leves,Flex Fuel,19179
+2019-10,Comerciais leves,Gasolina,49
+2019-10,Comerciais leves,Híbrido,0
+2019-10,Comerciais leves,Híbrido Plug-In,0
+2019-10,Ônibus,Diesel,2157
+2019-10,Ônibus,Elétrico,0
+2019-10,Ônibus,Gasolina,0
+2019-10,Ônibus,Gás,0
+2019-11,Automóveis,Diesel,4578
+2019-11,Automóveis,Elétrico,60
+2019-11,Automóveis,Etanol,5
+2019-11,Automóveis,Flex Fuel,184510
+2019-11,Automóveis,Gasolina,5670
+2019-11,Automóveis,Híbrido,1644
+2019-11,Automóveis,Híbrido Plug-In,304
+2019-11,Caminhões,Diesel,9051
+2019-11,Caminhões,Elétrico,6
+2019-11,Caminhões,Gasolina,2
+2019-11,Caminhões,Gás,5
+2019-11,Comerciais leves,Diesel,16604
+2019-11,Comerciais leves,Elétrico,3
+2019-11,Comerciais leves,Etanol,0
+2019-11,Comerciais leves,Flex Fuel,18170
+2019-11,Comerciais leves,Gasolina,42
+2019-11,Comerciais leves,Híbrido,0
+2019-11,Comerciais leves,Híbrido Plug-In,0
+2019-11,Ônibus,Diesel,1641
+2019-11,Ônibus,Elétrico,15
+2019-11,Ônibus,Gasolina,0
+2019-11,Ônibus,Gás,0
+2019-12,Automóveis,Diesel,5364
+2019-12,Automóveis,Elétrico,47
+2019-12,Automóveis,Etanol,4
+2019-12,Automóveis,Flex Fuel,200767
+2019-12,Automóveis,Gasolina,6650
+2019-12,Automóveis,Híbrido,2085
+2019-12,Automóveis,Híbrido Plug-In,276
+2019-12,Caminhões,Diesel,8594
+2019-12,Caminhões,Elétrico,1
+2019-12,Caminhões,Gasolina,1
+2019-12,Caminhões,Gás,2
+2019-12,Comerciais leves,Diesel,19436
+2019-12,Comerciais leves,Elétrico,3
+2019-12,Comerciais leves,Etanol,0
+2019-12,Comerciais leves,Flex Fuel,17359
+2019-12,Comerciais leves,Gasolina,46
+2019-12,Comerciais leves,Híbrido,0
+2019-12,Comerciais leves,Híbrido Plug-In,0
+2019-12,Ônibus,Diesel,1922
+2019-12,Ônibus,Elétrico,1
+2019-12,Ônibus,Gasolina,0
+2019-12,Ônibus,Gás,0
+2020-01,Automóveis,Diesel,3805
+2020-01,Automóveis,Elétrico,38
+2020-01,Automóveis,Etanol,2
+2020-01,Automóveis,Flex Fuel,144634
+2020-01,Automóveis,Gasolina,4579
+2020-01,Automóveis,Híbrido,1344
+2020-01,Automóveis,Híbrido Plug-In,179
+2020-01,Caminhões,Diesel,7282
+2020-01,Caminhões,Elétrico,0
+2020-01,Caminhões,Gasolina,3
+2020-01,Caminhões,Gás,0
+2020-01,Comerciais leves,Diesel,15959
+2020-01,Comerciais leves,Elétrico,9
+2020-01,Comerciais leves,Etanol,0
+2020-01,Comerciais leves,Flex Fuel,14085
+2020-01,Comerciais leves,Gasolina,48
+2020-01,Comerciais leves,Híbrido,0
+2020-01,Comerciais leves,Híbrido Plug-In,0
+2020-01,Ônibus,Diesel,1490
+2020-01,Ônibus,Elétrico,2
+2020-01,Ônibus,Gasolina,0
+2020-01,Ônibus,Gás,0
+2020-02,Automóveis,Diesel,3646
+2020-02,Automóveis,Elétrico,49
+2020-02,Automóveis,Etanol,1
+2020-02,Automóveis,Flex Fuel,154099
+2020-02,Automóveis,Gasolina,5349
+2020-02,Automóveis,Híbrido,1684
+2020-02,Automóveis,Híbrido Plug-In,322
+2020-02,Caminhões,Diesel,6405
+2020-02,Caminhões,Elétrico,2
+2020-02,Caminhões,Gasolina,2
+2020-02,Caminhões,Gás,3
+2020-02,Comerciais leves,Diesel,14842
+2020-02,Comerciais leves,Elétrico,0
+2020-02,Comerciais leves,Etanol,0
+2020-02,Comerciais leves,Flex Fuel,13275
+2020-02,Comerciais leves,Gasolina,32
+2020-02,Comerciais leves,Híbrido,0
+2020-02,Comerciais leves,Híbrido Plug-In,0
+2020-02,Ônibus,Diesel,1285
+2020-02,Ônibus,Elétrico,1
+2020-02,Ônibus,Gasolina,0
+2020-02,Ônibus,Gás,0
+2020-03,Automóveis,Diesel,2674
+2020-03,Automóveis,Elétrico,81
+2020-03,Automóveis,Etanol,4
+2020-03,Automóveis,Flex Fuel,123050
+2020-03,Automóveis,Gasolina,3977
+2020-03,Automóveis,Híbrido,1162
+2020-03,Automóveis,Híbrido Plug-In,328
+2020-03,Caminhões,Diesel,6429
+2020-03,Caminhões,Elétrico,8
+2020-03,Caminhões,Gasolina,1
+2020-03,Caminhões,Gás,0
+2020-03,Comerciais leves,Diesel,13011
+2020-03,Comerciais leves,Elétrico,1
+2020-03,Comerciais leves,Etanol,0
+2020-03,Comerciais leves,Flex Fuel,11991
+2020-03,Comerciais leves,Gasolina,25
+2020-03,Comerciais leves,Híbrido,0
+2020-03,Comerciais leves,Híbrido Plug-In,0
+2020-03,Ônibus,Diesel,883
+2020-03,Ônibus,Elétrico,0
+2020-03,Ônibus,Gasolina,0
+2020-03,Ônibus,Gás,0
+2020-04,Automóveis,Diesel,1309
+2020-04,Automóveis,Elétrico,23
+2020-04,Automóveis,Etanol,0
+2020-04,Automóveis,Flex Fuel,36477
+2020-04,Automóveis,Gasolina,1273
+2020-04,Automóveis,Híbrido,242
+2020-04,Automóveis,Híbrido Plug-In,177
+2020-04,Caminhões,Diesel,3954
+2020-04,Caminhões,Elétrico,0
+2020-04,Caminhões,Gasolina,0
+2020-04,Caminhões,Gás,0
+2020-04,Comerciais leves,Diesel,7276
+2020-04,Comerciais leves,Elétrico,0
+2020-04,Comerciais leves,Etanol,0
+2020-04,Comerciais leves,Flex Fuel,4665
+2020-04,Comerciais leves,Gasolina,19
+2020-04,Comerciais leves,Híbrido,0
+2020-04,Comerciais leves,Híbrido Plug-In,0
+2020-04,Ônibus,Diesel,320
+2020-04,Ônibus,Elétrico,0
+2020-04,Ônibus,Gasolina,0
+2020-04,Ônibus,Gás,0
+2020-05,Automóveis,Diesel,1371
+2020-05,Automóveis,Elétrico,51
+2020-05,Automóveis,Etanol,0
+2020-05,Automóveis,Flex Fuel,39834
+2020-05,Automóveis,Gasolina,2332
+2020-05,Automóveis,Híbrido,354
+2020-05,Automóveis,Híbrido Plug-In,195
+2020-05,Caminhões,Diesel,4820
+2020-05,Caminhões,Elétrico,0
+2020-05,Caminhões,Gasolina,0
+2020-05,Caminhões,Gás,0
+2020-05,Comerciais leves,Diesel,7649
+2020-05,Comerciais leves,Elétrico,0
+2020-05,Comerciais leves,Etanol,0
+2020-05,Comerciais leves,Flex Fuel,4901
+2020-05,Comerciais leves,Gasolina,17
+2020-05,Comerciais leves,Híbrido,0
+2020-05,Comerciais leves,Híbrido Plug-In,0
+2020-05,Ônibus,Diesel,662
+2020-05,Ônibus,Elétrico,4
+2020-05,Ônibus,Gasolina,0
+2020-05,Ônibus,Gás,0
+2020-06,Automóveis,Diesel,2961
+2020-06,Automóveis,Elétrico,71
+2020-06,Automóveis,Etanol,1
+2020-06,Automóveis,Flex Fuel,92765
+2020-06,Automóveis,Gasolina,5326
+2020-06,Automóveis,Híbrido,799
+2020-06,Automóveis,Híbrido Plug-In,481
+2020-06,Caminhões,Diesel,8947
+2020-06,Caminhões,Elétrico,0
+2020-06,Caminhões,Gasolina,2
+2020-06,Caminhões,Gás,5
+2020-06,Comerciais leves,Diesel,10852
+2020-06,Comerciais leves,Elétrico,4
+2020-06,Comerciais leves,Etanol,0
+2020-06,Comerciais leves,Flex Fuel,9493
+2020-06,Comerciais leves,Gasolina,42
+2020-06,Comerciais leves,Híbrido,0
+2020-06,Comerciais leves,Híbrido Plug-In,0
+2020-06,Ônibus,Diesel,1069
+2020-06,Ônibus,Elétrico,0
+2020-06,Ônibus,Gasolina,0
+2020-06,Ônibus,Gás,0
+2020-07,Automóveis,Diesel,4261
+2020-07,Automóveis,Elétrico,54
+2020-07,Automóveis,Etanol,2
+2020-07,Automóveis,Flex Fuel,123256
+2020-07,Automóveis,Gasolina,5742
+2020-07,Automóveis,Híbrido,1184
+2020-07,Automóveis,Híbrido Plug-In,457
+2020-07,Caminhões,Diesel,9535
+2020-07,Caminhões,Elétrico,1
+2020-07,Caminhões,Gasolina,0
+2020-07,Caminhões,Gás,7
+2020-07,Comerciais leves,Diesel,13623
+2020-07,Comerciais leves,Elétrico,1
+2020-07,Comerciais leves,Etanol,0
+2020-07,Comerciais leves,Flex Fuel,14782
+2020-07,Comerciais leves,Gasolina,59
+2020-07,Comerciais leves,Híbrido,0
+2020-07,Comerciais leves,Híbrido Plug-In,0
+2020-07,Ônibus,Diesel,1520
+2020-07,Ônibus,Elétrico,2
+2020-07,Ônibus,Gasolina,1
+2020-07,Ônibus,Gás,0
+2020-08,Automóveis,Diesel,4011
+2020-08,Automóveis,Elétrico,45
+2020-08,Automóveis,Etanol,2
+2020-08,Automóveis,Flex Fuel,130288
+2020-08,Automóveis,Gasolina,5564
+2020-08,Automóveis,Híbrido,1734
+2020-08,Automóveis,Híbrido Plug-In,413
+2020-08,Caminhões,Diesel,8073
+2020-08,Caminhões,Elétrico,0
+2020-08,Caminhões,Gasolina,0
+2020-08,Caminhões,Gás,6
+2020-08,Comerciais leves,Diesel,13707
+2020-08,Comerciais leves,Elétrico,1
+2020-08,Comerciais leves,Etanol,1
+2020-08,Comerciais leves,Flex Fuel,17985
+2020-08,Comerciais leves,Gasolina,68
+2020-08,Comerciais leves,Híbrido,0
+2020-08,Comerciais leves,Híbrido Plug-In,0
+2020-08,Ônibus,Diesel,1497
+2020-08,Ônibus,Elétrico,0
+2020-08,Ônibus,Gasolina,0
+2020-08,Ônibus,Gás,0
+2020-09,Automóveis,Diesel,5257
+2020-09,Automóveis,Elétrico,74
+2020-09,Automóveis,Etanol,1
+2020-09,Automóveis,Flex Fuel,147356
+2020-09,Automóveis,Gasolina,6053
+2020-09,Automóveis,Híbrido,1811
+2020-09,Automóveis,Híbrido Plug-In,562
+2020-09,Caminhões,Diesel,7307
+2020-09,Caminhões,Elétrico,0
+2020-09,Caminhões,Gasolina,0
+2020-09,Caminhões,Gás,5
+2020-09,Comerciais leves,Diesel,16983
+2020-09,Comerciais leves,Elétrico,4
+2020-09,Comerciais leves,Etanol,1
+2020-09,Comerciais leves,Flex Fuel,20994
+2020-09,Comerciais leves,Gasolina,68
+2020-09,Comerciais leves,Híbrido,0
+2020-09,Comerciais leves,Híbrido Plug-In,0
+2020-09,Ônibus,Diesel,1234
+2020-09,Ônibus,Elétrico,0
+2020-09,Ônibus,Gasolina,0
+2020-09,Ônibus,Gás,0
+2020-10,Automóveis,Diesel,5574
+2020-10,Automóveis,Elétrico,125
+2020-10,Automóveis,Etanol,5
+2020-10,Automóveis,Flex Fuel,154864
+2020-10,Automóveis,Gasolina,5563
+2020-10,Automóveis,Híbrido,1807
+2020-10,Automóveis,Híbrido Plug-In,570
+2020-10,Caminhões,Diesel,7907
+2020-10,Caminhões,Elétrico,1
+2020-10,Caminhões,Gasolina,0
+2020-10,Caminhões,Gás,1
+2020-10,Comerciais leves,Diesel,16201
+2020-10,Comerciais leves,Elétrico,29
+2020-10,Comerciais leves,Etanol,1
+2020-10,Comerciais leves,Flex Fuel,20872
+2020-10,Comerciais leves,Gasolina,88
+2020-10,Comerciais leves,Híbrido,0
+2020-10,Comerciais leves,Híbrido Plug-In,0
+2020-10,Ônibus,Diesel,1433
+2020-10,Ônibus,Elétrico,3
+2020-10,Ônibus,Gasolina,0
+2020-10,Ônibus,Gás,0
+2020-11,Automóveis,Diesel,5865
+2020-11,Automóveis,Elétrico,65
+2020-11,Automóveis,Etanol,0
+2020-11,Automóveis,Flex Fuel,163795
+2020-11,Automóveis,Gasolina,5496
+2020-11,Automóveis,Híbrido,1681
+2020-11,Automóveis,Híbrido Plug-In,675
+2020-11,Caminhões,Diesel,9143
+2020-11,Caminhões,Elétrico,0
+2020-11,Caminhões,Gasolina,0
+2020-11,Caminhões,Gás,0
+2020-11,Comerciais leves,Diesel,16095
+2020-11,Comerciais leves,Elétrico,5
+2020-11,Comerciais leves,Etanol,0
+2020-11,Comerciais leves,Flex Fuel,20729
+2020-11,Comerciais leves,Gasolina,72
+2020-11,Comerciais leves,Híbrido,0
+2020-11,Comerciais leves,Híbrido Plug-In,0
+2020-11,Ônibus,Diesel,1383
+2020-11,Ônibus,Elétrico,6
+2020-11,Ônibus,Gasolina,0
+2020-11,Ônibus,Gás,0
+2020-12,Automóveis,Diesel,6693
+2020-12,Automóveis,Elétrico,88
+2020-12,Automóveis,Etanol,0
+2020-12,Automóveis,Flex Fuel,180064
+2020-12,Automóveis,Gasolina,5806
+2020-12,Automóveis,Híbrido,1308
+2020-12,Automóveis,Híbrido Plug-In,722
+2020-12,Caminhões,Diesel,9809
+2020-12,Caminhões,Elétrico,11
+2020-12,Caminhões,Gasolina,0
+2020-12,Caminhões,Gás,18
+2020-12,Comerciais leves,Diesel,17511
+2020-12,Comerciais leves,Elétrico,4
+2020-12,Comerciais leves,Etanol,0
+2020-12,Comerciais leves,Flex Fuel,20726
+2020-12,Comerciais leves,Gasolina,62
+2020-12,Comerciais leves,Híbrido,0
+2020-12,Comerciais leves,Híbrido Plug-In,0
+2020-12,Ônibus,Diesel,1145
+2020-12,Ônibus,Elétrico,0
+2020-12,Ônibus,Gasolina,0
+2020-12,Ônibus,Gás,0
+2021-01,Automóveis,Diesel,4639
+2021-01,Automóveis,Elétrico,127
+2021-01,Automóveis,Etanol,2
+2021-01,Automóveis,Flex Fuel,121006
+2021-01,Automóveis,Gasolina,3739
+2021-01,Automóveis,Híbrido,644
+2021-01,Automóveis,Híbrido Plug-In,647
+2021-01,Caminhões,Diesel,7534
+2021-01,Caminhões,Elétrico,0
+2021-01,Caminhões,Gasolina,0
+2021-01,Caminhões,Gás,4
+2021-01,Comerciais leves,Diesel,14449
+2021-01,Comerciais leves,Elétrico,13
+2021-01,Comerciais leves,Etanol,0
+2021-01,Comerciais leves,Flex Fuel,17271
+2021-01,Comerciais leves,Gasolina,42
+2021-01,Comerciais leves,Híbrido,0
+2021-01,Comerciais leves,Híbrido Plug-In,0
+2021-01,Ônibus,Diesel,1028
+2021-01,Ônibus,Elétrico,1
+2021-01,Ônibus,Gasolina,0
+2021-01,Ônibus,Gás,0
+2021-02,Automóveis,Diesel,3986
+2021-02,Automóveis,Elétrico,132
+2021-02,Automóveis,Etanol,1
+2021-02,Automóveis,Flex Fuel,119043
+2021-02,Automóveis,Gasolina,3612
+2021-02,Automóveis,Híbrido,793
+2021-02,Automóveis,Híbrido Plug-In,544
+2021-02,Caminhões,Diesel,7770
+2021-02,Caminhões,Elétrico,6
+2021-02,Caminhões,Gasolina,0
+2021-02,Caminhões,Gás,5
+2021-02,Comerciais leves,Diesel,11794
+2021-02,Comerciais leves,Elétrico,2
+2021-02,Comerciais leves,Etanol,0
+2021-02,Comerciais leves,Flex Fuel,18538
+2021-02,Comerciais leves,Gasolina,43
+2021-02,Comerciais leves,Híbrido,0
+2021-02,Comerciais leves,Híbrido Plug-In,0
+2021-02,Ônibus,Diesel,1122
+2021-02,Ônibus,Elétrico,0
+2021-02,Ônibus,Gasolina,0
+2021-02,Ônibus,Gás,0
+2021-03,Automóveis,Diesel,5131
+2021-03,Automóveis,Elétrico,89
+2021-03,Automóveis,Etanol,1
+2021-03,Automóveis,Flex Fuel,131094
+2021-03,Automóveis,Gasolina,3810
+2021-03,Automóveis,Híbrido,912
+2021-03,Automóveis,Híbrido Plug-In,915
+2021-03,Caminhões,Diesel,10737
+2021-03,Caminhões,Elétrico,14
+2021-03,Caminhões,Gasolina,0
+2021-03,Caminhões,Gás,8
+2021-03,Comerciais leves,Diesel,14418
+2021-03,Comerciais leves,Elétrico,14
+2021-03,Comerciais leves,Etanol,1
+2021-03,Comerciais leves,Flex Fuel,21008
+2021-03,Comerciais leves,Gasolina,57
+2021-03,Comerciais leves,Híbrido,0
+2021-03,Comerciais leves,Híbrido Plug-In,0
+2021-03,Ônibus,Diesel,1180
+2021-03,Ônibus,Elétrico,0
+2021-03,Ônibus,Gasolina,0
+2021-03,Ônibus,Gás,0
+2021-04,Automóveis,Diesel,6496
+2021-04,Automóveis,Elétrico,66
+2021-04,Automóveis,Etanol,1
+2021-04,Automóveis,Flex Fuel,114214
+2021-04,Automóveis,Gasolina,3921
+2021-04,Automóveis,Híbrido,1857
+2021-04,Automóveis,Híbrido Plug-In,908
+2021-04,Caminhões,Diesel,9781
+2021-04,Caminhões,Elétrico,1
+2021-04,Caminhões,Gasolina,0
+2021-04,Caminhões,Gás,4
+2021-04,Comerciais leves,Diesel,14458
+2021-04,Comerciais leves,Elétrico,0
+2021-04,Comerciais leves,Etanol,0
+2021-04,Comerciais leves,Flex Fuel,22137
+2021-04,Comerciais leves,Gasolina,98
+2021-04,Comerciais leves,Híbrido,0
+2021-04,Comerciais leves,Híbrido Plug-In,0
+2021-04,Ônibus,Diesel,1174
+2021-04,Ônibus,Elétrico,0
+2021-04,Ônibus,Gasolina,0
+2021-04,Ônibus,Gás,0
+2021-05,Automóveis,Diesel,6246
+2021-05,Automóveis,Elétrico,89
+2021-05,Automóveis,Etanol,0
+2021-05,Automóveis,Flex Fuel,128704
+2021-05,Automóveis,Gasolina,4395
+2021-05,Automóveis,Híbrido,2290
+2021-05,Automóveis,Híbrido Plug-In,975
+2021-05,Caminhões,Diesel,11488
+2021-05,Caminhões,Elétrico,4
+2021-05,Caminhões,Gasolina,2
+2021-05,Caminhões,Gás,4
+2021-05,Comerciais leves,Diesel,14304
+2021-05,Comerciais leves,Elétrico,4
+2021-05,Comerciais leves,Etanol,0
+2021-05,Comerciais leves,Flex Fuel,18298
+2021-05,Comerciais leves,Gasolina,270
+2021-05,Comerciais leves,Híbrido,0
+2021-05,Comerciais leves,Híbrido Plug-In,0
+2021-05,Ônibus,Diesel,1600
+2021-05,Ônibus,Elétrico,2
+2021-05,Ônibus,Gasolina,0
+2021-05,Ônibus,Gás,1
+2021-06,Automóveis,Diesel,4283
+2021-06,Automóveis,Elétrico,140
+2021-06,Automóveis,Etanol,2
+2021-06,Automóveis,Flex Fuel,120033
+2021-06,Automóveis,Gasolina,5335
+2021-06,Automóveis,Híbrido,2396
+2021-06,Automóveis,Híbrido Plug-In,1142
+2021-06,Caminhões,Diesel,11359
+2021-06,Caminhões,Elétrico,4
+2021-06,Caminhões,Gasolina,2
+2021-06,Caminhões,Gás,6
+2021-06,Comerciais leves,Diesel,16776
+2021-06,Comerciais leves,Elétrico,84
+2021-06,Comerciais leves,Etanol,0
+2021-06,Comerciais leves,Flex Fuel,19283
+2021-06,Comerciais leves,Gasolina,177
+2021-06,Comerciais leves,Híbrido,0
+2021-06,Comerciais leves,Híbrido Plug-In,0
+2021-06,Ônibus,Diesel,1430
+2021-06,Ônibus,Elétrico,0
+2021-06,Ônibus,Gasolina,0
+2021-06,Ônibus,Gás,0
+2021-07,Automóveis,Diesel,4892
+2021-07,Automóveis,Elétrico,177
+2021-07,Automóveis,Etanol,2
+2021-07,Automóveis,Flex Fuel,109816
+2021-07,Automóveis,Gasolina,5089
+2021-07,Automóveis,Híbrido,2645
+2021-07,Automóveis,Híbrido Plug-In,977
+2021-07,Caminhões,Diesel,11959
+2021-07,Caminhões,Elétrico,14
+2021-07,Caminhões,Gasolina,1
+2021-07,Caminhões,Gás,0
+2021-07,Comerciais leves,Diesel,20492
+2021-07,Comerciais leves,Elétrico,6
+2021-07,Comerciais leves,Etanol,2
+2021-07,Comerciais leves,Flex Fuel,17951
+2021-07,Comerciais leves,Gasolina,160
+2021-07,Comerciais leves,Híbrido,0
+2021-07,Comerciais leves,Híbrido Plug-In,0
+2021-07,Ônibus,Diesel,1270
+2021-07,Ônibus,Elétrico,0
+2021-07,Ônibus,Gasolina,0
+2021-07,Ônibus,Gás,0
+2021-08,Automóveis,Diesel,5087
+2021-08,Automóveis,Elétrico,239
+2021-08,Automóveis,Etanol,3
+2021-08,Automóveis,Flex Fuel,105691
+2021-08,Automóveis,Gasolina,5046
+2021-08,Automóveis,Híbrido,2498
+2021-08,Automóveis,Híbrido Plug-In,1264
+2021-08,Caminhões,Diesel,12906
+2021-08,Caminhões,Elétrico,32
+2021-08,Caminhões,Gasolina,1
+2021-08,Caminhões,Gás,8
+2021-08,Comerciais leves,Diesel,22022
+2021-08,Comerciais leves,Elétrico,4
+2021-08,Comerciais leves,Etanol,0
+2021-08,Comerciais leves,Flex Fuel,16533
+2021-08,Comerciais leves,Gasolina,174
+2021-08,Comerciais leves,Híbrido,0
+2021-08,Comerciais leves,Híbrido Plug-In,0
+2021-08,Ônibus,Diesel,1275
+2021-08,Ônibus,Elétrico,1
+2021-08,Ônibus,Gasolina,0
+2021-08,Ônibus,Gás,0
+2021-09,Automóveis,Diesel,5247
+2021-09,Automóveis,Elétrico,266
+2021-09,Automóveis,Etanol,1
+2021-09,Automóveis,Flex Fuel,97090
+2021-09,Automóveis,Gasolina,3902
+2021-09,Automóveis,Híbrido,1513
+2021-09,Automóveis,Híbrido Plug-In,1067
+2021-09,Caminhões,Diesel,11578
+2021-09,Caminhões,Elétrico,42
+2021-09,Caminhões,Gasolina,1
+2021-09,Caminhões,Gás,6
+2021-09,Comerciais leves,Diesel,19788
+2021-09,Comerciais leves,Elétrico,3
+2021-09,Comerciais leves,Etanol,2
+2021-09,Comerciais leves,Flex Fuel,13557
+2021-09,Comerciais leves,Gasolina,158
+2021-09,Comerciais leves,Híbrido,0
+2021-09,Comerciais leves,Híbrido Plug-In,0
+2021-09,Ônibus,Diesel,854
+2021-09,Ônibus,Elétrico,0
+2021-09,Ônibus,Gasolina,0
+2021-09,Ônibus,Gás,0
+2021-10,Automóveis,Diesel,3770
+2021-10,Automóveis,Elétrico,370
+2021-10,Automóveis,Etanol,1
+2021-10,Automóveis,Flex Fuel,109113
+2021-10,Automóveis,Gasolina,3614
+2021-10,Automóveis,Híbrido,1585
+2021-10,Automóveis,Híbrido Plug-In,875
+2021-10,Caminhões,Diesel,10991
+2021-10,Caminhões,Elétrico,35
+2021-10,Caminhões,Gasolina,1
+2021-10,Caminhões,Gás,21
+2021-10,Comerciais leves,Diesel,17319
+2021-10,Comerciais leves,Elétrico,13
+2021-10,Comerciais leves,Etanol,0
+2021-10,Comerciais leves,Flex Fuel,13617
+2021-10,Comerciais leves,Gasolina,119
+2021-10,Comerciais leves,Híbrido,0
+2021-10,Comerciais leves,Híbrido Plug-In,0
+2021-10,Ônibus,Diesel,904
+2021-10,Ônibus,Elétrico,1
+2021-10,Ônibus,Gasolina,0
+2021-10,Ônibus,Gás,0
+2021-11,Automóveis,Diesel,3983
+2021-11,Automóveis,Elétrico,354
+2021-11,Automóveis,Etanol,3
+2021-11,Automóveis,Flex Fuel,114860
+2021-11,Automóveis,Gasolina,3548
+2021-11,Automóveis,Híbrido,2209
+2021-11,Automóveis,Híbrido Plug-In,1145
+2021-11,Caminhões,Diesel,10376
+2021-11,Caminhões,Elétrico,85
+2021-11,Caminhões,Gasolina,0
+2021-11,Caminhões,Gás,12
+2021-11,Comerciais leves,Diesel,18187
+2021-11,Comerciais leves,Elétrico,0
+2021-11,Comerciais leves,Etanol,1
+2021-11,Comerciais leves,Flex Fuel,17026
+2021-11,Comerciais leves,Gasolina,132
+2021-11,Comerciais leves,Híbrido,0
+2021-11,Comerciais leves,Híbrido Plug-In,0
+2021-11,Ônibus,Diesel,1035
+2021-11,Ônibus,Elétrico,7
+2021-11,Ônibus,Gasolina,0
+2021-11,Ônibus,Gás,1
+2021-12,Automóveis,Diesel,6098
+2021-12,Automóveis,Elétrico,718
+2021-12,Automóveis,Etanol,2
+2021-12,Automóveis,Flex Fuel,140985
+2021-12,Automóveis,Gasolina,4462
+2021-12,Automóveis,Híbrido,2860
+2021-12,Automóveis,Híbrido Plug-In,1037
+2021-12,Caminhões,Diesel,11815
+2021-12,Caminhões,Elétrico,56
+2021-12,Caminhões,Gasolina,1
+2021-12,Caminhões,Gás,15
+2021-12,Comerciais leves,Diesel,20310
+2021-12,Comerciais leves,Elétrico,8
+2021-12,Comerciais leves,Etanol,0
+2021-12,Comerciais leves,Flex Fuel,17442
+2021-12,Comerciais leves,Gasolina,68
+2021-12,Comerciais leves,Híbrido,0
+2021-12,Comerciais leves,Híbrido Plug-In,0
+2021-12,Ônibus,Diesel,1168
+2021-12,Ônibus,Elétrico,8
+2021-12,Ônibus,Gasolina,0
+2021-12,Ônibus,Gás,0
+2022-01,Automóveis,Diesel,4148
+2022-01,Automóveis,Elétrico,383
+2022-01,Automóveis,Etanol,4
+2022-01,Automóveis,Flex Fuel,82196
+2022-01,Automóveis,Gasolina,3196
+2022-01,Automóveis,Híbrido,1704
+2022-01,Automóveis,Híbrido Plug-In,606
+2022-01,Caminhões,Diesel,8625
+2022-01,Caminhões,Elétrico,62
+2022-01,Caminhões,Gasolina,4
+2022-01,Caminhões,Gás,14
+2022-01,Comerciais leves,Diesel,11732
+2022-01,Comerciais leves,Elétrico,0
+2022-01,Comerciais leves,Etanol,0
+2022-01,Comerciais leves,Flex Fuel,12742
+2022-01,Comerciais leves,Gasolina,62
+2022-01,Comerciais leves,Híbrido,0
+2022-01,Comerciais leves,Híbrido Plug-In,0
+2022-01,Ônibus,Diesel,1038
+2022-01,Ônibus,Elétrico,1
+2022-01,Ônibus,Gasolina,0
+2022-01,Ônibus,Gás,0
+2022-02,Automóveis,Diesel,3758
+2022-02,Automóveis,Elétrico,422
+2022-02,Automóveis,Etanol,5
+2022-02,Automóveis,Flex Fuel,88864
+2022-02,Automóveis,Gasolina,3849
+2022-02,Automóveis,Híbrido,2544
+2022-02,Automóveis,Híbrido Plug-In,591
+2022-02,Caminhões,Diesel,7891
+2022-02,Caminhões,Elétrico,197
+2022-02,Caminhões,Gasolina,2
+2022-02,Caminhões,Gás,4
+2022-02,Comerciais leves,Diesel,11473
+2022-02,Comerciais leves,Elétrico,0
+2022-02,Comerciais leves,Etanol,1
+2022-02,Comerciais leves,Flex Fuel,11712
+2022-02,Comerciais leves,Gasolina,96
+2022-02,Comerciais leves,Híbrido,0
+2022-02,Comerciais leves,Híbrido Plug-In,0
+2022-02,Ônibus,Diesel,921
+2022-02,Ônibus,Elétrico,0
+2022-02,Ônibus,Gasolina,0
+2022-02,Ônibus,Gás,0
+2022-03,Automóveis,Diesel,3972
+2022-03,Automóveis,Elétrico,434
+2022-03,Automóveis,Etanol,2
+2022-03,Automóveis,Flex Fuel,96781
+2022-03,Automóveis,Gasolina,3673
+2022-03,Automóveis,Híbrido,2988
+2022-03,Automóveis,Híbrido Plug-In,421
+2022-03,Caminhões,Diesel,9946
+2022-03,Caminhões,Elétrico,86
+2022-03,Caminhões,Gasolina,1
+2022-03,Caminhões,Gás,25
+2022-03,Comerciais leves,Diesel,14631
+2022-03,Comerciais leves,Elétrico,97
+2022-03,Comerciais leves,Etanol,0
+2022-03,Comerciais leves,Flex Fuel,12250
+2022-03,Comerciais leves,Gasolina,149
+2022-03,Comerciais leves,Híbrido,0
+2022-03,Comerciais leves,Híbrido Plug-In,0
+2022-03,Ônibus,Diesel,1360
+2022-03,Ônibus,Elétrico,2
+2022-03,Ônibus,Gasolina,0
+2022-03,Ônibus,Gás,0
+2022-04,Automóveis,Diesel,3842
+2022-04,Automóveis,Elétrico,456
+2022-04,Automóveis,Etanol,3
+2022-04,Automóveis,Flex Fuel,99300
+2022-04,Automóveis,Gasolina,3343
+2022-04,Automóveis,Híbrido,2122
+2022-04,Automóveis,Híbrido Plug-In,640
+2022-04,Caminhões,Diesel,9367
+2022-04,Caminhões,Elétrico,34
+2022-04,Caminhões,Gasolina,1
+2022-04,Caminhões,Gás,17
+2022-04,Comerciais leves,Diesel,15509
+2022-04,Comerciais leves,Elétrico,14
+2022-04,Comerciais leves,Etanol,0
+2022-04,Comerciais leves,Flex Fuel,11126
+2022-04,Comerciais leves,Gasolina,340
+2022-04,Comerciais leves,Híbrido,0
+2022-04,Comerciais leves,Híbrido Plug-In,0
+2022-04,Ônibus,Diesel,1127
+2022-04,Ônibus,Elétrico,0
+2022-04,Ônibus,Gasolina,0
+2022-04,Ônibus,Gás,0
+2022-05,Automóveis,Diesel,3696
+2022-05,Automóveis,Elétrico,514
+2022-05,Automóveis,Etanol,2
+2022-05,Automóveis,Flex Fuel,128164
+2022-05,Automóveis,Gasolina,4161
+2022-05,Automóveis,Híbrido,2219
+2022-05,Automóveis,Híbrido Plug-In,727
+2022-05,Caminhões,Diesel,10408
+2022-05,Caminhões,Elétrico,25
+2022-05,Caminhões,Gasolina,1
+2022-05,Caminhões,Gás,29
+2022-05,Comerciais leves,Diesel,17419
+2022-05,Comerciais leves,Elétrico,59
+2022-05,Comerciais leves,Etanol,0
+2022-05,Comerciais leves,Flex Fuel,17851
+2022-05,Comerciais leves,Gasolina,333
+2022-05,Comerciais leves,Híbrido,0
+2022-05,Comerciais leves,Híbrido Plug-In,0
+2022-05,Ônibus,Diesel,1456
+2022-05,Ônibus,Elétrico,0
+2022-05,Ônibus,Gasolina,0
+2022-05,Ônibus,Gás,0
+2022-06,Automóveis,Diesel,3554
+2022-06,Automóveis,Elétrico,1015
+2022-06,Automóveis,Etanol,3
+2022-06,Automóveis,Flex Fuel,121852
+2022-06,Automóveis,Gasolina,4281
+2022-06,Automóveis,Híbrido,2365
+2022-06,Automóveis,Híbrido Plug-In,711
+2022-06,Caminhões,Diesel,10912
+2022-06,Caminhões,Elétrico,18
+2022-06,Caminhões,Gasolina,4
+2022-06,Caminhões,Gás,88
+2022-06,Comerciais leves,Diesel,15972
+2022-06,Comerciais leves,Elétrico,86
+2022-06,Comerciais leves,Etanol,0
+2022-06,Comerciais leves,Flex Fuel,15310
+2022-06,Comerciais leves,Gasolina,491
+2022-06,Comerciais leves,Híbrido,1
+2022-06,Comerciais leves,Híbrido Plug-In,0
+2022-06,Ônibus,Diesel,1404
+2022-06,Ônibus,Elétrico,0
+2022-06,Ônibus,Gasolina,0
+2022-06,Ônibus,Gás,0
+2022-07,Automóveis,Diesel,3318
+2022-07,Automóveis,Elétrico,450
+2022-07,Automóveis,Etanol,2
+2022-07,Automóveis,Flex Fuel,125541
+2022-07,Automóveis,Gasolina,3359
+2022-07,Automóveis,Híbrido,2040
+2022-07,Automóveis,Híbrido Plug-In,720
+2022-07,Caminhões,Diesel,11502
+2022-07,Caminhões,Elétrico,45
+2022-07,Caminhões,Gasolina,5
+2022-07,Caminhões,Gás,22
+2022-07,Comerciais leves,Diesel,15807
+2022-07,Comerciais leves,Elétrico,6
+2022-07,Comerciais leves,Etanol,0
+2022-07,Comerciais leves,Flex Fuel,17423
+2022-07,Comerciais leves,Gasolina,510
+2022-07,Comerciais leves,Híbrido,0
+2022-07,Comerciais leves,Híbrido Plug-In,0
+2022-07,Ônibus,Diesel,1225
+2022-07,Ônibus,Elétrico,18
+2022-07,Ônibus,Gasolina,0
+2022-07,Ônibus,Gás,0
+2022-08,Automóveis,Diesel,3764
+2022-08,Automóveis,Elétrico,757
+2022-08,Automóveis,Etanol,1
+2022-08,Automóveis,Flex Fuel,142615
+2022-08,Automóveis,Gasolina,4249
+2022-08,Automóveis,Híbrido,2604
+2022-08,Automóveis,Híbrido Plug-In,764
+2022-08,Caminhões,Diesel,12445
+2022-08,Caminhões,Elétrico,16
+2022-08,Caminhões,Gasolina,2
+2022-08,Caminhões,Gás,71
+2022-08,Comerciais leves,Diesel,15414
+2022-08,Comerciais leves,Elétrico,208
+2022-08,Comerciais leves,Etanol,0
+2022-08,Comerciais leves,Flex Fuel,23480
+2022-08,Comerciais leves,Gasolina,505
+2022-08,Comerciais leves,Híbrido,0
+2022-08,Comerciais leves,Híbrido Plug-In,0
+2022-08,Ônibus,Diesel,1712
+2022-08,Ônibus,Elétrico,0
+2022-08,Ônibus,Gasolina,0
+2022-08,Ônibus,Gás,0
+2022-09,Automóveis,Diesel,3673
+2022-09,Automóveis,Elétrico,1406
+2022-09,Automóveis,Etanol,3
+2022-09,Automóveis,Flex Fuel,129756
+2022-09,Automóveis,Gasolina,3264
+2022-09,Automóveis,Híbrido,3128
+2022-09,Automóveis,Híbrido Plug-In,1936
+2022-09,Caminhões,Diesel,11485
+2022-09,Caminhões,Elétrico,28
+2022-09,Caminhões,Gasolina,2
+2022-09,Caminhões,Gás,9
+2022-09,Comerciais leves,Diesel,16880
+2022-09,Comerciais leves,Elétrico,17
+2022-09,Comerciais leves,Etanol,1
+2022-09,Comerciais leves,Flex Fuel,20381
+2022-09,Comerciais leves,Gasolina,369
+2022-09,Comerciais leves,Híbrido,0
+2022-09,Comerciais leves,Híbrido Plug-In,0
+2022-09,Ônibus,Diesel,1638
+2022-09,Ônibus,Elétrico,2
+2022-09,Ônibus,Gasolina,0
+2022-09,Ônibus,Gás,0
+2022-10,Automóveis,Diesel,3424
+2022-10,Automóveis,Elétrico,633
+2022-10,Automóveis,Etanol,0
+2022-10,Automóveis,Flex Fuel,126160
+2022-10,Automóveis,Gasolina,2778
+2022-10,Automóveis,Híbrido,2815
+2022-10,Automóveis,Híbrido Plug-In,1082
+2022-10,Caminhões,Diesel,10720
+2022-10,Caminhões,Elétrico,89
+2022-10,Caminhões,Gasolina,3
+2022-10,Caminhões,Gás,20
+2022-10,Comerciais leves,Diesel,13901
+2022-10,Comerciais leves,Elétrico,10
+2022-10,Comerciais leves,Etanol,0
+2022-10,Comerciais leves,Flex Fuel,17437
+2022-10,Comerciais leves,Gasolina,424
+2022-10,Comerciais leves,Híbrido,1
+2022-10,Comerciais leves,Híbrido Plug-In,0
+2022-10,Ônibus,Diesel,1407
+2022-10,Ônibus,Elétrico,3
+2022-10,Ônibus,Gasolina,0
+2022-10,Ônibus,Gás,0
+2022-11,Automóveis,Diesel,4474
+2022-11,Automóveis,Elétrico,732
+2022-11,Automóveis,Etanol,2
+2022-11,Automóveis,Flex Fuel,145895
+2022-11,Automóveis,Gasolina,3293
+2022-11,Automóveis,Híbrido,3592
+2022-11,Automóveis,Híbrido Plug-In,729
+2022-11,Caminhões,Diesel,10146
+2022-11,Caminhões,Elétrico,62
+2022-11,Caminhões,Gasolina,2
+2022-11,Caminhões,Gás,12
+2022-11,Comerciais leves,Diesel,15055
+2022-11,Comerciais leves,Elétrico,5
+2022-11,Comerciais leves,Etanol,0
+2022-11,Comerciais leves,Flex Fuel,17677
+2022-11,Comerciais leves,Gasolina,583
+2022-11,Comerciais leves,Híbrido,1
+2022-11,Comerciais leves,Híbrido Plug-In,0
+2022-11,Ônibus,Diesel,1746
+2022-11,Ônibus,Elétrico,5
+2022-11,Ônibus,Gasolina,0
+2022-11,Ônibus,Gás,0
+2022-12,Automóveis,Diesel,4264
+2022-12,Automóveis,Elétrico,903
+2022-12,Automóveis,Etanol,2
+2022-12,Automóveis,Flex Fuel,150523
+2022-12,Automóveis,Gasolina,3755
+2022-12,Automóveis,Híbrido,3591
+2022-12,Automóveis,Híbrido Plug-In,1150
+2022-12,Caminhões,Diesel,12398
+2022-12,Caminhões,Elétrico,52
+2022-12,Caminhões,Gasolina,7
+2022-12,Caminhões,Gás,45
+2022-12,Comerciais leves,Diesel,19127
+2022-12,Comerciais leves,Elétrico,12
+2022-12,Comerciais leves,Etanol,0
+2022-12,Comerciais leves,Flex Fuel,18144
+2022-12,Comerciais leves,Gasolina,658
+2022-12,Comerciais leves,Híbrido,0
+2022-12,Comerciais leves,Híbrido Plug-In,0
+2022-12,Ônibus,Diesel,2288
+2022-12,Ônibus,Elétrico,4
+2022-12,Ônibus,Gasolina,0
+2022-12,Ônibus,Gás,0
 2023-01,Automóveis,Diesel,2445
 2023-01,Automóveis,Elétrico,745
 2023-01,Automóveis,Etanol,2

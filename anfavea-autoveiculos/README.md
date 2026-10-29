@@ -1,8 +1,8 @@
-# ANFAVEA – Autoveículos (2023+)
+# ANFAVEA – Autoveículos (2019+)
 
 Coleta automática de **todos** os dados da seção *Autoveículos* da
 [Central de Dados da ANFAVEA](https://anfavea.com.br/site/central-de-dados/), com
-agregação mensal desde jan/2023, e relatório consolidado.
+agregação mensal desde jan/2019, e relatório consolidado.
 
 **Relatório:** [`relatorio/RELATORIO.md`](relatorio/RELATORIO.md) ·
 **Planilha:** [`relatorio/relatorio_anfavea_autoveiculos.xlsx`](relatorio/relatorio_anfavea_autoveiculos.xlsx) ·
@@ -27,10 +27,10 @@ das marcas (Simple Icons, CC0); marcas sem logo livre aparecem como monograma.
 
 | Série | Aberturas | Desde |
 |---|---|---|
-| Produção, Emplacamento, Exportação | Automóveis, Comerciais leves, Caminhões, Ônibus | 2023-01 |
-| Produção, Emplacamento, Exportação | Caminhões por subsegmento (semileves, leves, médios, semipesados, pesados) | 2023-01 |
-| Emplacamento | Por combustível, por categoria | 2023-01 |
-| Emplacamento | Nacional × importado, por categoria | 2023-01 |
+| Produção, Emplacamento, Exportação | Automóveis, Comerciais leves, Caminhões, Ônibus | 2019-01 |
+| Produção, Emplacamento, Exportação | Caminhões por subsegmento (semileves, leves, médios, semipesados, pesados) | 2019-01 |
+| Emplacamento | Por combustível, por categoria | 2019-01 |
+| Emplacamento | Nacional × importado, por categoria | 2019-01 |
 | Emplacamento | Empresa × marca × procedência, por categoria | **2026-01** (limite da fonte) |
 
 ## Como funciona
